@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Command Center</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--c1:#E8E4DD;--c2:#D4CFC5;--c3:#1A1915;--c4:#2D2B26;--c5:#8C8578;--c6:#B8B2A6;--ac:#C8A95C;--rd:#C44B3F;--gn:#5A9E6F;--bl:#4A7FB5;--pu:#7B6AB5}
+body{background:var(--c1);color:var(--c3);font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ═══ DOCK — macOS-style bottom nav ═══ */
+.dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:8px 12px;background:rgba(26,25,21,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:22px;z-index:200;box-shadow:0 8px 32px #00000040}
+.dock-i{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:24px;border-radius:14px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);position:relative}
+.dock-i:hover{transform:scale(1.3) translateY(-8px);background:rgba(255,255,255,.12)}
+.dock-i.on{background:var(--ac);transform:scale(1.1) translateY(-4px)}
+.dock-i.on::after{content:'';position:absolute;bottom:-4px;width:4px;height:4px;border-radius:50%;background:#fff}
+.dock-tip{display:none;position:absolute;top:-32px;background:var(--c3);color:#fff;font-size:10px;padding:4px 10px;border-radius:6px;white-space:nowrap;font-weight:600}
+.dock-i:hover .dock-tip{display:block}
+
+/* ═══ PAGES ═══ */
+.page{display:none;min-height:100vh;padding-bottom:90px}
+.page.on{display:block;animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 1: HOME — Cinematic hero + rings         */
+/* ═══════════════════════════════════════════════ */
+.hero{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,var(--c1) 75%);z-index:1}
+.hero-ring{position:absolute;border:1px solid var(--c2);border-radius:50%;opacity:.4;animation:spin 60s linear infinite}
+.hero-ring:nth-child(1){width:300px;height:300px;animation-duration:80s}
+.hero-ring:nth-child(2){width:500px;height:500px;animation-duration:120s;animation-direction:reverse}
+.hero-ring:nth-child(3){width:700px;height:700px;animation-duration:160s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-content{position:relative;z-index:2}
+.hero-greeting{font-size:14px;color:var(--c5);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.hero-name{font-size:52px;font-weight:700;letter-spacing:-2px;line-height:1.1}
+.hero-name span{color:var(--ac)}
+
+/* Countdown — split flap style */
+.flap-wrap{display:flex;gap:12px;justify-content:center;margin:32px 0;direction:ltr}
+.flap{background:var(--c3);color:var(--ac);width:72px;padding:16px 0;text-align:center;position:relative;overflow:hidden}
+.flap::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:#ffffff15}
+.flap-val{font-size:36px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.flap-lbl{font-size:9px;color:var(--c5);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+
+/* Orbit stats */
+.orbit-wrap{position:relative;width:280px;height:280px;margin:24px auto 0}
+.orbit-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.orbit-center-v{font-size:48px;font-weight:700;color:var(--ac)}
+.orbit-center-l{font-size:11px;color:var(--c5)}
+.orbit-item{position:absolute;width:64px;height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s}
+.orbit-item:hover{transform:scale(1.2)!important}
+.orbit-em{font-size:22px}
+.orbit-v{font-size:16px;font-weight:700;margin-top:2px}
+.orbit-l{font-size:8px;color:var(--c5);text-transform:uppercase}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 2: PROJECTS — Magazine editorial layout  */
+/* ═══════════════════════════════════════════════ */
+.mag{max-width:900px;margin:0 auto;padding:60px 24px}
+.mag-head{text-align:center;margin-bottom:48px;padding-bottom:24px;border-bottom:2px solid var(--c3)}
+.mag-head h2{font-size:42px;font-weight:300;letter-spacing:-1px}
+.mag-head h2 b{font-weight:700}
+.mag-item{display:grid;grid-template-columns:80px 1fr;gap:0;margin-bottom:0;border-bottom:1px solid var(--c2);cursor:pointer;transition:all .2s;position:relative}
+.mag-item:hover{background:rgba(200,169,92,.08)}
+.mag-item:first-of-type{border-top:1px solid var(--c2)}
+.mag-num{font-size:48px;font-weight:700;color:var(--c2);display:flex;align-items:center;justify-content:center;border-left:1px solid var(--c2);padding:24px 0}
+.mag-body{padding:24px 28px}
+.mag-cat{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--c5);margin-bottom:4px}
+.mag-title{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.mag-title .em{font-size:26px}
+.mag-excerpt{font-size:12px;color:var(--c5);line-height:1.7;max-height:40px;overflow:hidden}
+.mag-tags{display:flex;gap:6px;margin-top:8px;direction:ltr;justify-content:flex-end}
+.mag-tag{font-size:9px;padding:2px 8px;border:1px solid var(--c2);color:var(--c5);font-weight:600;letter-spacing:.5px}
+.mag-status{position:absolute;top:24px;left:24px}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 3: SERVER — Real terminal emulation      */
+/* ═══════════════════════════════════════════════ */
+.terminal{max-width:800px;margin:40px auto;padding:0 24px}
+.t-window{background:#0C0C0C;color:#33FF33;font-family:'SF Mono','Fira Code','Courier New',monospace;font-size:13px;line-height:1.8;overflow:hidden;box-shadow:0 20px 60px #00000050}
+.t-chrome{background:#2D2D2D;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.t-btn{width:12px;height:12px;border-radius:50%}
+.t-title{color:#999;font-size:11px;margin:0 auto;font-family:system-ui}
+.t-body{padding:20px;max-height:70vh;overflow-y:auto}
+.t-line{margin-bottom:2px;word-break:break-all}
+.t-prompt{color:#33FF33}.t-cmd{color:#fff}.t-out{color:#999}
+.t-hl{color:#FFD700}.t-gn{color:#33FF33}.t-rd{color:#FF4444}.t-bl{color:#4488FF}.t-gy{color:#666}
+.t-cursor{display:inline-block;width:8px;height:15px;background:#33FF33;animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{50%{opacity:0}}
+.t-bar{display:flex;gap:20px;padding:8px 20px;background:#1A1A1A;border-top:1px solid #333}
+.t-bar-item{color:#666;font-size:11px;font-family:system-ui}
+.t-bar-item b{color:#33FF33}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 4: BOTS — Radar/sonar visualization      */
+/* ═══════════════════════════════════════════════ */
+.radar-page{max-width:900px;margin:0 auto;padding:40px 24px;display:flex;flex-direction:column;align-items:center}
+.radar-title{font-size:36px;font-weight:300;letter-spacing:-1px;text-align:center;margin-bottom:40px}
+.radar-title b{font-weight:700}
+.radar-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%}
+.radar-bot{position:relative;padding:28px;background:var(--c3);color:#E8E4DD;cursor:pointer;transition:all .3s;overflow:hidden}
+.radar-bot:hover{transform:scale(1.02)}
+.radar-pulse{position:absolute;top:20px;left:20px;width:12px;height:12px;border-radius:50%}
+.radar-pulse.live{background:var(--gn);box-shadow:0 0 12px var(--gn)}
+.radar-pulse.live::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--gn);animation:sonar 2s ease-out infinite}
+.radar-pulse.off{background:var(--c5);opacity:.4}
+@keyframes sonar{to{transform:scale(3);opacity:0}}
+.radar-em{font-size:42px;margin-bottom:12px}
+.radar-name{font-size:18px;font-weight:700;margin-bottom:4px}
+.radar-desc{font-size:11px;color:var(--c6);line-height:1.7;margin-bottom:14px;white-space:pre-line}
+.radar-line{height:1px;background:linear-gradient(90deg,transparent,var(--c5),transparent);margin:14px 0}
+.radar-meta{display:flex;gap:8px;flex-wrap:wrap}
+.radar-tag{font-size:9px;padding:3px 8px;border:1px solid var(--c5);color:var(--c6)}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 5: TOOLS — Blueprint/schematic style     */
+/* ═══════════════════════════════════════════════ */
+.blueprint{max-width:900px;margin:0 auto;padding:40px 24px}
+.bp-title{font-size:36px;font-weight:300;letter-spacing:-1px;text-align:center;margin-bottom:40px}
+.bp-title b{font-weight:700}
+.bp-grid{background:#1B2838;color:#A4C8E8;padding:32px;position:relative;overflow:hidden;font-family:'SF Mono',monospace}
+.bp-grid::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(100,150,200,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(100,150,200,.06) 1px,transparent 1px);background-size:24px 24px}
+.bp-node{padding:20px;margin-bottom:16px;border:1px solid #2A4060;position:relative;cursor:pointer;transition:all .2s;background:#1B283880}
+.bp-node:hover{border-color:var(--ac);background:#1B2838}
+.bp-node::before{content:'◆';position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--ac);font-size:10px}
+.bp-connector{width:1px;height:16px;background:#2A4060;margin:0 auto}
+.bp-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4A7090;margin-bottom:6px}
+.bp-name{font-size:16px;font-weight:700;color:#E8E4DD;margin-bottom:4px;font-family:'IBM Plex Sans Arabic',system-ui}
+.bp-detail{font-size:11px;color:#6A90B0;line-height:1.7;white-space:pre-line;font-family:'IBM Plex Sans Arabic',system-ui}
+.bp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:6px}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 6: CLOUD — Constellation star map        */
+/* ═══════════════════════════════════════════════ */
+.constellation{max-width:900px;margin:0 auto;padding:40px 24px}
+.const-title{font-size:36px;font-weight:300;letter-spacing:-1px;text-align:center;margin-bottom:40px;color:var(--c3)}
+.const-title b{font-weight:700}
+.const-sky{background:linear-gradient(180deg,#0A0A1A 0%,#1A1A30 50%,#0A0A1A 100%);padding:48px 32px;position:relative;overflow:hidden;min-height:500px}
+.const-sky::before{content:'';position:absolute;inset:0;background:radial-gradient(1px 1px at 20% 30%,#ffffff40,transparent),radial-gradient(1px 1px at 40% 70%,#ffffff30,transparent),radial-gradient(1px 1px at 60% 20%,#ffffff20,transparent),radial-gradient(1px 1px at 80% 50%,#ffffff40,transparent),radial-gradient(1px 1px at 10% 80%,#ffffff30,transparent),radial-gradient(1px 1px at 90% 10%,#ffffff20,transparent),radial-gradient(1px 1px at 50% 50%,#ffffff25,transparent),radial-gradient(1px 1px at 30% 60%,#ffffff35,transparent)}
+.const-wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;position:relative;z-index:1}
+.star{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .3s;padding:16px}
+.star:hover{transform:scale(1.15)}
+.star-glow{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative}
+.star-glow::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,#ffffff15,transparent 70%);transition:all .3s}
+.star:hover .star-glow::before{inset:-12px;background:radial-gradient(circle,#C8A95C30,transparent 70%)}
+.star-name{font-size:11px;font-weight:600;color:#AAA;letter-spacing:.5px}
+.star-sub{font-size:9px;color:#666}
+
+/* ═══════════════════════════════════════════════ */
+/*  PAGE 7: ARCHIVE — Filing cabinet drawers      */
+/* ═══════════════════════════════════════════════ */
+.cabinet{max-width:700px;margin:0 auto;padding:40px 24px}
+.cab-title{font-size:36px;font-weight:300;letter-spacing:-1px;text-align:center;margin-bottom:40px}
+.cab-title b{font-weight:700}
+.cab-unit{background:linear-gradient(180deg,#8B7F6B,#6B6155);margin-bottom:4px;cursor:pointer;transition:all .25s;overflow:hidden;position:relative}
+.cab-unit:hover{transform:translateX(-8px)}
+.cab-unit::before{content:'';position:absolute;right:50%;top:50%;transform:translate(50%,-50%);width:40px;height:12px;border:2px solid #A0956D;border-radius:2px}
+.cab-handle{display:flex;align-items:center;gap:14px;padding:22px 24px;color:#E8E4DD}
+.cab-em{font-size:24px}
+.cab-info{flex:1}
+.cab-name{font-size:15px;font-weight:700}
+.cab-sub{font-size:10px;color:#C0B8A8;margin-top:2px}
+.cab-expand{max-height:0;overflow:hidden;transition:max-height .4s ease;background:#5A5347}
+.cab-unit.open .cab-expand{max-height:300px}
+.cab-detail{padding:16px 24px;color:#D4CFC5;font-size:12px;line-height:1.8;white-space:pre-line}
+
+/* ═══ DRAWER (detail panel) ═══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(26,25,21,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:300}
+.overlay.on{display:block}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(480px,90vw);background:var(--c1);z-index:301;transform:translateX(-105%);transition:transform .4s cubic-bezier(.22,1,.36,1);overflow-y:auto;box-shadow:12px 0 40px #00000020}
+.drawer.on{transform:translateX(0)}
+.dr-close{position:sticky;top:0;background:var(--c1);padding:16px 20px;display:flex;justify-content:flex-end;z-index:1}
+.dr-close button{background:none;border:1px solid var(--c2);width:36px;height:36px;font-size:18px;cursor:pointer;color:var(--c5);transition:all .15s}
+.dr-close button:hover{background:var(--c2);color:var(--c3)}
+.dr-body{padding:0 28px 40px}
+.dr-emoji{font-size:48px;margin-bottom:12px}
+.dr-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.dr-st{display:inline-block;font-size:10px;padding:4px 12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.dr-st.a{background:var(--gn);color:#fff}.dr-st.p{background:var(--ac);color:var(--c3)}.dr-st.i{background:var(--c5);color:#fff}
+.dr-section{margin-top:20px}
+.dr-section h4{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--c5);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--c2)}
+.dr-text{font-size:12px;color:var(--c4);line-height:1.9;white-space:pre-line}
+.dr-code{font-family:'SF Mono',monospace;font-size:11px;background:var(--c3);color:var(--ac);padding:10px 14px;direction:ltr;word-break:break-all;margin-top:6px}
+.dr-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.dr-link{padding:8px 18px;background:var(--c3);color:var(--ac);font-size:11px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:6px;direction:ltr}
+.dr-link:hover{background:var(--c4)}
+
+/* ═══ STATUS ═══ */
+.st{font-size:9px;padding:3px 10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:inline-flex;align-items:center;gap:4px}
+.st-a{background:var(--gn);color:#fff}.st-a::before{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:pu 2s infinite}
+.st-p{background:var(--ac);color:var(--c3)}.st-i{background:var(--c5);color:#fff}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .dock{bottom:8px;gap:2px;padding:6px 8px;border-radius:18px}
+  .dock-i{width:40px;height:40px;font-size:20px;border-radius:12px}
+  .hero-name{font-size:32px}
+  .flap{width:52px;padding:10px 0}.flap-val{font-size:24px}
+  .orbit-wrap{width:220px;height:220px}
+  .mag-item{grid-template-columns:50px 1fr}.mag-num{font-size:28px}.mag-title{font-size:16px}
+  .radar-grid{grid-template-columns:1fr}
+  .bp-grid{padding:16px}
+  .const-wrap{gap:10px}.star{padding:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- DOCK -->
+<nav class="dock" id="dock"></nav>
+
+<!-- OVERLAY + DRAWER -->
+<div class="overlay" id="ov" onclick="closeDr()"></div>
+<div class="drawer" id="dr"><div class="dr-close"><button onclick="closeDr()">&times;</button></div><div class="dr-body" id="drB"></div></div>
+
+<!-- PAGES -->
+<div id="pages"></div>
+
+<script>
+const E=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const M={};
+let cur='home';
+
+const PAGES=[
+  {id:'home',ic:'🏠',n:'الرئيسية'},
+  {id:'projects',ic:'🚀',n:'المشاريع'},
+  {id:'server',ic:'🖥️',n:'السيرفر'},
+  {id:'bots',ic:'🤖',n:'البوتات'},
+  {id:'tools',ic:'🛠️',n:'الأدوات'},
+  {id:'cloud',ic:'☁️',n:'السحابية'},
+  {id:'archive',ic:'🗄️',n:'الأرشيف'},
+];
+
+const PRJ=[
+  {k:"brix",nm:"BRIX Travel System",ar:"نظام حجز الفنادق",st:"active",em:"🏨",
+   desc:"نظام إدارة عقود الفنادق وحساب الأسعار — المشروع الرئيسي\n\nNext.js 16 + React 18 + TypeScript + Tailwind 4\nSupabase + Zod 4 + بنية LEGO معمارية\nContract Wizard (10 خطوات) + محرك التسعير\n1,450+ اختبار Vitest + Playwright E2E\n30 مرحلة تطوير",
+   tags:["Next.js 16","Supabase","Tailwind 4","Vitest"],cat:"تطوير",
+   path:"~/Projects/brix-travel-system/hotel-web-app/",
+   links:{"الموقع":"https://hotel-web-app-ten.vercel.app","GitHub":"https://github.com/aneerabee/brix-travel-system"}},
+  {k:"wedding",nm:"Wedding Planner",ar:"مخطط الزفاف",st:"active",em:"💒",
+   desc:"نظام تخطيط حفل الزفاف — 5 أيام (21-25 أبريل 2026)\n\nReact + Express + SQLite على السيرفر\nقائمة ضيوف + اختيار أيام الحضور\nمنبهات تلقرام + نسخ احتياطي كل 6 ساعات\nالمنفذ: 3001",
+   tags:["React","Express","SQLite"],cat:"شخصي",
+   path:"server:~/wedding-planner/",links:{"التطبيق":"http://62.171.128.44:3001"}},
+  {k:"easy",nm:"EasyBooking Marketing",ar:"تسويق إيزي بوكينغ",st:"active",em:"📢",
+   desc:"حملات إعلانية لوكالة السفر\n\nحملة عيد 2026 — Kaya Palazzo (6 دول)\nMeta Ads + WhatsApp كقناة حجز\n37 أداة MCP مخصصة",
+   tags:["Meta Ads","6 Countries","WhatsApp"],cat:"تسويق",
+   path:"iCloud:📢 EasyBooking/",
+   links:{"Ads":"https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=840190289038740"}},
+  {k:"wapy",nm:"Wapy.dev",ar:"متتبع الاشتراكات",st:"active",em:"💳",
+   desc:"تتبع وإدارة الاشتراكات الشهرية\n\nNext.js + Prisma + PostgreSQL + Docker\nالمنفذ: 3000 (Tailscale فقط)\nنسخ احتياطي يومي 3 صباحاً",
+   tags:["Next.js","Docker","PostgreSQL"],cat:"تطوير",path:"server:/opt/wapy/"},
+  {k:"cc",nm:"Command Center",ar:"مركز التحكم",st:"active",em:"⚡",
+   desc:"لوحة تحكم واحدة — هذه الصفحة\n\n7 صفحات بتصاميم فريدة\nيعمل على الهاتف والكمبيوتر",
+   tags:["HTML","CSS","JS"],cat:"أدوات",path:"~/Projects/command-center.html"},
+];
+
+const SVC=[
+  {nm:"Wedding Planner",st:1,p:"3001",d:"React + Express + SQLite",em:"💒"},
+  {nm:"Wapy.dev (Docker)",st:1,p:"3000",d:"Next.js + Prisma + PostgreSQL",em:"💳"},
+  {nm:"Wapy Cron",st:1,p:"—",d:"Alpine — scheduled tasks",em:"⏰"},
+  {nm:"Wapy DB",st:1,p:"5432",d:"PostgreSQL 17 (localhost)",em:"🗄️"},
+  {nm:"Argaz Bot",st:1,p:"—",d:"Gemini 2.5 Flash + Telegram",em:"🤖"},
+  {nm:"Backup Jobs",st:1,p:"—",d:"Wedding 6h · Wapy 3AM · Config 1h",em:"💾"},
+  {nm:"Gateway Watchdog",st:1,p:"—",d:"Health check every 60s",em:"🛡️"},
+  {nm:"Tailscale VPN",st:1,p:"—",d:"100.116.69.101",em:"🔒"},
+];
+
+const BOT=[
+  {k:"tron",nm:"Tron Address Bot",ar:"بوت عناوين ترون",st:"paused",em:"⚡",
+   desc:"مراقبة عناوين ترون + إدارة محافظ\n\nNode.js + TronWeb + AES-256\n26 ثغرة أُصلحت مارس 2026\n5 محاولات + قفل 15 دقيقة",
+   tags:["Node.js","TronWeb","AES-256"],path:"~/Projects/🤖 Bots/tron-address-bot/"},
+  {k:"bank",nm:"Bank Bot",ar:"بوت كشوف البنك",st:"paused",em:"🏦",
+   desc:"تحليل كشوف بنك بـ OCR\n\nPython + pytesseract + pandas\nتصدير CSV + Excel",
+   tags:["Python","OCR","Heroku"],path:"~/Projects/🤖 Bots/bank-bot/",
+   links:{"Heroku":"https://dashboard.heroku.com/apps/ruble-transfer-bot"}},
+  {k:"money",nm:"Money Manager",ar:"مدير المال",st:"paused",em:"💰",
+   desc:"إدارة مالية + أسعار كريبتو\n\nFastAPI + Supabase + CoinGecko",
+   tags:["FastAPI","Supabase"],path:"~/Projects/💰 Money-Manager/"},
+  {k:"argaz",nm:"Argaz Bot",ar:"بوت أرقاز",st:"active",em:"🧠",
+   desc:"ذكاء اصطناعي على السيرفر 24/7\n\nGemini 2.5 Flash | 3 وكلاء\nرئيسي (Argaz) + عامل + بريكس\nTelegram Gateway + systemd",
+   tags:["Gemini","Telegram","AI"],path:"server:~/.openclaw/"},
+];
+
+const TL=[
+  {k:"claude",nm:"Claude Code",ar:"إعداد Claude Code",st:"active",
+   desc:"14 وكيل + 29 مهارة + 44 أمر + 15 قاعدة\nHooks: prettier + tsc + git push\nSSH مباشر للسيرفر\nOpus 4.6 (1M) · Claude Max",
+   tags:["14 Agents","29 Skills"],path:"~/.claude/",
+   links:{"GitHub":"https://github.com/aneerabee/claude-code-config"}},
+  {k:"mcp",nm:"EasyBooking Meta MCP",ar:"خادم MCP للإعلانات",st:"active",
+   desc:"37 أداة في 6 وحدات\nPython + Meta Graph API v22.0\nبديل مجاني لـ Pipeboard",
+   tags:["Python","37 Tools"],path:"~/Developer/easybooking-meta-mcp/"},
+  {k:"gh",nm:"GitHub",ar:"مستودعات GitHub",st:"active",
+   desc:"حساب: aneerabee\nbrix-travel-system\nclaude-code-config",
+   tags:["2 Repos"],links:{"GitHub":"https://github.com/aneerabee"}},
+  {k:"ts",nm:"Tailscale",ar:"شبكة Tailscale",st:"active",
+   desc:"سيرفر: 100.116.69.101\nMacBook: 100.78.245.115\niPhone: 100.97.195.82",
+   tags:["VPN","3 Devices"]},
+];
+
+const CLD=[
+  {nm:"GitHub",em:"🐙",d:"aneerabee",lk:"https://github.com/aneerabee"},
+  {nm:"Supabase",em:"⚡",d:"BRIX DB",lk:"https://supabase.com/dashboard"},
+  {nm:"Vercel",em:"▲",d:"BRIX Deploy",lk:"https://vercel.com"},
+  {nm:"Heroku",em:"🟣",d:"Bank Bot",lk:"https://dashboard.heroku.com"},
+  {nm:"Meta",em:"📘",d:"EasyBooking",lk:"https://business.facebook.com"},
+  {nm:"Airtable",em:"📊",d:"11 Tables",lk:"https://airtable.com"},
+  {nm:"Telegram",em:"✈️",d:"4 Bots",lk:"https://t.me"},
+  {nm:"Contabo",em:"🖥️",d:"62.171.128.44"},
+  {nm:"iCloud",em:"☁️",d:"5,400+ files"},
+  {nm:"TronGrid",em:"🔗",d:"Blockchain",lk:"https://trongrid.io"},
+  {nm:"CoinGecko",em:"🪙",d:"Crypto API",lk:"https://coingecko.com"},
+  {nm:"Railway",em:"🚂",d:"MCP Server",lk:"https://railway.app"},
+  {nm:"Perplexity",em:"🔍",d:"AI Search",lk:"https://perplexity.ai"},
+  {nm:"Firecrawl",em:"🕷️",d:"Web Crawl"},
+];
+
+const ARC=[
+  {k:"exch",nm:"Exchanger",ar:"منصة صرف",em:"💱",desc:"Nuxt.js 2.15 — غير نشطة",tags:["Nuxt.js"]},
+  {k:"etranex",nm:"Etranex",ar:"شركة إيتران",em:"🏢",desc:"لوقو + موقع + مدونة — مؤرشف",tags:["Archive"]},
+  {k:"brixltd",nm:"BRIX LTD",ar:"بريكس العقارية",em:"🏗️",desc:"Houzez WordPress + تصاميم",tags:["WordPress"]},
+  {k:"smi",nm:"Smart Media Indexer",ar:"فهرسة الوسائط",em:"📸",desc:"Python + Gemini AI — مؤرشف",tags:["Python"]},
+  {k:"vault",nm:"Vault",ar:"الخزنة المشفرة",em:"🔐",desc:"AES-256 · 130 ملف حساس\nمحافظ + أكواد 2FA + استرداد",tags:["AES-256"],path:"~/Desktop/🔐 Vault.dmg"},
+];
+
+// Build M
+[...PRJ,...BOT,...TL,...ARC].forEach(i=>M[i.k]=i);
+
+function init(){
+  // Dock
+  document.getElementById('dock').innerHTML=PAGES.map(p=>
+    `<div class="dock-i${p.id===cur?' on':''}" id="d-${p.id}" onclick="go('${p.id}')"><div class="dock-tip">${p.n}</div>${p.ic}</div>`
+  ).join('');
+
+  // Pages
+  document.getElementById('pages').innerHTML=`
+    <div class="page on" id="p-home">${rHome()}</div>
+    <div class="page" id="p-projects">${rProjects()}</div>
+    <div class="page" id="p-server">${rServer()}</div>
+    <div class="page" id="p-bots">${rBots()}</div>
+    <div class="page" id="p-tools">${rTools()}</div>
+    <div class="page" id="p-cloud">${rCloud()}</div>
+    <div class="page" id="p-archive">${rArchive()}</div>
+  `;
+}
+
+function go(id){
+  cur=id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+id)?.classList.add('on');
+  document.querySelectorAll('.dock-i').forEach(d=>d.classList.remove('on'));
+  document.getElementById('d-'+id)?.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+// ── HOME ──
+function rHome(){
+  const now=new Date();now.setHours(0,0,0,0);
+  const wd=Math.max(0,Math.round((new Date(2026,3,21)-now)/864e5));
+  const d=wd%30,m=Math.floor(wd/30),h=Math.floor((new Date(2026,3,21)-new Date())/36e5)%24;
+  const orbitItems=[
+    {em:'🚀',v:PRJ.length,l:'مشروع',a:0,pg:'projects'},
+    {em:'🤖',v:BOT.length,l:'بوت',a:60,pg:'bots'},
+    {em:'🖥️',v:SVC.length,l:'خدمة',a:120,pg:'server'},
+    {em:'🛠️',v:TL.length,l:'أداة',a:180,pg:'tools'},
+    {em:'☁️',v:CLD.length,l:'سحابية',a:240,pg:'cloud'},
+    {em:'🗄️',v:ARC.length,l:'أرشيف',a:300,pg:'archive'},
+  ];
+  const r=110;
+  return `<div class="hero">
+    <div class="hero-ring"></div><div class="hero-ring"></div><div class="hero-ring"></div>
+    <div class="hero-content">
+      <div class="hero-greeting">مركز التحكم</div>
+      <h1 class="hero-name">مرحباً <span>ربيع</span></h1>
+      <div class="flap-wrap">
+        <div class="flap"><div class="flap-val">${String(wd).padStart(2,'0')}</div><div class="flap-lbl">يوم</div></div>
+        <div class="flap"><div class="flap-val">${String(h).padStart(2,'0')}</div><div class="flap-lbl">ساعة</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--c5);margin-bottom:8px">💒 حفل الزفاف · 21-25 أبريل 2026</div>
+      <div class="orbit-wrap">
+        <div class="orbit-center"><div class="orbit-center-v">${PRJ.length+BOT.length+TL.length}</div><div class="orbit-center-l">مشروع وأداة</div></div>
+        ${orbitItems.map(o=>{
+          const rad=o.a*Math.PI/180;
+          const x=r*Math.cos(rad)+140-32;
+          const y=r*Math.sin(rad)+140-32;
+          return `<div class="orbit-item" style="left:${x}px;top:${y}px" onclick="go('${o.pg}')"><div class="orbit-em">${o.em}</div><div class="orbit-v">${o.v}</div><div class="orbit-l">${o.l}</div></div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── PROJECTS — Magazine ──
+function rProjects(){
+  return `<div class="mag">
+    <div class="mag-head"><h2>المشاريع <b>النشطة</b></h2></div>
+    ${PRJ.map((p,i)=>`
+      <div class="mag-item" onclick="openDr('${p.k}')">
+        <div class="mag-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="mag-body">
+          <div class="mag-cat">${E(p.cat)}</div>
+          <div class="mag-title"><span class="em">${p.em}</span> ${E(p.ar)}</div>
+          <div class="mag-excerpt">${E(p.desc).split('\n')[0]}</div>
+          <div class="mag-tags">${p.tags.map(t=>`<span class="mag-tag">${E(t)}</span>`).join('')}</div>
+        </div>
+        <div class="mag-status"><span class="st st-${p.st==='active'?'a':'p'}">${p.st==='active'?'نشط':'متوقف'}</span></div>
+      </div>`).join('')}
+  </div>`;
+}
+
+// ── SERVER — Terminal ──
+function rServer(){
+  return `<div class="terminal">
+    <div class="t-window">
+      <div class="t-chrome"><div class="t-btn" style="background:#FF5F56"></div><div class="t-btn" style="background:#FFBD2E"></div><div class="t-btn" style="background:#27C93F"></div><div class="t-title">argaz@vmi3061403 — bash — 80×24</div></div>
+      <div class="t-body">
+        <div class="t-line"><span class="t-prompt">argaz@vmi3061403:~$ </span><span class="t-cmd">systemctl status --all</span></div>
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="t-line"><span class="t-hl">  CONTABO VPS</span> <span class="t-gy">|</span> <span class="t-out">62.171.128.44</span> <span class="t-gy">|</span> <span class="t-out">Ubuntu 24</span></div>
+        <div class="t-line"><span class="t-gy">  DISK</span> <span class="t-rd">77%</span> <span class="t-gy">|</span> <span class="t-gy">RAM</span> <span class="t-gn">10GB free</span> <span class="t-gy">|</span> <span class="t-gy">SPACE</span> <span class="t-bl">23GB free</span></div>
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        ${SVC.map(s=>`<div class="t-line">  ${s.st?'<span class="t-gn">●</span>':'<span class="t-rd">○</span>'} <span class="t-cmd">${E(s.nm)}</span> <span class="t-gy">${s.p!=='—'?':'+s.p:''}</span> <span class="t-out">${E(s.d)}</span></div>`).join('')}
+        <div class="t-line t-out">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="t-line"><span class="t-prompt">argaz@vmi3061403:~$ </span><span class="t-cursor"></span></div>
+      </div>
+      <div class="t-bar"><div class="t-bar-item">Services: <b>${SVC.filter(s=>s.st).length}/${SVC.length}</b></div><div class="t-bar-item">Uptime: <b>48h</b></div><div class="t-bar-item">Tailscale: <b>100.116.69.101</b></div></div>
+    </div>
+  </div>`;
+}
+
+// ── BOTS — Radar ──
+function rBots(){
+  return `<div class="radar-page">
+    <div class="radar-title">مصنع <b>البوتات</b></div>
+    <div class="radar-grid">${BOT.map(b=>`
+      <div class="radar-bot" onclick="openDr('${b.k}')">
+        <div class="radar-pulse ${b.st==='active'?'live':'off'}"></div>
+        <div class="radar-em">${b.em}</div>
+        <div class="radar-name">${E(b.ar)}</div>
+        <div class="radar-desc">${E(b.desc).split('\n').slice(0,2).join('\n')}</div>
+        <div class="radar-line"></div>
+        <div class="radar-meta">${b.tags.map(t=>`<span class="radar-tag">${E(t)}</span>`).join('')}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── TOOLS — Blueprint ──
+function rTools(){
+  return `<div class="blueprint">
+    <div class="bp-title">مخطط <b>الأدوات</b></div>
+    <div class="bp-grid">
+      ${TL.map((t,i)=>`
+        ${i>0?'<div class="bp-connector"></div>':''}
+        <div class="bp-node" onclick="openDr('${t.k}')">
+          <div class="bp-label">NODE ${String(i+1).padStart(2,'0')}</div>
+          <div class="bp-name">${E(t.ar)} <span class="bp-dot" style="background:${t.st==='active'?'var(--gn)':'var(--c5)'}"></span></div>
+          <div class="bp-detail">${E(t.desc).split('\n').slice(0,2).join('\n')}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── CLOUD — Constellation ──
+function rCloud(){
+  return `<div class="constellation">
+    <div class="const-title">خريطة <b>السحابة</b></div>
+    <div class="const-sky">
+      <div class="const-wrap">${CLD.map(c=>`
+        <div class="star" ${c.lk?`onclick="window.open('${E(c.lk)}','_blank')"`:''}>
+          <div class="star-glow">${c.em}</div>
+          <div class="star-name">${E(c.nm)}</div>
+          <div class="star-sub">${E(c.d)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── ARCHIVE — Cabinet ──
+function rArchive(){
+  return `<div class="cabinet">
+    <div class="cab-title">خزانة <b>الأرشيف</b></div>
+    ${ARC.map((a,i)=>`
+      <div class="cab-unit" id="cab-${i}" onclick="toggleCab(${i})">
+        <div class="cab-handle"><div class="cab-em">${a.em}</div><div class="cab-info"><div class="cab-name">${E(a.ar)}</div><div class="cab-sub">${E(a.desc).split('\n')[0]}</div></div></div>
+        <div class="cab-expand"><div class="cab-detail">${E(a.desc)}${a.path?'\n\n📁 '+E(a.path):''}${a.tags?'\n\n'+a.tags.map(t=>'['+t+']').join(' '):''}</div></div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function toggleCab(i){const el=document.getElementById('cab-'+i);el.classList.toggle('open')}
+
+// ── DRAWER ──
+function openDr(k){
+  const item=M[k];if(!item)return;
+  const stT=item.st==='active'?'نشط':item.st==='paused'?'متوقف':'أرشيف';
+  const stC=item.st==='active'?'a':item.st==='paused'?'p':'i';
+  document.getElementById('drB').innerHTML=`
+    <div class="dr-emoji">${item.em||''}</div>
+    <div class="dr-title">${E(item.ar||item.nm)}</div>
+    ${item.st?`<div class="dr-st ${stC}">${stT}</div>`:''}
+    ${item.desc?`<div class="dr-section"><h4>الوصف</h4><div class="dr-text">${E(item.desc)}</div></div>`:''}
+    ${item.path?`<div class="dr-section"><h4>المسار</h4><div class="dr-code">${E(item.path)}</div></div>`:''}
+    ${item.tags?`<div class="dr-section"><h4>التقنيات</h4><div class="mag-tags" style="justify-content:flex-start">${item.tags.map(t=>`<span class="mag-tag">${E(t)}</span>`).join('')}</div></div>`:''}
+    ${item.links?`<div class="dr-section"><h4>الروابط</h4><div class="dr-links">${Object.entries(item.links).map(([k,v])=>`<a class="dr-link" href="${E(v)}" target="_blank">→ ${E(k)}</a>`).join('')}</div></div>`:''}
+  `;
+  document.getElementById('dr').classList.add('on');
+  document.getElementById('ov').classList.add('on');
+}
+function closeDr(){document.getElementById('dr').classList.remove('on');document.getElementById('ov').classList.remove('on')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDr()});
+
+init();
+</script>
+</body>
+</html>
