@@ -24,8 +24,30 @@ const IC={
   '📦':'package','🎯':'target','🔄':'refresh-cw','🐳':'container',
   '📡':'radio-tower','👥':'users','🌍':'earth','📈':'trending-up',
   '💹':'trending-up','🎨':'palette','🔔':'bell','🎮':'gamepad-2',
-  '👤':'user','📌':'pin','⚠️':'alert-triangle','📂':'folder'
+  '👤':'user','📌':'pin','⚠️':'alert-triangle','📂':'folder',
+  '🏷️':'tag','📐':'ruler','📍':'map-pin','📄':'file-text',
+  '⛔':'ban','🔴':'circle','🟡':'circle','⚫':'circle',
+  '🔥':'flame','💹':'trending-up','🎯':'target','🎮':'gamepad-2',
+  '📌':'pin','📡':'radio-tower','🐳':'container','👥':'users',
+  '🔔':'bell','📈':'trending-up','💱':'arrow-right-left',
+  '📸':'camera','🎨':'palette','📦':'package','🛍️':'shopping-bag'
 };
+
+/* _icText(str) — replaces leading emoji in text with icon */
+function _icText(str){
+  if(!str)return '';
+  const chars=[...str];
+  const first=chars[0];
+  const nm=IC[first];
+  if(nm) return _ic(first,12)+' '+E(str.replace(first,'').replace(/^\uFE0F/,'').trim());
+  // Try two-char emoji
+  if(chars.length>1){
+    const two=chars[0]+chars[1];
+    const nm2=IC[two];
+    if(nm2) return _ic(two,12)+' '+E(str.substring(two.length).replace(/^\uFE0F/,'').trim());
+  }
+  return E(str);
+}
 
 /* _ic(emoji, size) — returns Lucide icon markup */
 function _ic(em,sz){
@@ -82,7 +104,7 @@ function init() {
   const app = document.getElementById('app');
 
   if (sidebar) {
-    sidebar.innerHTML = '<div class="sidebar-brand"><span class="brand-icon">⚡</span><span class="brand-text">مركز التحكم</span></div>' +
+    sidebar.innerHTML = '<div class="sidebar-brand"><span class="brand-icon">'+_ic('⚡',20)+'</span><span class="brand-text">مركز التحكم</span></div>' +
       '<nav class="sidebar-nav">' + PG.map(p =>
         `<a class="nav-item${cur===p.id?' active':''}" data-page="${p.id}" onclick="go('${p.id}')">`+
         `<span class="nav-icon">${p.ic}</span><span class="nav-label">${E(p.n)}</span></a>`
@@ -308,14 +330,14 @@ R.map = function() {
       `<button class="filter-btn" data-filter="server" onclick="mapFilter('server')">سيرفر</button>`+
     '</div>' +
     '<div class="map-list" id="map-list">' + mapData.map(d => {
-      const ghLink = d.g !== '—' ? `<a href="https://github.com/aneerabee/${E(d.g)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.75rem;margin-right:.5rem">${d.gp?'🌐':'🔒'} GitHub</a>` : '';
+      const ghLink = d.g !== '—' ? `<a href="https://github.com/aneerabee/${E(d.g)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.75rem;margin-right:.5rem">${d.gp?_ic('🌐',12):_ic('🔒',12)} GitHub</a>` : '';
       return `<div class="map-item" data-loc="${d.l}" style="border-right:4px solid ${d.c}">`+
         `<span style="margin-left:.5rem">${_ic(d.e,18)}</span>`+
         `<div style="flex:1"><span class="map-item-name">${E(d.n)}</span>`+
         `<span class="map-item-path">${E(d.p)}</span>`+
         `<span style="font-size:.7rem;opacity:.55">${E(d.t)}</span></div>`+
         `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">`+
-        `<span class="map-item-badge badge-${d.l}" style="color:${d.c}">${E(d.s)}</span>`+
+        `<span class="map-item-badge badge-${d.l}" style="color:${d.c}">${_icText(d.s)}</span>`+
         `${ghLink}</div></div>`;
     }).join('') + '</div>';
 };
@@ -375,7 +397,7 @@ R.auto = function() {
       '<div class="auto-stat-box"><span class="auto-stat-val">24/7</span><span class="auto-stat-label">متاح</span></div>'+
     '</div>' +
     renderGroup(s1) + renderGroup(s2) + renderGroup(s3) +
-    '<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">💡 المحلي: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler</div>';
+    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} المحلي: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler</div>`;
 };
 
 /* ── SERVER ── */
@@ -425,7 +447,7 @@ R.bots = function() {
         `<span class="bot-pulse ${isActive?'pulse-on':'pulse-off'}"></span>`+
         `</div>`+
         `<h3 class="bot-name">${E(b.ar||b.name)}</h3>`+
-        (isActive ? `<span style="font-size:.65rem;color:${b.cl};opacity:.8;display:inline-block;margin-bottom:.4rem">● نشط${b.st==='a'?' · '.repeat(3):''}&#8203;</span>` : `<span style="font-size:.65rem;opacity:.45;display:inline-block;margin-bottom:.4rem">متوقف</span>`) +
+        (isActive ? `<span style="font-size:.65rem;color:${b.cl};opacity:.8;display:inline-block;margin-bottom:.4rem"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>` : `<span style="font-size:.65rem;opacity:.45;display:inline-block;margin-bottom:.4rem"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
         `<div style="font-family:monospace;font-size:.7rem;opacity:.5;margin-bottom:.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${E(firstLine)}</div>`+
         `<div class="bot-stats">${stats.map(s => `<div class="bot-stat"><span class="bot-stat-val">${E(s.v)}</span><span class="bot-stat-label">${E(s.l)}</span></div>`).join('')}</div>`+
         `<div class="bot-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
@@ -485,7 +507,7 @@ R.cloud = function() {
 
 /* ── IDEAS ── */
 R.ideas = function() {
-  const prLabels = {1:'🔴 عاجل',2:'🟡 قريب',3:'⚫ يوماً ما'};
+  const prLabels = {1:'عاجل',2:'قريب',3:'يوماً ما'};
   const prColors = {1:'#EF4444',2:'#F59E0B',3:'#6366F1'};
   const noteBgs = {1:'#EF444418',2:'#F59E0B18',3:'#6366F118'};
   const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 2.5];
@@ -502,15 +524,15 @@ R.ideas = function() {
     '</div>' +
     '<div class="idea-filters">' +
       `<button class="filter-btn active" data-priority="all" onclick="filterIdeas('all')">الكل</button>`+
-      `<button class="filter-btn" data-priority="1" onclick="filterIdeas(1)">🔴 عاجل</button>`+
-      `<button class="filter-btn" data-priority="2" onclick="filterIdeas(2)">🟡 قريب</button>`+
-      `<button class="filter-btn" data-priority="3" onclick="filterIdeas(3)">⚫ يوماً ما</button>`+
+      `<button class="filter-btn" data-priority="1" onclick="filterIdeas(1)"><span class="pr-dot" style="background:#EF4444"></span> عاجل</button>`+
+      `<button class="filter-btn" data-priority="2" onclick="filterIdeas(2)"><span class="pr-dot" style="background:#F59E0B"></span> قريب</button>`+
+      `<button class="filter-btn" data-priority="3" onclick="filterIdeas(3)"><span class="pr-dot" style="background:#6366F1"></span> يوماً ما</button>`+
     '</div>' +
     '<div class="ideas-grid" id="ideas-grid">' + IDEAS.map((idea, i) => {
       const rot = rotations[i % rotations.length];
       const rels = (relMap[idea.name]||[]).slice(0,3).map(rn => {
         const rp = [...PRJ,...BOT].find(x => x.name === rn || x.ar === rn);
-        return rp ? `<span title="${E(rn)}">${rp.em||'•'}</span>` : '';
+        return rp ? `<span title="${E(rn)}">${_ic(rp.em,14)}</span>` : '';
       }).filter(Boolean).join(' ');
       const bullets = (idea.desc||'').split('\n').filter(l => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim())).slice(0,3);
       return `<div class="sticky-note" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr]||'#999'};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">`+
@@ -595,7 +617,7 @@ function _linksHTML(links,cl) {
 
 function _pathHTML(path) {
   if (!path) return '';
-  return `<div style="margin-top:14px;font-family:var(--mono);font-size:11px;background:var(--elevated);padding:10px 14px;border-radius:8px;color:var(--t2);direction:ltr;word-break:break-all">📁 ${E(path)}</div>`;
+  return `<div style="margin-top:14px;font-family:var(--mono);font-size:11px;background:var(--elevated);padding:10px 14px;border-radius:8px;color:var(--t2);direction:ltr;word-break:break-all;display:flex;align-items:center;gap:6px">${_ic('📁',14)} ${E(path)}</div>`;
 }
 
 /* ── 1. PROJECT DETAIL — صفحة كاملة تحل محل المحتوى ── */
@@ -629,9 +651,9 @@ function openProjectDetail(name) {
         s.rows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')+
         `</div>`
       ).join('')+
-      (tags.length?`<div class="prj-info-card"><h3 class="prj-info-title">🏷️ التقنيات</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map(t=>`<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join('')}</div></div>`:'')+
-      (item.path?`<div class="prj-info-card"><h3 class="prj-info-title">📁 المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`:'')+
-      (Object.keys(links).length?`<div class="prj-info-card"><h3 class="prj-info-title">🔗 الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(links).map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`).join('')}</div></div>`:'')+
+      (tags.length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🏷️',14)} التقنيات</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map(t=>`<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join('')}</div></div>`:'')+
+      (item.path?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('📁',14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`:'')+
+      (Object.keys(links).length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🔗',14)} الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(links).map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`).join('')}</div></div>`:'')+
     `</div>`;
   document.getElementById('app').appendChild(el);
   _suppressHash = true;
@@ -665,7 +687,7 @@ function openBotDetail(name) {
         `<div class="dt-prompt">$ bot status --name "${E(item.name)}"</div>`+
         `<div class="dt-output">`+
           `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar||item.name)} ${_ic(item.em,16)}</div>`+
-          `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive?'#28C840':'#FF5F57'}">${isActive?'● نشط':'● متوقف'}</span></div>`+
+          `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive?'#28C840':'#FF5F57'}">${isActive?'■ نشط':'□ متوقف'}</span></div>`+
           (headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(headline)}</div>`:'')+
         `</div>`+
         (stats.length?`<div class="dt-prompt">$ bot stats</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
@@ -725,7 +747,7 @@ function openIdeaDetail(name) {
   const item = M[name]; if (!item) return;
   closeDetail();
   const {headline,sections} = _parseDesc(item);
-  const prLabels = {1:'🔴 عاجل',2:'🟡 قريب',3:'⚫ يوماً ما'};
+  const prLabels = {1:'عاجل',2:'قريب',3:'يوماً ما'};
   const prColors = {1:'#EF4444',2:'#F59E0B',3:'#6366F1'};
   const cl = prColors[item.pr]||'#6366F1';
 
@@ -736,7 +758,7 @@ function openIdeaDetail(name) {
   };
   const rels = (relMap[item.name]||[]).map(rn => {
     const rp = [...PRJ,...BOT].find(x=>x.name===rn||x.ar===rn);
-    return rp ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--elevated);border-radius:20px;font-size:10px">${rp.em} ${E(rp.ar||rp.name)}</span>` : '';
+    return rp ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--elevated);border-radius:20px;font-size:10px">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : '';
   }).filter(Boolean).join('');
 
   const el = document.createElement('div');
