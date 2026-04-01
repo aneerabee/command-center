@@ -27,8 +27,17 @@ const IC={
   '👤':'user','📌':'pin','⚠️':'alert-triangle','📂':'folder'
 };
 
+/* _ic(emoji, size) — returns Lucide icon markup */
+function _ic(em,sz){
+  const nm=IC[em]; if(!nm) return em||'';
+  const s=sz||20; const sw=s>28?1.5:s>18?1.75:2;
+  return `<span class="ic-wrap" style="width:${s}px;height:${s}px;display:inline-flex;align-items:center;justify-content:center;line-height:0"><i data-lucide="${nm}" style="width:${s}px;height:${s}px" stroke-width="${sw}"></i></span>`;
+}
+
+/* _processIcons — aggressive: scans ALL DOM for remaining emojis */
 function _processIcons(){
   if(!window.lucide)return;
+  // Target known containers
   const targets=[
     ['.nav-icon',16,2],['.bar-icon',20,2],['.more-icon',22,2],
     ['.brand-icon',20,2.5],['.orb-icon',22,2],['.svc-em',18,2],
@@ -38,26 +47,22 @@ function _processIcons(){
   ];
   targets.forEach(([sel,sz,sw])=>{
     document.querySelectorAll(sel).forEach(el=>{
-      if(el.classList.contains('ic-done'))return;
+      if(el.querySelector('svg'))return;
       const em=el.textContent.trim();
       const nm=IC[em];
-      if(nm){
-        el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sw}"></i>`;
-        el.classList.add('ic-done');
-      }
+      if(nm) el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sw}"></i>`;
     });
   });
-  // Handle inline font-size spans (project heroes, detail banners, card heads)
+  // Handle ANY span with font-size containing single emoji
   document.querySelectorAll('span[style*="font-size"]').forEach(el=>{
-    if(el.classList.contains('ic-done')||el.children.length>0)return;
+    if(el.querySelector('svg')||el.children.length>0)return;
     const em=el.textContent.trim();
     if(!em||em.length>4)return;
     const nm=IC[em];
     if(nm){
       const m=el.style.fontSize.match(/(\d+)/);
       const sz=m?parseInt(m[1]):24;
-      el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sz>30?1.5:2}"></i>`;
-      el.classList.add('ic-done');
+      el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sz>28?1.5:2}"></i>`;
     }
   });
   lucide.createIcons();
@@ -168,13 +173,13 @@ R.home = function() {
   const dashArray = `${pct * circumference} ${circumference}`;
 
   const orbs = [
-    {label:'مشاريع',val:PRJ.length,ic:'🚀',pg:'projects',grad:'linear-gradient(135deg,#6C3AED,#8B5CF6)'},
-    {label:'خدمات',val:SVC.length,ic:'🖥️',pg:'server',grad:'linear-gradient(135deg,#0EA5E9,#38BDF8)'},
-    {label:'بوتات',val:BOT.length,ic:'🤖',pg:'bots',grad:'linear-gradient(135deg,#10B981,#34D399)'},
-    {label:'سحابية',val:CLD.length,ic:'☁️',pg:'cloud',grad:'linear-gradient(135deg,#EC4899,#F472B6)'},
-    {label:'وكلاء',val:14,ic:'🧠',pg:'tools',grad:'linear-gradient(135deg,#8B5CF6,#A78BFA)'},
-    {label:'أفكار',val:IDEAS.length,ic:'💡',pg:'ideas',grad:'linear-gradient(135deg,#F59E0B,#FBBF24)'},
-    {label:'مشفّر',val:130,ic:'🔐',pg:'archive',grad:'linear-gradient(135deg,#EF4444,#F87171)'}
+    {label:'مشاريع',val:PRJ.length,em:'🚀',pg:'projects',grad:'linear-gradient(135deg,#6C3AED,#8B5CF6)'},
+    {label:'خدمات',val:SVC.length,em:'🖥️',pg:'server',grad:'linear-gradient(135deg,#0EA5E9,#38BDF8)'},
+    {label:'بوتات',val:BOT.length,em:'🤖',pg:'bots',grad:'linear-gradient(135deg,#10B981,#34D399)'},
+    {label:'سحابية',val:CLD.length,em:'☁️',pg:'cloud',grad:'linear-gradient(135deg,#EC4899,#F472B6)'},
+    {label:'وكلاء',val:14,em:'🧠',pg:'tools',grad:'linear-gradient(135deg,#8B5CF6,#A78BFA)'},
+    {label:'أفكار',val:IDEAS.length,em:'💡',pg:'ideas',grad:'linear-gradient(135deg,#F59E0B,#FBBF24)'},
+    {label:'مشفّر',val:130,em:'🔐',pg:'archive',grad:'linear-gradient(135deg,#EF4444,#F87171)'}
   ];
 
   const timeline = [
@@ -200,14 +205,14 @@ R.home = function() {
         '</div>' +
       '</div>' +
       '<div class="countdown-info">' +
-        '<div style="font-size:1.3rem">💒 العد التنازلي للزفاف</div>' +
+        `<div style="font-size:1.3rem">${_ic('💒',22)} العد التنازلي للزفاف</div>` +
         '<div style="opacity:.7;margin:.25rem 0">21 — 25 أبريل 2026</div>' +
         `<div style="font-size:.85rem;opacity:.55">5 أيام · ${days} يوم متبقي</div>` +
       '</div>' +
     '</div>' +
     '<div class="orbs-grid">' + orbs.map(o =>
       `<div class="orb glass" style="background:${o.grad}" onclick="go('${o.pg}')">`+
-      `<span class="orb-icon">${o.ic}</span>`+
+      `<span class="orb-icon">${_ic(o.em,24)}</span>`+
       `<span class="orb-val">${o.val}</span>`+
       `<span class="orb-label">${E(o.label)}</span></div>`
     ).join('') + '</div>' +
@@ -235,7 +240,7 @@ R.projects = function() {
     `<div class="prj-hero-accent" style="background:linear-gradient(135deg,${hero.cl},${hero.cl}aa)"></div>`+
     `<div class="prj-hero-content">`+
       `<div class="prj-hero-top">`+
-        `<span style="font-size:52px">${hero.em}</span>`+
+        `<span style="font-size:52px">${_ic(hero.em,52)}</span>`+
         `<div>`+
           `<span class="prj-hero-badge">المشروع الرئيسي</span>`+
           `<h2 class="prj-hero-title">${E(hero.ar)}</h2>`+
@@ -257,7 +262,7 @@ R.projects = function() {
       `<div class="prj-card-accent" style="background:${p.cl}"></div>`+
       `<div class="prj-card-body">`+
         `<div class="prj-card-head">`+
-          `<span style="font-size:30px">${p.em}</span>`+
+          `<span style="font-size:30px">${_ic(p.em,30)}</span>`+
           `<span class="prj-card-dot" style="background:${p.st==='a'?'var(--green)':'var(--t3)'}"></span>`+
         `</div>`+
         `<h3 class="prj-card-name">${E(p.ar||p.name)}</h3>`+
@@ -289,7 +294,7 @@ R.map = function() {
   const counts = {github:0,local:0,server:0};
   mapData.forEach(d => counts[d.l]++);
 
-  return '<h2 class="page-title">🗺️ خريطة المشاريع</h2>' +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🗺️',20)}</span> خريطة المشاريع</h2>` +
     '<div class="map-stats">' +
       `<div class="map-stat"><span class="map-stat-val">${counts.github}</span><span class="map-stat-label">GitHub</span></div>`+
       `<div class="map-stat"><span class="map-stat-val">${counts.local}</span><span class="map-stat-label">محلي</span></div>`+
@@ -305,7 +310,7 @@ R.map = function() {
     '<div class="map-list" id="map-list">' + mapData.map(d => {
       const ghLink = d.g !== '—' ? `<a href="https://github.com/aneerabee/${E(d.g)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.75rem;margin-right:.5rem">${d.gp?'🌐':'🔒'} GitHub</a>` : '';
       return `<div class="map-item" data-loc="${d.l}" style="border-right:4px solid ${d.c}">`+
-        `<span style="margin-left:.5rem">${d.e}</span>`+
+        `<span style="margin-left:.5rem">${_ic(d.e,18)}</span>`+
         `<div style="flex:1"><span class="map-item-name">${E(d.n)}</span>`+
         `<span class="map-item-path">${E(d.p)}</span>`+
         `<span style="font-size:.7rem;opacity:.55">${E(d.t)}</span></div>`+
@@ -384,7 +389,7 @@ R.server = function() {
   ];
 
   return '<div class="server-header">' +
-    '<h2 class="page-title server-title">🖥️ CONTABO VPS</h2>' +
+    `<h2 class="page-title server-title"><span class="page-icon">${_ic('🖥️',20)}</span> CONTABO VPS</h2>` +
     '<span class="server-ip">62.171.128.44 · UBUNTU 24 · <span style="color:#10B981">ONLINE</span></span>' +
     '</div>' +
     '<div class="gauge-grid">' + gauges.map(g => {
@@ -399,7 +404,7 @@ R.server = function() {
     '<div class="svc-list">' + SVC.map(s =>
       `<div class="svc-item">`+
       `<span class="svc-status ${s.st?'svc-on':'svc-off'}"></span>`+
-      `<span class="svc-em">${s.em}</span>`+
+      `<span class="svc-em">${_ic(s.em,18)}</span>`+
       `<div class="svc-info"><span class="svc-name">${E(s.name)}</span><span class="svc-dt">${E(s.dt)}</span></div>`+
       (s.port && s.port !== '—' ? `<span class="svc-port">:${E(s.port)}</span>` : '') +
       `</div>`
@@ -408,7 +413,7 @@ R.server = function() {
 
 /* ── BOTS ── */
 R.bots = function() {
-  return '<h2 class="page-title">🤖 مصنع البوتات <small style="font-size:.6em;opacity:.5">بوتات Telegram والأدوات المالية</small></h2>' +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🤖',20)}</span> مصنع البوتات <small style="font-size:.6em;opacity:.5">بوتات Telegram والأدوات المالية</small></h2>` +
     '<div class="bot-grid">' + BOT.map(b => {
       const stats = BSTATS[b.name] || [];
       const tags = (b.tags||[]).slice(0,4);
@@ -416,7 +421,7 @@ R.bots = function() {
       const isActive = b.st === 'a';
       return `<div class="bot-card glass" style="border-top:3px solid ${b.cl}" onclick="openBotDetail('${E(b.name)}')">`+
         `<div class="bot-header">`+
-        `<span class="bot-emoji">${b.em}</span>`+
+        `<span class="bot-emoji">${_ic(b.em,26)}</span>`+
         `<span class="bot-pulse ${isActive?'pulse-on':'pulse-off'}"></span>`+
         `</div>`+
         `<h3 class="bot-name">${E(b.ar||b.name)}</h3>`+
@@ -442,7 +447,7 @@ R.tools = function() {
   const dialCirc = 2 * Math.PI * 24;
   const dialMaxes = [20, 60, 16, 20];
 
-  return '<h2 class="page-title">🛠️ أدوات التطوير <small style="font-size:.6em;opacity:.5">Claude Code + MCP + الإعدادات</small></h2>' +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">Claude Code + MCP + الإعدادات</small></h2>` +
     `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">`+
       `<div class="tool-hero-info"><h3 class="tool-hero-name">${E(hero.ar||hero.name)}</h3>`+
       `<p class="tool-hero-desc">Opus 4.6 · 1M context · Claude Max</p></div>`+
@@ -458,7 +463,7 @@ R.tools = function() {
     '<div class="tool-grid">' + rest.map(t => {
       const em = emojiMap[t.name] || t.em || '🔧';
       return `<div class="tool-card glass" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">`+
-        `<span style="font-size:1.5rem">${em}</span>`+
+        `<span style="font-size:1.5rem">${_ic(em,24)}</span>`+
         `<h4 class="tool-card-name">${E(t.ar||t.name)}</h4>`+
         `<p class="tool-card-desc">${E((t.desc||'').split('\n')[0])}</p>`+
         `<div class="tool-card-tags">${(t.tags||[]).join(' · ')}</div>`+
@@ -468,11 +473,11 @@ R.tools = function() {
 
 /* ── CLOUD ── */
 R.cloud = function() {
-  return `<h2 class="page-title">☁️ الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} خدمة متصلة</small></h2>` +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('☁️',20)}</span> الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} خدمة متصلة</small></h2>` +
     '<div class="cloud-grid">' + CLD.map(c => {
       const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
       return `<div class="planet glass ${c.lk?'clickable':''}" ${clickAttr}>`+
-        `<span class="planet-emoji">${c.em}</span>`+
+        `<span class="planet-emoji">${_ic(c.em,26)}</span>`+
         `<span class="planet-name">${E(c.nm)}</span>`+
         `<span class="planet-dt">${E(c.dt)}</span></div>`;
     }).join('') + '</div>';
@@ -493,7 +498,7 @@ R.ideas = function() {
 
   return '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">' +
     '<span style="font-size:.7rem;padding:.2rem .6rem;border-radius:20px;background:var(--elevated);color:var(--t3)">خريطة الطريق</span>' +
-    `<h2 class="page-title" style="margin:0">💡 أفكار المستقبل <small style="font-size:.6em;opacity:.5">${IDEAS.length}</small></h2>` +
+    `<h2 class="page-title" style="margin:0"><span class="page-icon">${_ic('💡',20)}</span> أفكار المستقبل <small style="font-size:.6em;opacity:.5">${IDEAS.length}</small></h2>` +
     '</div>' +
     '<div class="idea-filters">' +
       `<button class="filter-btn active" data-priority="all" onclick="filterIdeas('all')">الكل</button>`+
@@ -510,7 +515,7 @@ R.ideas = function() {
       const bullets = (idea.desc||'').split('\n').filter(l => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim())).slice(0,3);
       return `<div class="sticky-note" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr]||'#999'};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">`+
         `<span class="sticky-badge" style="background:${prColors[idea.pr]||'#999'}">${E(prLabels[idea.pr]||'')}</span>`+
-        `<span class="sticky-emoji">${idea.em}</span>`+
+        `<span class="sticky-emoji">${_ic(idea.em,36)}</span>`+
         `<h4 class="sticky-title">${E(idea.name)}</h4>`+
         `<p class="sticky-desc">${E((idea.desc||'').split('\n')[0])}</p>`+
         (bullets.length ? `<div style="margin-top:.4rem;font-size:.7rem;color:var(--t3)">${bullets.map(b => `<div>${E(b)}</div>`).join('')}</div>` : '') +
@@ -521,13 +526,13 @@ R.ideas = function() {
 
 /* ── ARCHIVE ── */
 R.archive = function() {
-  return '<h2 class="page-title">🗄️ الأرشيف <small style="font-size:.6em;opacity:.5">المشاريع القديمة والملفات المؤرشفة</small></h2>' +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🗄️',20)}</span> الأرشيف <small style="font-size:.6em;opacity:.5">المشاريع القديمة والملفات المؤرشفة</small></h2>` +
     '<div class="archive-shelf">' + ARC.map(a => {
       const tags = (a.tags||[]).slice(0,3);
       return `<div class="book-card" onclick="openArchiveDetail('${E(a.name)}')">`+
         `<div class="book-spine" style="background:${a.cl}"></div>`+
         `<div class="book-body">`+
-          `<span class="book-emoji">${a.em}</span>`+
+          `<span class="book-emoji">${_ic(a.em,32)}</span>`+
           `<h4 class="book-title">${E(a.ar||a.name)}</h4>`+
           `<p class="book-desc">${E((a.desc||'').split('\n')[0])}</p>`+
           `<div class="book-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
@@ -562,12 +567,19 @@ function _parseDesc(item) {
 }
 
 function _sectionsHTML(sections) {
-  return sections.map(s =>
-    `<div style="margin-top:14px">`+
-    (s.title?`<h4 style="font-size:12px;font-weight:600;color:var(--t1);margin-bottom:6px">${E(s.title)}</h4>`:'')+
+  return sections.map(s => {
+    // Replace emoji in section title with icon
+    let title = s.title||'';
+    if(title){
+      const firstChar = [...title][0];
+      const iconName = IC[firstChar];
+      if(iconName) title = _ic(firstChar,14) + ' ' + title.substring(firstChar.length + (title.codePointAt(0)>0xFFFF?0:title[1]==='\uFE0F'?1:0)).trim();
+    }
+    return `<div style="margin-top:14px">`+
+    (title?`<h4 style="font-size:12px;font-weight:600;color:var(--t1);margin-bottom:6px;display:flex;align-items:center;gap:4px">${title}</h4>`:'')+
     s.rows.map(r=>`<div style="font-size:11px;color:var(--t2);line-height:1.7;padding:4px 10px;background:var(--elevated);border-radius:5px;margin-bottom:2px">${E(r)}</div>`).join('')+
-    `</div>`
-  ).join('');
+    `</div>`;
+  }).join('');
 }
 
 function _tagsHTML(tags,cl) {
@@ -605,7 +617,7 @@ function openProjectDetail(name) {
   el.innerHTML =
     `<button class="prj-detail-back" onclick="closeDetail()">← رجوع للمشاريع</button>`+
     `<div class="prj-detail-banner" style="background:linear-gradient(135deg,${cl},${cl}88)">`+
-      `<span style="font-size:60px">${item.em||''}</span>`+
+      `<span style="font-size:60px">${_ic(item.em,60)}</span>`+
       `<h1 style="font-size:28px;font-weight:800;margin-top:10px">${E(item.ar||item.name)}</h1>`+
       `<span class="${stCls}" style="margin-top:8px">${E(stLabel)}</span>`+
       (headline?`<p style="margin-top:14px;font-size:14px;opacity:.85;max-width:520px;line-height:1.7">${E(headline)}</p>`:'')+
@@ -652,7 +664,7 @@ function openBotDetail(name) {
       `<div class="dt-body">`+
         `<div class="dt-prompt">$ bot status --name "${E(item.name)}"</div>`+
         `<div class="dt-output">`+
-          `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar||item.name)} ${item.em||''}</div>`+
+          `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar||item.name)} ${_ic(item.em,16)}</div>`+
           `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive?'#28C840':'#FF5F57'}">${isActive?'● نشط':'● متوقف'}</span></div>`+
           (headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(headline)}</div>`:'')+
         `</div>`+
@@ -691,7 +703,7 @@ function openToolDetail(name) {
     `<div class="dsp-panel">`+
       `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">`+
         `<button class="dsp-close" onclick="closeDetail()">&times;</button>`+
-        `<span style="font-size:48px;display:block;margin-bottom:14px">${item.em||''}</span>`+
+        `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em,48)}</span>`+
         `<h2 style="font-size:18px;font-weight:700">${E(item.ar||item.name)}</h2>`+
         (tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:14px;justify-content:center">${tags.map(t=>`<span style="font-size:8px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join('')}</div>`:'')+
       `</div>`+
@@ -735,7 +747,7 @@ function openIdeaDetail(name) {
     `<div class="di-card" style="border-top:4px solid ${cl}">`+
       `<button class="di-close" onclick="closeDetail()">&times;</button>`+
       `<div class="di-header">`+
-        `<span style="font-size:42px">${item.em||''}</span>`+
+        `<span style="font-size:42px">${_ic(item.em,42)}</span>`+
         `<span class="di-priority" style="background:${cl}">${E(prLabels[item.pr]||'')}</span>`+
       `</div>`+
       `<h2 style="font-size:18px;font-weight:700;margin-bottom:8px">${E(item.name)}</h2>`+
@@ -765,7 +777,7 @@ function openArchiveDetail(name) {
       `<button class="da-close" onclick="closeDetail()">&times;</button>`+
       `<div class="da-stamp">مؤرشف</div>`+
       `<div class="da-header">`+
-        `<span style="font-size:44px">${item.em||''}</span>`+
+        `<span style="font-size:44px">${_ic(item.em,44)}</span>`+
         `<h2 style="font-size:18px;font-weight:700;color:var(--t1)">${E(item.ar||item.name)}</h2>`+
       `</div>`+
       (headline?`<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(headline)}</p>`:'')+
