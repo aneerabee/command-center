@@ -26,11 +26,7 @@ const IC={
   '💹':'trending-up','🎨':'palette','🔔':'bell','🎮':'gamepad-2',
   '👤':'user','📌':'pin','⚠️':'alert-triangle','📂':'folder',
   '🏷️':'tag','📐':'ruler','📍':'map-pin','📄':'file-text',
-  '⛔':'ban','🔴':'circle','🟡':'circle','⚫':'circle',
-  '🔥':'flame','💹':'trending-up','🎯':'target','🎮':'gamepad-2',
-  '📌':'pin','📡':'radio-tower','🐳':'container','👥':'users',
-  '🔔':'bell','📈':'trending-up','💱':'arrow-right-left',
-  '📸':'camera','🎨':'palette','📦':'package','🛍️':'shopping-bag'
+  '⛔':'ban','🔴':'circle','🟡':'circle','⚫':'circle','🔥':'flame'
 };
 
 /* _icText(str) — replaces leading emoji in text with icon */
@@ -174,10 +170,7 @@ function closeMore() {
   if (s) s.classList.remove('open');
 }
 
-window.addEventListener('popstate', () => {
-  const id = _readHash();
-  if (id !== cur) go(id);
-});
+/* popstate removed — hashchange handles all navigation */
 
 /* ─────────────── 3. RENDER FUNCTIONS ─────────────── */
 
@@ -681,7 +674,7 @@ function openBotDetail(name) {
       `<div class="dt-titlebar">`+
         `<div class="dt-dots"><span style="background:#FF5F57"></span><span style="background:#FFBD2E"></span><span style="background:#28C840"></span></div>`+
         `<span class="dt-titlebar-text">${E(item.ar||item.name)} — ${isActive?'ACTIVE':'STOPPED'}</span>`+
-        `<button class="dt-close" onclick="closeDetail()">&times;</button>`+
+        `<button class="dt-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
       `</div>`+
       `<div class="dt-body">`+
         `<div class="dt-prompt">$ bot status --name "${E(item.name)}"</div>`+
@@ -724,7 +717,7 @@ function openToolDetail(name) {
     `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
     `<div class="dsp-panel">`+
       `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">`+
-        `<button class="dsp-close" onclick="closeDetail()">&times;</button>`+
+        `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
         `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em,48)}</span>`+
         `<h2 style="font-size:18px;font-weight:700">${E(item.ar||item.name)}</h2>`+
         (tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:14px;justify-content:center">${tags.map(t=>`<span style="font-size:8px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join('')}</div>`:'')+
@@ -767,7 +760,7 @@ function openIdeaDetail(name) {
   el.innerHTML =
     `<div class="di-overlay" onclick="closeDetail()"></div>`+
     `<div class="di-card" style="border-top:4px solid ${cl}">`+
-      `<button class="di-close" onclick="closeDetail()">&times;</button>`+
+      `<button class="di-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
       `<div class="di-header">`+
         `<span style="font-size:42px">${_ic(item.em,42)}</span>`+
         `<span class="di-priority" style="background:${cl}">${E(prLabels[item.pr]||'')}</span>`+
@@ -796,7 +789,7 @@ function openArchiveDetail(name) {
   el.innerHTML =
     `<div class="da-overlay" onclick="closeDetail()"></div>`+
     `<div class="da-paper">`+
-      `<button class="da-close" onclick="closeDetail()">&times;</button>`+
+      `<button class="da-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
       `<div class="da-stamp">مؤرشف</div>`+
       `<div class="da-header">`+
         `<span style="font-size:44px">${_ic(item.em,44)}</span>`+
@@ -818,9 +811,8 @@ function openArchiveDetail(name) {
 function closeDetail(instant) {
   const d = document.getElementById('detail-view');
   if (!d) return;
-  // Restore any hidden pages
-  const pg = document.getElementById('page-'+cur);
-  if (pg && pg.style.display==='none') pg.style.display='';
+  // Restore ALL hidden pages (project detail hides all)
+  document.querySelectorAll('.page').forEach(p=>{if(p.style.display==='none')p.style.display='';});
   if (instant) { d.remove(); return; }
   d.classList.remove('open');
   d.addEventListener('transitionend',()=>d.remove(),{once:true});
@@ -867,15 +859,21 @@ function filterIdeas(pr) {
 
 /* ─────────────── 6. INTERACTIVE EFFECTS ─────────────── */
 
+let _mRaf=false;
 document.addEventListener('mousemove', function(e) {
-  document.querySelectorAll('.glass').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-      card.style.setProperty('--mouse-x', x + 'px');
-      card.style.setProperty('--mouse-y', y + 'px');
-    }
+  if(_mRaf)return; _mRaf=true;
+  requestAnimationFrame(()=>{
+    _mRaf=false;
+    const active=document.querySelector('.page.active');
+    if(!active)return;
+    active.querySelectorAll('.glass').forEach(card=>{
+      const rect=card.getBoundingClientRect();
+      const x=e.clientX-rect.left,y=e.clientY-rect.top;
+      if(x>=0&&x<=rect.width&&y>=0&&y<=rect.height){
+        card.style.setProperty('--mouse-x',x+'px');
+        card.style.setProperty('--mouse-y',y+'px');
+      }
+    });
   });
 });
 
