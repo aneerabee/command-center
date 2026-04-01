@@ -214,14 +214,14 @@ R.projects = function() {
 /* ── MAP ── */
 R.map = function() {
   const mapData = [
-    {n:"BRIX Travel System",e:"🏨",l:"github",p:"~/Desktop/Projects/🏨 BRIX-Travel/",g:"brix-travel-system",gp:1,s:"🔄 مُزامَن",c:"#10B981",t:"تطوير نشط — Vercel ينشر من GitHub"},
-    {n:"WhatsApp CRM",e:"💬",l:"github",p:"~/Desktop/Projects/📢 EasyBooking/💬 whatsapp-crm/",g:"easybooking-whatsapp-crm",gp:1,s:"🔄 مُزامَن",c:"#10B981",t:"Railway ينشر من GitHub"},
-    {n:"Meta MCP",e:"🤖",l:"github",p:"~/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp/",g:"meta-mcp",gp:1,s:"💾 احتياطية",c:"#F59E0B",t:"يستخدمه Claude Code"},
-    {n:"Money Manager",e:"💰",l:"github",p:"~/Desktop/Projects/💰 Money-Manager/",g:"money-manager",gp:1,s:"💾 احتياطية",c:"#F59E0B",t:"مشروع متوقف"},
-    {n:"BRIX Website",e:"🌐",l:"github",p:"~/Desktop/Projects/🌐 brixtravelwebsite/",g:"brixtravel",gp:1,s:"💾 احتياطية",c:"#F59E0B",t:"الحي على Hostinger"},
-    {n:"Command Center",e:"⚡",l:"github",p:"—",g:"command-center",gp:0,s:"☁️ GitHub فقط",c:"#6C3AED",t:"GitHub Pages"},
-    {n:"Chess Academy",e:"♟️",l:"github",p:"—",g:"chess-academy",gp:0,s:"☁️ GitHub فقط",c:"#6C3AED",t:"GitHub Pages · AR+EN"},
-    {n:"Tron Address Bot",e:"⚡",l:"local",p:"~/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot/",g:"—",gp:0,s:"⛔ محلي فقط",c:"#EF4444",t:"محافظ كريبتو — ممنوع الرفع"},
+    {n:"BRIX Travel System",e:"🏨",l:"github",p:"~/Desktop/Projects/🏨 BRIX-Travel/",g:"brix-travel-system",gp:0,s:"🔄 مُزامَن",c:"#10B981",t:"تطوير نشط — Vercel ينشر من GitHub"},
+    {n:"WhatsApp CRM",e:"💬",l:"github",p:"~/Desktop/Projects/📢 EasyBooking/💬 whatsapp-crm/",g:"easybooking-whatsapp-crm",gp:0,s:"🔄 مُزامَن",c:"#10B981",t:"Railway ينشر من GitHub"},
+    {n:"Meta MCP",e:"🤖",l:"github",p:"~/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp/",g:"meta-mcp",gp:0,s:"💾 احتياطية",c:"#F59E0B",t:"يستخدمه Claude Code"},
+    {n:"Money Manager",e:"💰",l:"github",p:"~/Desktop/Projects/💰 Money-Manager/",g:"money-manager",gp:0,s:"💾 احتياطية",c:"#F59E0B",t:"مشروع متوقف"},
+    {n:"BRIX Website",e:"🌐",l:"github",p:"~/Desktop/Projects/🌐 brixtravelwebsite/",g:"brixtravel",gp:0,s:"💾 احتياطية",c:"#F59E0B",t:"الحي على Hostinger"},
+    {n:"Command Center",e:"⚡",l:"github",p:"—",g:"command-center",gp:1,s:"☁️ GitHub فقط",c:"#6C3AED",t:"GitHub Pages"},
+    {n:"Chess Academy",e:"♟️",l:"github",p:"—",g:"chess-academy",gp:1,s:"☁️ GitHub فقط",c:"#6C3AED",t:"GitHub Pages · AR+EN"},
+    {n:"Tron Address Bot",e:"🕵️",l:"local",p:"~/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot/",g:"—",gp:0,s:"⛔ محلي فقط",c:"#EF4444",t:"محافظ كريبتو — ممنوع الرفع"},
     {n:"Sueno Scripts",e:"🔧",l:"local",p:"~/Desktop/Projects/📢 EasyBooking/🔧 sueno-scripts/",g:"—",gp:0,s:"⛔ محلي فقط",c:"#EF4444",t:"توكن مكشوف — ممنوع الرفع"},
     {n:"Wedding Planner",e:"💒",l:"server",p:"server:~/wedding-planner/",g:"—",gp:0,s:"🖥️ سيرفر",c:"#00E5FF",t:"Contabo :3001"},
     {n:"Wapy.dev",e:"💳",l:"server",p:"server:/opt/wapy/",g:"—",gp:0,s:"🖥️ سيرفر",c:"#00E5FF",t:"Docker · PostgreSQL"},
@@ -377,12 +377,12 @@ R.tools = function() {
   const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍"};
   const dials = [
     {v:"14",l:"وكيل",cl:"var(--purple)"},
-    {v:"29",l:"مهارة",cl:"var(--blue)"},
-    {v:"13",l:"MCP",cl:"var(--green)"},
+    {v:"49",l:"مهارة",cl:"var(--blue)"},
+    {v:"12",l:"MCP",cl:"var(--green)"},
     {v:"15",l:"قاعدة",cl:"var(--amber)"}
   ];
   const dialCirc = 2 * Math.PI * 24;
-  const dialMaxes = [20, 40, 20, 20];
+  const dialMaxes = [20, 60, 16, 20];
 
   return '<h2 class="page-title">🛠️ أدوات التطوير <small style="font-size:.6em;opacity:.5">Claude Code + MCP + الإعدادات</small></h2>' +
     `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">`+
@@ -428,7 +428,6 @@ R.ideas = function() {
   const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 2.5];
 
   const relMap = {
-    "بوت واتساب ذكي":["WhatsApp CRM","BRIX Travel System"],
     "بوت تلقرام لبريكس":["Argaz Bot","BRIX Travel System"],
     "نظام تتبع مالي":["BRIX Travel System","Wapy.dev"],
     "BRIX Website v2":["BRIX Travel Website","BRIX Travel System"]
@@ -661,7 +660,6 @@ function openIdeaDetail(name) {
   const cl = prColors[item.pr]||'#6366F1';
 
   const relMap = {
-    "بوت واتساب ذكي":["WhatsApp CRM","BRIX Travel System"],
     "بوت تلقرام لبريكس":["Argaz Bot","BRIX Travel System"],
     "نظام تتبع مالي":["BRIX Travel System","Wapy.dev"],
     "BRIX Website v2":["BRIX Travel Website","BRIX Travel System"]
