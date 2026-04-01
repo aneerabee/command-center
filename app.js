@@ -6,6 +6,62 @@
 /* ─────────────── 1. UTILITIES ─────────────── */
 
 const E = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* ── ICON SYSTEM — Lucide SVG icons replace emojis ── */
+const IC={
+  '🏠':'home','🚀':'rocket','🗺️':'map','⚙️':'settings','🖥️':'monitor',
+  '🤖':'bot','🛠️':'wrench','💡':'lightbulb','☁️':'cloud','🗄️':'archive',
+  '🏨':'building-2','💒':'heart','📢':'megaphone','💳':'credit-card',
+  '⚡':'zap','💬':'message-circle','🌐':'globe','♟️':'trophy',
+  '🧠':'brain','💰':'wallet','🏦':'landmark','💱':'arrow-right-left',
+  '🏢':'building','🛍️':'shopping-bag','🏗️':'hard-hat','📸':'camera',
+  '🔐':'lock-keyhole','🦞':'terminal','🐙':'github','📊':'bar-chart-3',
+  '✈️':'send','🔍':'search','🕷️':'scan-search','🔗':'link',
+  '🪙':'circle-dollar-sign','🚂':'train-front','📝':'file-text',
+  '🔒':'shield-check','📁':'folder-open','🔧':'settings',
+  '🕵️':'scan-eye','📘':'book-open','🟣':'circle-dot','▲':'triangle',
+  '⏰':'clock','💾':'hard-drive','🛡️':'shield','📱':'smartphone',
+  '📦':'package','🎯':'target','🔄':'refresh-cw','🐳':'container',
+  '📡':'radio-tower','👥':'users','🌍':'earth','📈':'trending-up',
+  '💹':'trending-up','🎨':'palette','🔔':'bell','🎮':'gamepad-2',
+  '👤':'user','📌':'pin','⚠️':'alert-triangle','📂':'folder'
+};
+
+function _processIcons(){
+  if(!window.lucide)return;
+  const targets=[
+    ['.nav-icon',16,2],['.bar-icon',20,2],['.more-icon',22,2],
+    ['.brand-icon',20,2.5],['.orb-icon',22,2],['.svc-em',18,2],
+    ['.planet-emoji',26,1.5],['.book-emoji',32,1.5],
+    ['.sticky-emoji',36,1.5],['.bot-emoji',26,2],
+    ['.map-item>span:first-child',18,2]
+  ];
+  targets.forEach(([sel,sz,sw])=>{
+    document.querySelectorAll(sel).forEach(el=>{
+      if(el.classList.contains('ic-done'))return;
+      const em=el.textContent.trim();
+      const nm=IC[em];
+      if(nm){
+        el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sw}"></i>`;
+        el.classList.add('ic-done');
+      }
+    });
+  });
+  // Handle inline font-size spans (project heroes, detail banners, card heads)
+  document.querySelectorAll('span[style*="font-size"]').forEach(el=>{
+    if(el.classList.contains('ic-done')||el.children.length>0)return;
+    const em=el.textContent.trim();
+    if(!em||em.length>4)return;
+    const nm=IC[em];
+    if(nm){
+      const m=el.style.fontSize.match(/(\d+)/);
+      const sz=m?parseInt(m[1]):24;
+      el.innerHTML=`<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px" stroke-width="${sz>30?1.5:2}"></i>`;
+      el.classList.add('ic-done');
+    }
+  });
+  lucide.createIcons();
+}
 const M = {};
 [...PRJ,...BOT,...TL,...ARC,...IDEAS].forEach(i => { M[i.name] = i; });
 const _validPages = new Set(PG.map(p => p.id));
@@ -58,6 +114,7 @@ function init() {
 
   _updateCountdown();
   setInterval(_updateCountdown, 60000);
+  requestAnimationFrame(_processIcons);
 
   const hashParts = location.hash.slice(1).split('/');
   if (hashParts[1]) {
@@ -77,6 +134,7 @@ function go(id) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === id));
   document.querySelectorAll('.bar-item').forEach(el => el.classList.toggle('active', el.dataset.page === id));
   window.scrollTo(0, 0);
+  requestAnimationFrame(_processIcons);
 }
 
 function openMore() {
@@ -567,7 +625,7 @@ function openProjectDetail(name) {
   _suppressHash = true;
   location.hash = cur+'/'+encodeURIComponent(name);
   window.scrollTo(0,0);
-  requestAnimationFrame(()=>el.classList.add('open'));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 2. BOT TERMINAL — واجهة ترمنال داكنة ── */
@@ -614,7 +672,7 @@ function openBotDetail(name) {
   document.body.appendChild(el);
   _suppressHash = true;
   location.hash = cur+'/'+encodeURIComponent(name);
-  requestAnimationFrame(()=>el.classList.add('open'));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 3. TOOL SPLIT — لوحة منقسمة (أيقونة + تفاصيل) ── */
@@ -647,7 +705,7 @@ function openToolDetail(name) {
   document.body.appendChild(el);
   _suppressHash = true;
   location.hash = cur+'/'+encodeURIComponent(name);
-  requestAnimationFrame(()=>el.classList.add('open'));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 4. IDEA EXPAND — بطاقة تتوسع من المركز ── */
@@ -688,7 +746,7 @@ function openIdeaDetail(name) {
   document.body.appendChild(el);
   _suppressHash = true;
   location.hash = cur+'/'+encodeURIComponent(name);
-  requestAnimationFrame(()=>el.classList.add('open'));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 5. ARCHIVE DOCUMENT — وثيقة ورقية كلاسيكية ── */
@@ -719,7 +777,7 @@ function openArchiveDetail(name) {
   document.body.appendChild(el);
   _suppressHash = true;
   location.hash = cur+'/'+encodeURIComponent(name);
-  requestAnimationFrame(()=>el.classList.add('open'));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── إغلاق أي عرض تفصيلي ── */
