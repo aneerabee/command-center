@@ -471,283 +471,87 @@ a{text-decoration:none;color:inherit}
 @keyframes icVintageIn{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 
 /* ═══════════════════════════════════════
-   1. HOME — Gradient circles (pink→purple)
+   CLEAN ICON SYSTEM — Professional & Minimal
+   Default: subtle grey icons. Section color only on page-icon badge.
    ═══════════════════════════════════════ */
-#page-home .ic-wrap{
-  background:linear-gradient(135deg,#EC4899,#8B5CF6);
-  border-radius:50%;padding:8px;
-  box-shadow:0 2px 10px rgba(236,72,153,.25);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-home .ic-wrap svg.lucide{color:#fff;filter:none}
-#page-home .ic-wrap:hover{transform:scale(1.15) rotate(5deg);box-shadow:0 4px 18px rgba(139,92,246,.35)}
-#page-home .page-icon{
-  background:linear-gradient(135deg,#EC4899,#8B5CF6)!important;
-  color:#fff!important;border-radius:50%;
-  box-shadow:0 2px 12px rgba(236,72,153,.3);
-}
-#page-home .page-icon svg.lucide{color:#fff}
 
-/* ═══════════════════════════════════════
-   2. PROJECTS — Solid purple rounded squares
-   ═══════════════════════════════════════ */
-#page-projects .ic-wrap{
-  background:#6C3AED;border-radius:8px;padding:7px;
-  box-shadow:0 2px 8px rgba(108,58,237,.2);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .35s var(--ease),box-shadow .35s var(--ease);
-}
-#page-projects .ic-wrap svg.lucide{color:#fff;filter:none}
-#page-projects .ic-wrap:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 20px rgba(108,58,237,.35)}
-#page-projects .page-icon{
-  background:#6C3AED!important;color:#fff!important;
-  border-radius:8px;box-shadow:0 3px 12px rgba(108,58,237,.25);
-}
-#page-projects .page-icon svg.lucide{color:#fff}
-.prj-detail .ic-wrap{
-  background:#6C3AED;border-radius:8px;padding:7px;
-  box-shadow:0 2px 8px rgba(108,58,237,.2);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .35s var(--ease),box-shadow .35s var(--ease);
-}
-.prj-detail .ic-wrap svg.lucide{color:#fff;filter:none}
-.prj-detail .ic-wrap:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 20px rgba(108,58,237,.35)}
+/* Base: all icons are clean grey, no backgrounds */
+.ic-wrap{transition:transform .3s var(--ease),color .3s var(--ease)}
+.ic-wrap svg.lucide{color:var(--t3);transition:color .3s var(--ease),transform .3s var(--ease)}
 
-/* ═══════════════════════════════════════
-   3. MAP — Green outlined circles with dot pattern
-   ═══════════════════════════════════════ */
-#page-map .ic-wrap{
-  background:radial-gradient(circle,rgba(16,185,129,.06) 1px,transparent 1px);
-  background-size:4px 4px;
-  border:2px solid #10B981;border-radius:50%;padding:7px;
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),border-color .3s var(--ease),background-color .3s var(--ease);
-}
-#page-map .ic-wrap svg.lucide{color:#10B981;filter:none}
-#page-map .ic-wrap:hover{transform:scale(1.12);border-color:#059669;background-color:rgba(16,185,129,.08)}
-#page-map .page-icon{
-  background:transparent!important;
-  border:2px solid #10B981;border-radius:50%;
-  color:#10B981!important;
-}
+/* Page title icon — subtle tinted badge per section */
+.page-icon{background:var(--elevated);border:1px solid var(--brd)}
+.page-icon svg.lucide{color:var(--sec,var(--purple))}
+
+/* Section-specific page-icon tints (subtle, not garish) */
+#page-projects .page-icon{background:rgba(108,58,237,.08);border-color:rgba(108,58,237,.12)}
+#page-projects .page-icon svg.lucide{color:#6C3AED}
+#page-map .page-icon{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.12)}
 #page-map .page-icon svg.lucide{color:#10B981}
-
-/* ═══════════════════════════════════════
-   4. AUTO — Dark terminal boxes, green LED glow
-   ═══════════════════════════════════════ */
-#page-auto .ic-wrap{
-  --neon-c:#34D399;
-  background:#0D1117;border-radius:6px;padding:7px;
-  border:1px solid rgba(52,211,153,.2);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),border-color .3s var(--ease);
-}
-#page-auto .ic-wrap svg.lucide{
-  color:#34D399;
-  filter:drop-shadow(0 0 6px rgba(52,211,153,.5));
-  animation:icLedBlink 2.5s ease-in-out infinite;
-}
-#page-auto .ic-wrap:hover{transform:scale(1.1);border-color:#34D399}
-#page-auto .ic-wrap:hover svg.lucide{animation:icNeonPulse 1.5s ease-in-out infinite}
-#page-auto .page-icon{
-  background:#0D1117!important;color:#34D399!important;
-  border:1px solid rgba(52,211,153,.3);border-radius:6px;
-  box-shadow:0 0 8px rgba(52,211,153,.15);
-}
-#page-auto .page-icon svg.lucide{color:#34D399;filter:drop-shadow(0 0 4px rgba(52,211,153,.4))}
-
-/* ═══════════════════════════════════════
-   5. SERVER — Blue glass cards with inner glow
-   ═══════════════════════════════════════ */
-#page-server .ic-wrap{
-  background:linear-gradient(135deg,rgba(14,165,233,.12),rgba(14,165,233,.04));
-  border:1px solid rgba(14,165,233,.2);
-  border-radius:10px;padding:8px;
-  box-shadow:inset 0 0 12px rgba(14,165,233,.08),0 2px 8px rgba(14,165,233,.1);
-  backdrop-filter:blur(4px);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-server .ic-wrap svg.lucide{color:#0EA5E9;filter:none}
-#page-server .ic-wrap:hover{
-  transform:scale(1.1);
-  box-shadow:inset 0 0 18px rgba(14,165,233,.15),0 4px 16px rgba(14,165,233,.2);
-}
-#page-server .page-icon{
-  background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(14,165,233,.05))!important;
-  border:1px solid rgba(14,165,233,.25);border-radius:10px;
-  box-shadow:inset 0 0 10px rgba(14,165,233,.1);
-  color:#0EA5E9!important;
-}
+#page-auto .page-icon{background:rgba(6,95,70,.08);border-color:rgba(6,95,70,.12)}
+#page-auto .page-icon svg.lucide{color:#065F46}
+#page-server .page-icon{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.12)}
 #page-server .page-icon svg.lucide{color:#0EA5E9}
-
-/* ═══════════════════════════════════════
-   6. BOTS — Gradient violet to pink pills, neon glow
-   ═══════════════════════════════════════ */
-#page-bots .ic-wrap{
-  --neon-c:#A78BFA;
-  background:linear-gradient(135deg,#8B5CF6,#EC4899);
-  border-radius:9999px;padding:7px 10px;
-  box-shadow:0 0 12px rgba(139,92,246,.25);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-bots .ic-wrap svg.lucide{color:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.3))}
-#page-bots .ic-wrap:hover{
-  transform:scale(1.12);
-  box-shadow:0 0 22px rgba(139,92,246,.4),0 0 40px rgba(236,72,153,.15);
-}
-#page-bots .page-icon{
-  background:linear-gradient(135deg,#8B5CF6,#EC4899)!important;
-  color:#fff!important;border-radius:9999px;
-  box-shadow:0 0 10px rgba(139,92,246,.25);
-}
-#page-bots .page-icon svg.lucide{color:#fff}
-.detail-terminal .ic-wrap{
-  background:linear-gradient(135deg,#8B5CF6,#EC4899);
-  border-radius:9999px;padding:7px 10px;
-  box-shadow:0 0 12px rgba(139,92,246,.25);
-}
-.detail-terminal .ic-wrap svg.lucide{color:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.3))}
-
-/* ═══════════════════════════════════════
-   7. TOOLS — Dark purple circles, gold icon
-   ═══════════════════════════════════════ */
-#page-tools .ic-wrap{
-  background:#3B0764;border-radius:50%;padding:8px;
-  box-shadow:0 2px 10px rgba(59,7,100,.25);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-tools .ic-wrap svg.lucide{color:#FCD34D;filter:drop-shadow(0 0 3px rgba(252,211,77,.3))}
-#page-tools .ic-wrap:hover{transform:scale(1.12) rotate(-8deg);box-shadow:0 4px 18px rgba(59,7,100,.35)}
-#page-tools .ic-wrap:hover svg.lucide{color:#FBBF24}
-#page-tools .page-icon{
-  background:#3B0764!important;color:#FCD34D!important;
-  border-radius:50%;box-shadow:0 2px 10px rgba(59,7,100,.2);
-}
-#page-tools .page-icon svg.lucide{color:#FCD34D}
-.detail-split .ic-wrap{
-  background:#3B0764;border-radius:50%;padding:8px;
-  box-shadow:0 2px 10px rgba(59,7,100,.25);
-}
-.detail-split .ic-wrap svg.lucide{color:#FCD34D;filter:drop-shadow(0 0 3px rgba(252,211,77,.3))}
-
-/* ═══════════════════════════════════════
-   8. IDEAS — Warm gradient soft squares
-   ═══════════════════════════════════════ */
-#page-ideas .ic-wrap{
-  background:linear-gradient(135deg,#F59E0B,#F97316);
-  border-radius:10px;padding:8px;
-  box-shadow:0 2px 10px rgba(245,158,11,.2);
-  animation:icEnter .5s var(--ease) both;
-  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-ideas .ic-wrap svg.lucide{color:#fff;filter:none}
-#page-ideas .ic-wrap:hover{transform:scale(1.1) rotate(3deg);box-shadow:0 6px 20px rgba(249,115,22,.3)}
-#page-ideas .page-icon{
-  background:linear-gradient(135deg,#F59E0B,#F97316)!important;
-  color:#fff!important;border-radius:10px;
-  box-shadow:0 2px 10px rgba(245,158,11,.2);
-}
-#page-ideas .page-icon svg.lucide{color:#fff}
-.detail-idea .ic-wrap{
-  background:linear-gradient(135deg,#F59E0B,#F97316);
-  border-radius:10px;padding:8px;
-  box-shadow:0 2px 10px rgba(245,158,11,.2);
-}
-.detail-idea .ic-wrap svg.lucide{color:#fff;filter:none}
-
-/* ═══════════════════════════════════════
-   9. CLOUD — Cloud-shaped containers, float animation
-   ═══════════════════════════════════════ */
-#page-cloud .ic-wrap{
-  background:rgba(14,165,233,.08);
-  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
-  padding:8px 10px;
-  border:1px solid rgba(14,165,233,.12);
-  box-shadow:0 3px 10px rgba(14,165,233,.08);
-  animation:icEnter .5s var(--ease) both,icCloudBob 4s ease-in-out infinite .5s;
-  transition:background .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-cloud .ic-wrap svg.lucide{color:#0284C7;filter:none}
-#page-cloud .ic-wrap:hover{background:rgba(14,165,233,.14);box-shadow:0 6px 18px rgba(14,165,233,.15)}
-#page-cloud .page-icon{
-  background:rgba(14,165,233,.1)!important;
-  border:1px solid rgba(14,165,233,.15);
-  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
-  color:#0284C7!important;
-}
-#page-cloud .page-icon svg.lucide{color:#0284C7}
-
-/* ═══════════════════════════════════════
-   10. ARCHIVE — Sepia/vintage paper circles
-   ═══════════════════════════════════════ */
-#page-archive .ic-wrap{
-  background:linear-gradient(145deg,#FEF3C7,#FDE68A);
-  border-radius:50%;padding:8px;
-  border:1px solid #D4A373;
-  box-shadow:0 1px 4px rgba(146,64,14,.12),inset 0 1px 3px rgba(255,255,255,.4);
-  filter:saturate(.85);
-  animation:icVintageIn .6s var(--ease) both;
-  transition:transform .3s var(--ease),filter .3s var(--ease),box-shadow .3s var(--ease);
-}
-#page-archive .ic-wrap svg.lucide{color:#92400E;filter:none}
-#page-archive .ic-wrap:hover{transform:scale(1.1) rotate(-3deg);filter:saturate(1);box-shadow:0 4px 14px rgba(146,64,14,.18)}
-#page-archive .page-icon{
-  background:linear-gradient(145deg,#FEF3C7,#FDE68A)!important;
-  border:1px solid #D4A373;border-radius:50%;
-  color:#92400E!important;filter:saturate(.85);
-}
+#page-bots .page-icon{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.12)}
+#page-bots .page-icon svg.lucide{color:#8B5CF6}
+#page-tools .page-icon{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.12)}
+#page-tools .page-icon svg.lucide{color:#6D28D9}
+#page-ideas .page-icon{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.12)}
+#page-ideas .page-icon svg.lucide{color:#F59E0B}
+#page-cloud .page-icon{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.12)}
+#page-cloud .page-icon svg.lucide{color:#0EA5E9}
+#page-archive .page-icon{background:rgba(146,64,14,.08);border-color:rgba(146,64,14,.12)}
 #page-archive .page-icon svg.lucide{color:#92400E}
-.detail-archive .ic-wrap{
-  background:linear-gradient(145deg,#FEF3C7,#FDE68A);
-  border-radius:50%;padding:8px;
-  border:1px solid #D4A373;
-  box-shadow:0 1px 4px rgba(146,64,14,.12),inset 0 1px 3px rgba(255,255,255,.4);
-  filter:saturate(.85);
-}
-.detail-archive .ic-wrap svg.lucide{color:#92400E;filter:none}
+
+/* Card icons: grey default, section color on hover */
+.prj-card svg.lucide,.bot-card svg.lucide,.tool-card svg.lucide,.sticky-note svg.lucide,.book-card svg.lucide,.planet svg.lucide,.map-item svg.lucide{color:var(--t3);transition:color .3s var(--ease),transform .3s var(--ease)}
+.prj-card:hover svg.lucide{color:#6C3AED;transform:scale(1.1)}
+.bot-card:hover svg.lucide{color:#8B5CF6;transform:scale(1.1)}
+.tool-card:hover svg.lucide{color:#6D28D9;transform:scale(1.1)}
+.sticky-note:hover svg.lucide{color:#F59E0B;transform:scale(1.1)}
+.book-card:hover svg.lucide{color:#92400E;transform:scale(1.1)}
+.planet:hover svg.lucide{color:#0EA5E9;transform:scale(1.15)}
+.map-item:hover svg.lucide{color:#10B981;transform:scale(1.1)}
+
+/* Hero/banner icons: white on gradient backgrounds */
+.prj-hero svg.lucide,.prj-detail-banner svg.lucide,.tool-hero svg.lucide,.server-header svg.lucide,.auto-header svg.lucide,.dm-banner svg.lucide{color:#fff}
+.dsp-sidebar svg.lucide{color:#fff}
+
+/* Orb icons: white (on gradient backgrounds) */
+.orb svg.lucide,.orb-icon svg.lucide{color:#fff}
+
+/* Nav: grey default, purple when active */
+.nav-icon svg.lucide{color:var(--t3);transition:all .25s var(--ease)}
+.nav-item:hover svg.lucide{color:var(--t1)}
+.nav-item.active svg.lucide{color:var(--purple)}
+.bar-icon svg.lucide{color:var(--t3)}
+.bar-item.active .bar-icon svg.lucide{color:var(--purple)}
+.brand-icon svg.lucide{color:var(--purple)}
+
+/* Terminal detail: green icons */
+.dt-panel svg.lucide{color:#7ee787}
+
+/* Service list icons: section color */
+.svc-em svg.lucide{color:var(--cyan)}
+.gauge-card svg.lucide{color:var(--cyan)}
+
+/* LED/status indicators */
+.auto-group svg.lucide{color:var(--green)}
 
 /* ══════════════════════════════════════════════
-   UNIQUE CARD STYLING PER SECTION
+   SECTION CARD STYLING — subtle per-section accents
    ══════════════════════════════════════════════ */
-#page-home .glass{border-color:rgba(236,72,153,.08)}
-#page-home .glass:hover{border-color:rgba(236,72,153,.2);box-shadow:0 6px 24px rgba(236,72,153,.1)}
-#page-home .glass::before{background:linear-gradient(90deg,transparent,rgba(236,72,153,.12),transparent)}
-
-#page-projects .prj-card{border-color:rgba(108,58,237,.06)}
-#page-projects .prj-card:hover{border-color:rgba(108,58,237,.18);box-shadow:0 8px 28px rgba(108,58,237,.1)}
-#page-projects .glass::before{background:linear-gradient(90deg,transparent,rgba(108,58,237,.12),transparent)}
-
-#page-map .map-item{border-right:3px solid rgba(16,185,129,.15)}
-#page-map .map-item:hover{border-right-color:#10B981;box-shadow:0 4px 16px rgba(16,185,129,.08)}
-#page-map .map-stat{border-top:2px solid rgba(16,185,129,.12)}
-
-#page-auto .auto-group{border-color:rgba(52,211,153,.1);background:linear-gradient(180deg,var(--surface),rgba(13,17,23,.02))}
-#page-auto .auto-group:hover{border-color:rgba(52,211,153,.2);box-shadow:0 4px 16px rgba(6,95,70,.06)}
-#page-auto .auto-task{border-right:2px solid rgba(52,211,153,.15)}
-
-#page-server .gauge-card{border-color:rgba(14,165,233,.1)}
-#page-server .gauge-card:hover{border-color:rgba(14,165,233,.25);box-shadow:0 4px 20px rgba(14,165,233,.08),inset 0 0 12px rgba(14,165,233,.03)}
-#page-server .svc-item:hover{background:rgba(14,165,233,.03);box-shadow:inset 3px 0 0 rgba(14,165,233,.3)}
-
-#page-bots .bot-card{border-color:rgba(139,92,246,.08)}
-#page-bots .bot-card:hover{border-color:rgba(139,92,246,.2);box-shadow:0 8px 28px rgba(139,92,246,.1),0 0 0 1px rgba(139,92,246,.06)}
-
-#page-tools .tool-card{border-top:2px solid rgba(109,40,217,.12)}
-#page-tools .tool-card:hover{border-top-color:#6D28D9;box-shadow:0 8px 24px rgba(109,40,217,.1)}
-
-#page-ideas .sticky-note{border-color:rgba(245,158,11,.1)}
-#page-ideas .sticky-note:hover{border-color:rgba(245,158,11,.2);box-shadow:0 8px 28px rgba(245,158,11,.1)}
-
-#page-cloud .planet{border-color:rgba(14,165,233,.1);box-shadow:0 4px 16px rgba(14,165,233,.06)}
-#page-cloud .planet:hover{border-color:rgba(14,165,233,.25);box-shadow:0 8px 30px rgba(14,165,233,.12)!important}
-
-#page-archive .book-card{border-color:rgba(146,64,14,.1);background:linear-gradient(180deg,#FFFDF7,var(--surface))}
-#page-archive .book-card:hover{border-color:rgba(146,64,14,.2);box-shadow:0 12px 36px rgba(146,64,14,.08)}
-#page-archive .book-spine{opacity:.8}
+#page-projects .prj-card:hover{border-color:rgba(108,58,237,.15);box-shadow:0 6px 20px rgba(108,58,237,.06)}
+#page-map .map-item:hover{box-shadow:0 4px 12px rgba(16,185,129,.06)}
+#page-auto .auto-group:hover{border-color:rgba(52,211,153,.15);box-shadow:0 4px 12px rgba(6,95,70,.04)}
+#page-server .gauge-card:hover{border-color:rgba(14,165,233,.15);box-shadow:0 4px 14px rgba(14,165,233,.06)}
+#page-server .svc-item:hover{background:rgba(14,165,233,.02)}
+#page-bots .bot-card:hover{border-color:rgba(139,92,246,.15);box-shadow:0 6px 20px rgba(139,92,246,.06)}
+#page-tools .tool-card:hover{border-color:rgba(109,40,217,.15);box-shadow:0 6px 20px rgba(109,40,217,.06)}
+#page-ideas .sticky-note:hover{border-color:rgba(245,158,11,.15);box-shadow:0 6px 20px rgba(245,158,11,.06)}
+#page-cloud .planet:hover{border-color:rgba(14,165,233,.2);box-shadow:0 6px 20px rgba(14,165,233,.08)!important}
+#page-archive .book-card{background:linear-gradient(180deg,#FFFDF7,var(--surface))}
+#page-archive .book-card:hover{border-color:rgba(146,64,14,.15);box-shadow:0 6px 20px rgba(146,64,14,.06)}
 
 /* ══════ RESPONSIVE ══════ */
 
