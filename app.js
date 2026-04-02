@@ -237,15 +237,19 @@ R.home = function() {
       ).join('')+
     `</div>`+
 
-    // Row 3: Projects + Feed side by side
-    `<div class="hm-c hm-prj">`+
-      `<h3 class="hm-sec-title">${_ic('🚀',14)} مشاريع نشطة</h3>`+
-      topProjects.map(p=>
-        `<div class="hm-prj-row" onclick="go('projects')">`+
-          `<span class="hm-prj-dot" style="background:${p.cl}"></span>`+
-          `<span class="hm-prj-name">${E(p.ar)}</span>`+
-          `<div class="hm-prj-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div>`+
-          `<span class="hm-prj-pct">${p.pct}%</span>`+
+    // Row 3: Project cards with animated icons + Feed
+    `<div class="hm-projects-grid">`+
+      PRJ.filter(p=>p.st==='a').map((p,i)=>
+        `<div class="hm-pcard" style="--pc:${p.cl};animation-delay:${i*0.06}s" onclick="openProjectDetail('${E(p.name)}')">`+
+          `<div class="hm-pcard-icon" style="background:${p.cl}12;border:1px solid ${p.cl}22">`+
+            `<span class="hm-pcard-ic" style="color:${p.cl}">${_ic(p.em,20)}</span>`+
+          `</div>`+
+          `<div class="hm-pcard-info">`+
+            `<span class="hm-pcard-name">${E(p.ar)}</span>`+
+            `<div class="hm-pcard-progress"><div class="hm-pcard-fill" style="width:${p.pct}%;background:${p.cl}"></div></div>`+
+          `</div>`+
+          `<span class="hm-pcard-pct" style="color:${p.cl}">${p.pct}%</span>`+
+          `<div class="hm-pcard-glow" style="background:${p.cl}"></div>`+
         `</div>`
       ).join('')+
     `</div>`+
