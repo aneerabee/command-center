@@ -176,70 +176,107 @@ function closeMore() {
 
 const R = {};
 
-/* ── HOME ── */
+/* ── HOME — Bento Grid Dashboard ── */
 R.home = function() {
   const weddingDate = new Date(2026, 3, 21);
   const now = new Date();
   const days = Math.max(0, Math.ceil((weddingDate - now) / 86400000));
-  const circumference = 2 * Math.PI * 52;
-  const totalDays = 365;
-  const elapsed = totalDays - days;
-  const pct = Math.min(100, Math.max(0, elapsed / totalDays));
-  const dashArray = `${pct * circumference} ${circumference}`;
+  const circ = 2 * Math.PI * 52;
+  const pct = Math.min(1, Math.max(0, (365 - days) / 365));
 
-  const orbs = [
-    {label:'مشاريع',val:PRJ.length,em:'🚀',pg:'projects',grad:'linear-gradient(135deg,#6C3AED,#8B5CF6)'},
-    {label:'خدمات',val:SVC.length,em:'🖥️',pg:'server',grad:'linear-gradient(135deg,#0EA5E9,#38BDF8)'},
-    {label:'بوتات',val:BOT.length,em:'🤖',pg:'bots',grad:'linear-gradient(135deg,#10B981,#34D399)'},
-    {label:'سحابية',val:CLD.length,em:'☁️',pg:'cloud',grad:'linear-gradient(135deg,#EC4899,#F472B6)'},
-    {label:'وكلاء',val:14,em:'🧠',pg:'tools',grad:'linear-gradient(135deg,#8B5CF6,#A78BFA)'},
-    {label:'أفكار',val:IDEAS.length,em:'💡',pg:'ideas',grad:'linear-gradient(135deg,#F59E0B,#FBBF24)'},
-    {label:'مشفّر',val:130,em:'🔐',pg:'archive',grad:'linear-gradient(135deg,#EF4444,#F87171)'}
+  const stats = [
+    {label:'مشاريع',val:PRJ.length,em:'🚀',pg:'projects',cl:'#6C3AED'},
+    {label:'خدمات',val:SVC.length,em:'🖥️',pg:'server',cl:'#0EA5E9'},
+    {label:'بوتات',val:BOT.length,em:'🤖',pg:'bots',cl:'#8B5CF6'},
+    {label:'سحابية',val:CLD.length,em:'☁️',pg:'cloud',cl:'#EC4899'},
+    {label:'أدوات',val:TL.length,em:'🛠️',pg:'tools',cl:'#6D28D9'},
+    {label:'أفكار',val:IDEAS.length,em:'💡',pg:'ideas',cl:'#F59E0B'}
   ];
 
   const timeline = [
-    {date:'31 مارس',text:'أكاديمية الشطرنج v2 — نسخة إنجليزية + اختبارات + XP + سلسلة يومية',cl:'var(--purple)'},
-    {date:'31 مارس',text:'تأمين 3 مشاريع — money-manager + meta-mcp + brixtravel → GitHub',cl:'var(--blue)'},
-    {date:'31 مارس',text:'لوحة التحكم — إعادة تصميم CSS + 15 حركة + خطوط جديدة',cl:'var(--green)'},
-    {date:'29 مارس',text:'تنظيم iCloud — 5,400 ملف + خزنة مشفرة AES-256',cl:'var(--amber)'}
+    {date:'31 مارس',text:'أكاديمية الشطرنج v2 — نسخة إنجليزية + اختبارات',cl:'#8B5CF6'},
+    {date:'31 مارس',text:'تأمين 3 مشاريع → GitHub خاص',cl:'#0EA5E9'},
+    {date:'31 مارس',text:'لوحة التحكم — إعادة تصميم كاملة',cl:'#10B981'},
+    {date:'29 مارس',text:'تنظيم iCloud — 5,400 ملف + خزنة مشفرة',cl:'#F59E0B'}
   ];
 
-  return '<div class="home-hero">' +
-    '<h1 class="hero-title"><span class="gradient-text">مرحباً ربيع</span></h1>' +
-    '<p class="hero-sub">نظرة شاملة على كل مشاريعك وخدماتك وأدواتك — من مكان واحد.</p>' +
-    '</div>' +
-    '<div class="countdown-section">' +
-      '<div class="countdown-ring" id="countdown-ring">' +
-        '<svg viewBox="0 0 120 120" class="ring-svg">' +
-          '<circle cx="60" cy="60" r="52" class="ring-bg"/>' +
-          `<circle cx="60" cy="60" r="52" class="ring-fg" id="ring-fg" style="stroke-dasharray:${dashArray}"/>` +
-        '</svg>' +
-        '<div class="ring-content">' +
-          `<span class="ring-days" id="ring-days">${days}</span>` +
-          '<span class="ring-label">يوم</span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="countdown-info">' +
-        `<div style="font-size:1.3rem">${_ic('💒',22)} العد التنازلي للزفاف</div>` +
-        '<div style="opacity:.7;margin:.25rem 0">21 — 25 أبريل 2026</div>' +
-        `<div style="font-size:.85rem;opacity:.55">5 أيام · ${days} يوم متبقي</div>` +
-      '</div>' +
-    '</div>' +
-    '<div class="orbs-grid">' + orbs.map(o =>
-      `<div class="orb glass" style="background:${o.grad}" onclick="go('${o.pg}')">`+
-      `<span class="orb-icon">${_ic(o.em,24)}</span>`+
-      `<span class="orb-val">${o.val}</span>`+
-      `<span class="orb-label">${E(o.label)}</span></div>`
-    ).join('') + '</div>' +
-    '<div class="timeline-section">' +
-      '<h3 class="section-title">آخر النشاطات</h3>' +
-      '<div class="timeline">' + timeline.map(t =>
-        `<div class="timeline-item">`+
-        `<span class="timeline-dot" style="background:${t.cl}"></span>`+
-        `<span class="timeline-text"><strong style="opacity:.5;font-size:.75rem;margin-left:.4rem">${E(t.date)}</strong>${E(t.text)}</span>`+
+  const activeProjects = PRJ.filter(p=>p.st==='a').slice(0,3);
+
+  return `<div class="hm-bento">`+
+    // Welcome card — spans 2 cols
+    `<div class="hm-card hm-welcome">`+
+      `<div class="hm-welcome-content">`+
+        `<p class="hm-greeting">مرحباً</p>`+
+        `<h1 class="hm-name">ربيع</h1>`+
+        `<p class="hm-sub">نظرة شاملة على كل مشاريعك وأدواتك</p>`+
+      `</div>`+
+      `<div class="hm-welcome-deco"></div>`+
+    `</div>`+
+
+    // Countdown card
+    `<div class="hm-card hm-countdown">`+
+      `<div class="hm-countdown-top">`+
+        `<span class="hm-countdown-badge">${_ic('💒',14)} الزفاف</span>`+
+        `<span class="hm-countdown-date">21 — 25 أبريل</span>`+
+      `</div>`+
+      `<div class="hm-countdown-center">`+
+        `<svg viewBox="0 0 120 120" class="hm-ring">`+
+          `<circle cx="60" cy="60" r="52" fill="none" stroke="var(--elevated)" stroke-width="8"/>`+
+          `<circle cx="60" cy="60" r="52" fill="none" stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/>`+
+        `</svg>`+
+        `<div class="hm-countdown-num">`+
+          `<span class="hm-days" id="ring-days">${days}</span>`+
+          `<span class="hm-days-label">يوم متبقي</span>`+
+        `</div>`+
+      `</div>`+
+    `</div>`+
+
+    // Stats row — 6 mini cards
+    stats.map(s =>
+      `<div class="hm-card hm-stat" onclick="go('${s.pg}')">`+
+        `<div class="hm-stat-icon" style="color:${s.cl}">${_ic(s.em,18)}</div>`+
+        `<span class="hm-stat-val">${s.val}</span>`+
+        `<span class="hm-stat-label">${E(s.label)}</span>`+
+      `</div>`
+    ).join('')+
+
+    // Active projects card — spans 2 cols
+    `<div class="hm-card hm-active">`+
+      `<h3 class="hm-card-title">${_ic('🚀',16)} مشاريع نشطة</h3>`+
+      `<div class="hm-active-list">`+
+        activeProjects.map(p=>
+          `<div class="hm-active-item" onclick="go('projects')">`+
+            `<div class="hm-active-dot" style="background:${p.cl}"></div>`+
+            `<span class="hm-active-name">${E(p.ar)}</span>`+
+            `<div class="hm-active-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div>`+
+            `<span class="hm-active-pct">${p.pct}%</span>`+
+          `</div>`
+        ).join('')+
+      `</div>`+
+    `</div>`+
+
+    // Activity feed card
+    `<div class="hm-card hm-feed">`+
+      `<h3 class="hm-card-title">${_ic('📈',16)} آخر النشاطات</h3>`+
+      timeline.map(t=>
+        `<div class="hm-feed-item">`+
+          `<div class="hm-feed-dot" style="background:${t.cl}"></div>`+
+          `<div class="hm-feed-content">`+
+            `<span class="hm-feed-text">${E(t.text)}</span>`+
+            `<span class="hm-feed-date">${E(t.date)}</span>`+
+          `</div>`+
         `</div>`
-      ).join('') + '</div>' +
-    '</div>';
+      ).join('')+
+    `</div>`+
+
+    // Server status mini card
+    `<div class="hm-card hm-server" onclick="go('server')">`+
+      `<div class="hm-server-dot"></div>`+
+      `<span class="hm-server-label">Contabo VPS</span>`+
+      `<span class="hm-server-status">نشط · ${SVC.filter(s=>s.st).length} خدمات</span>`+
+    `</div>`+
+
+  `</div>`;
 };
 
 /* ── PROJECTS — Hero + Grid ── */
