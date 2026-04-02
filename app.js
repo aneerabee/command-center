@@ -267,6 +267,8 @@ R.projects = function() {
         `<div style="display:flex;flex-wrap:wrap;gap:4px">${heroTags.map(t=>`<span class="tag" style="background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join('')}</div>`+
         `<div style="display:flex;gap:6px">${heroLinks.map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="prj-hero-link">${E(k)}</a>`).join('')}</div>`+
       `</div>`+
+      `<div class="prj-hero-progress"><div class="prj-hero-progress-bar" style="width:${hero.pct||0}%"></div></div>`+
+      `<span class="prj-hero-progress-text">${hero.pct||0}% مكتمل</span>`+
     `</div>`+
   `</div>`+
   `<div class="prj-grid">`+rest.map(p=>{
@@ -284,6 +286,7 @@ R.projects = function() {
         `<p class="prj-card-desc">${E(firstLine)}</p>`+
         `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px">${tags.map(t=>`<span class="tag" style="background:${p.cl}12;color:${p.cl}">${E(t)}</span>`).join('')}</div>`+
         (links.length?`<div class="prj-card-links">${links.map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${E(k)}</a>`).join('')}</div>`:'')+
+        `<div class="prj-progress" style="margin-top:12px"><div class="prj-progress-bar" style="width:${p.pct||0}%;background:${p.cl}"></div></div>`+
       `</div>`+
     `</div>`;
   }).join('')+`</div>`;
@@ -377,7 +380,7 @@ R.auto = function() {
       `<div class="auto-task"><span class="led ${t.on?'led-on':'led-off'}"></span>`+
       `<span class="auto-task-name">${E(t.name)}</span>`+
       `<span class="auto-task-dt">${E(t.freq)}</span>`+
-      `<span style="font-size:.7rem;opacity:.5;flex:1;text-align:left">${E(t.what)}</span></div>`
+      `<span style="font-size:.75rem;opacity:.75;flex:1;text-align:left">${E(t.what)}</span></div>`
     ).join('') +
     '</div>';
 
@@ -394,8 +397,21 @@ R.auto = function() {
 };
 
 /* ── SERVER ── */
+function _sparkline(data, color) {
+  const w=80, h=20, max=Math.max(...data), min=Math.min(...data);
+  const range = max-min || 1;
+  const points = data.map((v,i) => `${(i/(data.length-1))*w},${h - ((v-min)/range)*h}`);
+  return `<svg viewBox="0 0 ${w} ${h}" class="sparkline" style="width:80px;height:20px;display:block;margin:6px auto 0"><polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
 R.server = function() {
   const circ = 2 * Math.PI * 34;
+  const sparkData = {
+    'القرص': [65,68,70,72,74,75,76,77,77,77],
+    'RAM خالي': [12,11,10,11,10,10,11,10,10,10],
+    'مساحة حرة': [30,28,27,26,25,24,23,23,23,23],
+    'الخدمات': [10,10,10,10,10,10,10,10,10,10]
+  };
   const gauges = [
     {label:'القرص',val:'77%',pct:77,cl:'#0EA5E9'},
     {label:'RAM خالي',val:'10GB',pct:55,cl:'#8B5CF6'},
@@ -414,7 +430,9 @@ R.server = function() {
         `<circle cx="40" cy="40" r="34" class="gauge-bg"/>`+
         `<circle cx="40" cy="40" r="34" class="gauge-fg" style="stroke:${g.cl};stroke-dasharray:${dash.toFixed(1)} ${circ.toFixed(1)}"/>`+
         `</svg><span class="gauge-val">${E(g.val)}</span></div>`+
-        `<span class="gauge-label">${E(g.label)}</span></div>`;
+        `<span class="gauge-label">${E(g.label)}</span>`+
+        (sparkData[g.label] ? _sparkline(sparkData[g.label], g.cl) : '') +
+        `</div>`;
     }).join('') + '</div>' +
     '<div class="svc-list">' + SVC.map(s =>
       `<div class="svc-item">`+
@@ -488,14 +506,38 @@ R.tools = function() {
 
 /* ── CLOUD ── */
 R.cloud = function() {
+  const categories = [
+    {name:'تطوير', items:['GitHub','Supabase','Vercel','Railway','Heroku']},
+    {name:'تسويق', items:['Meta Business','Airtable']},
+    {name:'بنية تحتية', items:['Contabo VPS','Tailscale','iCloud Drive','Google Drive']},
+    {name:'ذكاء اصطناعي', items:['Perplexity','Firecrawl','Notion']},
+    {name:'مالي', items:['TronGrid','CoinGecko']},
+    {name:'تواصل', items:['Telegram']}
+  ];
+  const important = new Set(['GitHub','Supabase','Contabo VPS']);
+  const cldMap = {};
+  CLD.forEach(c => { cldMap[c.nm] = c; });
+
   return `<h2 class="page-title"><span class="page-icon">${_ic('☁️',20)}</span> الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} خدمة متصلة</small></h2>` +
-    '<div class="cloud-grid">' + CLD.map(c => {
-      const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
-      return `<div class="planet glass ${c.lk?'clickable':''}" ${clickAttr}>`+
-        `<span class="planet-emoji">${_ic(c.em,26)}</span>`+
-        `<span class="planet-name">${E(c.nm)}</span>`+
-        `<span class="planet-dt">${E(c.dt)}</span></div>`;
-    }).join('') + '</div>';
+    categories.map(cat => {
+      const catItems = cat.items.map(nm => cldMap[nm]).filter(Boolean);
+      if (!catItems.length) return '';
+      return `<div class="cloud-category">` +
+        `<h3 class="cloud-cat-title">${E(cat.name)}</h3>` +
+        `<div class="cloud-cat-grid">` +
+        catItems.map(c => {
+          const isImportant = important.has(c.nm);
+          const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
+          return `<div class="cloud-card ${isImportant?'cloud-card-lg':''} ${c.lk?'clickable':''}" ${clickAttr}>` +
+            `<span class="cloud-card-icon">${_ic(c.em, isImportant?28:22)}</span>` +
+            `<div class="cloud-card-info">` +
+              `<span class="cloud-card-name">${E(c.nm)}</span>` +
+              `<span class="cloud-card-dt">${E(c.dt)}</span>` +
+            `</div>` +
+          `</div>`;
+        }).join('') +
+        `</div></div>`;
+    }).join('');
 };
 
 /* ── IDEAS ── */
