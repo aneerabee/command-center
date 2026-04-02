@@ -175,66 +175,59 @@ a{text-decoration:none;color:inherit}
 .glass:hover::after{opacity:1}
 .glass:hover{border-color:var(--brdH);box-shadow:var(--sh2)}
 
-/* ══════ HOME — Bento Grid ══════ */
-.hm-bento{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;animation:fadeIn .5s var(--ease)}
-.hm-card{background:var(--surface);border:1px solid var(--brd);border-radius:var(--rl);padding:20px;box-shadow:var(--sh);transition:all .3s var(--ease);animation:slideUp .4s var(--ease) both}
-.hm-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
-.hm-card-title{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+/* ══════ HOME — Compact Dashboard ══════ */
+.hm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;animation:fadeIn .4s var(--ease)}
+.hm-c{background:var(--surface);border:1px solid var(--brd);border-radius:var(--rl);padding:16px 18px;box-shadow:var(--sh);transition:all .3s var(--ease);animation:slideUp .35s var(--ease) both}
+.hm-c:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.hm-sec-title{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
-/* Welcome — spans 4 cols */
-.hm-welcome{grid-column:span 4;background:linear-gradient(135deg,#6C3AED,#8B5CF6 40%,#EC4899);color:#fff;position:relative;overflow:hidden;padding:32px 28px;min-height:160px;display:flex;align-items:center}
-.hm-welcome-content{position:relative;z-index:1}
-.hm-greeting{font-size:14px;opacity:.8;margin-bottom:4px}
-.hm-name{font-size:clamp(32px,5vw,48px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:8px}
-.hm-sub{font-size:13px;opacity:.75;max-width:320px;line-height:1.6}
-.hm-welcome-deco{position:absolute;left:-40px;bottom:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
-.hm-welcome::after{content:'';position:absolute;left:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+/* Greeting — col 1 */
+.hm-greet{display:flex;flex-direction:column;justify-content:center}
+.hm-hi{font-size:20px;color:var(--t1);margin-bottom:2px}
+.hm-hi strong{font-size:26px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--purple),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hm-sub2{font-size:11px;color:var(--t3);line-height:1.5}
 
-/* Countdown — spans 2 cols */
-.hm-countdown{grid-column:span 2;text-align:center;display:flex;flex-direction:column;align-items:center;padding:20px}
-.hm-countdown-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:12px}
-.hm-countdown-badge{font-size:11px;font-weight:600;color:var(--rose);display:flex;align-items:center;gap:4px}
-.hm-countdown-date{font-size:10px;color:var(--t3)}
-.hm-countdown-center{position:relative;width:110px;height:110px;margin:0 auto}
-.hm-ring{width:100%;height:100%}
-.hm-ring circle:last-child{filter:drop-shadow(0 0 6px rgba(244,114,182,.3))}
-.hm-countdown-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.hm-days{font-size:32px;font-weight:800;font-family:var(--mono);color:var(--rose);line-height:1}
-.hm-days-label{font-size:9px;color:var(--t3);margin-top:2px}
+/* Countdown — col 2 */
+.hm-cd{display:flex;align-items:center;gap:14px;cursor:pointer}
+.hm-cd-ring{position:relative;width:68px;height:68px;flex-shrink:0}
+.hm-cd-ring svg{width:100%;height:100%}
+.hm-cd-ring circle:last-child{filter:drop-shadow(0 0 4px rgba(244,114,182,.3))}
+.hm-cd-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;font-family:var(--mono);color:var(--rose)}
+.hm-cd-info{display:flex;flex-direction:column;gap:2px}
+.hm-cd-title{font-size:12px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:4px}
+.hm-cd-date{font-size:10px;color:var(--t3)}
 
-/* Stats — each 1 col */
-.hm-stat{grid-column:span 1;text-align:center;cursor:pointer;padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.hm-stat:hover{border-color:var(--brdH)}
-.hm-stat-icon{width:36px;height:36px;border-radius:10px;background:var(--elevated);display:flex;align-items:center;justify-content:center;margin-bottom:4px;transition:all .3s var(--ease)}
-.hm-stat:hover .hm-stat-icon{transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.hm-stat-val{font-size:22px;font-weight:800;font-family:var(--mono);color:var(--t1)}
-.hm-stat-label{font-size:10px;color:var(--t3);font-weight:500}
+/* Server status — col 3 */
+.hm-srv{display:flex;flex-direction:column;justify-content:center;gap:6px;cursor:pointer}
+.hm-srv-row{display:flex;align-items:center;gap:8px}
+.hm-srv-led{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.hm-srv-name{font-size:13px;font-weight:700;font-family:var(--mono);color:var(--t1)}
+.hm-srv-info{font-size:10px;color:var(--t3)}
 
-/* Active projects — spans 4 cols */
-.hm-active{grid-column:span 4}
-.hm-active-list{display:flex;flex-direction:column;gap:10px}
-.hm-active-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border-radius:10px;transition:background .2s}
-.hm-active-item:hover{background:var(--elevated)}
-.hm-active-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.hm-active-name{font-size:12px;font-weight:600;color:var(--t1);min-width:120px}
-.hm-active-bar{flex:1;height:4px;background:var(--elevated);border-radius:2px;overflow:hidden}
-.hm-active-bar>div{height:100%;border-radius:2px;transition:width 1s var(--ease)}
-.hm-active-pct{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--t3);min-width:36px;text-align:left}
+/* Stats chips row — spans all 3 cols */
+.hm-stats-row{grid-column:span 3;display:flex;gap:8px}
+.hm-chip{flex:1;background:var(--surface);border:1px solid var(--brd);border-radius:var(--r);padding:12px 8px;text-align:center;cursor:pointer;transition:all .25s var(--ease);box-shadow:var(--sh)}
+.hm-chip:hover{border-color:var(--brdH);transform:translateY(-2px);box-shadow:var(--sh2)}
+.hm-chip-val{font-size:20px;font-weight:800;font-family:var(--mono);display:block}
+.hm-chip-label{font-size:9px;color:var(--t3);display:block;margin-top:2px}
 
-/* Feed — spans 2 cols */
-.hm-feed{grid-column:span 2}
-.hm-feed-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--brd)}
-.hm-feed-item:last-child{border-bottom:none}
-.hm-feed-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px}
-.hm-feed-content{flex:1}
-.hm-feed-text{font-size:11px;color:var(--t2);line-height:1.6;display:block}
-.hm-feed-date{font-size:9px;color:var(--t3);margin-top:2px;display:block}
+/* Projects section — col 1+2 */
+.hm-prj{grid-column:span 2}
+.hm-prj-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background .2s}
+.hm-prj-row:hover{background:var(--elevated)}
+.hm-prj-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hm-prj-name{font-size:11px;font-weight:600;color:var(--t1);min-width:100px}
+.hm-prj-bar{flex:1;height:3px;background:var(--elevated);border-radius:2px;overflow:hidden}
+.hm-prj-bar>div{height:100%;border-radius:2px;transition:width 1s var(--ease)}
+.hm-prj-pct{font-size:10px;font-weight:700;font-family:var(--mono);color:var(--t3);min-width:30px;text-align:left}
 
-/* Server mini — spans full or part */
-.hm-server{grid-column:span 6;display:flex;align-items:center;gap:10px;cursor:pointer;padding:14px 20px}
-.hm-server-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-.hm-server-label{font-size:13px;font-weight:600;font-family:var(--mono);color:var(--t1)}
-.hm-server-status{font-size:11px;color:var(--t3);margin-right:auto}
+/* Activity — col 3 */
+.hm-act{grid-column:span 1}
+.hm-act-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--brd)}
+.hm-act-row:last-child{border-bottom:none}
+.hm-act-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.hm-act-text{font-size:10px;color:var(--t2);line-height:1.5;flex:1}
+.hm-act-date{font-size:8px;color:var(--t3);white-space:nowrap}
 
 /* ══════ PROJECTS — Hero + Grid ══════ */
 .prj-hero{position:relative;border-radius:20px;overflow:hidden;cursor:pointer;margin-bottom:20px;animation:fadeIn .5s var(--ease);transition:transform .3s var(--ease),box-shadow .3s var(--ease);will-change:transform;box-shadow:var(--sh3)}
@@ -620,11 +613,10 @@ a{text-decoration:none;color:inherit}
   .more-sheet-content{grid-template-columns:repeat(4,1fr)}
   .more-sheet-handle{grid-column:span 4}
   .prj-hero-content{padding:28px 22px}
-  .hm-bento{grid-template-columns:repeat(4,1fr)}
-  .hm-welcome{grid-column:span 2}.hm-countdown{grid-column:span 2}
-  .hm-stat{grid-column:span 1}
-  .hm-active{grid-column:span 2}.hm-feed{grid-column:span 2}
-  .hm-server{grid-column:span 4}
+  .hm-grid{grid-template-columns:1fr 1fr}
+  .hm-stats-row{grid-column:span 2;flex-wrap:wrap}
+  .hm-chip{min-width:calc(33% - 8px)}
+  .hm-prj{grid-column:span 2}.hm-act{grid-column:span 2}
 }
 
 /* ── MOBILE: <=768px ── */
@@ -657,12 +649,10 @@ a{text-decoration:none;color:inherit}
   .prj-hero-stats{justify-content:center}
   .prj-hero-footer{justify-content:center}
   .prj-hero-content{padding:24px 18px}
-  .hm-bento{grid-template-columns:repeat(2,1fr)}
-  .hm-welcome{grid-column:span 2}.hm-countdown{grid-column:span 2}
-  .hm-stat{grid-column:span 1}
-  .hm-active{grid-column:span 2}.hm-feed{grid-column:span 2}
-  .hm-server{grid-column:span 2}
-  .hm-name{font-size:28px}
+  .hm-grid{grid-template-columns:1fr}
+  .hm-stats-row{grid-column:span 1;flex-wrap:wrap}
+  .hm-chip{min-width:calc(33% - 8px)}
+  .hm-prj{grid-column:span 1}.hm-act{grid-column:span 1}
 
   /* Detail views — full width */
   .dt-panel{width:96%;max-width:none;max-height:90vh}
@@ -685,10 +675,8 @@ a{text-decoration:none;color:inherit}
   .cloud-card-lg{min-width:0}
 
   /* Orbs */
-  .hm-stat{padding:12px 8px}
-  .hm-stat-val{font-size:18px}
-  .hm-stat-icon{width:30px;height:30px}
-  .hm-active-name{min-width:90px;font-size:11px}
+  .hm-chip{min-width:calc(50% - 8px)}
+  .hm-prj-name{min-width:80px;font-size:10px}
 
   /* Auto stats */
   .auto-stats{flex-wrap:wrap;gap:8px}
@@ -728,14 +716,12 @@ a{text-decoration:none;color:inherit}
   .server-header{padding:14px}
   .cloud-cat-grid{gap:6px}
   .cloud-card{padding:10px 12px;min-width:0;flex:1 1 100%}
-  .hm-bento{grid-template-columns:1fr}
-  .hm-welcome,.hm-countdown,.hm-stat,.hm-active,.hm-feed,.hm-server{grid-column:span 1}
-  .hm-bento{display:flex;flex-direction:column;gap:10px}
-  .hm-name{font-size:24px}
-  .hm-stat{flex-direction:row;text-align:right;gap:10px;padding:12px 16px}
-  .hm-stat-val{font-size:18px}
-  .hm-countdown-center{width:90px;height:90px}
-  .hm-days{font-size:26px}
+  .hm-stats-row{gap:6px}
+  .hm-chip{min-width:calc(33% - 6px);padding:10px 6px}
+  .hm-chip-val{font-size:16px}
+  .hm-cd-ring{width:56px;height:56px}
+  .hm-cd-num{font-size:18px}
+  .hm-hi strong{font-size:22px}
   .ring-days{font-size:30px}
   .dsp-sidebar{padding:16px 14px}
   .dt-body{padding:14px 16px}

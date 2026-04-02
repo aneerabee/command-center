@@ -176,12 +176,12 @@ function closeMore() {
 
 const R = {};
 
-/* ── HOME — Bento Grid Dashboard ── */
+/* ── HOME — Compact Bento Dashboard ── */
 R.home = function() {
   const weddingDate = new Date(2026, 3, 21);
   const now = new Date();
   const days = Math.max(0, Math.ceil((weddingDate - now) / 86400000));
-  const circ = 2 * Math.PI * 52;
+  const circ = 2 * Math.PI * 38;
   const pct = Math.min(1, Math.max(0, (365 - days) / 365));
 
   const stats = [
@@ -194,86 +194,71 @@ R.home = function() {
   ];
 
   const timeline = [
-    {date:'31 مارس',text:'أكاديمية الشطرنج v2 — نسخة إنجليزية + اختبارات',cl:'#8B5CF6'},
+    {date:'31 مارس',text:'أكاديمية الشطرنج v2 — نسخة إنجليزية',cl:'#8B5CF6'},
     {date:'31 مارس',text:'تأمين 3 مشاريع → GitHub خاص',cl:'#0EA5E9'},
     {date:'31 مارس',text:'لوحة التحكم — إعادة تصميم كاملة',cl:'#10B981'},
-    {date:'29 مارس',text:'تنظيم iCloud — 5,400 ملف + خزنة مشفرة',cl:'#F59E0B'}
+    {date:'29 مارس',text:'تنظيم iCloud — 5,400 ملف + خزنة',cl:'#F59E0B'}
   ];
 
-  const activeProjects = PRJ.filter(p=>p.st==='a').slice(0,3);
+  const topProjects = PRJ.filter(p=>p.st==='a').slice(0,4);
 
-  return `<div class="hm-bento">`+
-    // Welcome card — spans 2 cols
-    `<div class="hm-card hm-welcome">`+
-      `<div class="hm-welcome-content">`+
-        `<p class="hm-greeting">مرحباً</p>`+
-        `<h1 class="hm-name">ربيع</h1>`+
-        `<p class="hm-sub">نظرة شاملة على كل مشاريعك وأدواتك</p>`+
-      `</div>`+
-      `<div class="hm-welcome-deco"></div>`+
+  return `<div class="hm-grid">`+
+
+    // Row 1: Greeting + Countdown + Server — all in one row
+    `<div class="hm-c hm-greet">`+
+      `<p class="hm-hi">مرحباً <strong>ربيع</strong></p>`+
+      `<p class="hm-sub2">نظرة شاملة على كل شيء</p>`+
     `</div>`+
 
-    // Countdown card
-    `<div class="hm-card hm-countdown">`+
-      `<div class="hm-countdown-top">`+
-        `<span class="hm-countdown-badge">${_ic('💒',14)} الزفاف</span>`+
-        `<span class="hm-countdown-date">21 — 25 أبريل</span>`+
+    `<div class="hm-c hm-cd" onclick="go('projects')">`+
+      `<div class="hm-cd-ring">`+
+        `<svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/>`+
+        `<circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg>`+
+        `<span class="hm-cd-num" id="ring-days">${days}</span>`+
       `</div>`+
-      `<div class="hm-countdown-center">`+
-        `<svg viewBox="0 0 120 120" class="hm-ring">`+
-          `<circle cx="60" cy="60" r="52" fill="none" stroke="var(--elevated)" stroke-width="8"/>`+
-          `<circle cx="60" cy="60" r="52" fill="none" stroke="url(#ringGrad)" stroke-width="8" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/>`+
-        `</svg>`+
-        `<div class="hm-countdown-num">`+
-          `<span class="hm-days" id="ring-days">${days}</span>`+
-          `<span class="hm-days-label">يوم متبقي</span>`+
-        `</div>`+
+      `<div class="hm-cd-info">`+
+        `<span class="hm-cd-title">${_ic('💒',14)} الزفاف</span>`+
+        `<span class="hm-cd-date">21 — 25 أبريل</span>`+
       `</div>`+
     `</div>`+
 
-    // Stats row — 6 mini cards
-    stats.map(s =>
-      `<div class="hm-card hm-stat" onclick="go('${s.pg}')">`+
-        `<div class="hm-stat-icon" style="color:${s.cl}">${_ic(s.em,18)}</div>`+
-        `<span class="hm-stat-val">${s.val}</span>`+
-        `<span class="hm-stat-label">${E(s.label)}</span>`+
-      `</div>`
-    ).join('')+
-
-    // Active projects card — spans 2 cols
-    `<div class="hm-card hm-active">`+
-      `<h3 class="hm-card-title">${_ic('🚀',16)} مشاريع نشطة</h3>`+
-      `<div class="hm-active-list">`+
-        activeProjects.map(p=>
-          `<div class="hm-active-item" onclick="go('projects')">`+
-            `<div class="hm-active-dot" style="background:${p.cl}"></div>`+
-            `<span class="hm-active-name">${E(p.ar)}</span>`+
-            `<div class="hm-active-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div>`+
-            `<span class="hm-active-pct">${p.pct}%</span>`+
-          `</div>`
-        ).join('')+
-      `</div>`+
+    `<div class="hm-c hm-srv" onclick="go('server')">`+
+      `<div class="hm-srv-row"><span class="hm-srv-led"></span><span class="hm-srv-name">Contabo VPS</span></div>`+
+      `<span class="hm-srv-info">${SVC.filter(s=>s.st).length} خدمات نشطة</span>`+
     `</div>`+
 
-    // Activity feed card
-    `<div class="hm-card hm-feed">`+
-      `<h3 class="hm-card-title">${_ic('📈',16)} آخر النشاطات</h3>`+
-      timeline.map(t=>
-        `<div class="hm-feed-item">`+
-          `<div class="hm-feed-dot" style="background:${t.cl}"></div>`+
-          `<div class="hm-feed-content">`+
-            `<span class="hm-feed-text">${E(t.text)}</span>`+
-            `<span class="hm-feed-date">${E(t.date)}</span>`+
-          `</div>`+
+    // Row 2: 6 stat chips
+    `<div class="hm-stats-row">`+
+      stats.map(s =>
+        `<div class="hm-chip" onclick="go('${s.pg}')">`+
+          `<span class="hm-chip-val" style="color:${s.cl}">${s.val}</span>`+
+          `<span class="hm-chip-label">${E(s.label)}</span>`+
         `</div>`
       ).join('')+
     `</div>`+
 
-    // Server status mini card
-    `<div class="hm-card hm-server" onclick="go('server')">`+
-      `<div class="hm-server-dot"></div>`+
-      `<span class="hm-server-label">Contabo VPS</span>`+
-      `<span class="hm-server-status">نشط · ${SVC.filter(s=>s.st).length} خدمات</span>`+
+    // Row 3: Projects + Feed side by side
+    `<div class="hm-c hm-prj">`+
+      `<h3 class="hm-sec-title">${_ic('🚀',14)} مشاريع نشطة</h3>`+
+      topProjects.map(p=>
+        `<div class="hm-prj-row" onclick="go('projects')">`+
+          `<span class="hm-prj-dot" style="background:${p.cl}"></span>`+
+          `<span class="hm-prj-name">${E(p.ar)}</span>`+
+          `<div class="hm-prj-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div>`+
+          `<span class="hm-prj-pct">${p.pct}%</span>`+
+        `</div>`
+      ).join('')+
+    `</div>`+
+
+    `<div class="hm-c hm-act">`+
+      `<h3 class="hm-sec-title">${_ic('📈',14)} آخر النشاطات</h3>`+
+      timeline.map(t=>
+        `<div class="hm-act-row">`+
+          `<span class="hm-act-dot" style="background:${t.cl}"></span>`+
+          `<span class="hm-act-text">${E(t.text)}</span>`+
+          `<span class="hm-act-date">${E(t.date)}</span>`+
+        `</div>`
+      ).join('')+
     `</div>`+
 
   `</div>`;
