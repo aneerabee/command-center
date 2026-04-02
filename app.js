@@ -45,6 +45,28 @@ function _icText(str){
   return E(str);
 }
 
+/* _projAnim(emoji, color) — animated SVG motion graphic per project */
+function _projAnim(em,cl){
+const A={
+'🏨':`<svg viewBox="0 0 44 44" width="38" height="38"><rect x="10" y="8" width="24" height="30" rx="2" fill="none" stroke="${cl}" stroke-width="1.5"/><rect x="18" y="30" width="8" height="8" rx="1" fill="none" stroke="${cl}" stroke-width="1.5"/><rect x="14" y="13" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:0s"/><rect x="20" y="13" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:.4s"/><rect x="26" y="13" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:.8s"/><rect x="14" y="19" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:1.2s"/><rect x="20" y="19" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:1.6s"/><rect x="26" y="19" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:2s"/><rect x="14" y="25" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:.2s"/><rect x="20" y="25" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:1s"/><rect x="26" y="25" width="4" height="3" rx=".5" fill="${cl}" class="pm-win" style="--d:1.8s"/></svg>`,
+
+'💒':`<svg viewBox="0 0 44 44" width="38" height="38"><path d="M22 8 L22 16" stroke="${cl}" stroke-width="1.5" stroke-linecap="round"/><path d="M22 14 C16 14 12 20 12 24 L12 36 L32 36 L32 24 C32 20 28 14 22 14Z" fill="none" stroke="${cl}" stroke-width="1.5"/><circle cx="22" cy="22" r="4" fill="none" stroke="${cl}" stroke-width="1.2" class="pm-beat"/><rect x="19" y="30" width="6" height="6" rx="1" fill="none" stroke="${cl}" stroke-width="1.2"/><circle cx="22" cy="8" r="2" fill="${cl}" class="pm-sparkle"/><circle cx="16" cy="11" r="1" fill="${cl}" class="pm-sparkle" style="--d:.5s"/><circle cx="28" cy="11" r="1" fill="${cl}" class="pm-sparkle" style="--d:1s"/></svg>`,
+
+'📢':`<svg viewBox="0 0 44 44" width="38" height="38"><path d="M10 18 L10 26 L16 26 L24 32 L24 12 L16 18Z" fill="none" stroke="${cl}" stroke-width="1.5" stroke-linejoin="round"/><path d="M28 16 C30 18 30 26 28 28" fill="none" stroke="${cl}" stroke-width="1.5" stroke-linecap="round" class="pm-wave" style="--d:0s"/><path d="M31 12 C35 16 35 28 31 32" fill="none" stroke="${cl}" stroke-width="1.5" stroke-linecap="round" class="pm-wave" style="--d:.3s"/><path d="M34 8 C40 14 40 30 34 36" fill="none" stroke="${cl}" stroke-width="1.2" stroke-linecap="round" class="pm-wave" style="--d:.6s"/></svg>`,
+
+'💳':`<svg viewBox="0 0 44 44" width="38" height="38"><rect x="6" y="12" width="32" height="22" rx="3" fill="none" stroke="${cl}" stroke-width="1.5"/><line x1="6" y1="19" x2="38" y2="19" stroke="${cl}" stroke-width="1.5"/><rect x="10" y="24" width="10" height="2" rx="1" fill="${cl}" opacity=".4"/><rect x="10" y="28" width="6" height="2" rx="1" fill="${cl}" opacity=".3"/><line x1="0" y1="12" x2="0" y2="34" stroke="${cl}" stroke-width="2" stroke-linecap="round" class="pm-scan"/></svg>`,
+
+'⚡':`<svg viewBox="0 0 44 44" width="38" height="38"><polygon points="24,4 12,24 20,24 18,40 32,18 24,18" fill="none" stroke="${cl}" stroke-width="1.5" stroke-linejoin="round" class="pm-flash"/><circle cx="22" cy="22" r="18" fill="none" stroke="${cl}" stroke-width=".8" opacity=".15" class="pm-ring1"/><circle cx="22" cy="22" r="14" fill="none" stroke="${cl}" stroke-width=".6" opacity=".1" class="pm-ring2"/></svg>`,
+
+'💬':`<svg viewBox="0 0 44 44" width="38" height="38"><rect x="6" y="8" width="22" height="16" rx="4" fill="none" stroke="${cl}" stroke-width="1.5"/><path d="M12 24 L10 30 L18 24" fill="none" stroke="${cl}" stroke-width="1.5" stroke-linejoin="round"/><rect x="18" y="18" width="18" height="12" rx="3" fill="none" stroke="${cl}" stroke-width="1.2" class="pm-bubble"/><circle cx="13" cy="15" r="1.2" fill="${cl}" class="pm-dot" style="--d:0s"/><circle cx="17" cy="15" r="1.2" fill="${cl}" class="pm-dot" style="--d:.3s"/><circle cx="21" cy="15" r="1.2" fill="${cl}" class="pm-dot" style="--d:.6s"/></svg>`,
+
+'🌐':`<svg viewBox="0 0 44 44" width="38" height="38"><circle cx="22" cy="22" r="16" fill="none" stroke="${cl}" stroke-width="1.5"/><ellipse cx="22" cy="22" rx="8" ry="16" fill="none" stroke="${cl}" stroke-width="1" opacity=".5"/><line x1="6" y1="22" x2="38" y2="22" stroke="${cl}" stroke-width=".8" opacity=".4"/><line x1="6" y1="16" x2="38" y2="16" stroke="${cl}" stroke-width=".6" opacity=".25"/><line x1="6" y1="28" x2="38" y2="28" stroke="${cl}" stroke-width=".6" opacity=".25"/><circle cx="34" cy="10" r="3" fill="none" stroke="${cl}" stroke-width="1" class="pm-orbit"/></svg>`,
+
+'♟️':`<svg viewBox="0 0 44 44" width="38" height="38"><circle cx="22" cy="12" r="5" fill="none" stroke="${cl}" stroke-width="1.5"/><path d="M16 38 L16 30 C16 26 18 24 22 22 C26 24 28 26 28 30 L28 38" fill="none" stroke="${cl}" stroke-width="1.5"/><line x1="14" y1="38" x2="30" y2="38" stroke="${cl}" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="7" x2="22" y2="4" stroke="${cl}" stroke-width="1.2" stroke-linecap="round"/><rect x="12" y="6" width="20" height="36" fill="${cl}" opacity="0" class="pm-shine"/></svg>`
+};
+return A[em]||_ic(em,22);
+}
+
 /* _ic(emoji, size) — returns Lucide icon markup */
 function _ic(em,sz){
   const nm=IC[em]; if(!nm) return em||'';
@@ -241,8 +263,8 @@ R.home = function() {
     `<div class="hm-projects-grid">`+
       PRJ.filter(p=>p.st==='a').map((p,i)=>
         `<div class="hm-pcard" style="--pc:${p.cl};animation-delay:${i*0.06}s" onclick="openProjectDetail('${E(p.name)}')">`+
-          `<div class="hm-pcard-icon" style="background:${p.cl}12;border:1px solid ${p.cl}22">`+
-            `<span class="hm-pcard-ic" style="color:${p.cl}">${_ic(p.em,20)}</span>`+
+          `<div class="hm-pcard-anim">`+
+            _projAnim(p.em, p.cl)+
           `</div>`+
           `<div class="hm-pcard-info">`+
             `<span class="hm-pcard-name">${E(p.ar)}</span>`+
