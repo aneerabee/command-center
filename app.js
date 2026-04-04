@@ -109,12 +109,28 @@ function _processIcons(){
 }
 const M = {};
 [...PRJ,...BOT,...TL,...ARC,...IDEAS].forEach(i => { M[i.name] = i; });
+SVC.forEach(i => { M[i.name] = i; });
+CLD.forEach(i => { M[i.nm] = i; });
+
+function _entityLookup(name) {
+  if (!name) return null;
+  return [...PRJ, ...BOT, ...ARC, ...TL].find(x => x.name === name || x.ar === name)
+    || CLD.find(x => x.nm === name)
+    || M[name]
+    || null;
+}
+
+function _entityColor(name, fallback) {
+  const entity = _entityLookup(name);
+  return entity?.cl || _prjColor(name) || fallback || '#888';
+}
 
 function _relChips(names) {
   if (!names || !names.length) return '';
-  return names.map(rn => {
-    const rp = [...PRJ, ...BOT].find(x => x.name === rn || x.ar === rn);
-    return rp ? `<span class="meta-chip">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : `<span class="meta-chip">${E(rn)}</span>`;
+  return [...new Set(names.filter(Boolean))].map(rn => {
+    const rp = _entityLookup(rn);
+    const label = rp ? (rp.ar || rp.name || rp.nm) : rn;
+    return rp ? `<span class="meta-chip">${_ic(rp.em,12)} ${E(label)}</span>` : `<span class="meta-chip">${E(rn)}</span>`;
   }).join('');
 }
 
@@ -186,6 +202,18 @@ function _cloudCategoryLabel(category) {
   }[category] || category;
 }
 
+function _serviceTypeLabel(kind) {
+  return {
+    app:'تطبيق',
+    container:'حاوية',
+    database:'قاعدة بيانات',
+    'agent-runtime':'runtime',
+    'user-service':'خدمة مستخدم',
+    cron:'cron',
+    network:'شبكة'
+  }[kind] || kind;
+}
+
 function _searchableText(v) {
   if (!v) return '';
   if (Array.isArray(v)) return v.map(_searchableText).join(' ');
@@ -220,9 +248,9 @@ function _buildSearchIndex() {
     kind: 'service',
     page: 'server',
     title: s.name,
-    subtitle: [s.prj, s.service_type, s.host].filter(Boolean).join(' · '),
-    action: () => go('server'),
-    tokens: [s.name, s.prj, s.info, s.dt, s.path, s.runtime, s.service_type, s.host, s.schedule, s.port]
+    subtitle: [s.owner || s.prj, s.service_type, s.host].filter(Boolean).join(' · '),
+    action: () => { go('server'); setTimeout(() => openServiceDetail(s.name), 120); },
+    tokens: [s.name, s.prj, s.owner, s.owner_type, s.info, s.dt, s.path, s.runtime, s.service_type, s.host, s.schedule, s.port]
   }));
 
   AUTO.forEach(group => group.tasks.forEach(task => push({
@@ -231,7 +259,18 @@ function _buildSearchIndex() {
     page: 'auto',
     title: task.name,
     subtitle: [group.group, task.prj, task.freq].filter(Boolean).join(' · '),
-    action: () => go('auto'),
+    action: () => {
+      go('auto');
+      const id = `auto-${encodeURIComponent(group.group+'-'+task.name).replace(/%/g,'')}`;
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({block:'center', behavior:'smooth'});
+          el.classList.add('auto-task-focus');
+          setTimeout(() => el.classList.remove('auto-task-focus'), 1800);
+        }
+      }, 120);
+    },
     tokens: [group.group, task.name, task.what, task.prj, task.path, task.kind, task.freq, task.on]
   })));
 
@@ -240,9 +279,9 @@ function _buildSearchIndex() {
     kind: 'bot',
     page: 'bots',
     title: b.ar || b.name,
-    subtitle: [b.kind, b.host].filter(Boolean).join(' · '),
+    subtitle: [_botKindLabel(b.kind), b.host].filter(Boolean).join(' · '),
     action: () => { go('bots'); setTimeout(() => openBotDetail(b.name), 120); },
-    tokens: [b.name, b.ar, b.summary, b.desc, b.tags, b.kind, b.host, b.runtime, b.channel, b.related_project]
+    tokens: [b.name, b.ar, b.summary, b.desc, b.tags, b.kind, b.host, b.runtime, b.channel, b.related_entities]
   }));
 
   TL.forEach(t => push({
@@ -260,9 +299,9 @@ function _buildSearchIndex() {
     kind: 'cloud',
     page: 'cloud',
     title: c.nm,
-    subtitle: [c.category, c.prj].filter(Boolean).join(' · '),
-    action: () => go('cloud'),
-    tokens: [c.nm, c.dt, c.category, c.prj, c.used_in, c.lk]
+    subtitle: [_cloudCategoryLabel(c.category), c.prj].filter(Boolean).join(' · '),
+    action: () => { go('cloud'); setTimeout(() => openCloudDetail(c.nm), 120); },
+    tokens: [c.nm, c.dt, c.category, c.prj, c.used_in, c.related_entities, c.lk]
   }));
 
   ARC.forEach(a => push({
@@ -293,6 +332,16 @@ const _validPages = new Set(PG.map(p => p.id));
 function _readHash() { const h = location.hash.slice(1).split('/')[0]; return _validPages.has(h) ? h : 'home'; }
 let cur = _readHash();
 const MOBILE_ITEMS = ['home','projects','server','bots','tools'];
+
+function _setHashSilently(nextHash) {
+  const normalized = nextHash.startsWith('#') ? nextHash : `#${nextHash}`;
+  if (location.hash === normalized) {
+    _suppressHash = false;
+    return;
+  }
+  _suppressHash = true;
+  location.hash = normalized;
+}
 
 /* ─────────────── 2. NAVIGATION ─────────────── */
 
@@ -366,7 +415,9 @@ function init() {
   const hashParts = location.hash.slice(1).split('/');
   if (hashParts[1]) {
     const itemName = decodeURIComponent(hashParts[1]);
-    if (M[itemName]) setTimeout(() => openDetailSmart(itemName), 300);
+    if (M[itemName] || SVC.find(s=>s.name===itemName) || CLD.find(c=>c.nm===itemName)) {
+      setTimeout(() => openDetailSmart(itemName, hashParts[0]), 300);
+    }
   }
 
   const input = document.getElementById('search-input');
@@ -382,11 +433,10 @@ function init() {
   }
 }
 
-function go(id) {
+function _activatePage(id, syncHash) {
   if (!_validPages.has(id)) return;
-  closeDetail(true);
   cur = id;
-  location.hash = id;
+  if (syncHash) _setHashSilently(id);
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   const target = document.getElementById('page-' + id);
   if (target) { target.classList.add('active'); target.scrollTop = 0; }
@@ -394,6 +444,12 @@ function go(id) {
   document.querySelectorAll('.bar-item').forEach(el => el.classList.toggle('active', el.dataset.page === id));
   window.scrollTo(0, 0);
   requestAnimationFrame(_processIcons);
+}
+
+function go(id) {
+  if (!_validPages.has(id)) return;
+  closeDetail(true);
+  _activatePage(id, true);
 }
 
 function openMore() {
@@ -634,7 +690,7 @@ R.auto = function() {
     '<div class="auto-group">' +
     `<div class="auto-group-header"><span class="auto-group-title">${E(g.group)}</span><span class="auto-group-loc">${E(g.loc)}</span></div>` +
     g.tasks.map(t =>
-      `<div class="auto-task"><span class="led ${t.on?'led-on':'led-off'}"></span>`+
+      `<div class="auto-task" id="auto-${encodeURIComponent(g.group+'-'+t.name).replace(/%/g,'')}"><span class="led ${t.on?'led-on':'led-off'}"></span>`+
       `<span class="auto-task-name">${E(t.name)}</span>`+
       `<span class="auto-task-dt">${E(t.freq)}</span>`+
       ((t.prj||[]).map(p => {
@@ -684,16 +740,6 @@ R.server = function() {
     {label:'مهام cron',val:String(SVC.filter(s=>s.service_type==='cron').length),pct:100,cl:'#10B981'},
     {label:'خدمات user',val:String(SVC.filter(s=>s.service_type==='user-service').length),pct:100,cl:'#F59E0B'}
   ];
-  const typeMap = {
-    app:'تطبيق',
-    container:'حاوية',
-    database:'قاعدة بيانات',
-    'agent-runtime':'runtime',
-    'user-service':'خدمة مستخدم',
-    cron:'cron',
-    network:'شبكة'
-  };
-
   return '<div class="server-header">' +
     `<h2 class="page-title server-title"><span class="page-icon">${_ic('🖥️',20)}</span> CONTABO VPS</h2>` +
     '<span class="server-ip">62.171.128.44 · Ubuntu 24 · `vmi3061403` · جرد موثق من السيرفر</span>' +
@@ -706,7 +752,7 @@ R.server = function() {
         `</div>`;
     }).join('') + '</div>' +
     '<div class="svc-list">' + SVC.map(s => {
-      const prj = s.prj || '';
+      const prj = s.owner || s.prj || '';
       const info = s.info || '';
       const path = s.path || '';
       const host = s.host || '';
@@ -714,13 +760,14 @@ R.server = function() {
       const runtime = s.runtime || '';
       const type = s.service_type || '';
       const pc = prj ? _prjColor(prj) : '';
-      return `<div class="svc-item">`+
+      const ownerLabel = s.owner_type === 'bot' ? 'runtime' : 'مشروع';
+      return `<button class="svc-item" onclick="openServiceDetail('${E(s.name)}')">`+
       `<span class="svc-status ${s.st?'svc-on':'svc-off'}"></span>`+
       `<span class="svc-em">${_ic(s.em,18)}</span>`+
       `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>`+
-      (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(prj)}</span>` : '') +
+      (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(ownerLabel)} · ${E(prj)}</span>` : '') +
       `<span class="svc-dt">${E(s.dt)}</span>`+
-      (type ? `<span class="svc-desc">النوع: ${E(typeMap[type] || type)}</span>` : '') +
+      (type ? `<span class="svc-desc">النوع: ${E(_serviceTypeLabel(type))}</span>` : '') +
       (runtime ? `<span class="svc-desc">التشغيل: ${E(runtime)}</span>` : '') +
       (host ? `<span class="svc-desc">المضيف: ${E(host)}</span>` : '') +
       (schedule ? `<span class="svc-desc">الجدولة: ${E(schedule)}</span>` : '') +
@@ -728,7 +775,7 @@ R.server = function() {
       (path ? `<span class="svc-path">${E(path)}</span>` : '') +
       `</div>`+
       (s.port && s.port !== '—' ? `<span class="svc-port">:${E(s.port)}</span>` : '') +
-      `</div>`;
+      `</button>`;
     }).join('') + '</div>';
 };
 
@@ -855,12 +902,12 @@ R.cloud = function() {
         `<div class="cloud-cat-head"><h3 class="cloud-cat-title">${E(categoryLabels[group.cat] || group.cat)}</h3><span>${group.items.length}</span></div>` +
         `<div class="cloud-cat-grid">` +
         group.items.map(c => {
-          const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
+          const clickAttr = `onclick="openCloudDetail('${E(c.nm)}')"`;
           const cPrj = c.prj || '';
-          const cpc = cPrj ? _prjColor(cPrj) : '';
+          const cpc = cPrj ? _entityColor(cPrj, '#0EA5E9') : '';
           const status = c.active === false ? 'متوقف' : 'نشط';
           const usedCount = (c.used_in || []).length;
-          return `<div class="cloud-card ${c.lk?'clickable':''} ${c.active===false?'cloud-card-off':''}" ${clickAttr}>` +
+          return `<div class="cloud-card clickable ${c.active===false?'cloud-card-off':''}" ${clickAttr}>` +
             `<span class="cloud-card-icon">${_ic(c.em, 22)}</span>` +
             `<div class="cloud-card-info">` +
               `<div class="cloud-card-top"><span class="cloud-card-name">${E(c.nm)}</span><span class="cloud-card-status ${c.active===false?'cloud-card-status-off':'cloud-card-status-on'}">${E(status)}</span></div>` +
@@ -870,7 +917,7 @@ R.cloud = function() {
                 (usedCount ? `<span class="cloud-prj-tag">يخدم ${usedCount}</span>` : '') +
               `</div>` +
               `<span class="cloud-card-dt">${E(c.dt)}</span>` +
-              (c.used_in?.length ? `<span class="cloud-card-usage">${E(c.used_in.slice(0,3).join(' · '))}</span>` : '') +
+              ((c.related_entities || c.used_in)?.length ? `<span class="cloud-card-usage">${E((c.related_entities || c.used_in).slice(0,3).join(' · '))}</span>` : '') +
             `</div>` +
           `</div>`;
         }).join('') +
@@ -1062,21 +1109,45 @@ function _projectStructuredSections(item) {
   return sections;
 }
 
+function _normalizeSectionTitle(title) {
+  return String(title || '')
+    .replace(/^[^\p{L}\p{N}]+/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function _projectMergedSections(item, legacySections) {
+  const structured = _projectStructuredSections(item);
+  if (!structured.length) return legacySections;
+
+  const blocked = ['نظرة عامة','التقنيات','الأنظمة الفرعية','المسارات','الريبو والنشر','التشغيل','العلاقات'];
+
+  const filteredLegacy = legacySections.filter(s => {
+    const normalized = _normalizeSectionTitle(s.title);
+    if (!normalized) {
+      const body = (s.rows || []).join(' ');
+      if (item.summary && body.includes(item.summary)) return false;
+      return true;
+    }
+    return !blocked.some(label => normalized.includes(label));
+  });
+
+  return [...structured, ...filteredLegacy];
+}
+
 /* ── 1. PROJECT DETAIL — صفحة كاملة تحل محل المحتوى ── */
 function openProjectDetail(name) {
-  const item = M[name]; if (!item) return;
+  const item = PRJ.find(p => p.name === name); if (!item) return;
   closeDetail(true);
   const {headline,sections: legacySections} = _parseDesc(item);
-  const structuredSections = _projectStructuredSections(item);
-  const sections = [...structuredSections, ...legacySections];
+  const sections = _projectMergedSections(item, legacySections);
   const cl = item.cl||'#6C3AED';
   const tags = item.tags||[];
   const links = item.links||{};
   const stLabel = item.st==='a'?'نشط':item.st==='p'?'متوقف':'أرشيف';
   const stCls = item.st==='a'?'status-active':item.st==='p'?'status-paused':'status-archive';
-  const kindMap = {product:'منتج',umbrella:'منظومة',dashboard:'لوحة',website:'موقع','service-app':'خدمة','content-product':'منتج محتوى','internal-tool':'أداة داخلية','financial-app':'تطبيق مالي'};
   const factRows = [
-    {l:'النوع',v:kindMap[item.kind] || item.kind || '—'},
+    {l:'النوع',v:_projectKindLabel(item.kind) || item.kind || '—'},
     {l:'الحالة',v:stLabel},
     {l:'التقدم',v:item.pct != null ? `${item.pct}%` : '—'},
     {l:'الأنظمة الفرعية',v:String(item.subsystems?.length || 0)},
@@ -1115,35 +1186,63 @@ function openProjectDetail(name) {
         s.rows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')+
         `</div>`;
       }).join('')+
-      (tags.length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🏷️',14)} التقنيات</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map(t=>`<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join('')}</div></div>`:'')+
-      (item.path?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('📁',14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`:'')+
-      (Object.keys(links).length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🔗',14)} الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(links).map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`).join('')}</div></div>`:'')+
+      (!item.stack?.length && tags.length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🏷️',14)} الوسوم</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map(t=>`<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join('')}</div></div>`:'')+
+      (!item.local_path && !item.server_path && item.path?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('📁',14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`:'')+
+      (!item.repo_url && !item.deploy_url && Object.keys(links).length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🔗',14)} الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(links).map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`).join('')}</div></div>`:'')+
     `</div>`;
   document.getElementById('app').appendChild(el);
-  _suppressHash = true;
-  location.hash = cur+'/'+encodeURIComponent(name);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
   window.scrollTo(0,0);
   requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 2. BOT TERMINAL — واجهة ترمنال داكنة ── */
 function openBotDetail(name) {
-  const item = M[name]; if (!item) return;
+  const item = BOT.find(b => b.name === name); if (!item) return;
   closeDetail();
   const {headline,sections} = _parseDesc(item);
   const stats = BSTATS[item.name]||[];
   const cl = item.cl||'#6C3AED';
   const isActive = item.st==='a';
   const tags = item.tags||[];
-  const botKindMap = {'telegram-bot':'بوت Telegram','agent-runtime':'runtime وكلاء','assistant-channel':'قناة مساعد','financial-app':'تطبيق مالي'};
+  const kindLabel = _botKindLabel(item.kind);
   const meta = [
-    item.kind ? `النوع: ${botKindMap[item.kind] || item.kind}` : '',
+    item.kind ? `النوع: ${kindLabel}` : '',
     item.host ? `المضيف: ${item.host}` : '',
     item.runtime ? `التشغيل: ${item.runtime}` : '',
     item.channel ? `القناة: ${item.channel}` : '',
-    item.related_project ? `يرتبط بـ: ${item.related_project}` : ''
+    item.related_entities?.length ? `يرتبط بـ: ${item.related_entities.join(' · ')}` : ''
   ].filter(Boolean);
-  const related = item.related_project ? _relChips([item.related_project]) : '';
+  const related = _relChips(item.related_entities || []);
+
+  if (item.kind !== 'agent-runtime') {
+    const el = document.createElement('div');
+    el.id = 'detail-view';
+    el.className = 'detail-split';
+    el.innerHTML =
+      `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
+      `<div class="dsp-panel">`+
+        `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">`+
+          `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
+          `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em,48)}</span>`+
+          `<h2 style="font-size:18px;font-weight:700">${E(item.ar||item.name)}</h2>`+
+          `<p style="font-size:12px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(kindLabel)}</p>`+
+        `</div>`+
+        `<div class="dsp-content">`+
+          ((item.summary||headline)?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.8">${E(item.summary||headline)}</p>`:'')+
+          (meta.length ? `<div class="detail-meta-box">${meta.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (related ? `<div style="margin:16px 0"><div class="detail-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div></div>` : '') +
+          (stats.length ? `<div class="entity-stats">${stats.map(s=>`<div class="entity-stat"><span class="entity-stat-val" style="color:${cl}">${E(s.v)}</span><span class="entity-stat-label">${E(s.l)}</span></div>`).join('')}</div>` : '') +
+          _sectionsHTML(sections)+
+          (item.path ? _pathHTML(item.path) : '')+
+          _linksHTML(item.links,cl)+
+        `</div>`+
+      `</div>`;
+    document.body.appendChild(el);
+    _setHashSilently(cur+'/'+encodeURIComponent(name));
+    requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
+    return;
+  }
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1153,22 +1252,22 @@ function openBotDetail(name) {
     `<div class="dt-panel">`+
       `<div class="dt-titlebar">`+
         `<div class="dt-dots"><span style="background:#FF5F57"></span><span style="background:#FFBD2E"></span><span style="background:#28C840"></span></div>`+
-        `<span class="dt-titlebar-text">${E(item.ar||item.name)} — ${isActive?'ACTIVE':'STOPPED'}</span>`+
+        `<span class="dt-titlebar-text">${E(item.ar||item.name)} — ${isActive?'نشط':'متوقف'}</span>`+
         `<button class="dt-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
       `</div>`+
       `<div class="dt-body">`+
-        `<div class="dt-prompt">$ bot status --name "${E(item.name)}"</div>`+
+        `<div class="dt-prompt">الملف التشغيلي</div>`+
         `<div class="dt-output">`+
           `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar||item.name)} ${_ic(item.em,16)}</div>`+
           `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive?'#28C840':'#FF5F57'}">${isActive?'■ نشط':'□ متوقف'}</span></div>`+
           (item.summary||headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(item.summary||headline)}</div>`:'')+
           meta.map(m=>`<div class="dt-line">${E(m)}</div>`).join('')+
         `</div>`+
-        (related ? `<div class="detail-meta-box dt-meta-box"><div class="detail-meta-line">يرتبط بالمشروع</div><div class="meta-chip-row">${related}</div></div>` : '') +
-        (stats.length?`<div class="dt-prompt">$ bot stats</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
+        (related ? `<div class="detail-meta-box dt-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div>` : '') +
+        (stats.length?`<div class="dt-prompt">المقاييس</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
         (function(){
           const catMap = {'🔧':'tech','📊':'stats','🔐':'security','🛡️':'security','⏰':'schedule','🤖':'tech','👥':'tech','🛠️':'tech','🔗':'links','🚀':'deploy','💾':'deploy','📱':'tech','📸':'tech','🧠':'tech','💹':'stats','📈':'stats','🔔':'schedule'};
-          const catLabels = {tech:'$ bot tech',stats:'$ bot metrics',security:'$ bot security',schedule:'$ bot schedule',links:'$ bot links',deploy:'$ bot deploy'};
+          const catLabels = {tech:'البنية والقدرات',stats:'المؤشرات',security:'الأمان',schedule:'الجدولة',links:'الروابط',deploy:'النشر والتشغيل'};
           const catColors = {tech:'#79c0ff',stats:'#7ee787',security:'#f97583',schedule:'#d2a8ff',links:'#79c0ff',deploy:'#56d4dd'};
           const grouped = {};
           sections.forEach(s => {
@@ -1178,7 +1277,7 @@ function openBotDetail(name) {
             grouped[cat].push(s);
           });
           return Object.keys(grouped).map(cat =>
-            `<div class="dt-prompt" style="color:${catColors[cat]||'#7ee787'}">${catLabels[cat]||'$ bot info'}</div>`+
+            `<div class="dt-prompt" style="color:${catColors[cat]||'#7ee787'}">${catLabels[cat]||'تفاصيل'}</div>`+
             `<div class="dt-output">`+
             grouped[cat].map(s =>
               (s.title?`<div class="dt-section-title">${E(s.title)}</div>`:'')+
@@ -1187,20 +1286,19 @@ function openBotDetail(name) {
             `</div>`
           ).join('');
         })()+
-        (tags.length?`<div class="dt-prompt">$ bot tags</div><div class="dt-tags">${tags.map(t=>`<span class="dt-tag">${E(t)}</span>`).join('')}</div>`:'')+
-        (item.path?`<div class="dt-prompt">$ pwd</div><div class="dt-line" style="direction:ltr">${E(item.path)}</div>`:'')+
+        (tags.length?`<div class="dt-prompt">الوسوم</div><div class="dt-tags">${tags.map(t=>`<span class="dt-tag">${E(t)}</span>`).join('')}</div>`:'')+
+        (item.path?`<div class="dt-prompt">المسار</div><div class="dt-line" style="direction:ltr">${E(item.path)}</div>`:'')+
         _linksHTML(item.links,cl)+
       `</div>`+
     `</div>`;
   document.body.appendChild(el);
-  _suppressHash = true;
-  location.hash = cur+'/'+encodeURIComponent(name);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
   requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 3. TOOL SPLIT — لوحة منقسمة (أيقونة + تفاصيل) ── */
 function openToolDetail(name) {
-  const item = M[name]; if (!item) return;
+  const item = TL.find(t => t.name === name); if (!item) return;
   closeDetail();
   const {headline,sections} = _parseDesc(item);
   const cl = item.cl||'#6C3AED';
@@ -1208,8 +1306,7 @@ function openToolDetail(name) {
   const categoryMap = {'developer-env':'بيئة عمل','internal-tool':'أداة داخلية','platform':'منصة','infra-access':'وصول بنية','mcp':'MCP'};
   const metaRows = [
     item.type ? `النوع: ${item.type}` : '',
-    item.category ? `الفئة: ${categoryMap[item.category] || item.category}` : '',
-    item.used_in?.length ? `يُستخدم في: ${item.used_in.join(' · ')}` : ''
+    item.category ? `الفئة: ${categoryMap[item.category] || item.category}` : ''
   ].filter(Boolean);
   const rels = _relChips(item.used_in || []);
   const pathRows = [item.path].filter(Boolean);
@@ -1236,14 +1333,101 @@ function openToolDetail(name) {
       `</div>`+
     `</div>`;
   document.body.appendChild(el);
-  _suppressHash = true;
-  location.hash = cur+'/'+encodeURIComponent(name);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
+}
+
+function openServiceDetail(name) {
+  const item = SVC.find(s => s.name === name);
+  if (!item) return;
+  closeDetail();
+  const owner = item.owner || item.prj || '';
+  const cl = _prjColor(owner || item.name) || '#0EA5E9';
+  const rels = _relChips(owner ? [owner] : []);
+  const metaRows = [
+    item.service_type ? `النوع: ${_serviceTypeLabel(item.service_type)}` : '',
+    item.runtime ? `التشغيل: ${item.runtime}` : '',
+    item.host ? `المضيف: ${item.host}` : '',
+    item.port && item.port !== '—' ? `المنفذ: ${item.port}` : '',
+    item.schedule ? `الجدولة: ${item.schedule}` : '',
+    item.st ? 'الحالة: نشط' : 'الحالة: متوقف'
+  ].filter(Boolean);
+  const bodyRows = [
+    item.info ? `الوصف: ${item.info}` : '',
+    item.dt ? `التفصيل: ${item.dt}` : ''
+  ].filter(Boolean);
+  const accessRows = [
+    item.path ? `المسار: ${item.path}` : '',
+    item.host ? `المضيف: ${item.host}` : '',
+    owner ? `${item.owner_type === 'bot' ? 'المالك runtime' : 'يتبع'}: ${owner}` : ''
+  ].filter(Boolean);
+
+  const el = document.createElement('div');
+  el.id = 'detail-view';
+  el.className = 'detail-split';
+  el.innerHTML =
+    `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
+    `<div class="dsp-panel">`+
+      `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">`+
+        `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
+        `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em,48)}</span>`+
+        `<h2 style="font-size:18px;font-weight:700">${E(item.name)}</h2>`+
+        `<p style="font-size:11px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(_serviceTypeLabel(item.service_type))}</p>`+
+      `</div>`+
+      `<div class="dsp-content">`+
+        (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">${item.owner_type === 'bot' ? 'الكيان المالك' : 'المشروع المالك'}</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        `<div class="prj-detail-grid">`+
+          `<div class="prj-info-card prj-info-card--cyan"><h3 class="prj-info-title">🧭 ما هذا</h3>${bodyRows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')}</div>`+
+          `<div class="prj-info-card prj-info-card--blue"><h3 class="prj-info-title">📍 الوصول</h3>${accessRows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')}</div>`+
+        `</div>`+
+      `</div>`+
+    `</div>`;
+  document.body.appendChild(el);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
+  requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
+}
+
+function openCloudDetail(name) {
+  const item = CLD.find(c => c.nm === name);
+  if (!item) return;
+  closeDetail();
+  const cl = _entityColor(item.prj || item.nm, '#0EA5E9');
+  const rels = _relChips(item.related_entities || item.used_in || []);
+  const metaRows = [
+    item.category ? `الدور: ${_cloudCategoryLabel(item.category)}` : '',
+    item.prj ? `يرتبط أساسًا بـ: ${item.prj}` : '',
+    item.active === false ? 'الحالة: متوقف' : 'الحالة: نشط',
+    item.lk ? `الرابط: ${item.lk}` : ''
+  ].filter(Boolean);
+
+  const el = document.createElement('div');
+  el.id = 'detail-view';
+  el.className = 'detail-split';
+  el.innerHTML =
+    `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
+    `<div class="dsp-panel">`+
+      `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">`+
+        `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
+        `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em,48)}</span>`+
+        `<h2 style="font-size:18px;font-weight:700">${E(item.nm)}</h2>`+
+        `<p style="font-size:11px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(_cloudCategoryLabel(item.category))}</p>`+
+      `</div>`+
+      `<div class="dsp-content">`+
+        `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.dt)}</p>`+
+        (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">تظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        (item.lk ? `<div style="margin-top:8px">${_linksHTML({'افتح المنصة': item.lk}, cl)}</div>` : '') +
+      `</div>`+
+    `</div>`;
+  document.body.appendChild(el);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
   requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 4. IDEA EXPAND — بطاقة تتوسع من المركز ── */
 function openIdeaDetail(name) {
-  const item = M[name]; if (!item) return;
+  const item = IDEAS.find(i => i.name === name); if (!item) return;
   closeDetail();
   const {headline,sections} = _parseDesc(item);
   const prLabels = {1:'عاجل',2:'قريب',3:'يوماً ما'};
@@ -1251,7 +1435,6 @@ function openIdeaDetail(name) {
   const cl = prColors[item.pr]||'#6366F1';
   const rels = _relChips(item.related_projects || []);
   const metaRows = [
-    item.summary ? `الملخص: ${item.summary}` : '',
     item.owner_scope ? `النطاق: ${item.owner_scope}` : '',
     item.horizon ? `الأفق: ${item.horizon}` : '',
     item.next_step ? `الخطوة التالية: ${item.next_step}` : ''
@@ -1275,21 +1458,19 @@ function openIdeaDetail(name) {
       (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يتكامل مع</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
     `</div>`;
   document.body.appendChild(el);
-  _suppressHash = true;
-  location.hash = cur+'/'+encodeURIComponent(name);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
   requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
 /* ── 5. ARCHIVE DOCUMENT — وثيقة ورقية كلاسيكية ── */
 function openArchiveDetail(name) {
-  const item = M[name]; if (!item) return;
+  const item = ARC.find(a => a.name === name); if (!item) return;
   closeDetail();
   const {headline,sections} = _parseDesc(item);
   const cl = item.cl||'#F59E0B';
   const stamp = _archiveStamp(item);
   const metaRows = [
     `التصنيف: ${_archiveKindLabel(item)}`,
-    item.summary ? `الملخص: ${item.summary}` : '',
     item.next_step ? `الخطوة التالية: ${item.next_step}` : ''
   ].filter(Boolean);
   const rels = _relChips(item.related_projects || []);
@@ -1315,8 +1496,7 @@ function openArchiveDetail(name) {
       _linksHTML(item.links,cl)+
     `</div>`;
   document.body.appendChild(el);
-  _suppressHash = true;
-  location.hash = cur+'/'+encodeURIComponent(name);
+  _setHashSilently(cur+'/'+encodeURIComponent(name));
   requestAnimationFrame(()=>{el.classList.add('open');_processIcons();});
 }
 
@@ -1330,19 +1510,31 @@ function closeDetail(instant) {
   d.classList.remove('open');
   d.addEventListener('transitionend',()=>d.remove(),{once:true});
   setTimeout(()=>{if(document.getElementById('detail-view'))d.remove();},500);
-  if (location.hash.includes('/')) { _suppressHash = true; location.hash = cur; }
+  if (location.hash.includes('/')) _setHashSilently(cur);
   window.scrollTo(0,0);
 }
 
 /* ── فتح ذكي حسب نوع العنصر (للتنقل بالهاش) ── */
-function openDetailSmart(name) {
-  const item = M[name]; if (!item) return;
+function openDetailSmart(name, pageHint) {
+  const openByPage = {
+    projects: () => { if (PRJ.find(p=>p.name===name)) { openProjectDetail(name); return true; } return false; },
+    server: () => { if (SVC.find(s=>s.name===name)) { openServiceDetail(name); return true; } return false; },
+    bots: () => { if (BOT.find(b=>b.name===name)) { openBotDetail(name); return true; } return false; },
+    tools: () => { if (TL.find(t=>t.name===name)) { openToolDetail(name); return true; } return false; },
+    cloud: () => { if (CLD.find(c=>c.nm===name)) { openCloudDetail(name); return true; } return false; },
+    ideas: () => { if (IDEAS.find(i=>i.name===name)) { openIdeaDetail(name); return true; } return false; },
+    archive: () => { if (ARC.find(a=>a.name===name)) { openArchiveDetail(name); return true; } return false; }
+  };
+  if (pageHint && openByPage[pageHint]) {
+    if (openByPage[pageHint]()) return;
+  }
   if (PRJ.find(p=>p.name===name)) return openProjectDetail(name);
+  if (SVC.find(s=>s.name===name)) return openServiceDetail(name);
   if (BOT.find(b=>b.name===name)) return openBotDetail(name);
   if (TL.find(t=>t.name===name)) return openToolDetail(name);
+  if (CLD.find(c=>c.nm===name)) return openCloudDetail(name);
   if (IDEAS.find(i=>i.name===name)) return openIdeaDetail(name);
   if (ARC.find(a=>a.name===name)) return openArchiveDetail(name);
-  openProjectDetail(name);
 }
 
 /* ─────────────── 5. FILTER FUNCTIONS ─────────────── */
@@ -1502,11 +1694,15 @@ window.addEventListener('hashchange', function() {
   if (_suppressHash) { _suppressHash = false; return; }
   const parts = location.hash.slice(1).split('/');
   const page = parts[0];
-  if (_validPages.has(page) && page !== cur) go(page);
+  if (_validPages.has(page) && page !== cur) _activatePage(page, false);
+  if (!parts[1] && document.getElementById('detail-view')) closeDetail(true);
   if (parts[1]) {
     const itemName = decodeURIComponent(parts[1]);
-    if (M[itemName] && !document.getElementById('detail-view')) {
-      setTimeout(() => openDetailSmart(itemName), 200);
+    if (M[itemName] || SVC.find(s=>s.name===itemName) || CLD.find(c=>c.nm===itemName)) {
+      setTimeout(() => {
+        if (document.getElementById('detail-view')) closeDetail(true);
+        openDetailSmart(itemName, page);
+      }, 200);
     }
   }
 });
