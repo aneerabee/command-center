@@ -48,6 +48,7 @@ const SVC=[
 const AUTO=[
   {group:"MacBook Pro",loc:"launchd / محلي",host:"desktop",tasks:[
     {name:"auto-backup.sh",freq:"يوميًا 14:00",on:true,what:"دفع meta-mcp + Money Manager + brixtravelwebsite إلى GitHub",prj:["Meta MCP","Money Manager","BRIX Travel Website"],path:"local launchd",kind:"backup"},
+    {name:"Command Center Runtime Publish",freq:"كل 6 ساعات",on:true,what:"تشغيل runtime-sync.js ثم commit/push لـ data.runtime.json عند التغيير",prj:["Command Center"],path:"/Users/rabeeshaban/Library/LaunchAgents/com.rabeeshaban.command-center-runtime-publish.plist",kind:"automation"},
     {name:"PM2 Resurrect",freq:"عند الإقلاع",on:true,what:"إعادة تشغيل العمليات المحلية المحفوظة تلقائيًا",prj:["Command Center"],path:"local pm2",kind:"runtime"},
     {name:"BRIX Invoice Server",freq:"دائم",on:true,what:"تشغيل خادم فواتير BRIX محليًا",prj:["BRIX Travel System"],path:"localhost:8000",kind:"app"}
   ]},

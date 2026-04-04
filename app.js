@@ -696,7 +696,7 @@ R.home = function() {
         ).join('')+
       `</div>`+
       (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
-      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. الفحص الآلي الحالي محدود النطاق ويغطي فقط بعض عناصر <strong>services + tools + cloud</strong>، ولا يحدّث المشاريع أو الأفكار أو الأرشيف تلقائيًا بعد. لتشغيله يدويًا من داخل <code>/tmp/cc-push</code> استخدم <code>node runtime-sync.js</code>. الناتج المتوقع: تحديث ملف <code>data.runtime.json</code> ثم ظهور وقت آخر تحقق داخل اللوحة بعد إعادة التحميل${runtimeGenerated ? ` · آخر تشغيل: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
+      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. التحديث الآلي الحالي يعمل من النظام عبر <code>launchd</code> كل 6 ساعات، ويشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> لتحديث <strong>services + tools + cloud</strong> ثم commit/push لـ <code>data.runtime.json</code> فقط عند وجود تغيير. المشاريع والأفكار والأرشيف ما زالت تعتمد على التوثيق اليدوي في <code>data.js</code>${runtimeGenerated ? ` · آخر تشغيل معروف: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
     `</section>`+
 
     `<section class="hq-card hq-focus">`+
