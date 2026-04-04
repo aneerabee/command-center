@@ -838,6 +838,7 @@ R.bots = function() {
 R.tools = function() {
   const hero = TL[0];
   const emojiMap = {"Codex CLI":"🧭","Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
+  const cliItems = TL.filter(t => t.category === 'developer-env');
   const byCategory = c => TL.filter(t => t.category === c).length;
   const dials = [
     {v:String(byCategory('mcp')),l:"MCP",cl:"var(--purple)"},
@@ -851,6 +852,9 @@ R.tools = function() {
 
   return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">AI CLI + MCP + الإعدادات</small></h2>` +
     `<div class="tool-note">هذه الصفحة توثق أدوات العمل نفسها، وخصوصًا بيئات AI CLI: أين يوجد إعداد كل أداة، ما التخصيصات المضافة، وما المشاريع التي تُستخدم فيها.</div>` +
+    `<div class="tool-cli-grid">`+
+      cliItems.map(t => `<button class="tool-cli-card" style="--tc:${t.cl}" onclick="openToolDetail('${E(t.name)}')"><strong>${E(t.ar||t.name)}</strong><p>${E(t.summary||'')}</p><span>${E((t.capabilities||[]).slice(0,3).join(' · '))}</span></button>`).join('')+
+    `</div>`+
     `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">`+
       `<div class="tool-hero-info"><h3 class="tool-hero-name">${E(hero.ar||hero.name)}</h3>`+
       `<p class="tool-hero-desc">${E(hero.summary || 'بيئة العمل الأساسية الحالية')}</p></div>`+
@@ -1331,6 +1335,8 @@ function openToolDetail(name) {
   const factRows = item.facts || [];
   const customRows = item.customizations || [];
   const configPaths = item.config_paths || [];
+  const structureRows = item.structure || [];
+  const capabilityRows = item.capabilities || [];
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1349,7 +1355,9 @@ function openToolDetail(name) {
         (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         (factRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (capabilityRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">قدرات متصلة</div>${capabilityRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (structureRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">البنية الداخلية</div>${structureRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (configPaths.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ملفات الإعداد</div>${configPaths.map(r=>`<div class="detail-meta-line" style="font-family:var(--mono);font-size:11px;direction:ltr;text-align:left">${E(r)}</div>`).join('')}</div>` : '') +
         _sectionsHTML(sections)+
         (pathRows.length ? _pathHTML(pathRows[0]) : '')+

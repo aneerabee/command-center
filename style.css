@@ -254,6 +254,11 @@ a{text-decoration:none;color:inherit}
 .hq-standard-item p{margin:0;font-size:11px;color:#6B6560;line-height:1.7}
 .hq-standard-fact{display:block;margin-top:10px;font-size:10px;color:#8F8880;line-height:1.6}
 .tool-note{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:#FAFAF8;border:1px solid #EEECE8;font-size:11px;line-height:1.8;color:#6B6560}
+.tool-cli-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 14px}
+.tool-cli-card{border:none;appearance:none;-webkit-appearance:none;text-align:right;padding:14px 16px;border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--tc) 7%,#fff),#fff);border:1px solid color-mix(in srgb,var(--tc) 14%, #EEECE8);cursor:pointer}
+.tool-cli-card strong{display:block;font-size:13px;color:#2D2A26;margin-bottom:6px}
+.tool-cli-card p{margin:0;font-size:11px;line-height:1.7;color:#6B6560}
+.tool-cli-card span{display:block;margin-top:10px;font-size:10px;color:var(--tc);font-weight:700;line-height:1.6}
 .hq-link{display:flex;align-items:center;gap:6px;padding:10px 12px;border:1px solid #EEECE8;border-radius:14px;text-decoration:none;color:#5d574f;font-size:11px;font-weight:700;background:#FAFAF8}
 .hq-link:hover{color:#6C3AED;border-color:#D8D0EE;background:#fff}
 /* Warm Bento Grid — asymmetric layout */
