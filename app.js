@@ -1371,10 +1371,10 @@ function openProjectDetail(name) {
       `<div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">${_ic('🧭',14)} الملخص التنفيذي</div>`+
       `<div style="font-size:13px;line-height:1.8;color:var(--t2)">${E(item.summary || headline || '')}</div>`+
     `</div>`+
-    _entityTrustBox(item,'project')+
     `<div class="prj-fact-strip">`+
       factRows.map(f => `<div class="prj-fact"><span class="prj-fact-label">${E(f.l)}</span><strong class="prj-fact-val">${E(f.v)}</strong></div>`).join('')+
     `</div>`+
+    _entityTrustBox(item,'project')+
     `<div class="prj-detail-grid">`+
       sections.map(s=>{
         const title = s.title || '';
@@ -1634,8 +1634,8 @@ function openCloudDetail(name) {
       `</div>`+
       `<div class="dsp-content">`+
         `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.dt)}</p>`+
-        (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">تظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        (metaRows.length ? `<div class="detail-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-title">تظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         _entityTrustBox(item,'cloud')+
         (item.lk ? `<div style="margin-top:8px">${_linksHTML({'افتح المنصة': item.lk}, cl)}</div>` : '') +
       `</div>`+
@@ -1673,10 +1673,10 @@ function openIdeaDetail(name) {
       `</div>`+
       `<h2 style="font-size:18px;font-weight:700;margin-bottom:8px">${E(item.name)}</h2>`+
       ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);margin-bottom:14px">${E(item.summary||headline)}</p>`:'')+
-      (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+      (metaRows.length ? `<div class="detail-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
       _entityTrustBox(item,'idea')+
       _sectionsHTML(sections)+
-      (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يتكامل مع</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
+      (rels?`<div style="margin-top:16px"><div class="detail-meta-box"><div class="detail-meta-title">يتكامل مع</div><div class="meta-chip-row">${rels}</div></div></div>`:'')+
     `</div>`;
   document.body.appendChild(el);
   _setHashSilently(cur+'/'+encodeURIComponent(name));
@@ -1709,10 +1709,10 @@ function openArchiveDetail(name) {
         `<h2 style="font-size:18px;font-weight:700;color:var(--t1)">${E(item.ar||item.name)}</h2>`+
       `</div>`+
       ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(item.summary||headline)}</p>`:'')+
-      (metaRows.length ? `<div class="detail-meta-box archive-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+      (metaRows.length ? `<div class="detail-meta-box archive-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
       _entityTrustBox(item,'archive')+
       _sectionsHTML(sections)+
-      (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يرتبط بـ</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
+      (rels?`<div style="margin-top:16px"><div class="detail-meta-box archive-meta-box"><div class="detail-meta-title">يرتبط بـ</div><div class="meta-chip-row">${rels}</div></div></div>`:'')+
       _tagsHTML(item.tags,cl)+
       _pathHTML(item.path)+
       _linksHTML(item.links,cl)+
