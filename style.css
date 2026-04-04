@@ -244,6 +244,10 @@ a{text-decoration:none;color:inherit}
 .hq-access-item{padding:14px;border-radius:16px;background:#FAFAF8;border:1px solid #EEECE8}
 .hq-access-item strong{display:block;font-size:12px;color:#2D2A26;margin-bottom:6px}
 .hq-access-item p{margin:0;font-size:11px;color:#6B6560;line-height:1.7}
+.hq-standard-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.hq-standard-item{padding:14px;border-radius:16px;background:linear-gradient(180deg,#FFFDF7,#FAFAF8);border:1px solid #EEE7D8}
+.hq-standard-item strong{display:block;font-size:12px;color:#2D2A26;margin-bottom:6px}
+.hq-standard-item p{margin:0;font-size:11px;color:#6B6560;line-height:1.7}
 .hq-link{display:flex;align-items:center;gap:6px;padding:10px 12px;border:1px solid #EEECE8;border-radius:14px;text-decoration:none;color:#5d574f;font-size:11px;font-weight:700;background:#FAFAF8}
 .hq-link:hover{color:#6C3AED;border-color:#D8D0EE;background:#fff}
 /* Warm Bento Grid — asymmetric layout */
@@ -971,7 +975,7 @@ a{text-decoration:none;color:inherit}
   .hq-hero{flex-direction:column;align-items:flex-start}
   .hq-hero-meta{align-items:flex-start}
   .hq-metrics{grid-template-columns:repeat(2,1fr)}
-  .hq-layer-grid,.hq-access-grid,.hq-link-grid{grid-template-columns:1fr}
+  .hq-layer-grid,.hq-access-grid,.hq-link-grid,.hq-standard-grid{grid-template-columns:1fr}
   .prj-fact-strip{grid-template-columns:repeat(2,1fr)}
   .page-title{font-size:20px;margin-bottom:16px}
   .section-title{font-size:13px;margin-bottom:10px}

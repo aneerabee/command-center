@@ -485,6 +485,13 @@ R.home = function() {
   const focus = focusNames.map(n => PRJ.find(p => p.name === n)).filter(Boolean);
   const urgentIdeas = IDEAS.filter(i => i.pr === 1 || i.pr === 2);
   const activeRefs = ARC.filter(a => a.st === 'a');
+  const buildStandard = [
+    {t:'لا كسر جانبي',d:'أي تعديل يجب أن يحافظ على السلوك الحالي ولا يولّد مشاكل جديدة.'},
+    {t:'تحقق قبل وبعد',d:'نفهم النتيجة والمخاطر قبل التنفيذ، ثم نراجع correctness والتكامل بعده.'},
+    {t:'لا تكرار ولا نسخ زائدة',d:'لا ملفات مكررة، لا كود زائد، ولا طبقات غير مستخدمة.'},
+    {t:'مسارات منظمة',d:'لا إنشاء في أماكن عشوائية، ولا تغيير مسارات بدون سبب واضح.'},
+    {t:'الخطة لا تُترك في المنتصف',d:'إذا بدأنا تنفيذًا فنكمله حتى النهاية ما لم يوجد blocker حقيقي.'}
+  ];
   const layerCards = [
     {t:'أنظمة ومنتجات', n: PRJ.filter(p => ['product','service-app','website','content-product','financial-app','dashboard'].includes(p.kind)).length, d:'مشاريع وتشغيل فعلي يملك كودًا أو نشرًا أو خدمة حية.', c:'#6C3AED'},
     {t:'تسويق وأتمتة', n: ['EasyBooking','WhatsApp CRM','Meta MCP'].length, d:'منظومات الإعلانات والتحويل والـ MCP الداخلي.', c:'#2563EB'},
@@ -570,6 +577,15 @@ R.home = function() {
         `<div class="hq-access-item"><strong>سيرفر</strong><p>Contabo يشغّل Wapy وWedding وArgaz والمهام المجدولة والخدمات user-level.</p></div>`+
         `<div class="hq-access-item"><strong>سحابي</strong><p>GitHub وRailway وSupabase وMeta Business وHostinger هي طبقات النشر والتشغيل.</p></div>`+
         `<div class="hq-access-item"><strong>حساس</strong><p>Vault وTron Address Bot وTailscale ليست أرشيفًا؛ هي طبقات وصول وأمن حية.</p></div>`+
+      `</div>`+
+    `</section>`+
+
+    `<section class="hq-card hq-standard">`+
+      `<div class="hq-head"><h2>معيار البناء</h2><span>قواعد تنفيذ ثابتة</span></div>`+
+      `<div class="hq-standard-grid">`+
+        buildStandard.map(x =>
+          `<div class="hq-standard-item"><strong>${x.t}</strong><p>${x.d}</p></div>`
+        ).join('')+
       `</div>`+
     `</section>`+
 
