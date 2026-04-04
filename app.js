@@ -450,7 +450,7 @@ R.auto = function() {
     '</div>';
 
   return '<div class="auto-header">' +
-    '<div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-text">automation status --all</span></div>' +
+    '<div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-text">حالة الأتمتة — جميع الأنظمة</span></div>' +
     '</div>' +
     '<div class="auto-stats">' +
       `<div class="auto-stat-box"><span class="auto-stat-val">${totalTasks}</span><span class="auto-stat-label">مهمة</span></div>`+
