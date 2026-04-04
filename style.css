@@ -660,7 +660,6 @@ a{text-decoration:none;color:inherit}
 .cloud-overview-stat{padding:14px;border-radius:14px;background:#FAFAF8;border:1px solid #EEECE8;text-align:center}
 .cloud-overview-stat strong{display:block;font-size:24px;font-weight:800;font-family:var(--mono);color:#221f1b}
 .cloud-overview-stat span{display:block;margin-top:4px;font-size:10px;color:#8F8880}
-.cloud-note{margin-bottom:14px;padding:12px 14px;border-radius:14px;background:#FAFAF8;border:1px solid #EEECE8;font-size:11px;line-height:1.8;color:var(--t2)}
 .cloud-category{margin-bottom:20px}
 .cloud-cat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .cloud-cat-title{font-size:13px;font-weight:700;color:var(--t2);margin:0;padding-right:4px}

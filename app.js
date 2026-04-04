@@ -115,7 +115,9 @@ let RUNTIME_STATE = {
   project: {},
   service: {},
   tool: {},
-  cloud: {}
+  cloud: {},
+  bot: {},
+  archive: {}
 };
 
 async function _loadRuntimeData() {
@@ -131,15 +133,24 @@ async function _loadRuntimeData() {
         project: payload.project || {},
         service: payload.service || {},
         tool: payload.tool || {},
-        cloud: payload.cloud || {}
+        cloud: payload.cloud || {},
+        bot: payload.bot || {},
+        archive: payload.archive || {}
       };
     }
   } catch (_) {}
 }
 
-function _refreshHomeRuntimeOnly() {
+function _refreshRuntimeBoundViews() {
+  const parts = location.hash.slice(1).split('/');
+  const page = parts[0];
+  const itemName = parts[1] ? decodeURIComponent(parts[1]) : null;
+  if (itemName && _entityLookup(itemName) && document.getElementById('detail-view')) {
+    closeDetail(true);
+    openDetailSmart(itemName, page);
+    return;
+  }
   if (cur !== 'home') return;
-  if (document.getElementById('detail-view')) return;
   const home = document.getElementById('page-home');
   if (!home) return;
   home.innerHTML = R.home();
@@ -316,7 +327,7 @@ function _entityMeta(item, kind) {
 function _metaModeLabel(mode) {
   return {
     'manual-audit':'مراجعة يدوية من المصدر',
-    'runtime-audit':'فحص runtime',
+    'runtime-audit':'تحقق دوري من المصدر المناسب',
     'file-audit':'فحص ملفات الإعداد',
     'manual-curation':'تحرير يدوي',
   }[mode] || mode || 'غير محدد';
@@ -333,7 +344,7 @@ function _entityTrustBox(item, kind) {
     `<div class="trust-grid">`+
       (meta.source ? `<div class="trust-item"><span>المصدر</span><strong>${E(meta.source)}</strong></div>` : '')+
       (meta.stale_after ? `<div class="trust-item"><span>حد التقادم</span><strong>${E(meta.stale_after)}</strong></div>` : '')+
-      (meta.auto_refresh ? `<div class="trust-item trust-item-wide trust-item-plan"><span>مسار الأتمتة لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
+      (meta.auto_refresh ? `<div class="trust-item trust-item-wide trust-item-plan"><span>${String(meta.auto_refresh).startsWith('نشط الآن') ? 'التحديث الآلي الحالي' : 'مسار الأتمتة لاحقًا'}</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
     `</div>`+
     (runtime ? `<div class="trust-live"><div class="trust-section-head trust-section-head--live">آخر نتيجة تحقق آلي محفوظة</div><div class="trust-grid">`+
       `<div class="trust-item"><span>حالة آخر تحقق</span><strong><span class="runtime-badge" style="--rb:${runtimeMeta.color}">${E(runtimeMeta.label)}</span></strong></div>`+
@@ -625,13 +636,15 @@ R.home = function() {
     {t:'المشاريع', n:runtimeCoverage.project?.ok ?? 0, d:`تحذير ${runtimeCoverage.project?.warn ?? 0} · فشل ${runtimeCoverage.project?.fail ?? 0} · يدوي ${runtimeCoverage.project?.manual ?? 0}`, c:'#6C3AED'},
     {t:'الخدمات', n:runtimeCoverage.service?.ok ?? 0, d:`تحذير ${runtimeCoverage.service?.warn ?? 0} · فشل ${runtimeCoverage.service?.fail ?? 0} · يدوي ${runtimeCoverage.service?.manual ?? 0}`, c:'#0284C7'},
     {t:'الأدوات', n:runtimeCoverage.tool?.ok ?? 0, d:`تحذير ${runtimeCoverage.tool?.warn ?? 0} · فشل ${runtimeCoverage.tool?.fail ?? 0} · يدوي ${runtimeCoverage.tool?.manual ?? 0}`, c:'#7C3AED'},
-    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`تحذير ${runtimeCoverage.cloud?.warn ?? 0} · فشل ${runtimeCoverage.cloud?.fail ?? 0} · يدوي ${runtimeCoverage.cloud?.manual ?? 0}`, c:'#059669'}
+    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`تحذير ${runtimeCoverage.cloud?.warn ?? 0} · فشل ${runtimeCoverage.cloud?.fail ?? 0} · يدوي ${runtimeCoverage.cloud?.manual ?? 0}`, c:'#059669'},
+    {t:'البوتات', n:runtimeCoverage.bot?.ok ?? 0, d:`تحذير ${runtimeCoverage.bot?.warn ?? 0} · فشل ${runtimeCoverage.bot?.fail ?? 0} · يدوي ${runtimeCoverage.bot?.manual ?? 0}`, c:'#9333EA'},
+    {t:'الأرشيف', n:runtimeCoverage.archive?.ok ?? 0, d:`تحذير ${runtimeCoverage.archive?.warn ?? 0} · فشل ${runtimeCoverage.archive?.fail ?? 0} · يدوي ${runtimeCoverage.archive?.manual ?? 0}`, c:'#EA580C'}
   ];
   const trustSummary = [
-    {t:'فحص حي محدود', n:SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'عناصر يمكن فحصها من runtime أو من السيرفر، لكن ليست كلها مغطاة بنفس الدرجة.', c:'#0EA5E9'},
-    {t:'فحص ملفات', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length, d:'أدوات وإعدادات تُراجع من ملفات config ومسارات محلية معروفة.', c:'#6C3AED'},
-    {t:'مراجعة يدوية', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'manual-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'manual-audit').length, d:'عناصر لا يكفي فيها checker موحد بعد، لذلك تبقى مرتبطة بالمراجعة من المصدر.', c:'#D97706'},
-    {t:'تحرير مرجعي', n:IDEAS.length + ARC.length, d:'أفكار وأرشيف ليست بيانات تشغيل حي، بل محتوى منسق يُحدّث عند التغيير.', c:'#E11D48'}
+    {t:'فحص حي/تشغيلي', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'runtime-audit').length + SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'عناصر يجري لها تحقق دوري من runtime أو من السيرفر أو من أسطح النشر المعروفة.', c:'#0EA5E9'},
+    {t:'فحص ملفات/مسارات', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length + ARC.filter(a => _entityMeta(a,'archive').refresh_mode === 'file-audit').length, d:'عناصر تعتمد على ملفات إعداد أو مسارات معروفة، لذلك يتحقق منها النظام بوجودها لا بمعنى محتواها بالكامل.', c:'#6C3AED'},
+    {t:'مراجعة يدوية', n:IDEAS.filter(i => _entityMeta(i,'idea').refresh_mode === 'manual-curation').length, d:'الأفكار ومنطقة التخطيط لا يوجد لها checker دوري موثوق، لذلك تبقى مرتبطة بالمراجعة البشرية.', c:'#D97706'},
+    {t:'أرشيف مرجعي', n:ARC.length, d:'الأرشيف يُفحص دوريًا من جهة وجود المسارات، لكن معنى المحتوى وسياقه يبقيان مرجعيين لا تشغيلًا حيًا.', c:'#E11D48'}
   ];
   const aiCliTools = TL.filter(t => t.category === 'developer-env').map(t => ({
     t: t.ar || t.name,
@@ -679,16 +692,16 @@ R.home = function() {
     `</section>`+
 
     `<section class="hq-card hq-health">`+
-      `<div class="hq-head"><h2>ملخص التشغيل الموثق</h2><span onclick="go('server')" class="hq-inline-link">افتح السيرفر</span></div>`+
+      `<div class="hq-head"><h2>الجرد التشغيلي</h2><span onclick="go('server')" class="hq-inline-link">افتح السيرفر</span></div>`+
       `<div class="hq-health-list">`+
-        `<div class="hq-health-row"><span>خدمات عاملة</span><strong>${activeSvc}/${SVC.length}</strong></div>`+
-        `<div class="hq-health-row"><span>حاويات Docker</span><strong>${runningContainers}</strong></div>`+
-        `<div class="hq-health-row"><span>مهام cron</span><strong>${runningCron}</strong></div>`+
-        `<div class="hq-health-row"><span>خدمات user</span><strong>${runningUserServices}</strong></div>`+
-        `<div class="hq-health-row"><span>بوتات نشطة</span><strong>${activeBots}/${BOT.length}</strong></div>`+
-        `<div class="hq-health-row"><span>أتمتة نشطة</span><strong>${activeTasks}/${allTasks.length}</strong></div>`+
+        `<div class="hq-health-row"><span>خدمات في الكتالوج</span><strong>${activeSvc}/${SVC.length}</strong></div>`+
+        `<div class="hq-health-row"><span>حاويات موثقة</span><strong>${runningContainers}</strong></div>`+
+        `<div class="hq-health-row"><span>مهام cron موثقة</span><strong>${runningCron}</strong></div>`+
+        `<div class="hq-health-row"><span>خدمات user موثقة</span><strong>${runningUserServices}</strong></div>`+
+        `<div class="hq-health-row"><span>بوتات نشطة في الجرد</span><strong>${activeBots}/${BOT.length}</strong></div>`+
+        `<div class="hq-health-row"><span>أتمتة مفعلة في الجرد</span><strong>${activeTasks}/${allTasks.length}</strong></div>`+
       `</div>`+
-      `<div class="hq-mini-note">المعروض هنا مبني على الجرد الموثق في ` + `data.js` + ` وليس على أرقام شكلية.</div>`+
+      `<div class="hq-mini-note">هذا القسم يصف الجرد التشغيلي الموثق في <code>data.js</code>. أما نتائج التحقق الحي فتظهر في بطاقات مصدر وتحديث البيانات أدناه.</div>`+
     `</section>`+
 
     `<section class="hq-card hq-trust">`+
@@ -701,8 +714,8 @@ R.home = function() {
       (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
       `<div class="hq-trust-brief">`+
         `<div class="hq-trust-card"><strong>ما الذي يحدث آليًا الآن</strong><p>يوجد LaunchAgent على الماك يشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> كل 6 ساعات. هذا المسار يحدّث <code>data.runtime.json</code> ثم يدفعه فقط إذا تغيّرت النتيجة.</p></div>`+
-        `<div class="hq-trust-card"><strong>ما الذي يشمله هذا فعليًا</strong><p>التغطية الحالية هي <strong>projects + services + tools + cloud</strong>. لكن مستوى الفحص يختلف من عنصر لآخر: بعضه SSH، بعضه filesystem أو Git أو HTTP، وليس كل حقل مغطى checker مستقل.</p></div>`+
-        `<div class="hq-trust-card"><strong>ما الذي ما زال يدويًا</strong><p><strong>ideas + archive</strong> ما زالا يعتمدان على التوثيق داخل <code>data.js</code> فقط. لا يوجد لهما checker دوري حتى الآن.</p></div>`+
+        `<div class="hq-trust-card"><strong>ما الذي يشمله هذا فعليًا</strong><p>التغطية الحالية هي <strong>projects + services + tools + cloud + bots + archive</strong>. لكن مستوى الفحص يختلف من عنصر لآخر: بعضه SSH، بعضه filesystem أو Git أو HTTP، وليس كل حقل مغطى checker مستقل.</p></div>`+
+        `<div class="hq-trust-card"><strong>ما الذي ما زال يدويًا</strong><p><strong>ideas</strong> ما زالت تعتمد على التوثيق داخل <code>data.js</code> فقط. الأرشيف نفسه صار له existence-check دوري، لكن معنى المحتوى وسياقه ما زالا مرجعيين لا runtime حيًا.</p></div>`+
       `</div>`+
       `<div class="hq-mini-note">مصدر الحقيقة الثابت هو <code>data.js</code>، أما <code>data.runtime.json</code> فهو آخر نتيجة تحقق محفوظة${runtimeGenerated ? ` · آخر نتيجة محفوظة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
     `</section>`+
@@ -1465,6 +1478,7 @@ function openBotDetail(name) {
           (item.summary||headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(item.summary||headline)}</div>`:'')+
           meta.map(m=>`<div class="dt-line">${E(m)}</div>`).join('')+
         `</div>`+
+        _entityTrustBox(item,'bot')+
         (related ? `<div class="detail-meta-box dt-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div>` : '') +
         (stats.length?`<div class="dt-prompt">المقاييس</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
         (function(){
@@ -1534,7 +1548,7 @@ function openToolDetail(name) {
       `<div class="dsp-content">`+
         (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
         (metaRows.length ? `<div class="detail-meta-box detail-meta-box--intro">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يُستخدم هنا</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         _entityTrustBox(item,'tool')+
         `<div class="tool-detail-grid">`+
           (factRows.length ? `<div class="detail-meta-box detail-meta-box--strong"><div class="detail-meta-title">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
@@ -1913,7 +1927,7 @@ function _updateCountdown() {
 async function bootstrap() {
   init();
   _loadRuntimeData().then(() => {
-    if (RUNTIME_STATE.generated_at) _refreshHomeRuntimeOnly();
+    if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   });
 }
 
