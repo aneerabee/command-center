@@ -112,6 +112,7 @@ let RUNTIME_STATE = {
   generated_at: null,
   checker: null,
   coverage: {},
+  project: {},
   service: {},
   tool: {},
   cloud: {}
@@ -127,6 +128,7 @@ async function _loadRuntimeData() {
         generated_at: payload.generated_at || null,
         checker: payload.checker || null,
         coverage: payload.coverage || {},
+        project: payload.project || {},
         service: payload.service || {},
         tool: payload.tool || {},
         cloud: payload.cloud || {}
@@ -326,14 +328,14 @@ function _entityTrustBox(item, kind) {
   const runtimeMeta = runtime ? _runtimeStatusMeta(runtime.verification_status) : null;
   if (!meta || (!meta.source && !meta.refresh_mode && !meta.stale_after && !meta.auto_refresh)) return '';
   return `<div class="trust-box">`+
-    `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>سياسة: ${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
+    `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>سياسة التوثيق: ${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
     `<div class="trust-section-head">وصف ثابت للعنصر</div>`+
     `<div class="trust-grid">`+
       (meta.source ? `<div class="trust-item"><span>المصدر</span><strong>${E(meta.source)}</strong></div>` : '')+
       (meta.stale_after ? `<div class="trust-item"><span>حد التقادم</span><strong>${E(meta.stale_after)}</strong></div>` : '')+
       (meta.auto_refresh ? `<div class="trust-item trust-item-wide trust-item-plan"><span>مسار الأتمتة لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
     `</div>`+
-    (runtime ? `<div class="trust-live"><div class="trust-section-head">نتيجة آخر فحص آلي متاح</div><div class="trust-grid">`+
+    (runtime ? `<div class="trust-live"><div class="trust-section-head">آخر نتيجة تحقق آلي محفوظة</div><div class="trust-grid">`+
       `<div class="trust-item"><span>حالة آخر تحقق</span><strong><span class="runtime-badge" style="--rb:${runtimeMeta.color}">${E(runtimeMeta.label)}</span></strong></div>`+
       `<div class="trust-item"><span>آخر تحقق</span><strong>${E(_fmtRuntimeDate(runtime.verified_at))}</strong></div>`+
       (runtime?.checked_from ? `<div class="trust-item"><span>من أين تم التحقق</span><strong>${E(runtime.checked_from)}</strong></div>` : '')+
@@ -620,15 +622,16 @@ R.home = function() {
   const runtimeGenerated = RUNTIME_STATE.generated_at;
   const runtimeCoverage = RUNTIME_STATE.coverage || {};
   const runtimeCards = [
-    {t:'الخدمات', n:runtimeCoverage.service?.ok ?? 0, d:`${runtimeCoverage.service?.manual ?? 0} يدوي · ${(runtimeCoverage.service?.warn ?? 0)+(runtimeCoverage.service?.fail ?? 0)} يحتاج متابعة`, c:'#0284C7'},
-    {t:'الأدوات', n:runtimeCoverage.tool?.ok ?? 0, d:`${runtimeCoverage.tool?.manual ?? 0} يدوي · ${(runtimeCoverage.tool?.warn ?? 0)+(runtimeCoverage.tool?.fail ?? 0)} يحتاج متابعة`, c:'#7C3AED'},
-    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`${runtimeCoverage.cloud?.manual ?? 0} يدوي · ${(runtimeCoverage.cloud?.warn ?? 0)+(runtimeCoverage.cloud?.fail ?? 0)} يحتاج متابعة`, c:'#059669'}
+    {t:'المشاريع', n:runtimeCoverage.project?.ok ?? 0, d:`تحذير ${runtimeCoverage.project?.warn ?? 0} · فشل ${runtimeCoverage.project?.fail ?? 0} · يدوي ${runtimeCoverage.project?.manual ?? 0}`, c:'#6C3AED'},
+    {t:'الخدمات', n:runtimeCoverage.service?.ok ?? 0, d:`تحذير ${runtimeCoverage.service?.warn ?? 0} · فشل ${runtimeCoverage.service?.fail ?? 0} · يدوي ${runtimeCoverage.service?.manual ?? 0}`, c:'#0284C7'},
+    {t:'الأدوات', n:runtimeCoverage.tool?.ok ?? 0, d:`تحذير ${runtimeCoverage.tool?.warn ?? 0} · فشل ${runtimeCoverage.tool?.fail ?? 0} · يدوي ${runtimeCoverage.tool?.manual ?? 0}`, c:'#7C3AED'},
+    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`تحذير ${runtimeCoverage.cloud?.warn ?? 0} · فشل ${runtimeCoverage.cloud?.fail ?? 0} · يدوي ${runtimeCoverage.cloud?.manual ?? 0}`, c:'#059669'}
   ];
   const trustSummary = [
-    {t:'Runtime', n:SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'خدمات وبوتات يمكن ربطها لاحقًا بفحص حي من السيرفر.', c:'#0EA5E9'},
-    {t:'Config', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length, d:'أدوات وإعدادات يمكن تتبعها عبر الملفات مباشرة.', c:'#6C3AED'},
-    {t:'Manual', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'manual-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'manual-audit').length, d:'عناصر تحتاج مراجعة دورية من المصدر أو المنصة.', c:'#D97706'},
-    {t:'Curated', n:IDEAS.length + ARC.length, d:'أفكار وأرشيف تُراجع عند التغيير لا عند كل تشغيل.', c:'#E11D48'}
+    {t:'فحص حي محدود', n:SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'عناصر يمكن فحصها من runtime أو من السيرفر، لكن ليست كلها مغطاة بنفس الدرجة.', c:'#0EA5E9'},
+    {t:'فحص ملفات', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length, d:'أدوات وإعدادات تُراجع من ملفات config ومسارات محلية معروفة.', c:'#6C3AED'},
+    {t:'مراجعة يدوية', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'manual-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'manual-audit').length, d:'عناصر لا يكفي فيها checker موحد بعد، لذلك تبقى مرتبطة بالمراجعة من المصدر.', c:'#D97706'},
+    {t:'تحرير مرجعي', n:IDEAS.length + ARC.length, d:'أفكار وأرشيف ليست بيانات تشغيل حي، بل محتوى منسق يُحدّث عند التغيير.', c:'#E11D48'}
   ];
   const aiCliTools = TL.filter(t => t.category === 'developer-env').map(t => ({
     t: t.ar || t.name,
@@ -689,14 +692,14 @@ R.home = function() {
     `</section>`+
 
     `<section class="hq-card hq-trust">`+
-      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>سياسة التوثيق + آخر فحص آلي محدود</span></div>`+
+      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>ما هو موثق ثابتًا وما الذي فُحص آليًا فعلاً</span></div>`+
       `<div class="hq-layer-grid">`+
         trustSummary.map(x =>
           `<div class="hq-layer" style="--lc:${x.c}"><strong>${x.t}</strong><span class="hq-layer-num">${x.n}</span><p>${x.d}</p></div>`
         ).join('')+
       `</div>`+
       (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
-      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. التحديث الآلي الحالي يعمل من النظام عبر <code>launchd</code> كل 6 ساعات، ويشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> لتحديث <strong>services + tools + cloud</strong> ثم commit/push لـ <code>data.runtime.json</code> فقط عند وجود تغيير. المشاريع والأفكار والأرشيف ما زالت تعتمد على التوثيق اليدوي في <code>data.js</code>${runtimeGenerated ? ` · آخر تشغيل معروف: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
+      `<div class="hq-mini-note">الثابت هنا هو سياسة التوثيق داخل <code>data.js</code>. أما الفحص الآلي فله scope محدود ويكتب آخر نتيجة محفوظة في <code>data.runtime.json</code>. يوجد LaunchAgent مجدول على الماك كل 6 ساعات لتشغيل <code>/tmp/cc-push/runtime-sync-publish.sh</code>، لكن هذا لا يعني أن كل عنصر أو كل حقل مغطى بنفس مستوى التحقق. التغطية الحالية: <strong>projects + services + tools + cloud</strong>، بينما <strong>ideas + archive</strong> ما زالا يدويين بالكامل${runtimeGenerated ? ` · آخر نتيجة محفوظة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
     `</section>`+
 
     `<section class="hq-card hq-focus">`+
@@ -1553,7 +1556,7 @@ function openServiceDetail(name) {
   const rels = _relChips(owner ? [owner] : []);
   const metaRows = [
     item.service_type ? `النوع: ${_serviceTypeLabel(item.service_type)}` : '',
-    item.st ? 'الحالة: نشط' : 'الحالة: متوقف'
+    item.st ? 'حالة الكتالوج: نشط' : 'حالة الكتالوج: متوقف'
   ].filter(Boolean);
   const bodyRows = [
     item.info ? item.info : ''

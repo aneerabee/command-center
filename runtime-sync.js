@@ -72,7 +72,7 @@ function headReachable(url) {
 }
 
 function parseStaleDays(value) {
-  if (!value) return STALE_DAYS;
+  if (!value) return null;
   const days = Number(String(value).replace(/[^\d.]/g, ''));
   return Number.isFinite(days) && days > 0 ? days : null;
 }
@@ -161,6 +161,24 @@ function buildServerSnapshot() {
   }
 }
 
+function buildServerPathSnapshot(projects) {
+  const serverProjects = projects.filter(p => p.server_path);
+  if (!serverProjects.length) return {ok: true, data: {}};
+  const checks = serverProjects
+    .map(p => `if [ -e ${JSON.stringify(p.server_path)} ]; then echo ${JSON.stringify(`${p.id}|ok`)};
+else echo ${JSON.stringify(`${p.id}|missing`)}; fi`)
+    .join('; ');
+  const cmd = `ssh -i ${JSON.stringify(SSH_KEY)} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 ${SSH_HOST} '${checks}'`;
+  const result = safeExec(cmd, {timeout: 15000});
+  if (!result.ok) return {ok: false, error: result.stderr || result.stdout || 'server path snapshot failed'};
+  const rows = {};
+  for (const line of String(result.stdout || '').split('\n')) {
+    const [id, status] = line.trim().split('|');
+    if (id) rows[id] = status;
+  }
+  return {ok: true, data: rows};
+}
+
 function checkServices(services, previous, serverSnapshot) {
   const records = {};
   const dockerByName = Object.fromEntries(((serverSnapshot.data || {}).docker || []).map(x => [x.name, x]));
@@ -245,6 +263,108 @@ function checkServices(services, previous, serverSnapshot) {
       : {verification_status: 'warn', checked_from: 'ssh', summary: serverSnapshot.error || 'تعذر تشغيل server snapshot', facts: ['فشل checker لا يعني فشل الخدمة نفسها']};
     records[service.id] = buildRecord('service', service.id, previousRecord, patch, `${STALE_DAYS.service}d`);
   }
+  return records;
+}
+
+function checkProjects(projects, previous, serverPathSnapshot) {
+  const records = {};
+
+  for (const project of projects) {
+    const previousRecord = previous?.project?.[project.id];
+    const facts = [];
+    let status = 'manual';
+    let summary = 'لا يوجد تحقق آلي كافٍ لهذا المشروع بعد';
+    let checkedFrom = 'manual';
+
+    if (project.local_path) {
+      checkedFrom = 'filesystem';
+      const localExists = fs.existsSync(project.local_path);
+      facts.push(`local path: ${localExists ? 'ok' : 'missing'}`);
+      if (!localExists) {
+        status = 'fail';
+        summary = 'المسار المحلي غير موجود';
+      } else {
+        status = 'ok';
+        summary = 'المسار المحلي موجود';
+      }
+    }
+
+    if (project.server_path) {
+      checkedFrom = checkedFrom === 'manual' ? 'ssh' : `${checkedFrom} + ssh`;
+      if (!serverPathSnapshot.ok) {
+        status = status === 'fail' ? 'fail' : 'warn';
+        summary = 'تعذر تأكيد مسار السيرفر الآن';
+        facts.push('server path: snapshot unavailable');
+      } else {
+        const serverOk = serverPathSnapshot.data[project.id] === 'ok';
+        facts.push(`server path: ${serverOk ? 'ok' : 'missing'}`);
+        if (!serverOk) {
+          status = 'fail';
+          summary = 'مسار السيرفر غير موجود';
+        } else if (status !== 'fail') {
+          status = 'ok';
+          summary = project.local_path ? 'المساران المحلي والسيرفري مؤكدان' : 'مسار السيرفر موجود';
+        }
+      }
+    }
+
+    if (project.local_path && project.repo_url && fs.existsSync(project.local_path)) {
+      checkedFrom = checkedFrom === 'manual' ? 'git' : `${checkedFrom} + git`;
+      const remote = safeExec(`git -C ${JSON.stringify(project.local_path)} remote get-url origin`, {timeout: 1200});
+      if (remote.ok) {
+        const actual = normalizeGitHubRemote(remote.stdout);
+        const expected = normalizeGitHubRemote(project.repo_url);
+        const matches = actual && expected && actual === expected;
+        facts.push(`repo remote: ${matches ? 'ok' : 'mismatch'}`);
+        if (!matches && status !== 'fail') {
+          status = 'warn';
+          summary = 'المسار المحلي موجود لكن remote غير مطابق';
+        }
+      } else {
+        facts.push('repo remote: unknown');
+        if (status !== 'fail') {
+          status = 'warn';
+          summary = 'المشروع موجود محليًا لكن Git remote غير مؤكد';
+        }
+      }
+    }
+
+    if (project.deploy_url) {
+      checkedFrom = checkedFrom === 'manual' ? 'http' : `${checkedFrom} + http`;
+      const reach = headReachable(project.deploy_url);
+      if (reach.ok) {
+        facts.push(`deploy: HTTP ${reach.status}`);
+        if (status === 'manual') {
+          status = 'ok';
+          summary = 'رابط النشر متاح';
+        }
+      } else if (reach.status) {
+        facts.push(`deploy: HTTP ${reach.status}`);
+        if (status !== 'fail') {
+          status = 'warn';
+          summary = 'رابط النشر يرد بحالة غير متوقعة';
+        }
+      } else {
+        facts.push('deploy: probe inconclusive');
+        if (status !== 'fail') {
+          status = 'warn';
+          summary = 'تعذر تأكيد رابط النشر الآن';
+        }
+      }
+    }
+
+    if (!project.local_path && !project.server_path && !project.deploy_url && !project.repo_url) {
+      facts.push('project: static documentation only');
+    }
+
+    records[project.id] = buildRecord('project', project.id, previousRecord, {
+      verification_status: status,
+      checked_from: checkedFrom,
+      summary,
+      facts
+    }, `${STALE_DAYS.project || 14}d`);
+  }
+
   return records;
 }
 
@@ -445,6 +565,8 @@ function main() {
   const {PRJ, SVC, TL, CLD} = loadData();
   const previous = readPreviousRuntime();
   const serverSnapshot = buildServerSnapshot();
+  const serverPathSnapshot = buildServerPathSnapshot(PRJ);
+  const project = checkProjects(PRJ, previous, serverPathSnapshot);
   const service = checkServices(SVC, previous, serverSnapshot);
   const tool = checkTools(TL, PRJ, previous);
   const cloud = checkCloud(CLD, previous, serverSnapshot);
@@ -453,10 +575,12 @@ function main() {
     version: 1,
     checker: 'runtime-sync.js',
     generated_at: NOW,
+    project,
     service,
     tool,
     cloud,
     coverage: {
+      project: coverageFor(project),
       service: coverageFor(service),
       tool: coverageFor(tool),
       cloud: coverageFor(cloud)

@@ -253,7 +253,7 @@ a{text-decoration:none;color:inherit}
 .hq-standard-item strong{display:block;font-size:12px;color:#2D2A26;margin-bottom:6px}
 .hq-standard-item p{margin:0;font-size:11px;color:#6B6560;line-height:1.7}
 .hq-standard-fact{display:block;margin-top:10px;font-size:10px;color:#8F8880;line-height:1.6}
-.hq-runtime-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.hq-runtime-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
 .hq-runtime-item{padding:14px 16px;border-radius:16px;background:linear-gradient(180deg,#fff,#fbfaf7);border:1px solid #ECE7DD}
 .hq-runtime-item strong{display:block;font-size:24px;font-weight:800;font-family:var(--mono);line-height:1}
 .hq-runtime-item span{display:block;margin-top:5px;font-size:10px;font-weight:700;color:#6B6560}
@@ -846,7 +846,7 @@ a{text-decoration:none;color:inherit}
 .runtime-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;background:color-mix(in srgb, var(--rb) 12%, #fff);color:var(--rb);border:1px solid color-mix(in srgb, var(--rb) 18%, #E9E2D6);font-size:10px;font-weight:800}
 .runtime-facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .trust-section-head{margin:12px 0 8px;font-size:10px;font-weight:800;letter-spacing:.02em;color:#6B6560}
-.trust-live{margin-top:12px;padding-top:12px;border-top:1px dashed #E7E0D5}
+.trust-live{margin-top:14px;padding:14px;border-top:none;border-radius:14px;background:linear-gradient(180deg,#F7FBFF,#F2F8FF);border:1px solid #D9E8F6}
 .trust-item-plan{background:linear-gradient(180deg,#fffdf7,#faf7ee)}
 .runtime-fact{display:inline-flex;padding:4px 8px;border-radius:999px;background:#F6F1E8;border:1px solid #ECE2D4;font-size:9px;color:#6B6357;font-weight:700}
 .detail-meta-line{font-size:12px;color:var(--t2);line-height:1.8}
@@ -971,7 +971,7 @@ a{text-decoration:none;color:inherit}
   .hq{grid-template-columns:1fr}
   .hq-hero,.hq-metrics{grid-column:span 1}
   .hq-metrics{grid-template-columns:repeat(3,1fr)}
-  .hq-runtime-strip{grid-template-columns:1fr 1fr 1fr}
+  .hq-runtime-strip{grid-template-columns:1fr 1fr}
   .cloud-overview{grid-template-columns:repeat(2,1fr)}
   .prj-fact-strip{grid-template-columns:repeat(3,1fr)}
   .prj-grid{grid-template-columns:repeat(2,1fr)}
