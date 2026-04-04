@@ -107,16 +107,15 @@ function _processIcons(){
   });
   lucide.createIcons();
 }
-const M = {};
-[...PRJ,...BOT,...TL,...ARC,...IDEAS].forEach(i => { M[i.name] = i; });
-SVC.forEach(i => { M[i.name] = i; });
-CLD.forEach(i => { M[i.nm] = i; });
-
 function _entityLookup(name) {
   if (!name) return null;
-  return [...PRJ, ...BOT, ...ARC, ...TL].find(x => x.name === name || x.ar === name)
+  return PRJ.find(x => x.name === name || x.ar === name)
+    || BOT.find(x => x.name === name || x.ar === name)
+    || TL.find(x => x.name === name || x.ar === name)
     || CLD.find(x => x.nm === name)
-    || M[name]
+    || ARC.find(x => x.name === name || x.ar === name)
+    || IDEAS.find(x => x.name === name)
+    || SVC.find(x => x.name === name)
     || null;
 }
 
@@ -212,6 +211,58 @@ function _serviceTypeLabel(kind) {
     cron:'cron',
     network:'شبكة'
   }[kind] || kind;
+}
+
+function _entityMeta(item, kind) {
+  const base = (typeof DATA_TRUST_MODEL !== 'undefined' && DATA_TRUST_MODEL[kind]) ? DATA_TRUST_MODEL[kind] : {};
+  const derived = {};
+
+  if (kind === 'project') {
+    if (item.server_path) derived.source = 'server path + manual audit';
+    else if (item.local_path) derived.source = 'local path + source files';
+    else if (item.repo_url || item.deploy_url) derived.source = 'repo + deploy surface';
+  }
+  if (kind === 'service') {
+    derived.source = 'server runtime audit';
+  }
+  if (kind === 'tool') {
+    if (item.category === 'developer-env') {
+      derived.source = 'config files مباشرة';
+      derived.refresh_mode = 'file-audit';
+      derived.auto_refresh = 'future: file watcher';
+      derived.stale_after = '7d';
+    }
+  }
+  if (kind === 'cloud') {
+    derived.source = item.lk ? 'dashboard/link + manual linkage' : 'manual linkage';
+  }
+  if (kind === 'bot') {
+    derived.source = item.kind === 'agent-runtime' ? 'runtime + server path' : 'config/manual runtime audit';
+  }
+
+  return {...base, ...derived, ...(item.meta || {})};
+}
+
+function _metaModeLabel(mode) {
+  return {
+    'manual-audit':'مراجعة يدوية من المصدر',
+    'runtime-audit':'فحص runtime',
+    'file-audit':'فحص ملفات الإعداد',
+    'manual-curation':'تحرير يدوي',
+  }[mode] || mode || 'غير محدد';
+}
+
+function _entityTrustBox(item, kind) {
+  const meta = _entityMeta(item, kind);
+  if (!meta || (!meta.source && !meta.refresh_mode && !meta.stale_after && !meta.auto_refresh)) return '';
+  return `<div class="trust-box">`+
+    `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
+    `<div class="trust-grid">`+
+      (meta.source ? `<div class="trust-item"><span>المصدر</span><strong>${E(meta.source)}</strong></div>` : '')+
+      (meta.stale_after ? `<div class="trust-item"><span>حد التقادم</span><strong>${E(meta.stale_after)}</strong></div>` : '')+
+      (meta.auto_refresh ? `<div class="trust-item trust-item-wide"><span>التحديث المقترح لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
+    `</div>`+
+  `</div>`;
 }
 
 function _searchableText(v) {
@@ -415,7 +466,7 @@ function init() {
   const hashParts = location.hash.slice(1).split('/');
   if (hashParts[1]) {
     const itemName = decodeURIComponent(hashParts[1]);
-    if (M[itemName] || SVC.find(s=>s.name===itemName) || CLD.find(c=>c.nm===itemName)) {
+    if (_entityLookup(itemName)) {
       setTimeout(() => openDetailSmart(itemName, hashParts[0]), 300);
     }
   }
@@ -485,6 +536,12 @@ R.home = function() {
   const focus = focusNames.map(n => PRJ.find(p => p.name === n)).filter(Boolean);
   const urgentIdeas = IDEAS.filter(i => i.pr === 1 || i.pr === 2);
   const activeRefs = ARC.filter(a => a.st === 'a');
+  const trustSummary = [
+    {t:'Runtime', n:SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'خدمات وبوتات يمكن ربطها لاحقًا بفحص حي من السيرفر.', c:'#0EA5E9'},
+    {t:'Config', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length, d:'أدوات وإعدادات يمكن تتبعها عبر الملفات مباشرة.', c:'#6C3AED'},
+    {t:'Manual', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'manual-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'manual-audit').length, d:'عناصر تحتاج مراجعة دورية من المصدر أو المنصة.', c:'#D97706'},
+    {t:'Curated', n:IDEAS.length + ARC.length, d:'أفكار وأرشيف تُراجع عند التغيير لا عند كل تشغيل.', c:'#E11D48'}
+  ];
   const aiCliTools = TL.filter(t => t.category === 'developer-env').map(t => ({
     t: t.ar || t.name,
     d: t.summary || '',
@@ -541,6 +598,16 @@ R.home = function() {
         `<div class="hq-health-row"><span>أتمتة نشطة</span><strong>${activeTasks}/${allTasks.length}</strong></div>`+
       `</div>`+
       `<div class="hq-mini-note">المعروض هنا مبني على الجرد الموثق في ` + `data.js` + ` وليس على أرقام شكلية.</div>`+
+    `</section>`+
+
+    `<section class="hq-card hq-trust">`+
+      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>قاعدة عامة لكل عنصر</span></div>`+
+      `<div class="hq-layer-grid">`+
+        trustSummary.map(x =>
+          `<div class="hq-layer" style="--lc:${x.c}"><strong>${x.t}</strong><span class="hq-layer-num">${x.n}</span><p>${x.d}</p></div>`
+        ).join('')+
+      `</div>`+
+      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. التنفيذ الحالي يعرّف هذا النموذج بصراحة، والخطوة التالية هي ربطه لاحقًا بمجاميع فحص دورية أو file/runtime watchers أو API checks حسب نوع العنصر.</div>`+
     `</section>`+
 
     `<section class="hq-card hq-focus">`+
@@ -1207,6 +1274,7 @@ function openProjectDetail(name) {
       `<div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">${_ic('🧭',14)} الملخص التنفيذي</div>`+
       `<div style="font-size:13px;line-height:1.8;color:var(--t2)">${E(item.summary || headline || '')}</div>`+
     `</div>`+
+    _entityTrustBox(item,'project')+
     `<div class="prj-fact-strip">`+
       factRows.map(f => `<div class="prj-fact"><span class="prj-fact-label">${E(f.l)}</span><strong class="prj-fact-val">${E(f.v)}</strong></div>`).join('')+
     `</div>`+
@@ -1267,6 +1335,7 @@ function openBotDetail(name) {
         `<div class="dsp-content">`+
           ((item.summary||headline)?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.8">${E(item.summary||headline)}</p>`:'')+
           (meta.length ? `<div class="detail-meta-box">${meta.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          _entityTrustBox(item,'bot')+
           (related ? `<div style="margin:16px 0"><div class="detail-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div></div>` : '') +
           (stats.length ? `<div class="entity-stats">${stats.map(s=>`<div class="entity-stat"><span class="entity-stat-val" style="color:${cl}">${E(s.v)}</span><span class="entity-stat-label">${E(s.l)}</span></div>`).join('')}</div>` : '') +
           _sectionsHTML(sections)+
@@ -1369,6 +1438,7 @@ function openToolDetail(name) {
         (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
         (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        _entityTrustBox(item,'tool')+
         (factRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (capabilityRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">قدرات متصلة</div>${capabilityRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
@@ -1394,15 +1464,16 @@ function openServiceDetail(name) {
   const rels = _relChips(owner ? [owner] : []);
   const metaRows = [
     item.service_type ? `النوع: ${_serviceTypeLabel(item.service_type)}` : '',
-    item.runtime ? `التشغيل: ${item.runtime}` : '',
-    item.host ? `المضيف: ${item.host}` : '',
-    item.port && item.port !== '—' ? `المنفذ: ${item.port}` : '',
-    item.schedule ? `الجدولة: ${item.schedule}` : '',
     item.st ? 'الحالة: نشط' : 'الحالة: متوقف'
   ].filter(Boolean);
   const bodyRows = [
-    item.info ? `الوصف: ${item.info}` : '',
-    item.dt ? `التفصيل: ${item.dt}` : ''
+    item.info ? item.info : '',
+    item.dt ? item.dt : ''
+  ].filter(Boolean);
+  const runtimeRows = [
+    item.runtime ? `التشغيل: ${item.runtime}` : '',
+    item.schedule ? `الجدولة: ${item.schedule}` : '',
+    item.port && item.port !== '—' ? `المنفذ: ${item.port}` : ''
   ].filter(Boolean);
   const accessRows = [
     item.path ? `المسار: ${item.path}` : '',
@@ -1425,8 +1496,10 @@ function openServiceDetail(name) {
       `<div class="dsp-content">`+
         (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">${item.owner_type === 'bot' ? 'الكيان المالك' : 'المشروع المالك'}</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        _entityTrustBox(item,'service')+
         `<div class="prj-detail-grid">`+
           `<div class="prj-info-card prj-info-card--cyan"><h3 class="prj-info-title">🧭 ما هذا</h3>${bodyRows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')}</div>`+
+          (runtimeRows.length ? `<div class="prj-info-card prj-info-card--purple"><h3 class="prj-info-title">⚙️ التشغيل</h3>${runtimeRows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')}</div>` : '')+
           `<div class="prj-info-card prj-info-card--blue"><h3 class="prj-info-title">📍 الوصول</h3>${accessRows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')}</div>`+
         `</div>`+
       `</div>`+
@@ -1465,6 +1538,7 @@ function openCloudDetail(name) {
         `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.dt)}</p>`+
         (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">تظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        _entityTrustBox(item,'cloud')+
         (item.lk ? `<div style="margin-top:8px">${_linksHTML({'افتح المنصة': item.lk}, cl)}</div>` : '') +
       `</div>`+
     `</div>`;
@@ -1502,6 +1576,7 @@ function openIdeaDetail(name) {
       `<h2 style="font-size:18px;font-weight:700;margin-bottom:8px">${E(item.name)}</h2>`+
       ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);margin-bottom:14px">${E(item.summary||headline)}</p>`:'')+
       (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+      _entityTrustBox(item,'idea')+
       _sectionsHTML(sections)+
       (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يتكامل مع</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
     `</div>`;
@@ -1537,6 +1612,7 @@ function openArchiveDetail(name) {
       `</div>`+
       ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(item.summary||headline)}</p>`:'')+
       (metaRows.length ? `<div class="detail-meta-box archive-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+      _entityTrustBox(item,'archive')+
       _sectionsHTML(sections)+
       (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يرتبط بـ</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
       _tagsHTML(item.tags,cl)+
@@ -1746,7 +1822,7 @@ window.addEventListener('hashchange', function() {
   if (!parts[1] && document.getElementById('detail-view')) closeDetail(true);
   if (parts[1]) {
     const itemName = decodeURIComponent(parts[1]);
-    if (M[itemName] || SVC.find(s=>s.name===itemName) || CLD.find(c=>c.nm===itemName)) {
+    if (_entityLookup(itemName)) {
       setTimeout(() => {
         if (document.getElementById('detail-view')) closeDetail(true);
         openDetailSmart(itemName, page);
