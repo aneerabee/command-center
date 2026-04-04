@@ -198,116 +198,107 @@ function closeMore() {
 
 const R = {};
 
-/* ── HOME — Command Center Dashboard ── */
+/* ── HOME — Mission Control ── */
 R.home = function() {
-  const weddingDate = new Date(2026, 3, 21);
   const now = new Date();
-  const days = Math.max(0, Math.ceil((weddingDate - now) / 86400000));
-  const circ = 2 * Math.PI * 38;
-  const pct = Math.min(1, Math.max(0, (365 - days) / 365));
+  const wDate = new Date(2026,3,21);
+  const days = Math.max(0, Math.ceil((wDate - now) / 86400000));
+  const circ = 2*Math.PI*44;
+  const pct = Math.min(1,(365-days)/365);
   const activeBots = BOT.filter(b=>b.st==='a').length;
-  const pausedBots = BOT.filter(b=>b.st==='p').length;
-  const autoTasks = 16;
-  const autoActive = 13;
-  const dateStr = now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const dateStr = now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+  const activeP = PRJ.filter(p=>p.st==='a');
+  const totalPct = Math.round(activeP.reduce((s,p)=>s+p.pct,0)/activeP.length);
 
-  return `<div class="cc-grid">`+
+  return `<div class="mc">`+
 
-    // ─── Row 1: Header bar ───
-    `<div class="cc-header">`+
-      `<div class="cc-hello"><span class="cc-wave">&#x1F44B;</span> مرحباً <strong>ربيع</strong></div>`+
-      `<div class="cc-date">${dateStr}</div>`+
+    // ── Header ──
+    `<div class="mc-head">`+
+      `<div><h1 class="mc-title">مركز التحكم</h1><span class="mc-date">${dateStr}</span></div>`+
+      `<div class="mc-status"><span class="mc-pulse"></span>جميع الأنظمة تعمل</div>`+
     `</div>`+
 
-    // ─── Row 2: Key metrics strip ───
-    `<div class="cc-metrics">`+
-      [{l:'مشاريع',v:PRJ.length,c:'#6C3AED',p:'projects'},{l:'خدمات',v:SVC.length,c:'#0EA5E9',p:'server'},
-       {l:'بوتات',v:BOT.length,c:'#8B5CF6',p:'bots'},{l:'سحابية',v:CLD.length,c:'#EC4899',p:'cloud'},
-       {l:'أدوات',v:TL.length,c:'#6D28D9',p:'tools'},{l:'أفكار',v:IDEAS.length,c:'#F59E0B',p:'ideas'},
-       {l:'أرشيف',v:ARC.length,c:'#92400E',p:'archive'}].map(s=>
-        `<div class="cc-metric" onclick="go('${s.p}')"><span class="cc-mv" style="color:${s.c}">${s.v}</span><span class="cc-ml">${s.l}</span></div>`
+    // ── Metrics Row ──
+    `<div class="mc-nums">`+
+      [{l:'مشاريع',v:activeP.length,c:'#A78BFA',p:'projects'},{l:'خدمات',v:SVC.filter(s=>s.st).length,c:'#34D399',p:'server'},
+       {l:'بوتات',v:activeBots,c:'#60A5FA',p:'bots'},{l:'أتمتة',v:13,c:'#FBBF24',p:'auto'},
+       {l:'سحابية',v:CLD.length,c:'#F472B6',p:'cloud'},{l:'أدوات',v:TL.length,c:'#C084FC',p:'tools'}].map(s=>
+        `<div class="mc-num" onclick="go('${s.p}')"><span class="mc-nv" style="--nc:${s.c}">${s.v}</span><span class="mc-nl">${s.l}</span></div>`
       ).join('')+
     `</div>`+
 
-    // ─── Row 3: 3 columns ───
+    // ── Main Grid: 3 panels ──
+    `<div class="mc-panels">`+
 
-    // Col 1: Active Projects with motion graphics
-    `<div class="cc-card cc-projects">`+
-      `<div class="cc-card-head"><h3>${_ic('🚀',15)} مشاريع نشطة</h3><span class="cc-card-more" onclick="go('projects')">عرض الكل</span></div>`+
-      PRJ.filter(p=>p.st==='a').slice(0,4).map((p,i)=>
-        `<div class="cc-prow" style="--pc:${p.cl};animation-delay:${i*.05}s" onclick="openProjectDetail('${E(p.name)}')">`+
-          `<div class="cc-prow-anim">${_projAnim(p.em,p.cl)}</div>`+
-          `<div class="cc-prow-info"><span class="cc-prow-name">${E(p.ar)}</span><div class="cc-prow-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div></div>`+
-          `<span class="cc-prow-pct" style="color:${p.cl}">${p.pct}%</span>`+
-        `</div>`
-      ).join('')+
-    `</div>`+
-
-    // Col 2: System status (server + bots + automation)
-    `<div class="cc-card cc-system">`+
-      `<div class="cc-card-head"><h3>${_ic('🖥️',15)} حالة النظام</h3></div>`+
-
-      // Server
-      `<div class="cc-sys-section">`+
-        `<div class="cc-sys-row" onclick="go('server')"><span class="cc-led cc-led-on"></span><span class="cc-sys-name">Contabo VPS</span><span class="cc-sys-val">${SVC.filter(s=>s.st).length}/${SVC.length}</span></div>`+
-      `</div>`+
-
-      // Bots
-      `<div class="cc-sys-section">`+
-        `<div class="cc-sys-label" onclick="go('bots')">${_ic('🤖',13)} البوتات</div>`+
-        `<div class="cc-sys-badges">`+
-          `<span class="cc-badge cc-badge-on">${activeBots} نشط</span>`+
-          `<span class="cc-badge cc-badge-off">${pausedBots} متوقف</span>`+
-        `</div>`+
-        BOT.map(b=>
-          `<div class="cc-sys-bot"><span class="cc-led ${b.st==='a'?'cc-led-on':'cc-led-off'}"></span><span>${E(b.ar||b.name)}</span></div>`
+      // Panel 1: Projects
+      `<div class="mc-panel mc-p-projects">`+
+        `<div class="mc-panel-head"><h2>المشاريع النشطة</h2><span class="mc-link" onclick="go('projects')">الكل →</span></div>`+
+        `<div class="mc-progress-ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="rgba(167,139,250,.15)" stroke-width="6"/><circle cx="50" cy="50" r="44" fill="none" stroke="#A78BFA" stroke-width="6" stroke-linecap="round" style="stroke-dasharray:${(totalPct/100*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><div class="mc-ring-text"><span class="mc-ring-num">${totalPct}%</span><span class="mc-ring-label">متوسط التقدم</span></div></div>`+
+        activeP.slice(0,5).map((p,i)=>
+          `<div class="mc-proj" style="--pc:${p.cl};animation-delay:${i*.06}s" onclick="openProjectDetail('${E(p.name)}')">`+
+            `<div class="mc-proj-anim">${_projAnim(p.em,p.cl)}</div>`+
+            `<div class="mc-proj-info"><span class="mc-proj-name">${E(p.ar)}</span><div class="mc-proj-track"><div style="width:${p.pct}%;background:${p.cl}"></div></div></div>`+
+            `<span class="mc-proj-pct" style="color:${p.cl}">${p.pct}%</span>`+
+          `</div>`
         ).join('')+
       `</div>`+
 
-      // Automation
-      `<div class="cc-sys-section">`+
-        `<div class="cc-sys-label" onclick="go('auto')">${_ic('⚙️',13)} الأتمتة</div>`+
-        `<div class="cc-auto-bar"><div class="cc-auto-fill" style="width:${(autoActive/autoTasks*100).toFixed(0)}%"></div></div>`+
-        `<span class="cc-sys-sub">${autoActive} نشط من ${autoTasks} مهمة</span>`+
-      `</div>`+
-    `</div>`+
+      // Panel 2: System + Bots
+      `<div class="mc-panel mc-p-system">`+
+        `<div class="mc-panel-head"><h2>حالة النظام</h2></div>`+
 
-    // Col 3: Two stacked cards
-    `<div class="cc-col3">`+
+        `<div class="mc-server" onclick="go('server')">`+
+          `<div class="mc-srv-top"><span class="mc-pulse"></span><span class="mc-srv-label">Contabo VPS</span><span class="mc-srv-uptime">ONLINE</span></div>`+
+          `<div class="mc-srv-gauges">`+
+            [{l:'قرص',v:77,c:'#60A5FA'},{l:'RAM',v:55,c:'#A78BFA'},{l:'خدمات',v:100,c:'#34D399'}].map(g=>
+              `<div class="mc-gauge"><div class="mc-gauge-bar"><div style="height:${g.v}%;background:${g.c}"></div></div><span class="mc-gauge-label">${g.l}</span></div>`
+            ).join('')+
+          `</div>`+
+        `</div>`+
 
-      // TOP: Wedding countdown (compact)
-      `<div class="cc-card cc-countdown-card">`+
-        `<div class="cc-countdown">`+
-          `<div class="cc-cd-ring"><svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/><circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><span class="cc-cd-num" id="ring-days">${days}</span></div>`+
-          `<div class="cc-cd-text"><strong>${_ic('💒',13)} الزفاف</strong><span>21 — 25 أبريل · ${days} يوم</span></div>`+
+        `<div class="mc-bots-section" onclick="go('bots')">`+
+          `<div class="mc-section-label">${_ic('🤖',13)} البوتات</div>`+
+          BOT.map(b=>
+            `<div class="mc-bot-row"><span class="mc-led ${b.st==='a'?'mc-on':'mc-off'}"></span><span class="mc-bot-name">${E(b.ar)}</span></div>`
+          ).join('')+
+        `</div>`+
+
+        `<div class="mc-auto-section" onclick="go('auto')">`+
+          `<div class="mc-section-label">${_ic('⚙️',13)} الأتمتة · <strong>13/16</strong></div>`+
+          `<div class="mc-auto-track"><div style="width:81%"></div></div>`+
         `</div>`+
       `</div>`+
 
-      // BOTTOM: Activity feed
-      `<div class="cc-card cc-activity-card">`+
-        `<div class="cc-card-head"><h3>${_ic('📈',15)} آخر النشاطات</h3></div>`+
-        [{d:'31 مارس',t:'أكاديمية الشطرنج v2',c:'#8B5CF6'},
-         {d:'31 مارس',t:'تأمين 3 مشاريع → GitHub',c:'#0EA5E9'},
-         {d:'31 مارس',t:'إعادة تصميم لوحة التحكم',c:'#10B981'},
-         {d:'29 مارس',t:'تنظيم 5,400 ملف iCloud',c:'#F59E0B'}].map(t=>
-          `<div class="cc-feed-row"><span class="cc-feed-dot" style="background:${t.c}"></span><span class="cc-feed-txt">${E(t.t)}</span><span class="cc-feed-date">${E(t.d)}</span></div>`
-        ).join('')+
+      // Panel 3: Countdown + Feed + Links
+      `<div class="mc-panel mc-p-side">`+
+        `<div class="mc-wedding">`+
+          `<div class="mc-w-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(244,114,182,.12)" stroke-width="5"/><circle cx="40" cy="40" r="34" fill="none" stroke="#F472B6" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*2*Math.PI*34).toFixed(1)} ${(2*Math.PI*34).toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><span class="mc-w-num" id="ring-days">${days}</span></div>`+
+          `<div class="mc-w-info"><strong>${_ic('💒',13)} الزفاف</strong><span>21 — 25 أبريل · ${days} يوم</span></div>`+
+        `</div>`+
+
+        `<div class="mc-feed">`+
+          `<div class="mc-section-label">${_ic('📈',13)} آخر النشاطات</div>`+
+          [{d:'31 مارس',t:'أكاديمية الشطرنج v2',c:'#A78BFA'},
+           {d:'31 مارس',t:'تأمين 3 مشاريع → GitHub',c:'#60A5FA'},
+           {d:'31 مارس',t:'إعادة تصميم لوحة التحكم',c:'#34D399'},
+           {d:'29 مارس',t:'تنظيم 5,400 ملف iCloud',c:'#FBBF24'}].map(t=>
+            `<div class="mc-feed-item"><span class="mc-feed-dot" style="background:${t.c}"></span><span class="mc-feed-txt">${E(t.t)}</span><span class="mc-feed-date">${E(t.d)}</span></div>`
+          ).join('')+
+        `</div>`+
+
+        `<div class="mc-links">`+
+          `<div class="mc-section-label">${_ic('🔗',13)} اختصارات</div>`+
+          `<div class="mc-links-grid">`+
+            [{n:'GitHub',h:'https://github.com/aneerabee',e:'🐙'},{n:'Meta',h:'https://business.facebook.com',e:'📢'},
+             {n:'Supabase',h:'https://supabase.com/dashboard',e:'⚡'},{n:'Railway',h:'https://railway.app',e:'🚂'},
+             {n:'Vercel',h:'https://vercel.com',e:'▲'},{n:'Airtable',h:'https://airtable.com',e:'📊'}].map(l=>
+              `<a class="mc-lnk" href="${l.h}" target="_blank">${_ic(l.e,12)}<span>${l.n}</span></a>`
+            ).join('')+
+          `</div>`+
+        `</div>`+
       `</div>`+
 
     `</div>`+
-
-    // ─── Row 4: Quick links strip (full width) ───
-    `<div class="cc-quick-strip">`+
-      `<div class="cc-quick-row">`+
-        `<a class="cc-qlink" href="https://github.com/aneerabee" target="_blank">${_ic('🐙',14)} GitHub</a>`+
-        `<a class="cc-qlink" href="https://business.facebook.com" target="_blank">${_ic('📢',14)} Meta</a>`+
-        `<a class="cc-qlink" href="https://supabase.com/dashboard" target="_blank">${_ic('⚡',14)} Supabase</a>`+
-        `<a class="cc-qlink" href="https://railway.app" target="_blank">${_ic('🚂',14)} Railway</a>`+
-        `<a class="cc-qlink" href="https://vercel.com" target="_blank">${_ic('▲',14)} Vercel</a>`+
-        `<a class="cc-qlink" href="https://airtable.com" target="_blank">${_ic('📊',14)} Airtable</a>`+
-      `</div>`+
-    `</div>`+
-
   `</div>`;
 };
 
