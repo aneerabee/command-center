@@ -329,13 +329,13 @@ function _entityTrustBox(item, kind) {
   if (!meta || (!meta.source && !meta.refresh_mode && !meta.stale_after && !meta.auto_refresh)) return '';
   return `<div class="trust-box">`+
     `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>سياسة التوثيق: ${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
-    `<div class="trust-section-head">وصف ثابت للعنصر</div>`+
+    `<div class="trust-section-head trust-section-head--plan">وصف ثابت للعنصر</div>`+
     `<div class="trust-grid">`+
       (meta.source ? `<div class="trust-item"><span>المصدر</span><strong>${E(meta.source)}</strong></div>` : '')+
       (meta.stale_after ? `<div class="trust-item"><span>حد التقادم</span><strong>${E(meta.stale_after)}</strong></div>` : '')+
       (meta.auto_refresh ? `<div class="trust-item trust-item-wide trust-item-plan"><span>مسار الأتمتة لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
     `</div>`+
-    (runtime ? `<div class="trust-live"><div class="trust-section-head">آخر نتيجة تحقق آلي محفوظة</div><div class="trust-grid">`+
+    (runtime ? `<div class="trust-live"><div class="trust-section-head trust-section-head--live">آخر نتيجة تحقق آلي محفوظة</div><div class="trust-grid">`+
       `<div class="trust-item"><span>حالة آخر تحقق</span><strong><span class="runtime-badge" style="--rb:${runtimeMeta.color}">${E(runtimeMeta.label)}</span></strong></div>`+
       `<div class="trust-item"><span>آخر تحقق</span><strong>${E(_fmtRuntimeDate(runtime.verified_at))}</strong></div>`+
       (runtime?.checked_from ? `<div class="trust-item"><span>من أين تم التحقق</span><strong>${E(runtime.checked_from)}</strong></div>` : '')+
@@ -699,7 +699,12 @@ R.home = function() {
         ).join('')+
       `</div>`+
       (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
-      `<div class="hq-mini-note">الثابت هنا هو سياسة التوثيق داخل <code>data.js</code>. أما الفحص الآلي فله scope محدود ويكتب آخر نتيجة محفوظة في <code>data.runtime.json</code>. يوجد LaunchAgent مجدول على الماك كل 6 ساعات لتشغيل <code>/tmp/cc-push/runtime-sync-publish.sh</code>، لكن هذا لا يعني أن كل عنصر أو كل حقل مغطى بنفس مستوى التحقق. التغطية الحالية: <strong>projects + services + tools + cloud</strong>، بينما <strong>ideas + archive</strong> ما زالا يدويين بالكامل${runtimeGenerated ? ` · آخر نتيجة محفوظة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
+      `<div class="hq-trust-brief">`+
+        `<div class="hq-trust-card"><strong>ما الذي يحدث آليًا الآن</strong><p>يوجد LaunchAgent على الماك يشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> كل 6 ساعات. هذا المسار يحدّث <code>data.runtime.json</code> ثم يدفعه فقط إذا تغيّرت النتيجة.</p></div>`+
+        `<div class="hq-trust-card"><strong>ما الذي يشمله هذا فعليًا</strong><p>التغطية الحالية هي <strong>projects + services + tools + cloud</strong>. لكن مستوى الفحص يختلف من عنصر لآخر: بعضه SSH، بعضه filesystem أو Git أو HTTP، وليس كل حقل مغطى checker مستقل.</p></div>`+
+        `<div class="hq-trust-card"><strong>ما الذي ما زال يدويًا</strong><p><strong>ideas + archive</strong> ما زالا يعتمدان على التوثيق داخل <code>data.js</code> فقط. لا يوجد لهما checker دوري حتى الآن.</p></div>`+
+      `</div>`+
+      `<div class="hq-mini-note">مصدر الحقيقة الثابت هو <code>data.js</code>، أما <code>data.runtime.json</code> فهو آخر نتيجة تحقق محفوظة${runtimeGenerated ? ` · آخر نتيجة محفوظة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
     `</section>`+
 
     `<section class="hq-card hq-focus">`+
@@ -1528,15 +1533,17 @@ function openToolDetail(name) {
       `</div>`+
       `<div class="dsp-content">`+
         (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
-        (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
+        (metaRows.length ? `<div class="detail-meta-box detail-meta-box--intro">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         _entityTrustBox(item,'tool')+
-        (factRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (capabilityRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">قدرات متصلة</div>${capabilityRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (structureRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">البنية الداخلية</div>${structureRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (editRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">إذا أردت تعديلها</div>${editRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
-        (configPaths.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ملفات الإعداد</div>${configPaths.map(r=>`<div class="detail-meta-line" style="font-family:var(--mono);font-size:11px;direction:ltr;text-align:left">${E(r)}</div>`).join('')}</div>` : '') +
+        `<div class="tool-detail-grid">`+
+          (factRows.length ? `<div class="detail-meta-box detail-meta-box--strong"><div class="detail-meta-title">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (capabilityRows.length ? `<div class="detail-meta-box"><div class="detail-meta-title">قدرات متصلة</div>${capabilityRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-title">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (structureRows.length ? `<div class="detail-meta-box"><div class="detail-meta-title">البنية الداخلية</div>${structureRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (editRows.length ? `<div class="detail-meta-box"><div class="detail-meta-title">إذا أردت تعديلها</div>${editRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+          (configPaths.length ? `<div class="detail-meta-box detail-meta-box--wide"><div class="detail-meta-title">ملفات الإعداد</div>${configPaths.map(r=>`<div class="detail-meta-line detail-meta-path">${E(r)}</div>`).join('')}</div>` : '') +
+        `</div>`+
         _sectionsHTML(sections)+
         (pathRows.length ? _pathHTML(pathRows[0]) : '')+
         _linksHTML(item.links,cl)+
@@ -1585,7 +1592,7 @@ function openServiceDetail(name) {
         `<p style="font-size:11px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(_serviceTypeLabel(item.service_type))}</p>`+
       `</div>`+
       `<div class="dsp-content">`+
-        (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (metaRows.length ? `<div class="detail-meta-box detail-meta-box--intro">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">${item.owner_type === 'bot' ? 'الكيان المالك' : 'المشروع المالك'}</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         _entityTrustBox(item,'service')+
         `<div class="prj-detail-grid">`+
