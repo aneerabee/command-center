@@ -942,5 +942,45 @@ a{text-decoration:none;color:inherit}
   .da-paper{padding:24px 18px}
 }
 
+/* ══════ AUTO — Project Tags ══════ */
+.auto-prj-tag{font-size:9px;font-weight:600;padding:2px 8px;border-radius:var(--rf);white-space:nowrap;flex-shrink:0}
+.auto-task-desc{font-size:.75rem;opacity:.75;flex:1;text-align:left}
+.auto-task{flex-wrap:wrap}
+@media(min-width:641px){.auto-task{flex-wrap:nowrap}}
+
+/* ══════ SERVER — Enhanced SVC items ══════ */
+.svc-prj{font-size:9px;font-weight:600;padding:1px 8px;border-radius:var(--rf);display:inline-block;margin-top:1px}
+.svc-desc{font-size:10px;color:var(--t3);line-height:1.5;margin-top:1px;display:block}
+.svc-path{font-size:9px;color:var(--t3);font-family:var(--mono);direction:ltr;opacity:.6;display:block;margin-top:1px}
+
+/* ══════ BOTS — Stats Grid (replaces fake bars) ══════ */
+.bot-h-stats-grid{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.bot-h-stat-chip{display:flex;flex-direction:column;align-items:center;padding:6px 10px;background:var(--elevated);border-radius:8px;min-width:48px}
+.bot-h-stat-val{font-size:12px;font-weight:800;font-family:var(--mono)}
+.bot-h-stat-label{font-size:8px;color:var(--t3);margin-top:1px}
+
+/* ══════ PROJECT DETAIL — Tinted Section Cards ══════ */
+.prj-info-card--blue{background:linear-gradient(135deg,rgba(79,143,247,.06),rgba(79,143,247,.02));border-color:rgba(79,143,247,.15)}
+.prj-info-card--blue .prj-info-title{color:#3b82f6}
+.prj-info-card--purple{background:linear-gradient(135deg,rgba(139,92,246,.06),rgba(139,92,246,.02));border-color:rgba(139,92,246,.15)}
+.prj-info-card--purple .prj-info-title{color:#8b5cf6}
+.prj-info-card--green{background:linear-gradient(135deg,rgba(16,185,129,.06),rgba(16,185,129,.02));border-color:rgba(16,185,129,.15)}
+.prj-info-card--green .prj-info-title{color:#10b981}
+.prj-info-card--amber{background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(245,158,11,.02));border-color:rgba(245,158,11,.15)}
+.prj-info-card--amber .prj-info-title{color:#f59e0b}
+.prj-info-card--cyan{background:linear-gradient(135deg,rgba(14,165,233,.06),rgba(14,165,233,.02));border-color:rgba(14,165,233,.15)}
+.prj-info-card--cyan .prj-info-title{color:#0ea5e9}
+.prj-info-card--rose{background:linear-gradient(135deg,rgba(236,72,153,.06),rgba(236,72,153,.02));border-color:rgba(236,72,153,.15)}
+.prj-info-card--rose .prj-info-title{color:#ec4899}
+
+/* ══════ CLOUD — Project Tag ══════ */
+.cloud-prj-tag{font-size:8px;font-weight:600;padding:1px 6px;border-radius:var(--rf);display:inline-block}
+
+/* ══════ ARCHIVE — Enhanced Cards ══════ */
+.book-excerpt{font-size:9px;color:var(--t3);line-height:1.4;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.book-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;align-items:center}
+.book-status{font-size:8px;font-weight:700;padding:2px 8px;border-radius:var(--rf)}
+.book-size{font-size:8px;color:var(--t3);font-family:var(--mono)}
+
 /* ── Reduced motion ── */
 @media(prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition-duration:0s!important}}

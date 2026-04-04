@@ -382,44 +382,50 @@ R.map = function() {
 
 /* ── AUTO ── */
 R.auto = function() {
+  const _autoPrjColors = {
+    'meta-mcp':'#2563EB','Money-Manager':'#F59E0B','brixtravel':'#E8453C',
+    'system-wide':'#8B5CF6','BRIX Travel':'#6C3AED','Wedding Planner':'#E8453C',
+    'Wapy.dev':'#10B981','Argaz Bot':'#6C3AED','Claude Code':'#8B5CF6'
+  };
+
   const s1 = {
     title:'MacBook Pro',
     loc:'launchd',
     tasks:[
-      {name:'auto-backup.sh',freq:'يومياً 14:00',on:true,what:'دفع meta-mcp + Money-Manager + brixtravelwebsite → GitHub'},
-      {name:'PM2 Resurrect',freq:'عند الإقلاع',on:true,what:'إدارة العمليات — إعادة تشغيل تلقائية'},
-      {name:'BRIX Invoice Server',freq:'دائم',on:true,what:'PHP localhost:8000'}
+      {name:'auto-backup.sh',freq:'يومياً 14:00',on:true,what:'دفع meta-mcp + Money-Manager + brixtravelwebsite → GitHub',prj:['meta-mcp','Money-Manager','brixtravel']},
+      {name:'PM2 Resurrect',freq:'عند الإقلاع',on:true,what:'إدارة العمليات — إعادة تشغيل تلقائية',prj:['system-wide']},
+      {name:'BRIX Invoice Server',freq:'دائم',on:true,what:'PHP localhost:8000',prj:['BRIX Travel']}
     ]
   };
   const s2 = {
     title:'Contabo VPS',
     loc:'cron + systemd',
     tasks:[
-      {name:'Wedding Planner Backup',freq:'كل 6 ساعات',on:true,what:'نسخ قاعدة SQLite → مجلد النسخ الاحتياطي'},
-      {name:'Wapy.dev DB Dump',freq:'يومياً 3 صباحاً',on:true,what:'pg_dump لقاعدة PostgreSQL 17.5'},
-      {name:'Wapy.dev Cleanup',freq:'يومياً 4 صباحاً',on:true,what:'تنظيف النسخ القديمة والملفات المؤقتة'},
-      {name:'Argaz Config Backup',freq:'كل ساعة',on:true,what:'نسخ openclaw.json عند اكتشاف تغيير'},
-      {name:'Gateway Watchdog',freq:'كل دقيقة',on:true,what:'مراقبة OpenClaw + إعادة تشغيل تلقائية'}
+      {name:'Wedding Planner Backup',freq:'كل 6 ساعات',on:true,what:'نسخ قاعدة SQLite → مجلد النسخ الاحتياطي',prj:['Wedding Planner']},
+      {name:'Wapy.dev DB Dump',freq:'يومياً 3 صباحاً',on:true,what:'pg_dump لقاعدة PostgreSQL 17.5',prj:['Wapy.dev']},
+      {name:'Wapy.dev Cleanup',freq:'يومياً 4 صباحاً',on:true,what:'تنظيف النسخ القديمة والملفات المؤقتة',prj:['Wapy.dev']},
+      {name:'Argaz Config Backup',freq:'كل ساعة',on:true,what:'نسخ openclaw.json عند اكتشاف تغيير',prj:['Argaz Bot']},
+      {name:'Gateway Watchdog',freq:'كل دقيقة',on:true,what:'مراقبة OpenClaw + إعادة تشغيل تلقائية',prj:['Argaz Bot']}
     ]
   };
   const s3 = {
     title:'Argaz Bot',
     loc:'OpenClaw Scheduler',
     tasks:[
-      {name:'Morning Briefing',freq:'08:00 يومياً',on:true,what:'Gmail + طقس أنطاليا + ذاكرة → Telegram'},
-      {name:'Daily Self-Review',freq:'كل 24 ساعة',on:true,what:'مراجعة التعلمات + تحديث الذاكرة'},
-      {name:'Memory Maintenance',freq:'03:00 كل يومين',on:false,what:'تنظيف وصيانة ملفات الذاكرة'},
-      {name:'Weekly Skill Extraction',freq:'أسبوعياً',on:false,what:'استخراج مهارات جديدة من التعلمات'},
-      {name:'Error Pattern Detection',freq:'كل 3 أيام',on:false,what:'كشف أنماط الأخطاء المتكررة'}
+      {name:'Morning Briefing',freq:'08:00 يومياً',on:true,what:'Gmail + طقس أنطاليا + ذاكرة → Telegram',prj:['Argaz Bot']},
+      {name:'Daily Self-Review',freq:'كل 24 ساعة',on:true,what:'مراجعة التعلمات + تحديث الذاكرة',prj:['Argaz Bot']},
+      {name:'Memory Maintenance',freq:'03:00 كل يومين',on:false,what:'تنظيف وصيانة ملفات الذاكرة',prj:['Argaz Bot']},
+      {name:'Weekly Skill Extraction',freq:'أسبوعياً',on:false,what:'استخراج مهارات جديدة من التعلمات',prj:['Argaz Bot']},
+      {name:'Error Pattern Detection',freq:'كل 3 أيام',on:false,what:'كشف أنماط الأخطاء المتكررة',prj:['Argaz Bot']}
     ]
   };
   const s4 = {
     title:'Claude Code',
     loc:'Hooks',
     tasks:[
-      {name:'PreToolUse',freq:'3 hooks',on:true,what:'تحقق قبل الأدوات'},
-      {name:'PostToolUse',freq:'2 hooks',on:true,what:'تنسيق + فحص بعد الأدوات'},
-      {name:'Stop',freq:'1 hook',on:true,what:'تحقق نهائي'}
+      {name:'PreToolUse',freq:'3 hooks',on:true,what:'تحقق قبل الأدوات',prj:['Claude Code']},
+      {name:'PostToolUse',freq:'2 hooks',on:true,what:'تنسيق + فحص بعد الأدوات',prj:['Claude Code']},
+      {name:'Stop',freq:'1 hook',on:true,what:'تحقق نهائي',prj:['Claude Code']}
     ]
   };
 
@@ -435,7 +441,11 @@ R.auto = function() {
       `<div class="auto-task"><span class="led ${t.on?'led-on':'led-off'}"></span>`+
       `<span class="auto-task-name">${E(t.name)}</span>`+
       `<span class="auto-task-dt">${E(t.freq)}</span>`+
-      `<span style="font-size:.75rem;opacity:.75;flex:1;text-align:left">${E(t.what)}</span></div>`
+      ((t.prj||[]).map(p => {
+        const pc = _autoPrjColors[p]||'#888';
+        return `<span class="auto-prj-tag" style="background:${pc}15;color:${pc};border:1px solid ${pc}25">${E(p)}</span>`;
+      }).join('')) +
+      `<span class="auto-task-desc">${E(t.what)}</span></div>`
     ).join('') +
     '</div>';
 
@@ -451,6 +461,15 @@ R.auto = function() {
     allGroups.map(g => renderGroup(g)).join('') +
     `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} MacBook: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler · Claude: Hooks</div>`;
 };
+
+/* ── PROJECT COLOR HELPER ── */
+function _prjColor(name) {
+  if (!name) return '#888';
+  const p = PRJ.find(x => x.name === name || x.ar === name);
+  if (p) return p.cl;
+  const colors = {'system':'#8B5CF6','Contabo':'#0EA5E9','BRIX Travel':'#6C3AED','Wedding Planner':'#E8453C','Wapy.dev':'#10B981','Argaz Bot':'#6C3AED','EasyBooking':'#2563EB','Meta MCP':'#2563EB','WhatsApp CRM':'#25D366','Chess Academy':'#d4a843','Command Center':'#F59E0B'};
+  return colors[name] || '#888';
+}
 
 /* ── SERVER ── */
 function _sparkline(data, color) {
@@ -490,14 +509,23 @@ R.server = function() {
         (sparkData[g.label] ? _sparkline(sparkData[g.label], g.cl) : '') +
         `</div>`;
     }).join('') + '</div>' +
-    '<div class="svc-list">' + SVC.map(s =>
-      `<div class="svc-item">`+
+    '<div class="svc-list">' + SVC.map(s => {
+      const prj = s.prj || '';
+      const info = s.info || '';
+      const path = s.path || '';
+      const pc = prj ? _prjColor(prj) : '';
+      return `<div class="svc-item">`+
       `<span class="svc-status ${s.st?'svc-on':'svc-off'}"></span>`+
       `<span class="svc-em">${_ic(s.em,18)}</span>`+
-      `<div class="svc-info"><span class="svc-name">${E(s.name)}</span><span class="svc-dt">${E(s.dt)}</span></div>`+
+      `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>`+
+      (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(prj)}</span>` : '') +
+      `<span class="svc-dt">${E(s.dt)}</span>`+
+      (info ? `<span class="svc-desc">${E(info)}</span>` : '') +
+      (path ? `<span class="svc-path">${E(path)}</span>` : '') +
+      `</div>`+
       (s.port && s.port !== '—' ? `<span class="svc-port">:${E(s.port)}</span>` : '') +
-      `</div>`
-    ).join('') + '</div>';
+      `</div>`;
+    }).join('') + '</div>';
 };
 
 /* ── BOTS ── */
@@ -519,10 +547,9 @@ R.bots = function() {
             (isActive ? `<span class="bot-h-status bot-h-active"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>` : `<span class="bot-h-status bot-h-paused"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
           `</div>`+
           `<p class="bot-h-desc">${E(firstLine)}</p>`+
-          (stats.length ? `<div class="bot-h-bars">${stats.map(s => {
-            const barW = typeof s.v === 'string' && /^\d+$/.test(s.v) ? Math.min(100, parseInt(s.v)*5) : 60;
-            return `<div class="bot-h-bar-item"><span class="bot-h-bar-label">${E(s.l)}</span><div class="bot-h-bar-track"><div class="bot-h-bar-fill" style="width:${barW}%;background:${b.cl}"></div></div><span class="bot-h-bar-val" style="color:${b.cl}">${E(s.v)}</span></div>`;
-          }).join('')}</div>` : '') +
+          (stats.length ? `<div class="bot-h-stats-grid">${stats.map(s =>
+            `<div class="bot-h-stat-chip"><span class="bot-h-stat-val" style="color:${b.cl}">${E(s.v)}</span><span class="bot-h-stat-label">${E(s.l)}</span></div>`
+          ).join('')}</div>` : '') +
           `<div class="bot-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
         `</div>`+
       `</div>`;
@@ -591,10 +618,13 @@ R.cloud = function() {
         catItems.map(c => {
           const isImportant = important.has(c.nm);
           const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
+          const cPrj = c.prj || '';
+          const cpc = cPrj ? _prjColor(cPrj) : '';
           return `<div class="cloud-card ${isImportant?'cloud-card-lg':''} ${c.lk?'clickable':''}" ${clickAttr}>` +
             `<span class="cloud-card-icon">${_ic(c.em, isImportant?28:22)}</span>` +
             `<div class="cloud-card-info">` +
               `<span class="cloud-card-name">${E(c.nm)}</span>` +
+              (cPrj ? `<span class="cloud-prj-tag" style="background:${cpc}15;color:${cpc}">${E(cPrj)}</span>` : '') +
               `<span class="cloud-card-dt">${E(c.dt)}</span>` +
             `</div>` +
           `</div>`;
@@ -658,15 +688,27 @@ R.ideas = function() {
 R.archive = function() {
   return `<h2 class="page-title"><span class="page-icon">${_ic('🗄️',20)}</span> الأرشيف <small style="font-size:.6em;opacity:.5">المشاريع القديمة والملفات المؤرشفة</small></h2>` +
     '<div class="archive-shelf">' + ARC.map(a => {
-      const tags = (a.tags||[]).slice(0,3);
+      const tags = (a.tags||[]).slice(0,4);
+      const descLines = (a.desc||'').split('\n').filter(l => l.trim());
+      const firstLine = descLines[0] || '';
+      const excerpt = descLines.slice(1,3).map(l => l.trim()).filter(l => l && !/^[📐🔧📊🔄🚀📱📦📸🎯💹⚙️🔐🛡️🤖👥🛠️📈🌍🔗📍⚡💾🎮💰🌐🔔📂⏰🔒🎨📌⚠️👤🐳📡💱🏢🛍️🏗️🧠♟️]/.test(l)).join(' · ');
+      const stLabel = a.st === 'arc' ? 'مؤرشف' : a.st === 'a' ? 'نشط' : 'متوقف';
+      const stColor = a.st === 'arc' ? '#92400E' : a.st === 'a' ? 'var(--green)' : 'var(--amber)';
+      const size = a.size || '';
+      const count = a.count || '';
       return `<div class="book-card" onclick="openArchiveDetail('${E(a.name)}')">`+
         `<div class="book-spine" style="background:${a.cl}"></div>`+
         `<div class="book-body">`+
           `<span class="book-emoji">${_ic(a.em,32)}</span>`+
           `<h4 class="book-title">${E(a.ar||a.name)}</h4>`+
-          `<p class="book-desc">${E((a.desc||'').split('\n')[0])}</p>`+
-          `<div class="book-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
-          `<div class="book-stamp">مؤرشف</div>`+
+          `<p class="book-desc">${E(firstLine)}</p>`+
+          (excerpt ? `<p class="book-excerpt">${E(excerpt)}</p>` : '') +
+          `<div class="book-tags">${tags.map(t => `<span class="tag" style="background:${a.cl}12;color:${a.cl}">${E(t)}</span>`).join('')}</div>`+
+          `<div class="book-meta">`+
+            `<span class="book-status" style="background:${stColor}18;color:${stColor}">${E(stLabel)}</span>`+
+            (size ? `<span class="book-size">${E(size)}</span>` : '') +
+            (count ? `<span class="book-size">${E(count)}</span>` : '') +
+          `</div>`+
         `</div></div>`;
     }).join('') + '</div>';
 };
@@ -753,12 +795,17 @@ function openProjectDetail(name) {
       (headline?`<p style="margin-top:14px;font-size:14px;opacity:.85;max-width:520px;line-height:1.7">${E(headline)}</p>`:'')+
     `</div>`+
     `<div class="prj-detail-grid">`+
-      sections.map(s=>
-        `<div class="prj-info-card">`+
-        (s.title?`<h3 class="prj-info-title">${E(s.title)}</h3>`:'')+
+      sections.map(s=>{
+        const title = s.title || '';
+        const firstChar = title ? [...title][0] : '';
+        const sectionTints = {'📐':'blue','🔧':'purple','📊':'green','🔄':'amber','🚀':'cyan','💾':'cyan','📱':'purple','📦':'green','📸':'purple','🎯':'amber','💹':'green','⚙️':'purple','🔐':'rose','🛡️':'rose','🤖':'purple','👥':'blue','🛠️':'purple','📈':'green','🌍':'blue','🔗':'cyan','📍':'amber','⏰':'amber','💰':'green','🌐':'blue','🔔':'amber','📂':'amber','🎨':'purple','📌':'amber','🎮':'purple','💱':'green','🧠':'purple','👤':'blue','📡':'cyan','🐳':'cyan'};
+        const tint = sectionTints[firstChar] || '';
+        const tintClass = tint ? ' prj-info-card--' + tint : '';
+        return `<div class="prj-info-card${tintClass}">`+
+        (title?`<h3 class="prj-info-title">${E(title)}</h3>`:'')+
         s.rows.map(r=>`<div class="prj-info-row">${E(r)}</div>`).join('')+
-        `</div>`
-      ).join('')+
+        `</div>`;
+      }).join('')+
       (tags.length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🏷️',14)} التقنيات</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map(t=>`<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join('')}</div></div>`:'')+
       (item.path?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('📁',14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`:'')+
       (Object.keys(links).length?`<div class="prj-info-card"><h3 class="prj-info-title">${_ic('🔗',14)} الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(links).map(([k,v])=>`<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`).join('')}</div></div>`:'')+
@@ -799,13 +846,27 @@ function openBotDetail(name) {
           (headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(headline)}</div>`:'')+
         `</div>`+
         (stats.length?`<div class="dt-prompt">$ bot stats</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
-        `<div class="dt-prompt">$ bot info --verbose</div>`+
-        `<div class="dt-output">`+
-          sections.map(s=>
-            (s.title?`<div class="dt-section-title">${E(s.title)}</div>`:'')+
-            s.rows.map(r=>`<div class="dt-line">${E(r)}</div>`).join('')
-          ).join('')+
-        `</div>`+
+        (function(){
+          const catMap = {'🔧':'tech','📊':'stats','🔐':'security','🛡️':'security','⏰':'schedule','🤖':'tech','👥':'tech','🛠️':'tech','🔗':'links','🚀':'deploy','💾':'deploy','📱':'tech','📸':'tech','🧠':'tech','💹':'stats','📈':'stats','🔔':'schedule'};
+          const catLabels = {tech:'$ bot tech',stats:'$ bot metrics',security:'$ bot security',schedule:'$ bot schedule',links:'$ bot links',deploy:'$ bot deploy'};
+          const catColors = {tech:'#79c0ff',stats:'#7ee787',security:'#f97583',schedule:'#d2a8ff',links:'#79c0ff',deploy:'#56d4dd'};
+          const grouped = {};
+          sections.forEach(s => {
+            const firstChar = s.title ? [...s.title][0] : '';
+            const cat = catMap[firstChar] || 'tech';
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(s);
+          });
+          return Object.keys(grouped).map(cat =>
+            `<div class="dt-prompt" style="color:${catColors[cat]||'#7ee787'}">${catLabels[cat]||'$ bot info'}</div>`+
+            `<div class="dt-output">`+
+            grouped[cat].map(s =>
+              (s.title?`<div class="dt-section-title">${E(s.title)}</div>`:'')+
+              s.rows.map(r=>`<div class="dt-line">${E(r)}</div>`).join('')
+            ).join('')+
+            `</div>`
+          ).join('');
+        })()+
         (tags.length?`<div class="dt-prompt">$ bot tags</div><div class="dt-tags">${tags.map(t=>`<span class="dt-tag">${E(t)}</span>`).join('')}</div>`:'')+
         (item.path?`<div class="dt-prompt">$ pwd</div><div class="dt-line" style="direction:ltr">${E(item.path)}</div>`:'')+
         _linksHTML(item.links,cl)+
