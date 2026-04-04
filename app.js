@@ -1351,6 +1351,7 @@ function openToolDetail(name) {
   const configPaths = item.config_paths || [];
   const structureRows = item.structure || [];
   const capabilityRows = item.capabilities || [];
+  const editRows = item.edit_points || [];
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1372,6 +1373,7 @@ function openToolDetail(name) {
         (capabilityRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">قدرات متصلة</div>${capabilityRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (structureRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">البنية الداخلية</div>${structureRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (editRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">إذا أردت تعديلها</div>${editRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
         (configPaths.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ملفات الإعداد</div>${configPaths.map(r=>`<div class="detail-meta-line" style="font-family:var(--mono);font-size:11px;direction:ltr;text-align:left">${E(r)}</div>`).join('')}</div>` : '') +
         _sectionsHTML(sections)+
         (pathRows.length ? _pathHTML(pathRows[0]) : '')+
