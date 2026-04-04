@@ -169,7 +169,7 @@ function _projectKindLabel(kind) {
 
 function _toolCategoryLabel(category) {
   return {
-    'developer-env':'بيئة عمل',
+    'developer-env':'AI CLI',
     'internal-tool':'أداة داخلية',
     'platform':'منصة',
     'infra-access':'وصول بنية',
@@ -485,14 +485,12 @@ R.home = function() {
   const focus = focusNames.map(n => PRJ.find(p => p.name === n)).filter(Boolean);
   const urgentIdeas = IDEAS.filter(i => i.pr === 1 || i.pr === 2);
   const activeRefs = ARC.filter(a => a.st === 'a');
-  const boardDefinition = [
-    {t:'لماذا بُنيت؟',d:'بُنيت لأن منظومتك لم تعد مشروعًا واحدًا. لديك منتجات، خدمات سيرفر، بوتات، أدوات، منصات سحابية، ومرجعيات حساسة. اللوحة تجمع هذا كله في مكان واحد قابل للفهم.'},
-    {t:'لمن هي؟',d:'هي لك أولًا كصاحب المنظومة، ثم لأي مطور أو وكيل أو شريك تقني يدخل لاحقًا ويحتاج أن يفهم الواقع بدون سؤال طويل أو تخمين.'},
-    {t:'متى تُستخدم؟',d:'تُستخدم عندما تريد أن تعرف بسرعة ماذا تملك، ما الذي يعمل الآن، أين يوجد الشيء، ما علاقته بغيره، وأين يجب أن تبدأ.'},
-    {t:'ما الذي لا يجب أن تكونه؟',d:'ليست معرض تصميم، وليست ملاحظات عامة، وليست لوحة مبنية لشخص مجهول. إذا لم تساعد على فهم النظام الحقيقي واتخاذ قرار سريع فهي فاشلة.'},
-    {t:'من أين تأتي الحقيقة؟',d:'المصدر ليس هذه الصفحة وحدها. الحقيقة تأتي من data.js ومن المشاريع نفسها محليًا، ومن السيرفر، ومن الخدمات الحية. اللوحة يجب أن تعكس هذا ولا تخترعه.'},
-    {t:'إذا طوّرها شخص لاحقًا',d:'أي تعديل جديد يجب أن يحافظ على المعنى قبل الشكل: وضوح العلاقات، دقة المسارات، عدم كسر الموجود، وعدم إضافة طبقة غامضة أو شكلية لا تخدم الفهم.'}
-  ];
+  const aiCliTools = TL.filter(t => t.category === 'developer-env').map(t => ({
+    t: t.ar || t.name,
+    d: t.summary || '',
+    f: (t.facts || []).slice(0,2).join(' · '),
+    a: `openToolDetail('${E(t.name)}')`
+  }));
   const layerCards = [
     {t:'أنظمة ومنتجات', n: PRJ.filter(p => ['product','service-app','website','content-product','financial-app','dashboard'].includes(p.kind)).length, d:'مشاريع وتشغيل فعلي يملك كودًا أو نشرًا أو خدمة حية.', c:'#6C3AED'},
     {t:'تسويق وأتمتة', n: ['EasyBooking','WhatsApp CRM','Meta MCP'].length, d:'منظومات الإعلانات والتحويل والـ MCP الداخلي.', c:'#2563EB'},
@@ -582,12 +580,12 @@ R.home = function() {
     `</section>`+
 
     `<section class="hq-card hq-standard">`+
-      `<div class="hq-head"><h2>ما هذه اللوحة ولماذا بُنيت؟</h2><span>تعريف وظيفي واضح</span></div>`+
-      `<div class="hq-mini-note">هذا القسم لا يعرّف أداة جديدة. هو يشرح وظيفة Command Center نفسها: لماذا توجد، لمن تخدم، ومن أين تأتي حقيقتها، وكيف يجب أن يطوّرها أي شخص لاحق.</div>`+
-      `<div class="hq-standard-path"><strong>المصدر الحالي:</strong><code>/tmp/cc-push</code><span>المرجع الدائم للتطوير: <code>~/.codex/AGENTS.md</code></span></div>`+
+      `<div class="hq-head"><h2>بيئات AI CLI وإعداداتها</h2><span onclick="go('tools')" class="hq-inline-link">افتح الأدوات</span></div>`+
+      `<div class="hq-mini-note">هنا نوثق الأدوات التي نعمل بها نحن كوكلاء CLI مثل Codex وClaude Code: أين ملفاتها، ما إعداداتها الحالية، وما الذي أضفناه أو غيرناه فيها. هذا هو المكان الصحيح لهذا النوع من التوثيق.</div>`+
+      `<div class="hq-standard-path"><strong>المسارات الحالية:</strong><code>/Users/rabeeshaban/.codex</code><code>/Users/rabeeshaban/.claude</code></div>`+
       `<div class="hq-standard-grid">`+
-        boardDefinition.map(x =>
-          `<div class="hq-standard-item"><strong>${x.t}</strong><p>${x.d}</p></div>`
+        aiCliTools.map(x =>
+          `<button class="hq-standard-item hq-standard-item-btn" onclick="${x.a}"><strong>${x.t}</strong><p>${x.d}</p>${x.f ? `<span class="hq-standard-fact">${x.f}</span>` : ''}</button>`
         ).join('')+
       `</div>`+
     `</section>`+
@@ -839,7 +837,7 @@ R.bots = function() {
 /* ── TOOLS ── */
 R.tools = function() {
   const hero = TL[0];
-  const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
+  const emojiMap = {"Codex CLI":"🧭","Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
   const byCategory = c => TL.filter(t => t.category === c).length;
   const dials = [
     {v:String(byCategory('mcp')),l:"MCP",cl:"var(--purple)"},
@@ -851,7 +849,8 @@ R.tools = function() {
   const dialMaxes = [Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length)];
   const groups = ['developer-env','internal-tool','platform','infra-access','mcp'];
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">Claude Code + MCP + الإعدادات</small></h2>` +
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">AI CLI + MCP + الإعدادات</small></h2>` +
+    `<div class="tool-note">هذه الصفحة توثق أدوات العمل نفسها، وخصوصًا بيئات AI CLI: أين يوجد إعداد كل أداة، ما التخصيصات المضافة، وما المشاريع التي تُستخدم فيها.</div>` +
     `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">`+
       `<div class="tool-hero-info"><h3 class="tool-hero-name">${E(hero.ar||hero.name)}</h3>`+
       `<p class="tool-hero-desc">${E(hero.summary || 'بيئة العمل الأساسية الحالية')}</p></div>`+
@@ -1322,13 +1321,16 @@ function openToolDetail(name) {
   const {headline,sections} = _parseDesc(item);
   const cl = item.cl||'#6C3AED';
   const tags = item.tags||[];
-  const categoryMap = {'developer-env':'بيئة عمل','internal-tool':'أداة داخلية','platform':'منصة','infra-access':'وصول بنية','mcp':'MCP'};
+  const categoryMap = {'developer-env':'AI CLI','internal-tool':'أداة داخلية','platform':'منصة','infra-access':'وصول بنية','mcp':'MCP'};
   const metaRows = [
     item.type ? `النوع: ${item.type}` : '',
     item.category ? `الفئة: ${categoryMap[item.category] || item.category}` : ''
   ].filter(Boolean);
   const rels = _relChips(item.used_in || []);
   const pathRows = [item.path].filter(Boolean);
+  const factRows = item.facts || [];
+  const customRows = item.customizations || [];
+  const configPaths = item.config_paths || [];
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1346,6 +1348,9 @@ function openToolDetail(name) {
         (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
         (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
         (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
+        (factRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">الإعداد الحالي</div>${factRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (customRows.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ما أُضيف أو خُصص</div>${customRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
+        (configPaths.length ? `<div class="detail-meta-box"><div class="detail-meta-line">ملفات الإعداد</div>${configPaths.map(r=>`<div class="detail-meta-line" style="font-family:var(--mono);font-size:11px;direction:ltr;text-align:left">${E(r)}</div>`).join('')}</div>` : '') +
         _sectionsHTML(sections)+
         (pathRows.length ? _pathHTML(pathRows[0]) : '')+
         _linksHTML(item.links,cl)+

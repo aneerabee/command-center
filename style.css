@@ -249,8 +249,11 @@ a{text-decoration:none;color:inherit}
 .hq-standard-path strong{color:#2D2A26}
 .hq-standard-path code{font-family:var(--mono);font-size:10px;color:#5B21B6;background:#F5F1FF;border:1px solid #E6DDFE;padding:2px 6px;border-radius:999px}
 .hq-standard-item{padding:14px;border-radius:16px;background:linear-gradient(180deg,#FFFDF7,#FAFAF8);border:1px solid #EEE7D8}
+.hq-standard-item-btn{width:100%;text-align:right;cursor:pointer;border:none;font:inherit;appearance:none;-webkit-appearance:none}
 .hq-standard-item strong{display:block;font-size:12px;color:#2D2A26;margin-bottom:6px}
 .hq-standard-item p{margin:0;font-size:11px;color:#6B6560;line-height:1.7}
+.hq-standard-fact{display:block;margin-top:10px;font-size:10px;color:#8F8880;line-height:1.6}
+.tool-note{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:#FAFAF8;border:1px solid #EEECE8;font-size:11px;line-height:1.8;color:#6B6560}
 .hq-link{display:flex;align-items:center;gap:6px;padding:10px 12px;border:1px solid #EEECE8;border-radius:14px;text-decoration:none;color:#5d574f;font-size:11px;font-weight:700;background:#FAFAF8}
 .hq-link:hover{color:#6C3AED;border-color:#D8D0EE;background:#fff}
 /* Warm Bento Grid — asymmetric layout */
