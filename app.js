@@ -207,8 +207,8 @@ R.home = function() {
   const pct = Math.min(1, Math.max(0, (365 - days) / 365));
   const activeBots = BOT.filter(b=>b.st==='a').length;
   const pausedBots = BOT.filter(b=>b.st==='p').length;
-  const autoTasks = 11;
-  const autoActive = 8;
+  const autoTasks = 16;
+  const autoActive = 13;
   const dateStr = now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   return `<div class="cc-grid">`+
@@ -231,9 +231,9 @@ R.home = function() {
 
     // ─── Row 3: 3 columns ───
 
-    // Col 1: Projects (top 4) with motion graphics
+    // Col 1: Active Projects with motion graphics
     `<div class="cc-card cc-projects">`+
-      `<div class="cc-card-head"><h3>${_ic('🚀',15)} المشاريع</h3><span class="cc-card-more" onclick="go('projects')">عرض الكل</span></div>`+
+      `<div class="cc-card-head"><h3>${_ic('🚀',15)} مشاريع نشطة</h3><span class="cc-card-more" onclick="go('projects')">عرض الكل</span></div>`+
       PRJ.filter(p=>p.st==='a').slice(0,4).map((p,i)=>
         `<div class="cc-prow" style="--pc:${p.cl};animation-delay:${i*.05}s" onclick="openProjectDetail('${E(p.name)}')">`+
           `<div class="cc-prow-anim">${_projAnim(p.em,p.cl)}</div>`+
@@ -272,17 +272,20 @@ R.home = function() {
       `</div>`+
     `</div>`+
 
-    // Col 3: Countdown + Activity + Quick Links
-    `<div class="cc-card cc-sidebar">`+
-      // Countdown
-      `<div class="cc-countdown" onclick="go('projects')">`+
-        `<div class="cc-cd-ring"><svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/><circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><span class="cc-cd-num" id="ring-days">${days}</span></div>`+
-        `<div class="cc-cd-text"><strong>${_ic('💒',13)} الزفاف</strong><span>21 — 25 أبريل · ${days} يوم</span></div>`+
+    // Col 3: Two stacked cards
+    `<div class="cc-col3">`+
+
+      // TOP: Wedding countdown (compact)
+      `<div class="cc-card cc-countdown-card">`+
+        `<div class="cc-countdown">`+
+          `<div class="cc-cd-ring"><svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/><circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><span class="cc-cd-num" id="ring-days">${days}</span></div>`+
+          `<div class="cc-cd-text"><strong>${_ic('💒',13)} الزفاف</strong><span>21 — 25 أبريل · ${days} يوم</span></div>`+
+        `</div>`+
       `</div>`+
 
-      // Activity
-      `<div class="cc-feed-section">`+
-        `<div class="cc-sys-label">${_ic('📈',13)} آخر النشاطات</div>`+
+      // BOTTOM: Activity feed
+      `<div class="cc-card cc-activity-card">`+
+        `<div class="cc-card-head"><h3>${_ic('📈',15)} آخر النشاطات</h3></div>`+
         [{d:'31 مارس',t:'أكاديمية الشطرنج v2',c:'#8B5CF6'},
          {d:'31 مارس',t:'تأمين 3 مشاريع → GitHub',c:'#0EA5E9'},
          {d:'31 مارس',t:'إعادة تصميم لوحة التحكم',c:'#10B981'},
@@ -291,15 +294,17 @@ R.home = function() {
         ).join('')+
       `</div>`+
 
-      // Quick links
-      `<div class="cc-quick">`+
-        `<div class="cc-sys-label">${_ic('🔗',13)} اختصارات</div>`+
-        `<div class="cc-quick-row">`+
-          `<a class="cc-qlink" href="https://github.com/aneerabee" target="_blank">${_ic('🐙',14)} GitHub</a>`+
-          `<a class="cc-qlink" href="https://business.facebook.com" target="_blank">${_ic('📢',14)} Meta</a>`+
-          `<a class="cc-qlink" href="https://supabase.com/dashboard" target="_blank">${_ic('⚡',14)} Supabase</a>`+
-          `<a class="cc-qlink" href="https://railway.app" target="_blank">${_ic('🚂',14)} Railway</a>`+
-        `</div>`+
+    `</div>`+
+
+    // ─── Row 4: Quick links strip (full width) ───
+    `<div class="cc-quick-strip">`+
+      `<div class="cc-quick-row">`+
+        `<a class="cc-qlink" href="https://github.com/aneerabee" target="_blank">${_ic('🐙',14)} GitHub</a>`+
+        `<a class="cc-qlink" href="https://business.facebook.com" target="_blank">${_ic('📢',14)} Meta</a>`+
+        `<a class="cc-qlink" href="https://supabase.com/dashboard" target="_blank">${_ic('⚡',14)} Supabase</a>`+
+        `<a class="cc-qlink" href="https://railway.app" target="_blank">${_ic('🚂',14)} Railway</a>`+
+        `<a class="cc-qlink" href="https://vercel.com" target="_blank">${_ic('▲',14)} Vercel</a>`+
+        `<a class="cc-qlink" href="https://airtable.com" target="_blank">${_ic('📊',14)} Airtable</a>`+
       `</div>`+
     `</div>`+
 
@@ -405,37 +410,50 @@ R.map = function() {
 /* ── AUTO ── */
 R.auto = function() {
   const s1 = {
-    title:'النسخ الاحتياطي المحلي → GitHub',
-    loc:'MacBook Pro',
+    title:'MacBook Pro',
+    loc:'launchd',
     tasks:[
-      {name:'auto-backup.sh',freq:'يومياً 2 ظهراً',on:true,what:'meta-mcp + Money-Manager + brixtravelwebsite → GitHub'}
+      {name:'auto-backup.sh',freq:'يومياً 14:00',on:true,what:'دفع meta-mcp + Money-Manager + brixtravelwebsite → GitHub'},
+      {name:'PM2 Resurrect',freq:'عند الإقلاع',on:true,what:'إدارة العمليات — إعادة تشغيل تلقائية'},
+      {name:'BRIX Invoice Server',freq:'دائم',on:true,what:'PHP localhost:8000'}
     ]
   };
   const s2 = {
-    title:'النسخ الاحتياطي على السيرفر',
-    loc:'Contabo VPS',
+    title:'Contabo VPS',
+    loc:'cron + systemd',
     tasks:[
       {name:'Wedding Planner Backup',freq:'كل 6 ساعات',on:true,what:'نسخ قاعدة SQLite → مجلد النسخ الاحتياطي'},
       {name:'Wapy.dev DB Dump',freq:'يومياً 3 صباحاً',on:true,what:'pg_dump لقاعدة PostgreSQL 17.5'},
       {name:'Wapy.dev Cleanup',freq:'يومياً 4 صباحاً',on:true,what:'تنظيف النسخ القديمة والملفات المؤقتة'},
       {name:'Argaz Config Backup',freq:'كل ساعة',on:true,what:'نسخ openclaw.json عند اكتشاف تغيير'},
-      {name:'Gateway Watchdog',freq:'كل دقيقة',on:true,what:'مراقبة OpenClaw — إعادة تشغيل تلقائية عند التوقف'}
+      {name:'Gateway Watchdog',freq:'كل دقيقة',on:true,what:'مراقبة OpenClaw + إعادة تشغيل تلقائية'}
     ]
   };
   const s3 = {
-    title:'المهام السحابية — Argaz Bot',
+    title:'Argaz Bot',
     loc:'OpenClaw Scheduler',
     tasks:[
-      {name:'Morning Briefing',freq:'08:00 يومياً',on:true,what:'Gmail + طقس أنطاليا + ذاكرة → إرسال ملخص Telegram'},
+      {name:'Morning Briefing',freq:'08:00 يومياً',on:true,what:'Gmail + طقس أنطاليا + ذاكرة → Telegram'},
       {name:'Daily Self-Review',freq:'كل 24 ساعة',on:true,what:'مراجعة التعلمات + تحديث الذاكرة'},
       {name:'Memory Maintenance',freq:'03:00 كل يومين',on:false,what:'تنظيف وصيانة ملفات الذاكرة'},
       {name:'Weekly Skill Extraction',freq:'أسبوعياً',on:false,what:'استخراج مهارات جديدة من التعلمات'},
       {name:'Error Pattern Detection',freq:'كل 3 أيام',on:false,what:'كشف أنماط الأخطاء المتكررة'}
     ]
   };
+  const s4 = {
+    title:'Claude Code',
+    loc:'Hooks',
+    tasks:[
+      {name:'PreToolUse',freq:'3 hooks',on:true,what:'تحقق قبل الأدوات'},
+      {name:'PostToolUse',freq:'2 hooks',on:true,what:'تنسيق + فحص بعد الأدوات'},
+      {name:'Stop',freq:'1 hook',on:true,what:'تحقق نهائي'}
+    ]
+  };
 
-  const totalTasks = s1.tasks.length + s2.tasks.length + s3.tasks.length;
-  const onTasks = [...s1.tasks,...s2.tasks,...s3.tasks].filter(t => t.on).length;
+  const allGroups = [s1, s2, s3, s4];
+  const allTasks = allGroups.flatMap(g => g.tasks);
+  const totalTasks = allTasks.length;
+  const onTasks = allTasks.filter(t => t.on).length;
 
   const renderGroup = g =>
     '<div class="auto-group">' +
@@ -454,10 +472,11 @@ R.auto = function() {
     '<div class="auto-stats">' +
       `<div class="auto-stat-box"><span class="auto-stat-val">${totalTasks}</span><span class="auto-stat-label">مهمة</span></div>`+
       `<div class="auto-stat-box"><span class="auto-stat-val">${onTasks}</span><span class="auto-stat-label">نشط</span></div>`+
+      `<div class="auto-stat-box"><span class="auto-stat-val">${allGroups.length}</span><span class="auto-stat-label">أنظمة</span></div>`+
       '<div class="auto-stat-box"><span class="auto-stat-val">24/7</span><span class="auto-stat-label">متاح</span></div>'+
     '</div>' +
-    renderGroup(s1) + renderGroup(s2) + renderGroup(s3) +
-    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} المحلي: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler</div>`;
+    allGroups.map(g => renderGroup(g)).join('') +
+    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} MacBook: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler · Claude: Hooks</div>`;
 };
 
 /* ── SERVER ── */
@@ -511,21 +530,28 @@ R.server = function() {
 /* ── BOTS ── */
 R.bots = function() {
   return `<h2 class="page-title"><span class="page-icon">${_ic('🤖',20)}</span> مصنع البوتات <small style="font-size:.6em;opacity:.5">بوتات Telegram والأدوات المالية</small></h2>` +
-    '<div class="bot-grid">' + BOT.map(b => {
+    '<div class="bot-list">' + BOT.map(b => {
       const stats = BSTATS[b.name] || [];
       const tags = (b.tags||[]).slice(0,4);
       const firstLine = (b.desc||'').split('\n')[0] || '';
       const isActive = b.st === 'a';
-      return `<div class="bot-card glass" style="border-top:3px solid ${b.cl}" onclick="openBotDetail('${E(b.name)}')">`+
-        `<div class="bot-header">`+
-        `<span class="bot-emoji">${_ic(b.em,26)}</span>`+
-        `<span class="bot-pulse ${isActive?'pulse-on':'pulse-off'}"></span>`+
+      return `<div class="bot-card-h glass" onclick="openBotDetail('${E(b.name)}')">`+
+        `<div class="bot-h-icon" style="background:linear-gradient(135deg,${b.cl}22,${b.cl}08);border-left:4px solid ${b.cl}">`+
+          `<span class="bot-emoji">${_ic(b.em,36)}</span>`+
+          `<span class="bot-pulse ${isActive?'pulse-on':'pulse-off'}"></span>`+
         `</div>`+
-        `<h3 class="bot-name">${E(b.ar||b.name)}</h3>`+
-        (isActive ? `<span style="font-size:.65rem;color:${b.cl};opacity:.8;display:inline-block;margin-bottom:.4rem"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>` : `<span style="font-size:.65rem;opacity:.45;display:inline-block;margin-bottom:.4rem"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
-        `<div style="font-family:monospace;font-size:.7rem;opacity:.5;margin-bottom:.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${E(firstLine)}</div>`+
-        `<div class="bot-stats">${stats.map(s => `<div class="bot-stat"><span class="bot-stat-val">${E(s.v)}</span><span class="bot-stat-label">${E(s.l)}</span></div>`).join('')}</div>`+
-        `<div class="bot-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
+        `<div class="bot-h-body">`+
+          `<div class="bot-h-top">`+
+            `<h3 class="bot-name">${E(b.ar||b.name)}</h3>`+
+            (isActive ? `<span class="bot-h-status bot-h-active"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>` : `<span class="bot-h-status bot-h-paused"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
+          `</div>`+
+          `<p class="bot-h-desc">${E(firstLine)}</p>`+
+          (stats.length ? `<div class="bot-h-bars">${stats.map(s => {
+            const barW = typeof s.v === 'string' && /^\d+$/.test(s.v) ? Math.min(100, parseInt(s.v)*5) : 60;
+            return `<div class="bot-h-bar-item"><span class="bot-h-bar-label">${E(s.l)}</span><div class="bot-h-bar-track"><div class="bot-h-bar-fill" style="width:${barW}%;background:${b.cl}"></div></div><span class="bot-h-bar-val" style="color:${b.cl}">${E(s.v)}</span></div>`;
+          }).join('')}</div>` : '') +
+          `<div class="bot-tags">${tags.map(t => `<span class="tag">${E(t)}</span>`).join('')}</div>`+
+        `</div>`+
       `</div>`;
     }).join('') + '</div>';
 };
@@ -631,18 +657,28 @@ R.ideas = function() {
       const rot = rotations[i % rotations.length];
       const rels = (relMap[idea.name]||[]).slice(0,3).map(rn => {
         const rp = [...PRJ,...BOT].find(x => x.name === rn || x.ar === rn);
-        return rp ? `<span title="${E(rn)}">${_ic(rp.em,14)}</span>` : '';
-      }).filter(Boolean).join(' ');
-      const bullets = (idea.desc||'').split('\n').filter(l => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim())).slice(0,3);
+        return rp ? `<span class="idea-rel-chip">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : '';
+      }).filter(Boolean).join('');
+      const bullets = (idea.desc||'').split('\n').filter(l => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim())).slice(0,5);
+      const allLines = (idea.desc||'').split('\n').filter(l => l.trim()).slice(1,4);
       return `<div class="sticky-note" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr]||'#999'};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">`+
         `<span class="sticky-badge" style="background:${prColors[idea.pr]||'#999'}">${E(prLabels[idea.pr]||'')}</span>`+
-        `<span class="sticky-emoji">${_ic(idea.em,36)}</span>`+
+        `<span class="sticky-emoji">${_ic(idea.em,42)}</span>`+
         `<h4 class="sticky-title">${E(idea.name)}</h4>`+
         `<p class="sticky-desc">${E((idea.desc||'').split('\n')[0])}</p>`+
-        (bullets.length ? `<div style="margin-top:.4rem;font-size:.7rem;color:var(--t3)">${bullets.map(b => `<div>${E(b)}</div>`).join('')}</div>` : '') +
-        (rels ? `<div style="margin-top:.5rem;font-size:.75rem;color:var(--t3)">يتكامل مع ${rels}</div>` : '') +
+        (allLines.length ? `<div class="idea-details">${allLines.map(l => `<div class="idea-detail-line">${_icText(l.trim())}</div>`).join('')}</div>` : '') +
+        (bullets.length ? `<div class="idea-bullets">${bullets.map(b => `<div class="idea-bullet">${_icText(b.trim())}</div>`).join('')}</div>` : '') +
+        (rels ? `<div class="idea-rels"><span class="idea-rels-label">يتكامل مع</span>${rels}</div>` : '') +
       `</div>`;
-    }).join('') + '</div>';
+    }).join('') +
+    // Add idea placeholder
+    `<div class="sticky-note sticky-placeholder" style="border-right:4px dashed var(--brd);transform:rotate(0deg);cursor:default;opacity:.6">`+
+      `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px">`+
+        `<span style="font-size:32px;opacity:.3">+</span>`+
+        `<span style="font-size:12px;color:var(--t3)">فكرة جديدة</span>`+
+      `</div>`+
+    `</div>` +
+    '</div>';
 };
 
 /* ── ARCHIVE ── */
