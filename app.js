@@ -109,6 +109,138 @@ function _processIcons(){
 }
 const M = {};
 [...PRJ,...BOT,...TL,...ARC,...IDEAS].forEach(i => { M[i.name] = i; });
+
+function _relChips(names) {
+  if (!names || !names.length) return '';
+  return names.map(rn => {
+    const rp = [...PRJ, ...BOT].find(x => x.name === rn || x.ar === rn);
+    return rp ? `<span class="meta-chip">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : `<span class="meta-chip">${E(rn)}</span>`;
+  }).join('');
+}
+
+function _archiveKindLabel(item) {
+  const map = {
+    'archived-project':'مشروع مؤرشف',
+    'archived-brand':'هوية مؤرشفة',
+    'archived-client-work':'عمل عميل مؤرشف',
+    'archived-site-export':'تصدير موقع مؤرشف',
+    'archived-tool':'أداة مؤرشفة',
+    'active-security':'مرجع أمني نشط',
+    'active-runtime':'طبقة تشغيل نشطة'
+  };
+  return map[item.kind] || (item.st === 'a' ? 'نشط' : 'مؤرشف');
+}
+
+function _archiveStamp(item) {
+  if (item.kind === 'active-security') return 'نشط';
+  if (item.kind === 'active-runtime') return 'Runtime';
+  if (item.st === 'a') return 'نشط';
+  return 'مؤرشف';
+}
+
+function _searchableText(v) {
+  if (!v) return '';
+  if (Array.isArray(v)) return v.map(_searchableText).join(' ');
+  if (typeof v === 'object') return Object.values(v).map(_searchableText).join(' ');
+  return String(v);
+}
+
+function _buildSearchIndex() {
+  const rows = [];
+  const push = (entry) => rows.push({
+    id: entry.id,
+    kind: entry.kind,
+    page: entry.page,
+    title: entry.title,
+    subtitle: entry.subtitle || '',
+    action: entry.action || null,
+    tokens: _searchableText(entry.tokens).toLowerCase()
+  });
+
+  PRJ.forEach(p => push({
+    id: p.id,
+    kind: 'project',
+    page: 'projects',
+    title: p.ar || p.name,
+    subtitle: p.summary || p.kind,
+    action: () => { go('projects'); setTimeout(() => openProjectDetail(p.name), 120); },
+    tokens: [p.name, p.ar, p.summary, p.desc, p.tags, p.stack, p.subsystems, p.local_path, p.server_path, p.repo_url, p.deploy_url]
+  }));
+
+  SVC.forEach(s => push({
+    id: s.id,
+    kind: 'service',
+    page: 'server',
+    title: s.name,
+    subtitle: [s.prj, s.service_type, s.host].filter(Boolean).join(' · '),
+    action: () => go('server'),
+    tokens: [s.name, s.prj, s.info, s.dt, s.path, s.runtime, s.service_type, s.host, s.schedule, s.port]
+  }));
+
+  AUTO.forEach(group => group.tasks.forEach(task => push({
+    id: `${group.grp}-${task.name}`,
+    kind: 'automation',
+    page: 'auto',
+    title: task.name,
+    subtitle: [group.grp, task.prj, task.freq].filter(Boolean).join(' · '),
+    action: () => go('auto'),
+    tokens: [group.grp, task.name, task.what, task.prj, task.path, task.kind, task.freq, task.on]
+  })));
+
+  BOT.forEach(b => push({
+    id: b.id,
+    kind: 'bot',
+    page: 'bots',
+    title: b.ar || b.name,
+    subtitle: [b.kind, b.host].filter(Boolean).join(' · '),
+    action: () => { go('bots'); setTimeout(() => openBotDetail(b.name), 120); },
+    tokens: [b.name, b.ar, b.summary, b.desc, b.tags, b.kind, b.host, b.runtime, b.channel, b.related_project]
+  }));
+
+  TL.forEach(t => push({
+    id: t.id,
+    kind: 'tool',
+    page: 'tools',
+    title: t.ar || t.name,
+    subtitle: [t.category, ...(t.used_in||[])].filter(Boolean).join(' · '),
+    action: () => { go('tools'); setTimeout(() => openToolDetail(t.name), 120); },
+    tokens: [t.name, t.ar, t.summary, t.desc, t.tags, t.category, t.type, t.used_in, t.path]
+  }));
+
+  CLD.forEach(c => push({
+    id: c.id,
+    kind: 'cloud',
+    page: 'cloud',
+    title: c.nm,
+    subtitle: [c.category, c.prj].filter(Boolean).join(' · '),
+    action: () => go('cloud'),
+    tokens: [c.nm, c.dt, c.category, c.prj, c.used_in, c.lk]
+  }));
+
+  ARC.forEach(a => push({
+    id: a.id,
+    kind: a.kind,
+    page: 'archive',
+    title: a.ar || a.name,
+    subtitle: [ _archiveKindLabel(a), ...(a.related_projects || []) ].filter(Boolean).join(' · '),
+    action: () => { go('archive'); setTimeout(() => openArchiveDetail(a.name), 120); },
+    tokens: [a.name, a.ar, a.summary, a.desc, a.kind, a.related_projects, a.next_step, a.tags, a.path]
+  }));
+
+  IDEAS.forEach(i => push({
+    id: i.id,
+    kind: 'idea',
+    page: 'ideas',
+    title: i.name,
+    subtitle: [i.horizon, i.owner_scope].filter(Boolean).join(' · '),
+    action: () => { go('ideas'); setTimeout(() => openIdeaDetail(i.name), 120); },
+    tokens: [i.name, i.summary, i.desc, i.horizon, i.owner_scope, i.related_projects, i.next_step]
+  }));
+
+  return rows;
+}
+
+let SEARCH_INDEX = [];
 const _validPages = new Set(PG.map(p => p.id));
 function _readHash() { const h = location.hash.slice(1).split('/')[0]; return _validPages.has(h) ? h : 'home'; }
 let cur = _readHash();
@@ -120,9 +252,11 @@ function init() {
   const sidebar = document.getElementById('sidebar');
   const bottomBar = document.getElementById('bottom-bar');
   const app = document.getElementById('app');
+  SEARCH_INDEX = _buildSearchIndex();
 
   if (sidebar) {
     sidebar.innerHTML = '<div class="sidebar-brand"><span class="brand-icon">'+_ic('⚡',20)+'</span><span class="brand-text">مركز التحكم</span></div>' +
+      '<button class="search-trigger" onclick="openSearch()" aria-label="بحث">'+_ic('🔍',16)+'<span>بحث</span></button>' +
       '<nav class="sidebar-nav">' + PG.map(p =>
         `<a class="nav-item${cur===p.id?' active':''}" data-page="${p.id}" onclick="go('${p.id}')">`+
         `<span class="nav-icon">${p.ic}</span><span class="nav-label">${E(p.n)}</span></a>`
@@ -136,6 +270,7 @@ function init() {
       `<a class="bar-item${cur===p.id?' active':''}" data-page="${p.id}" onclick="go('${p.id}')">`+
       `<span class="bar-icon">${p.ic}</span><span class="bar-label">${E(p.n)}</span></a>`
     ).join('') +
+    `<a class="bar-item" onclick="openSearch()"><span class="bar-icon">⌕</span><span class="bar-label">بحث</span></a>` +
     `<a class="bar-item" onclick="openMore()"><span class="bar-icon">⋯</span><span class="bar-label">المزيد</span></a>`;
 
     const sheet = document.createElement('div');
@@ -151,6 +286,24 @@ function init() {
     document.body.appendChild(sheet);
   }
 
+  if (!document.getElementById('global-search')) {
+    const search = document.createElement('div');
+    search.id = 'global-search';
+    search.className = 'global-search';
+    search.innerHTML =
+      '<div class="search-overlay" onclick="closeSearch()"></div>' +
+      '<div class="search-panel">' +
+        '<div class="search-head">' +
+          `<span class="search-icon">${_ic('🔍',18)}</span>` +
+          '<input id="search-input" class="search-input" type="text" dir="rtl" placeholder="ابحث في المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابة، الأرشيف..." autocomplete="off" />' +
+          '<button class="search-close" onclick="closeSearch()" aria-label="إغلاق">&times;</button>' +
+        '</div>' +
+        '<div class="search-helper">يشمل كل البيانات المنظمة في اللوحة. جرّب اسم مشروع، مسار، خدمة، أداة، أو كلمة من الوصف.</div>' +
+        '<div id="search-results" class="search-results"></div>' +
+      '</div>';
+    document.body.appendChild(search);
+  }
+
   if (app) {
     app.innerHTML = PG.map(p =>
       `<section id="page-${p.id}" class="page${cur===p.id?' active':''}">${(R[p.id]||(() => ''))()}</section>`
@@ -160,11 +313,24 @@ function init() {
   _updateCountdown();
   setInterval(_updateCountdown, 60000);
   requestAnimationFrame(_processIcons);
+  _renderSearchResults('');
 
   const hashParts = location.hash.slice(1).split('/');
   if (hashParts[1]) {
     const itemName = decodeURIComponent(hashParts[1]);
     if (M[itemName]) setTimeout(() => openDetailSmart(itemName), 300);
+  }
+
+  const input = document.getElementById('search-input');
+  if (input && !input.dataset.bound) {
+    input.dataset.bound = '1';
+    input.addEventListener('input', e => _renderSearchResults(e.target.value || ''));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const first = document.querySelector('.search-result');
+        if (first) first.click();
+      }
+    });
   }
 }
 
@@ -382,54 +548,7 @@ R.map = function() {
 
 /* ── AUTO ── */
 R.auto = function() {
-  const _autoPrjColors = {
-    'meta-mcp':'#2563EB','Money-Manager':'#F59E0B','brixtravel':'#E8453C',
-    'system-wide':'#8B5CF6','BRIX Travel':'#6C3AED','Wedding Planner':'#E8453C',
-    'Wapy.dev':'#10B981','Argaz Bot':'#6C3AED','Claude Code':'#8B5CF6'
-  };
-
-  const s1 = {
-    title:'MacBook Pro',
-    loc:'launchd',
-    tasks:[
-      {name:'auto-backup.sh',freq:'يومياً 14:00',on:true,what:'دفع meta-mcp + Money-Manager + brixtravelwebsite → GitHub',prj:['meta-mcp','Money-Manager','brixtravel']},
-      {name:'PM2 Resurrect',freq:'عند الإقلاع',on:true,what:'إدارة العمليات — إعادة تشغيل تلقائية',prj:['system-wide']},
-      {name:'BRIX Invoice Server',freq:'دائم',on:true,what:'PHP localhost:8000',prj:['BRIX Travel']}
-    ]
-  };
-  const s2 = {
-    title:'Contabo VPS',
-    loc:'cron + systemd',
-    tasks:[
-      {name:'Wedding Planner Backup',freq:'كل 6 ساعات',on:true,what:'نسخ قاعدة SQLite → مجلد النسخ الاحتياطي',prj:['Wedding Planner']},
-      {name:'Wapy.dev DB Dump',freq:'يومياً 3 صباحاً',on:true,what:'pg_dump لقاعدة PostgreSQL 17.5',prj:['Wapy.dev']},
-      {name:'Wapy.dev Cleanup',freq:'يومياً 4 صباحاً',on:true,what:'تنظيف النسخ القديمة والملفات المؤقتة',prj:['Wapy.dev']},
-      {name:'Argaz Config Backup',freq:'كل ساعة',on:true,what:'نسخ openclaw.json عند اكتشاف تغيير',prj:['Argaz Bot']},
-      {name:'Gateway Watchdog',freq:'كل دقيقة',on:true,what:'مراقبة OpenClaw + إعادة تشغيل تلقائية',prj:['Argaz Bot']}
-    ]
-  };
-  const s3 = {
-    title:'Argaz Bot',
-    loc:'OpenClaw Scheduler',
-    tasks:[
-      {name:'Morning Briefing',freq:'08:00 يومياً',on:true,what:'Gmail + طقس أنطاليا + ذاكرة → Telegram',prj:['Argaz Bot']},
-      {name:'Daily Self-Review',freq:'كل 24 ساعة',on:true,what:'مراجعة التعلمات + تحديث الذاكرة',prj:['Argaz Bot']},
-      {name:'Memory Maintenance',freq:'03:00 كل يومين',on:false,what:'تنظيف وصيانة ملفات الذاكرة',prj:['Argaz Bot']},
-      {name:'Weekly Skill Extraction',freq:'أسبوعياً',on:false,what:'استخراج مهارات جديدة من التعلمات',prj:['Argaz Bot']},
-      {name:'Error Pattern Detection',freq:'كل 3 أيام',on:false,what:'كشف أنماط الأخطاء المتكررة',prj:['Argaz Bot']}
-    ]
-  };
-  const s4 = {
-    title:'Claude Code',
-    loc:'Hooks',
-    tasks:[
-      {name:'PreToolUse',freq:'3 hooks',on:true,what:'تحقق قبل الأدوات',prj:['Claude Code']},
-      {name:'PostToolUse',freq:'2 hooks',on:true,what:'تنسيق + فحص بعد الأدوات',prj:['Claude Code']},
-      {name:'Stop',freq:'1 hook',on:true,what:'تحقق نهائي',prj:['Claude Code']}
-    ]
-  };
-
-  const allGroups = [s1, s2, s3, s4];
+  const allGroups = AUTO || [];
   const allTasks = allGroups.flatMap(g => g.tasks);
   const totalTasks = allTasks.length;
   const onTasks = allTasks.filter(t => t.on).length;
@@ -442,10 +561,12 @@ R.auto = function() {
       `<span class="auto-task-name">${E(t.name)}</span>`+
       `<span class="auto-task-dt">${E(t.freq)}</span>`+
       ((t.prj||[]).map(p => {
-        const pc = _autoPrjColors[p]||'#888';
+        const pc = _prjColor(p)||'#888';
         return `<span class="auto-prj-tag" style="background:${pc}15;color:${pc};border:1px solid ${pc}25">${E(p)}</span>`;
       }).join('')) +
-      `<span class="auto-task-desc">${E(t.what)}</span></div>`
+      `<span class="auto-task-desc">${E(t.what)}</span>`+
+      (t.path ? `<span class="auto-task-desc" style="font-family:var(--mono);font-size:10px;color:var(--t3)">${E(t.path)}</span>` : '') +
+      `</div>`
     ).join('') +
     '</div>';
 
@@ -459,7 +580,7 @@ R.auto = function() {
       '<div class="auto-stat-box"><span class="auto-stat-val">24/7</span><span class="auto-stat-label">متاح</span></div>'+
     '</div>' +
     allGroups.map(g => renderGroup(g)).join('') +
-    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} MacBook: launchd · السيرفر: cron + systemd · Argaz: OpenClaw Scheduler · Claude: Hooks</div>`;
+    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic('💡',12)} المصدر الآن من data.js: محلي + cron + systemd + OpenClaw + hooks</div>`;
 };
 
 /* ── PROJECT COLOR HELPER ── */
@@ -493,6 +614,15 @@ R.server = function() {
     {label:'مساحة حرة',val:'23GB',pct:23,cl:'#10B981'},
     {label:'الخدمات',val:String(SVC.filter(s=>s.st).length),pct:100,cl:'#F59E0B'}
   ];
+  const typeMap = {
+    app:'تطبيق',
+    container:'حاوية',
+    database:'قاعدة بيانات',
+    'agent-runtime':'runtime',
+    'user-service':'خدمة مستخدم',
+    cron:'cron',
+    network:'شبكة'
+  };
 
   return '<div class="server-header">' +
     `<h2 class="page-title server-title"><span class="page-icon">${_ic('🖥️',20)}</span> CONTABO VPS</h2>` +
@@ -513,6 +643,10 @@ R.server = function() {
       const prj = s.prj || '';
       const info = s.info || '';
       const path = s.path || '';
+      const host = s.host || '';
+      const schedule = s.schedule || '';
+      const runtime = s.runtime || '';
+      const type = s.service_type || '';
       const pc = prj ? _prjColor(prj) : '';
       return `<div class="svc-item">`+
       `<span class="svc-status ${s.st?'svc-on':'svc-off'}"></span>`+
@@ -520,6 +654,10 @@ R.server = function() {
       `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>`+
       (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(prj)}</span>` : '') +
       `<span class="svc-dt">${E(s.dt)}</span>`+
+      (type ? `<span class="svc-desc">النوع: ${E(typeMap[type] || type)}</span>` : '') +
+      (runtime ? `<span class="svc-desc">التشغيل: ${E(runtime)}</span>` : '') +
+      (host ? `<span class="svc-desc">المضيف: ${E(host)}</span>` : '') +
+      (schedule ? `<span class="svc-desc">الجدولة: ${E(schedule)}</span>` : '') +
       (info ? `<span class="svc-desc">${E(info)}</span>` : '') +
       (path ? `<span class="svc-path">${E(path)}</span>` : '') +
       `</div>`+
@@ -530,11 +668,17 @@ R.server = function() {
 
 /* ── BOTS ── */
 R.bots = function() {
+  const kindMap = {
+    'telegram-bot':'بوت Telegram',
+    'agent-runtime':'runtime',
+    'assistant-channel':'قناة مساعد',
+    'financial-app':'تطبيق/API'
+  };
   return `<h2 class="page-title"><span class="page-icon">${_ic('🤖',20)}</span> مصنع البوتات <small style="font-size:.6em;opacity:.5">بوتات Telegram والأدوات المالية</small></h2>` +
     '<div class="bot-list">' + BOT.map(b => {
       const stats = BSTATS[b.name] || [];
       const tags = (b.tags||[]).slice(0,4);
-      const firstLine = (b.desc||'').split('\n')[0] || '';
+      const firstLine = b.summary || (b.desc||'').split('\n')[0] || '';
       const isActive = b.st === 'a';
       return `<div class="bot-card-h glass" onclick="openBotDetail('${E(b.name)}')">`+
         `<div class="bot-h-icon" style="background:linear-gradient(135deg,${b.cl}22,${b.cl}08);border-left:4px solid ${b.cl}">`+
@@ -547,6 +691,10 @@ R.bots = function() {
             (isActive ? `<span class="bot-h-status bot-h-active"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>` : `<span class="bot-h-status bot-h-paused"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
           `</div>`+
           `<p class="bot-h-desc">${E(firstLine)}</p>`+
+          `<div class="bot-tags">`+
+            (b.kind ? `<span class="tag" style="background:${b.cl}12;color:${b.cl}">${E(kindMap[b.kind] || b.kind)}</span>` : '') +
+            (b.host ? `<span class="tag">المضيف: ${E(b.host)}</span>` : '') +
+            `</div>`+
           (stats.length ? `<div class="bot-h-stats-grid">${stats.map(s =>
             `<div class="bot-h-stat-chip"><span class="bot-h-stat-val" style="color:${b.cl}">${E(s.v)}</span><span class="bot-h-stat-label">${E(s.l)}</span></div>`
           ).join('')}</div>` : '') +
@@ -561,6 +709,7 @@ R.tools = function() {
   const hero = TL[0];
   const rest = TL.slice(1);
   const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
+  const categoryMap = {'developer-env':'بيئة عمل','internal-tool':'أداة داخلية','platform':'منصة','infra-access':'وصول بنية','mcp':'MCP'};
   const dials = [
     {v:"14",l:"وكيل",cl:"var(--purple)"},
     {v:"49",l:"مهارة",cl:"var(--blue)"},
@@ -588,7 +737,8 @@ R.tools = function() {
       return `<div class="tool-card glass" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">`+
         `<span style="font-size:1.5rem">${_ic(em,24)}</span>`+
         `<h4 class="tool-card-name">${E(t.ar||t.name)}</h4>`+
-        `<p class="tool-card-desc">${E((t.desc||'').split('\n')[0])}</p>`+
+        `<p class="tool-card-desc">${E(t.summary || (t.desc||'').split('\n')[0])}</p>`+
+        (t.category ? `<div class="tool-card-tags">${E(categoryMap[t.category] || t.category)}</div>` : '') +
         `<div class="tool-card-tags">${(t.tags||[]).join(' · ')}</div>`+
         `</div>`;
     }).join('') + '</div>';
@@ -605,6 +755,19 @@ R.cloud = function() {
     {name:'تواصل', items:['Telegram']}
   ];
   const important = new Set(['GitHub','Supabase','Contabo VPS']);
+  const categoryLabels = {
+    'platform':'منصة',
+    'database-platform':'منصة بيانات',
+    'deployment':'نشر',
+    'marketing-platform':'تسويق',
+    'data-platform':'بيانات',
+    'communication':'تواصل',
+    'infrastructure':'بنية',
+    'storage':'تخزين',
+    'mcp-linked':'MCP',
+    'network':'شبكة',
+    'external-api':'API'
+  };
   const cldMap = {};
   CLD.forEach(c => { cldMap[c.nm] = c; });
 
@@ -625,6 +788,7 @@ R.cloud = function() {
             `<div class="cloud-card-info">` +
               `<span class="cloud-card-name">${E(c.nm)}</span>` +
               (cPrj ? `<span class="cloud-prj-tag" style="background:${cpc}15;color:${cpc}">${E(cPrj)}</span>` : '') +
+              (c.category ? `<span class="cloud-prj-tag">${E(categoryLabels[c.category] || c.category)}</span>` : '') +
               `<span class="cloud-card-dt">${E(c.dt)}</span>` +
             `</div>` +
           `</div>`;
@@ -637,14 +801,7 @@ R.cloud = function() {
 R.ideas = function() {
   const prLabels = {1:'عاجل',2:'قريب',3:'يوماً ما'};
   const prColors = {1:'#EF4444',2:'#F59E0B',3:'#6366F1'};
-  const noteBgs = {1:'#EF444418',2:'#F59E0B18',3:'#6366F118'};
   const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 2.5];
-
-  const relMap = {
-    "بوت تلقرام لبريكس":["Argaz Bot","BRIX Travel System"],
-    "نظام تتبع مالي":["BRIX Travel System","Wapy.dev"],
-    "BRIX Website v2":["BRIX Travel Website","BRIX Travel System"]
-  };
 
   return '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">' +
     '<span style="font-size:.7rem;padding:.2rem .6rem;border-radius:20px;background:var(--elevated);color:var(--t3)">خريطة الطريق</span>' +
@@ -658,17 +815,18 @@ R.ideas = function() {
     '</div>' +
     '<div class="ideas-grid" id="ideas-grid">' + IDEAS.map((idea, i) => {
       const rot = rotations[i % rotations.length];
-      const rels = (relMap[idea.name]||[]).slice(0,3).map(rn => {
-        const rp = [...PRJ,...BOT].find(x => x.name === rn || x.ar === rn);
-        return rp ? `<span class="idea-rel-chip">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : '';
-      }).filter(Boolean).join('');
+      const rels = _relChips((idea.related_projects || []).slice(0,3));
       const bullets = (idea.desc||'').split('\n').filter(l => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim())).slice(0,5);
-      const allLines = (idea.desc||'').split('\n').filter(l => l.trim()).slice(1,4);
+      const allLines = [
+        idea.summary ? `الملخص: ${idea.summary}` : '',
+        idea.owner_scope ? `النطاق: ${idea.owner_scope}` : '',
+        idea.next_step ? `الخطوة التالية: ${idea.next_step}` : ''
+      ].filter(Boolean);
       return `<div class="sticky-note" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr]||'#999'};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">`+
         `<span class="sticky-badge" style="background:${prColors[idea.pr]||'#999'}">${E(prLabels[idea.pr]||'')}</span>`+
         `<span class="sticky-emoji">${_ic(idea.em,42)}</span>`+
         `<h4 class="sticky-title">${E(idea.name)}</h4>`+
-        `<p class="sticky-desc">${E((idea.desc||'').split('\n')[0])}</p>`+
+        `<p class="sticky-desc">${E(idea.summary || (idea.desc||'').split('\n')[0])}</p>`+
         (allLines.length ? `<div class="idea-details">${allLines.map(l => `<div class="idea-detail-line">${_icText(l.trim())}</div>`).join('')}</div>` : '') +
         (bullets.length ? `<div class="idea-bullets">${bullets.map(b => `<div class="idea-bullet">${_icText(b.trim())}</div>`).join('')}</div>` : '') +
         (rels ? `<div class="idea-rels"><span class="idea-rels-label">يتكامل مع</span>${rels}</div>` : '') +
@@ -686,17 +844,19 @@ R.ideas = function() {
 
 /* ── ARCHIVE ── */
 R.archive = function() {
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🗄️',20)}</span> الأرشيف <small style="font-size:.6em;opacity:.5">المشاريع القديمة والملفات المؤرشفة</small></h2>` +
-    '<div class="archive-shelf">' + ARC.map(a => {
+  const archived = ARC.filter(a => (a.kind||'').startsWith('archived-'));
+  const activeRefs = ARC.filter(a => ['active-security','active-runtime'].includes(a.kind));
+
+  const renderCard = (a, activeRef) => {
       const tags = (a.tags||[]).slice(0,4);
       const descLines = (a.desc||'').split('\n').filter(l => l.trim());
-      const firstLine = descLines[0] || '';
+      const firstLine = a.summary || descLines[0] || '';
       const excerpt = descLines.slice(1,3).map(l => l.trim()).filter(l => l && !/^[📐🔧📊🔄🚀📱📦📸🎯💹⚙️🔐🛡️🤖👥🛠️📈🌍🔗📍⚡💾🎮💰🌐🔔📂⏰🔒🎨📌⚠️👤🐳📡💱🏢🛍️🏗️🧠♟️]/.test(l)).join(' · ');
-      const stLabel = a.st === 'arc' ? 'مؤرشف' : a.st === 'a' ? 'نشط' : 'متوقف';
-      const stColor = a.st === 'arc' ? '#92400E' : a.st === 'a' ? 'var(--green)' : 'var(--amber)';
+      const stLabel = _archiveKindLabel(a);
+      const stColor = activeRef ? 'var(--green)' : (a.st === 'arc' ? '#92400E' : 'var(--amber)');
       const size = a.size || '';
       const count = a.count || '';
-      return `<div class="book-card" onclick="openArchiveDetail('${E(a.name)}')">`+
+      return `<div class="book-card ${activeRef?'book-card-active-ref':''}" onclick="openArchiveDetail('${E(a.name)}')">`+
         `<div class="book-spine" style="background:${a.cl}"></div>`+
         `<div class="book-body">`+
           `<span class="book-emoji">${_ic(a.em,32)}</span>`+
@@ -710,7 +870,18 @@ R.archive = function() {
             (count ? `<span class="book-size">${E(count)}</span>` : '') +
           `</div>`+
         `</div></div>`;
-    }).join('') + '</div>';
+  };
+
+  return `<h2 class="page-title"><span class="page-icon">${_ic('🗄️',20)}</span> الأرشيف <small style="font-size:.6em;opacity:.5">الأرشيف الحقيقي + الطبقات النشطة التي كانت مختلطة معه</small></h2>` +
+    `<div class="archive-section">`+
+      `<div class="archive-section-head"><h3>المؤرشف فعليًا</h3><span>${archived.length}</span></div>`+
+      `<div class="archive-shelf">` + archived.map(a => renderCard(a, false)).join('') + `</div>`+
+    `</div>` +
+    (activeRefs.length ? `<div class="archive-section archive-active-block">`+
+      `<div class="archive-section-head"><h3>طبقات نشطة محفوظة خارج الأرشيف</h3><span>${activeRefs.length}</span></div>`+
+      `<p class="archive-section-note">هذه العناصر كانت مصنفة داخل الأرشيف بصريًا، لكن حقيقتها التشغيلية الحالية نشطة أو حساسة ويجب قراءتها كمرجع حي.</p>`+
+      `<div class="archive-shelf archive-shelf-active">` + activeRefs.map(a => renderCard(a, true)).join('') + `</div>`+
+    `</div>` : '');
 };
 
 /* ─────────────── 4. DETAIL VIEWS — 5 أنماط مختلفة ─────────────── */
@@ -770,11 +941,61 @@ function _pathHTML(path) {
   return `<div style="margin-top:14px;font-family:var(--mono);font-size:11px;background:var(--elevated);padding:10px 14px;border-radius:8px;color:var(--t2);direction:ltr;word-break:break-all;display:flex;align-items:center;gap:6px">${_ic('📁',14)} ${E(path)}</div>`;
 }
 
+function _projectStructuredSections(item) {
+  const sections = [];
+  const summary = item.summary || '';
+  const kindMap = {
+    product: 'منتج',
+    umbrella: 'منظومة',
+    dashboard: 'لوحة',
+    website: 'موقع',
+    'service-app': 'خدمة',
+    'content-product': 'منتج محتوى'
+  };
+  const pathRows = [];
+  if (item.local_path) pathRows.push(`محلي: ${item.local_path}`);
+  if (item.server_path) pathRows.push(`سيرفر: ${item.server_path}`);
+  if (!pathRows.length && item.path) pathRows.push(item.path);
+
+  const releaseRows = [];
+  if (item.repo_url) releaseRows.push(`GitHub: ${item.repo_url}`);
+  if (item.deploy_url) releaseRows.push(`نشر: ${item.deploy_url}`);
+  if (!releaseRows.length && item.links) {
+    Object.entries(item.links).forEach(([k, v]) => releaseRows.push(`${k}: ${v}`));
+  }
+
+  const relationRows = [];
+  if (item.parent_project) relationRows.push(`يتبع: ${item.parent_project}`);
+  if (item.related_services?.length) relationRows.push(`الخدمات: ${item.related_services.join(' · ')}`);
+  if (item.related_tools?.length) relationRows.push(`الأدوات: ${item.related_tools.join(' · ')}`);
+  if (item.related_cloud?.length) relationRows.push(`السحابية: ${item.related_cloud.join(' · ')}`);
+
+  if (summary || item.kind) {
+    sections.push({
+      title: '🧭 نظرة عامة',
+      rows: [
+        summary || 'لا يوجد ملخص منظم بعد',
+        item.kind ? `النوع: ${kindMap[item.kind] || item.kind}` : '',
+        item.pct != null ? `التقدم: ${item.pct}%` : ''
+      ].filter(Boolean)
+    });
+  }
+  if (item.stack?.length) sections.push({title: '🔧 التقنيات', rows: item.stack});
+  if (item.subsystems?.length) sections.push({title: '🧩 الأنظمة الفرعية', rows: item.subsystems});
+  if (pathRows.length) sections.push({title: '📁 المسارات', rows: pathRows});
+  if (releaseRows.length) sections.push({title: '🚀 الريبو والنشر', rows: releaseRows});
+  if (item.ops?.length) sections.push({title: '⚙️ التشغيل', rows: item.ops});
+  if (relationRows.length) sections.push({title: '🔗 العلاقات', rows: relationRows});
+  return sections;
+}
+
 /* ── 1. PROJECT DETAIL — صفحة كاملة تحل محل المحتوى ── */
 function openProjectDetail(name) {
   const item = M[name]; if (!item) return;
   closeDetail(true);
-  const {headline,sections} = _parseDesc(item);
+  const {headline,sections: legacySections} = _parseDesc(item);
+  const structuredSections = _projectStructuredSections(item);
+  const sections = [...structuredSections, ...legacySections];
   const cl = item.cl||'#6C3AED';
   const tags = item.tags||[];
   const links = item.links||{};
@@ -792,7 +1013,10 @@ function openProjectDetail(name) {
       `<span style="font-size:60px">${_ic(item.em,60)}</span>`+
       `<h1 style="font-size:28px;font-weight:800;margin-top:10px">${E(item.ar||item.name)}</h1>`+
       `<span class="${stCls}" style="margin-top:8px">${E(stLabel)}</span>`+
-      (headline?`<p style="margin-top:14px;font-size:14px;opacity:.85;max-width:520px;line-height:1.7">${E(headline)}</p>`:'')+
+      `</div>`+
+    `<div class="prj-detail-summary" style="margin-top:14px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,${cl}10,${cl}05);border:1px solid ${cl}20;color:var(--t1)">`+
+      `<div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">${_ic('🧭',14)} الملخص التنفيذي</div>`+
+      `<div style="font-size:13px;line-height:1.8;color:var(--t2)">${E(item.summary || headline || '')}</div>`+
     `</div>`+
     `<div class="prj-detail-grid">`+
       sections.map(s=>{
@@ -826,6 +1050,13 @@ function openBotDetail(name) {
   const cl = item.cl||'#6C3AED';
   const isActive = item.st==='a';
   const tags = item.tags||[];
+  const meta = [
+    item.kind ? `النوع: ${item.kind}` : '',
+    item.host ? `المضيف: ${item.host}` : '',
+    item.runtime ? `التشغيل: ${item.runtime}` : '',
+    item.channel ? `القناة: ${item.channel}` : '',
+    item.related_project ? `يرتبط بـ: ${item.related_project}` : ''
+  ].filter(Boolean);
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -843,7 +1074,8 @@ function openBotDetail(name) {
         `<div class="dt-output">`+
           `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar||item.name)} ${_ic(item.em,16)}</div>`+
           `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive?'#28C840':'#FF5F57'}">${isActive?'■ نشط':'□ متوقف'}</span></div>`+
-          (headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(headline)}</div>`:'')+
+          (item.summary||headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(item.summary||headline)}</div>`:'')+
+          meta.map(m=>`<div class="dt-line">${E(m)}</div>`).join('')+
         `</div>`+
         (stats.length?`<div class="dt-prompt">$ bot stats</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
         (function(){
@@ -885,6 +1117,11 @@ function openToolDetail(name) {
   const {headline,sections} = _parseDesc(item);
   const cl = item.cl||'#6C3AED';
   const tags = item.tags||[];
+  const metaRows = [
+    item.type ? `النوع: ${item.type}` : '',
+    item.category ? `الفئة: ${item.category}` : '',
+    item.used_in?.length ? `يُستخدم في: ${item.used_in.join(' · ')}` : ''
+  ].filter(Boolean);
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -899,7 +1136,8 @@ function openToolDetail(name) {
         (tags.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:14px;justify-content:center">${tags.map(t=>`<span style="font-size:8px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join('')}</div>`:'')+
       `</div>`+
       `<div class="dsp-content">`+
-        (headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(headline)}</p>`:'')+
+        (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
+        (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
         _sectionsHTML(sections)+
         _pathHTML(item.path)+
         _linksHTML(item.links,cl)+
@@ -919,16 +1157,13 @@ function openIdeaDetail(name) {
   const prLabels = {1:'عاجل',2:'قريب',3:'يوماً ما'};
   const prColors = {1:'#EF4444',2:'#F59E0B',3:'#6366F1'};
   const cl = prColors[item.pr]||'#6366F1';
-
-  const relMap = {
-    "بوت تلقرام لبريكس":["Argaz Bot","BRIX Travel System"],
-    "نظام تتبع مالي":["BRIX Travel System","Wapy.dev"],
-    "BRIX Website v2":["BRIX Travel Website","BRIX Travel System"]
-  };
-  const rels = (relMap[item.name]||[]).map(rn => {
-    const rp = [...PRJ,...BOT].find(x=>x.name===rn||x.ar===rn);
-    return rp ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--elevated);border-radius:20px;font-size:10px">${_ic(rp.em,12)} ${E(rp.ar||rp.name)}</span>` : '';
-  }).filter(Boolean).join('');
+  const rels = _relChips(item.related_projects || []);
+  const metaRows = [
+    item.summary ? `الملخص: ${item.summary}` : '',
+    item.owner_scope ? `النطاق: ${item.owner_scope}` : '',
+    item.horizon ? `الأفق: ${item.horizon}` : '',
+    item.next_step ? `الخطوة التالية: ${item.next_step}` : ''
+  ].filter(Boolean);
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -942,9 +1177,10 @@ function openIdeaDetail(name) {
         `<span class="di-priority" style="background:${cl}">${E(prLabels[item.pr]||'')}</span>`+
       `</div>`+
       `<h2 style="font-size:18px;font-weight:700;margin-bottom:8px">${E(item.name)}</h2>`+
-      (headline?`<p style="font-size:12px;color:var(--t2);margin-bottom:14px">${E(headline)}</p>`:'')+
+      ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);margin-bottom:14px">${E(item.summary||headline)}</p>`:'')+
+      (metaRows.length ? `<div class="detail-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
       _sectionsHTML(sections)+
-      (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يتكامل مع</h4><div style="display:flex;flex-wrap:wrap;gap:6px">${rels}</div></div>`:'')+
+      (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يتكامل مع</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
     `</div>`;
   document.body.appendChild(el);
   _suppressHash = true;
@@ -958,6 +1194,13 @@ function openArchiveDetail(name) {
   closeDetail();
   const {headline,sections} = _parseDesc(item);
   const cl = item.cl||'#F59E0B';
+  const stamp = _archiveStamp(item);
+  const metaRows = [
+    `التصنيف: ${_archiveKindLabel(item)}`,
+    item.summary ? `الملخص: ${item.summary}` : '',
+    item.next_step ? `الخطوة التالية: ${item.next_step}` : ''
+  ].filter(Boolean);
+  const rels = _relChips(item.related_projects || []);
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -966,13 +1209,15 @@ function openArchiveDetail(name) {
     `<div class="da-overlay" onclick="closeDetail()"></div>`+
     `<div class="da-paper">`+
       `<button class="da-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>`+
-      `<div class="da-stamp">مؤرشف</div>`+
+      `<div class="da-stamp ${item.st==='a'?'da-stamp-active':''}">${E(stamp)}</div>`+
       `<div class="da-header">`+
         `<span style="font-size:44px">${_ic(item.em,44)}</span>`+
         `<h2 style="font-size:18px;font-weight:700;color:var(--t1)">${E(item.ar||item.name)}</h2>`+
       `</div>`+
-      (headline?`<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(headline)}</p>`:'')+
+      ((item.summary||headline)?`<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(item.summary||headline)}</p>`:'')+
+      (metaRows.length ? `<div class="detail-meta-box archive-meta-box">${metaRows.map(r=>`<div class="detail-meta-line">${E(r)}</div>`).join('')}</div>` : '') +
       _sectionsHTML(sections)+
+      (rels?`<div style="margin-top:16px"><h4 style="font-size:11px;color:var(--t3);margin-bottom:6px">يرتبط بـ</h4><div class="meta-chip-row">${rels}</div></div>`:'')+
       _tagsHTML(item.tags,cl)+
       _pathHTML(item.path)+
       _linksHTML(item.links,cl)+
@@ -1033,6 +1278,87 @@ function filterIdeas(pr) {
   });
 }
 
+function _searchKindLabel(kind) {
+  const labels = {
+    project:'مشروع',
+    service:'خدمة',
+    automation:'أتمتة',
+    bot:'بوت',
+    tool:'أداة',
+    cloud:'سحابي',
+    idea:'فكرة',
+    'archived-project':'أرشيف',
+    'archived-brand':'أرشيف',
+    'archived-client-work':'أرشيف',
+    'archived-site-export':'أرشيف',
+    'archived-tool':'أرشيف',
+    'active-security':'مرجع نشط',
+    'active-runtime':'مرجع نشط'
+  };
+  return labels[kind] || kind;
+}
+
+function _searchEmpty(query) {
+  return `<div class="search-empty">`+
+    `<span class="search-empty-icon">${_ic('🔍',22)}</span>`+
+    `<strong>${query ? 'لا توجد نتائج مطابقة' : 'ابحث في كل اللوحة من مكان واحد'}</strong>`+
+    `<p>${query ? 'جرّب اسم مشروع، خدمة، مسار، أو كلمة من الوصف.' : 'المصدر يشمل المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابية، الأرشيف، والأفكار.'}</p>`+
+  `</div>`;
+}
+
+function _renderSearchResults(query) {
+  const resultsEl = document.getElementById('search-results');
+  if (!resultsEl) return;
+  const q = (query || '').trim().toLowerCase();
+  let rows = SEARCH_INDEX;
+  if (q) {
+    const parts = q.split(/\s+/).filter(Boolean);
+    rows = SEARCH_INDEX.filter(r => parts.every(p => r.tokens.includes(p)));
+  }
+  rows = rows.slice(0, 18);
+  if (!rows.length) {
+    resultsEl.innerHTML = _searchEmpty(query);
+    requestAnimationFrame(_processIcons);
+    return;
+  }
+  resultsEl.innerHTML = rows.map(r =>
+    `<button class="search-result" onclick="selectSearchResult('${E(r.id)}')">`+
+      `<span class="search-result-kind">${E(_searchKindLabel(r.kind))}</span>`+
+      `<div class="search-result-body">`+
+        `<strong class="search-result-title">${E(r.title)}</strong>`+
+        (r.subtitle ? `<span class="search-result-sub">${E(r.subtitle)}</span>` : '') +
+      `</div>`+
+      `<span class="search-result-page">${E(PG.find(p => p.id === r.page)?.n || r.page)}</span>`+
+    `</button>`
+  ).join('');
+  requestAnimationFrame(_processIcons);
+}
+
+function openSearch() {
+  closeMore();
+  const el = document.getElementById('global-search');
+  if (!el) return;
+  el.classList.add('open');
+  const input = document.getElementById('search-input');
+  if (input) {
+    input.value = '';
+    _renderSearchResults('');
+    setTimeout(() => input.focus(), 60);
+  }
+}
+
+function closeSearch() {
+  const el = document.getElementById('global-search');
+  if (el) el.classList.remove('open');
+}
+
+function selectSearchResult(id) {
+  const row = SEARCH_INDEX.find(r => r.id === id);
+  if (!row) return;
+  closeSearch();
+  if (row.action) row.action();
+}
+
 /* ─────────────── 6. INTERACTIVE EFFECTS ─────────────── */
 
 let _mRaf=false;
@@ -1054,7 +1380,11 @@ document.addEventListener('mousemove', function(e) {
 });
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeDetail(); closeMore(); }
+  if (e.key === 'Escape') { closeDetail(); closeMore(); closeSearch(); }
+  if ((e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k')) {
+    e.preventDefault();
+    openSearch();
+  }
 });
 
 /* ─────────────── 7. COUNTDOWN HELPER ─────────────── */
