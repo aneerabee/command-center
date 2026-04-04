@@ -198,93 +198,109 @@ function closeMore() {
 
 const R = {};
 
-/* ── HOME — Compact Bento Dashboard ── */
+/* ── HOME — Command Center Dashboard ── */
 R.home = function() {
   const weddingDate = new Date(2026, 3, 21);
   const now = new Date();
   const days = Math.max(0, Math.ceil((weddingDate - now) / 86400000));
   const circ = 2 * Math.PI * 38;
   const pct = Math.min(1, Math.max(0, (365 - days) / 365));
+  const activeBots = BOT.filter(b=>b.st==='a').length;
+  const pausedBots = BOT.filter(b=>b.st==='p').length;
+  const autoTasks = 11;
+  const autoActive = 8;
+  const dateStr = now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-  const stats = [
-    {label:'مشاريع',val:PRJ.length,em:'🚀',pg:'projects',cl:'#6C3AED'},
-    {label:'خدمات',val:SVC.length,em:'🖥️',pg:'server',cl:'#0EA5E9'},
-    {label:'بوتات',val:BOT.length,em:'🤖',pg:'bots',cl:'#8B5CF6'},
-    {label:'سحابية',val:CLD.length,em:'☁️',pg:'cloud',cl:'#EC4899'},
-    {label:'أدوات',val:TL.length,em:'🛠️',pg:'tools',cl:'#6D28D9'},
-    {label:'أفكار',val:IDEAS.length,em:'💡',pg:'ideas',cl:'#F59E0B'}
-  ];
+  return `<div class="cc-grid">`+
 
-  const timeline = [
-    {date:'31 مارس',text:'أكاديمية الشطرنج v2 — نسخة إنجليزية',cl:'#8B5CF6'},
-    {date:'31 مارس',text:'تأمين 3 مشاريع → GitHub خاص',cl:'#0EA5E9'},
-    {date:'31 مارس',text:'لوحة التحكم — إعادة تصميم كاملة',cl:'#10B981'},
-    {date:'29 مارس',text:'تنظيم iCloud — 5,400 ملف + خزنة',cl:'#F59E0B'}
-  ];
-
-  const topProjects = PRJ.filter(p=>p.st==='a').slice(0,4);
-
-  return `<div class="hm-grid">`+
-
-    // Row 1: Greeting + Countdown + Server — all in one row
-    `<div class="hm-c hm-greet">`+
-      `<p class="hm-hi">مرحباً <strong>ربيع</strong></p>`+
-      `<p class="hm-sub2">نظرة شاملة على كل شيء</p>`+
+    // ─── Row 1: Header bar ───
+    `<div class="cc-header">`+
+      `<div class="cc-hello"><span class="cc-wave">&#x1F44B;</span> مرحباً <strong>ربيع</strong></div>`+
+      `<div class="cc-date">${dateStr}</div>`+
     `</div>`+
 
-    `<div class="hm-c hm-cd" onclick="go('projects')">`+
-      `<div class="hm-cd-ring">`+
-        `<svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/>`+
-        `<circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg>`+
-        `<span class="hm-cd-num" id="ring-days">${days}</span>`+
+    // ─── Row 2: Key metrics strip ───
+    `<div class="cc-metrics">`+
+      [{l:'مشاريع',v:PRJ.length,c:'#6C3AED',p:'projects'},{l:'خدمات',v:SVC.length,c:'#0EA5E9',p:'server'},
+       {l:'بوتات',v:BOT.length,c:'#8B5CF6',p:'bots'},{l:'سحابية',v:CLD.length,c:'#EC4899',p:'cloud'},
+       {l:'أدوات',v:TL.length,c:'#6D28D9',p:'tools'},{l:'أفكار',v:IDEAS.length,c:'#F59E0B',p:'ideas'},
+       {l:'أرشيف',v:ARC.length,c:'#92400E',p:'archive'}].map(s=>
+        `<div class="cc-metric" onclick="go('${s.p}')"><span class="cc-mv" style="color:${s.c}">${s.v}</span><span class="cc-ml">${s.l}</span></div>`
+      ).join('')+
+    `</div>`+
+
+    // ─── Row 3: 3 columns ───
+
+    // Col 1: Projects (top 4) with motion graphics
+    `<div class="cc-card cc-projects">`+
+      `<div class="cc-card-head"><h3>${_ic('🚀',15)} المشاريع</h3><span class="cc-card-more" onclick="go('projects')">عرض الكل</span></div>`+
+      PRJ.filter(p=>p.st==='a').slice(0,4).map((p,i)=>
+        `<div class="cc-prow" style="--pc:${p.cl};animation-delay:${i*.05}s" onclick="openProjectDetail('${E(p.name)}')">`+
+          `<div class="cc-prow-anim">${_projAnim(p.em,p.cl)}</div>`+
+          `<div class="cc-prow-info"><span class="cc-prow-name">${E(p.ar)}</span><div class="cc-prow-bar"><div style="width:${p.pct}%;background:${p.cl}"></div></div></div>`+
+          `<span class="cc-prow-pct" style="color:${p.cl}">${p.pct}%</span>`+
+        `</div>`
+      ).join('')+
+    `</div>`+
+
+    // Col 2: System status (server + bots + automation)
+    `<div class="cc-card cc-system">`+
+      `<div class="cc-card-head"><h3>${_ic('🖥️',15)} حالة النظام</h3></div>`+
+
+      // Server
+      `<div class="cc-sys-section">`+
+        `<div class="cc-sys-row" onclick="go('server')"><span class="cc-led cc-led-on"></span><span class="cc-sys-name">Contabo VPS</span><span class="cc-sys-val">${SVC.filter(s=>s.st).length}/${SVC.length}</span></div>`+
       `</div>`+
-      `<div class="hm-cd-info">`+
-        `<span class="hm-cd-title">${_ic('💒',14)} الزفاف</span>`+
-        `<span class="hm-cd-date">21 — 25 أبريل</span>`+
+
+      // Bots
+      `<div class="cc-sys-section">`+
+        `<div class="cc-sys-label" onclick="go('bots')">${_ic('🤖',13)} البوتات</div>`+
+        `<div class="cc-sys-badges">`+
+          `<span class="cc-badge cc-badge-on">${activeBots} نشط</span>`+
+          `<span class="cc-badge cc-badge-off">${pausedBots} متوقف</span>`+
+        `</div>`+
+        BOT.map(b=>
+          `<div class="cc-sys-bot"><span class="cc-led ${b.st==='a'?'cc-led-on':'cc-led-off'}"></span><span>${E(b.ar||b.name)}</span></div>`
+        ).join('')+
+      `</div>`+
+
+      // Automation
+      `<div class="cc-sys-section">`+
+        `<div class="cc-sys-label" onclick="go('auto')">${_ic('⚙️',13)} الأتمتة</div>`+
+        `<div class="cc-auto-bar"><div class="cc-auto-fill" style="width:${(autoActive/autoTasks*100).toFixed(0)}%"></div></div>`+
+        `<span class="cc-sys-sub">${autoActive} نشط من ${autoTasks} مهمة</span>`+
       `</div>`+
     `</div>`+
 
-    `<div class="hm-c hm-srv" onclick="go('server')">`+
-      `<div class="hm-srv-row"><span class="hm-srv-led"></span><span class="hm-srv-name">Contabo VPS</span></div>`+
-      `<span class="hm-srv-info">${SVC.filter(s=>s.st).length} خدمات نشطة</span>`+
-    `</div>`+
+    // Col 3: Countdown + Activity + Quick Links
+    `<div class="cc-card cc-sidebar">`+
+      // Countdown
+      `<div class="cc-countdown" onclick="go('projects')">`+
+        `<div class="cc-cd-ring"><svg viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="var(--elevated)" stroke-width="5"/><circle cx="44" cy="44" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="5" stroke-linecap="round" id="ring-fg" style="stroke-dasharray:${(pct*circ).toFixed(1)} ${circ.toFixed(1)};transform:rotate(-90deg);transform-origin:center"/></svg><span class="cc-cd-num" id="ring-days">${days}</span></div>`+
+        `<div class="cc-cd-text"><strong>${_ic('💒',13)} الزفاف</strong><span>21 — 25 أبريل · ${days} يوم</span></div>`+
+      `</div>`+
 
-    // Row 2: 6 stat chips
-    `<div class="hm-stats-row">`+
-      stats.map(s =>
-        `<div class="hm-chip" onclick="go('${s.pg}')">`+
-          `<span class="hm-chip-val" style="color:${s.cl}">${s.val}</span>`+
-          `<span class="hm-chip-label">${E(s.label)}</span>`+
-        `</div>`
-      ).join('')+
-    `</div>`+
+      // Activity
+      `<div class="cc-feed-section">`+
+        `<div class="cc-sys-label">${_ic('📈',13)} آخر النشاطات</div>`+
+        [{d:'31 مارس',t:'أكاديمية الشطرنج v2',c:'#8B5CF6'},
+         {d:'31 مارس',t:'تأمين 3 مشاريع → GitHub',c:'#0EA5E9'},
+         {d:'31 مارس',t:'إعادة تصميم لوحة التحكم',c:'#10B981'},
+         {d:'29 مارس',t:'تنظيم 5,400 ملف iCloud',c:'#F59E0B'}].map(t=>
+          `<div class="cc-feed-row"><span class="cc-feed-dot" style="background:${t.c}"></span><span class="cc-feed-txt">${E(t.t)}</span><span class="cc-feed-date">${E(t.d)}</span></div>`
+        ).join('')+
+      `</div>`+
 
-    // Row 3: Project cards with animated icons + Feed
-    `<div class="hm-projects-grid">`+
-      PRJ.filter(p=>p.st==='a').map((p,i)=>
-        `<div class="hm-pcard" style="--pc:${p.cl};animation-delay:${i*0.06}s" onclick="openProjectDetail('${E(p.name)}')">`+
-          `<div class="hm-pcard-anim">`+
-            _projAnim(p.em, p.cl)+
-          `</div>`+
-          `<div class="hm-pcard-info">`+
-            `<span class="hm-pcard-name">${E(p.ar)}</span>`+
-            `<div class="hm-pcard-progress"><div class="hm-pcard-fill" style="width:${p.pct}%;background:${p.cl}"></div></div>`+
-          `</div>`+
-          `<span class="hm-pcard-pct" style="color:${p.cl}">${p.pct}%</span>`+
-          `<div class="hm-pcard-glow" style="background:${p.cl}"></div>`+
-        `</div>`
-      ).join('')+
-    `</div>`+
-
-    `<div class="hm-c hm-act">`+
-      `<h3 class="hm-sec-title">${_ic('📈',14)} آخر النشاطات</h3>`+
-      timeline.map(t=>
-        `<div class="hm-act-row">`+
-          `<span class="hm-act-dot" style="background:${t.cl}"></span>`+
-          `<span class="hm-act-text">${E(t.text)}</span>`+
-          `<span class="hm-act-date">${E(t.date)}</span>`+
-        `</div>`
-      ).join('')+
+      // Quick links
+      `<div class="cc-quick">`+
+        `<div class="cc-sys-label">${_ic('🔗',13)} اختصارات</div>`+
+        `<div class="cc-quick-row">`+
+          `<a class="cc-qlink" href="https://github.com/aneerabee" target="_blank">${_ic('🐙',14)} GitHub</a>`+
+          `<a class="cc-qlink" href="https://business.facebook.com" target="_blank">${_ic('📢',14)} Meta</a>`+
+          `<a class="cc-qlink" href="https://supabase.com/dashboard" target="_blank">${_ic('⚡',14)} Supabase</a>`+
+          `<a class="cc-qlink" href="https://railway.app" target="_blank">${_ic('🚂',14)} Railway</a>`+
+        `</div>`+
+      `</div>`+
     `</div>`+
 
   `</div>`;
