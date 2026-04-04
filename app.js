@@ -138,6 +138,54 @@ function _archiveStamp(item) {
   return 'مؤرشف';
 }
 
+function _projectKindLabel(kind) {
+  return {
+    product:'منتج',
+    umbrella:'منظومة',
+    dashboard:'لوحة',
+    website:'موقع',
+    'service-app':'خدمة',
+    'content-product':'منتج محتوى',
+    'internal-tool':'أداة داخلية',
+    'financial-app':'تطبيق مالي'
+  }[kind] || kind;
+}
+
+function _toolCategoryLabel(category) {
+  return {
+    'developer-env':'بيئة عمل',
+    'internal-tool':'أداة داخلية',
+    'platform':'منصة',
+    'infra-access':'وصول بنية',
+    'mcp':'MCP'
+  }[category] || category;
+}
+
+function _botKindLabel(kind) {
+  return {
+    'telegram-bot':'بوت Telegram',
+    'agent-runtime':'runtime وكلاء',
+    'assistant-channel':'قناة مساعد',
+    'financial-app':'تطبيق مالي'
+  }[kind] || kind;
+}
+
+function _cloudCategoryLabel(category) {
+  return {
+    'platform':'منصة',
+    'database-platform':'منصة بيانات',
+    'deployment':'نشر',
+    'marketing-platform':'تسويق',
+    'data-platform':'بيانات',
+    'communication':'تواصل',
+    'infrastructure':'بنية',
+    'storage':'تخزين',
+    'mcp-linked':'MCP',
+    'network':'شبكة',
+    'external-api':'API'
+  }[category] || category;
+}
+
 function _searchableText(v) {
   if (!v) return '';
   if (Array.isArray(v)) return v.map(_searchableText).join(' ');
@@ -392,8 +440,6 @@ R.home = function() {
     ...BOT.filter(b => b.st !== 'a').map(b => ({t:'بوت غير نشط', n:b.ar, d:b.summary || '', c:b.cl, a:`openBotDetail('${E(b.name)}')`})),
     ...urgentIdeas.map(i => ({t:`فكرة ${i.horizon}`, n:i.name, d:i.next_step || i.summary || '', c:i.cl, a:`openIdeaDetail('${E(i.name)}')`}))
   ].slice(0,6);
-  const kindLabel = k => ({product:'منتج',umbrella:'منظومة',dashboard:'لوحة',website:'موقع','service-app':'خدمة','content-product':'محتوى','internal-tool':'أداة داخلية','financial-app':'تطبيق مالي'})[k] || k;
-
   return `<div class="hq">`+
     `<section class="hq-card hq-hero">`+
       `<div class="hq-hero-copy">`+
@@ -441,7 +487,7 @@ R.home = function() {
         focus.map(p =>
           `<button class="hq-focus-item" onclick="openProjectDetail('${E(p.name)}')">`+
             `<span class="hq-focus-icon">${_ic(p.em,20)}</span>`+
-            `<div class="hq-focus-body"><strong>${E(p.ar)}</strong><p>${E(p.summary || '')}</p><span class="hq-focus-meta">${E(kindLabel(p.kind))} · ${p.pct}%</span></div>`+
+            `<div class="hq-focus-body"><strong>${E(p.ar)}</strong><p>${E(p.summary || '')}</p><span class="hq-focus-meta">${E(_projectKindLabel(p.kind))} · ${p.pct}%</span></div>`+
             `<span class="hq-focus-bar"><span style="width:${p.pct}%;background:${p.cl}"></span></span>`+
           `</button>`
         ).join('')+
@@ -538,17 +584,18 @@ R.map = function() {
     ...PRJ.map(p => {
       const loc = p.server_path ? 'server' : p.local_path ? 'local' : p.repo_url ? 'github' : 'local';
       const path = p.server_path ? `server:${p.server_path}` : (p.local_path || p.path || '—');
-      const repoName = p.repo_url ? p.repo_url.split('/').slice(-1)[0] : '—';
+      const repoName = p.repo_url ? p.repo_url.split('/').slice(-1)[0] : '';
       const status = p.st === 'a' ? 'نشط' : p.st === 'p' ? 'متوقف' : 'أرشيف';
-      const hint = p.deploy_url ? `نشر: ${p.deploy_url}` : (p.summary || p.kind || '');
-      return {n:p.ar||p.name,e:p.em,l:loc,p:path,g:repoName,gp:p.deploy_url?1:0,s:status,c:p.cl,t:hint};
+      const hint = p.deploy_url ? `نشر: ${p.deploy_url}` : (p.summary || _projectKindLabel(p.kind));
+      return {name:p.name,n:p.ar||p.name,e:p.em,l:loc,p:path,g:repoName,gp:!!p.deploy_url,s:status,c:p.cl,t:hint,kind:_projectKindLabel(p.kind),action:`openProjectDetail('${E(p.name)}')`};
     }),
-    {n:"Argaz Bot",e:"🧠",l:"server",p:"server:/home/argaz/.openclaw/",g:"—",gp:0,s:"نشط",c:"#6C3AED",t:"Runtime متعدد الوكلاء على Contabo"},
-    {n:"Tron Address Bot",e:"🕵️",l:"local",p:"/Users/rabeeshaban/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot",g:"—",gp:0,s:"عند الطلب",c:"#EF4444",t:"نظام حساس أمنيًا يعمل محليًا فقط"}
+    {name:"Argaz Bot",n:"بوت أرقاز",e:"🧠",l:"server",p:"server:/home/argaz/.openclaw/",g:"",gp:0,s:"نشط",c:"#6C3AED",t:"Runtime متعدد الوكلاء على Contabo",kind:"runtime وكلاء",action:`openBotDetail('Argaz Bot')`},
+    {name:"Tron Address Bot",n:"بوت عناوين ترون",e:"🕵️",l:"local",p:"/Users/rabeeshaban/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot",g:"",gp:0,s:"عند الطلب",c:"#EF4444",t:"نظام حساس أمنيًا يعمل محليًا فقط",kind:"بوت Telegram",action:`openBotDetail('Tron Address Bot')`}
   ];
 
   const counts = {github:0,local:0,server:0};
   mapData.forEach(d => counts[d.l]++);
+  const locLabel = {github:'مرتبط بـ GitHub',local:'محلي',server:'على السيرفر'};
 
   return `<h2 class="page-title"><span class="page-icon">${_ic('🗺️',20)}</span> خريطة المشاريع</h2>` +
     '<div class="map-stats">' +
@@ -557,6 +604,7 @@ R.map = function() {
       `<div class="map-stat"><span class="map-stat-val">${counts.server}</span><span class="map-stat-label">سيرفر</span></div>`+
       `<div class="map-stat"><span class="map-stat-val">${mapData.length}</span><span class="map-stat-label">المجموع</span></div>`+
     '</div>' +
+    '<div class="map-note">هذه الصفحة تجيب على سؤال واحد: أين يوجد كل عنصر فعليًا، وما هو نوع وجوده: محلي، GitHub، أو سيرفر.</div>' +
     '<div class="map-filters">' +
       `<button class="filter-btn active" data-filter="all" onclick="mapFilter('all')">الكل</button>`+
       `<button class="filter-btn" data-filter="github" onclick="mapFilter('github')">GitHub</button>`+
@@ -564,15 +612,14 @@ R.map = function() {
       `<button class="filter-btn" data-filter="server" onclick="mapFilter('server')">سيرفر</button>`+
     '</div>' +
     '<div class="map-list" id="map-list">' + mapData.map(d => {
-      const ghLink = d.g !== '—' ? `<a href="https://github.com/aneerabee/${E(d.g)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.75rem;margin-right:.5rem">${d.gp?_ic('🌐',12):_ic('🔒',12)} GitHub</a>` : '';
-      return `<div class="map-item" data-loc="${d.l}" style="border-right:4px solid ${d.c}">`+
-        `<span style="margin-left:.5rem">${_ic(d.e,18)}</span>`+
-        `<div style="flex:1"><span class="map-item-name">${E(d.n)}</span>`+
+      const ghLink = d.g ? `<a href="https://github.com/aneerabee/${E(d.g)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="map-item-link">${_ic(d.gp?'🌐':'🔒',12)} GitHub</a>` : '';
+      return `<button class="map-item" data-loc="${d.l}" style="border-right:4px solid ${d.c}" onclick="${d.action}">`+
+        `<span class="map-item-icon">${_ic(d.e,18)}</span>`+
+        `<div class="map-item-main"><span class="map-item-name">${E(d.n)}</span>`+
+        `<div class="map-item-meta"><span class="map-item-chip" style="background:${d.c}12;color:${d.c}">${E(d.kind)}</span><span class="map-item-chip">${E(locLabel[d.l] || d.l)}</span><span class="map-item-chip">${E(d.s)}</span></div>`+
         `<span class="map-item-path">${E(d.p)}</span>`+
-        `<span style="font-size:.7rem;opacity:.55">${E(d.t)}</span></div>`+
-        `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">`+
-        `<span class="map-item-badge badge-${d.l}" style="color:${d.c}">${_icText(d.s)}</span>`+
-        `${ghLink}</div></div>`;
+        `<span class="map-item-text">${E(d.t)}</span></div>`+
+        `<div class="map-item-side">${ghLink}</div></button>`;
     }).join('') + '</div>';
 };
 
@@ -726,9 +773,7 @@ R.bots = function() {
 /* ── TOOLS ── */
 R.tools = function() {
   const hero = TL[0];
-  const rest = TL.slice(1);
   const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
-  const categoryMap = {'developer-env':'بيئة عمل','internal-tool':'أداة داخلية','platform':'منصة','infra-access':'وصول بنية','mcp':'MCP'};
   const byCategory = c => TL.filter(t => t.category === c).length;
   const dials = [
     {v:String(byCategory('mcp')),l:"MCP",cl:"var(--purple)"},
@@ -738,6 +783,7 @@ R.tools = function() {
   ];
   const dialCirc = 2 * Math.PI * 24;
   const dialMaxes = [Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length)];
+  const groups = ['developer-env','internal-tool','platform','infra-access','mcp'];
 
   return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">Claude Code + MCP + الإعدادات</small></h2>` +
     `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">`+
@@ -752,64 +798,79 @@ R.tools = function() {
           `</svg><span class="dial-val">${E(d.v)}</span><span class="dial-label">${E(d.l)}</span></div>`;
       }).join('') + '</div>' +
     '</div>' +
-    '<div class="tool-grid">' + rest.map(t => {
-      const em = emojiMap[t.name] || t.em || '🔧';
-      return `<div class="tool-card glass" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">`+
-        `<span style="font-size:1.5rem">${_ic(em,24)}</span>`+
-        `<h4 class="tool-card-name">${E(t.ar||t.name)}</h4>`+
-        `<p class="tool-card-desc">${E(t.summary || (t.desc||'').split('\n')[0])}</p>`+
-        (t.category ? `<div class="tool-card-tags">${E(categoryMap[t.category] || t.category)}</div>` : '') +
-        `<div class="tool-card-tags">${(t.tags||[]).join(' · ')}</div>`+
-        `</div>`;
-    }).join('') + '</div>';
+    groups.map(cat => {
+      const items = TL.filter(t => t.category === cat);
+      if (!items.length) return '';
+      const activeCount = items.filter(t => t.st === 'a').length;
+      return `<div class="tool-section">`+
+        `<div class="tool-section-head"><div><h3>${E(_toolCategoryLabel(cat))}</h3><p>${activeCount}/${items.length} نشط · ${E(_toolCategoryLabel(cat))}</p></div><span>${items.length}</span></div>`+
+        `<div class="tool-grid">` + items.map(t => {
+          const em = emojiMap[t.name] || t.em || '🔧';
+          const usedIn = (t.used_in || []).slice(0,2).join(' · ');
+          return `<div class="tool-card glass" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">`+
+            `<span style="font-size:1.5rem">${_ic(em,24)}</span>`+
+            `<h4 class="tool-card-name">${E(t.ar||t.name)}</h4>`+
+            `<p class="tool-card-desc">${E(t.summary || (t.desc||'').split('\n')[0])}</p>`+
+            `<div class="tool-card-tags">${E(_toolCategoryLabel(t.category))}</div>` +
+            (usedIn ? `<div class="tool-card-usage">${E(usedIn)}</div>` : '') +
+            `</div>`;
+        }).join('') + '</div>' +
+      `</div>`;
+    }).join('');
 };
 
 /* ── CLOUD ── */
 R.cloud = function() {
-  const categories = [
-    {name:'تطوير', items:['GitHub','Supabase','Vercel','Railway','Heroku']},
-    {name:'تسويق', items:['Meta Business','Airtable']},
-    {name:'بنية تحتية', items:['Contabo VPS','Tailscale','iCloud Drive','Google Drive']},
-    {name:'ذكاء اصطناعي', items:['Perplexity','Firecrawl','Notion']},
-    {name:'مالي', items:['TronGrid','CoinGecko']},
-    {name:'تواصل', items:['Telegram']}
-  ];
-  const important = new Set(['GitHub','Supabase','Contabo VPS']);
+  const categoryOrder = ['platform','database-platform','deployment','marketing-platform','data-platform','infrastructure','network','storage','communication','mcp-linked','external-api'];
   const categoryLabels = {
-    'platform':'منصة',
-    'database-platform':'منصة بيانات',
-    'deployment':'نشر',
+    'platform':'منصات أساسية',
+    'database-platform':'منصات بيانات',
+    'deployment':'نشر واستضافة',
     'marketing-platform':'تسويق',
-    'data-platform':'بيانات',
-    'communication':'تواصل',
-    'infrastructure':'بنية',
+    'data-platform':'بيانات تشغيلية',
+    'infrastructure':'بنية تحتية',
     'storage':'تخزين',
-    'mcp-linked':'MCP',
-    'network':'شبكة',
-    'external-api':'API'
+    'mcp-linked':'خدمات متصلة عبر MCP',
+    'network':'وصول وشبكات',
+    'external-api':'واجهات خارجية',
+    'communication':'تواصل'
   };
-  const cldMap = {};
-  CLD.forEach(c => { cldMap[c.nm] = c; });
+  const groups = categoryOrder
+    .map(cat => ({cat, items: CLD.filter(c => c.category === cat)}))
+    .filter(g => g.items.length);
+  const activeCount = CLD.filter(c => c.active !== false).length;
+  const deploymentCount = CLD.filter(c => c.category === 'deployment').length;
+  const mcpLinkedCount = CLD.filter(c => c.category === 'mcp-linked').length;
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('☁️',20)}</span> الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} خدمة متصلة</small></h2>` +
-    categories.map(cat => {
-      const catItems = cat.items.map(nm => cldMap[nm]).filter(Boolean);
-      if (!catItems.length) return '';
+  return `<h2 class="page-title"><span class="page-icon">${_ic('☁️',20)}</span> الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} عنصر تشغيل</small></h2>` +
+    `<div class="cloud-overview">`+
+      `<div class="cloud-overview-stat"><strong>${activeCount}</strong><span>نشط حاليًا</span></div>`+
+      `<div class="cloud-overview-stat"><strong>${deploymentCount}</strong><span>نشر واستضافة</span></div>`+
+      `<div class="cloud-overview-stat"><strong>${mcpLinkedCount}</strong><span>مرتبط عبر MCP</span></div>`+
+      `<div class="cloud-overview-stat"><strong>${groups.length}</strong><span>فئات تشغيل</span></div>`+
+    `</div>` +
+    `<div class="cloud-note">هذه الصفحة لا تخلط بين المنصة نفسها وبين نوع دورها. ستجد الفرق بين منصة، نشر، API، شبكة، وتخزين بشكل صريح داخل كل بطاقة.</div>` +
+    groups.map(group => {
       return `<div class="cloud-category">` +
-        `<h3 class="cloud-cat-title">${E(cat.name)}</h3>` +
+        `<div class="cloud-cat-head"><h3 class="cloud-cat-title">${E(categoryLabels[group.cat] || group.cat)}</h3><span>${group.items.length}</span></div>` +
         `<div class="cloud-cat-grid">` +
-        catItems.map(c => {
-          const isImportant = important.has(c.nm);
+        group.items.map(c => {
           const clickAttr = c.lk ? `onclick="window.open('${E(c.lk)}','_blank')"` : '';
           const cPrj = c.prj || '';
           const cpc = cPrj ? _prjColor(cPrj) : '';
-          return `<div class="cloud-card ${isImportant?'cloud-card-lg':''} ${c.lk?'clickable':''}" ${clickAttr}>` +
-            `<span class="cloud-card-icon">${_ic(c.em, isImportant?28:22)}</span>` +
+          const status = c.active === false ? 'متوقف' : 'نشط';
+          const usedCount = (c.used_in || []).length;
+          return `<div class="cloud-card ${c.lk?'clickable':''} ${c.active===false?'cloud-card-off':''}" ${clickAttr}>` +
+            `<span class="cloud-card-icon">${_ic(c.em, 22)}</span>` +
             `<div class="cloud-card-info">` +
-              `<span class="cloud-card-name">${E(c.nm)}</span>` +
-              (cPrj ? `<span class="cloud-prj-tag" style="background:${cpc}15;color:${cpc}">${E(cPrj)}</span>` : '') +
-              (c.category ? `<span class="cloud-prj-tag">${E(categoryLabels[c.category] || c.category)}</span>` : '') +
+              `<div class="cloud-card-top"><span class="cloud-card-name">${E(c.nm)}</span><span class="cloud-card-status ${c.active===false?'cloud-card-status-off':'cloud-card-status-on'}">${E(status)}</span></div>` +
+              `<div class="cloud-card-tags">` +
+                `<span class="cloud-prj-tag">${E(categoryLabels[c.category] || c.category)}</span>` +
+                (cPrj ? `<span class="cloud-prj-tag" style="background:${cpc}15;color:${cpc}">${E(cPrj)}</span>` : '') +
+                (usedCount ? `<span class="cloud-prj-tag">يخدم ${usedCount}</span>` : '') +
+              `</div>` +
               `<span class="cloud-card-dt">${E(c.dt)}</span>` +
+              (c.used_in?.length ? `<span class="cloud-card-usage">${E(c.used_in.slice(0,3).join(' · '))}</span>` : '') +
             `</div>` +
           `</div>`;
         }).join('') +
@@ -964,16 +1025,6 @@ function _pathHTML(path) {
 function _projectStructuredSections(item) {
   const sections = [];
   const summary = item.summary || '';
-  const kindMap = {
-    product: 'منتج',
-    umbrella: 'منظومة',
-    dashboard: 'لوحة',
-    website: 'موقع',
-    'service-app': 'خدمة',
-    'content-product': 'منتج محتوى',
-    'internal-tool': 'أداة داخلية',
-    'financial-app': 'تطبيق مالي'
-  };
   const pathRows = [];
   if (item.local_path) pathRows.push(`محلي: ${item.local_path}`);
   if (item.server_path) pathRows.push(`سيرفر: ${item.server_path}`);
@@ -997,7 +1048,7 @@ function _projectStructuredSections(item) {
       title: '🧭 نظرة عامة',
       rows: [
         summary || 'لا يوجد ملخص منظم بعد',
-        item.kind ? `النوع: ${kindMap[item.kind] || item.kind}` : '',
+        item.kind ? `النوع: ${_projectKindLabel(item.kind)}` : '',
         item.pct != null ? `التقدم: ${item.pct}%` : ''
       ].filter(Boolean)
     });
@@ -1092,6 +1143,7 @@ function openBotDetail(name) {
     item.channel ? `القناة: ${item.channel}` : '',
     item.related_project ? `يرتبط بـ: ${item.related_project}` : ''
   ].filter(Boolean);
+  const related = item.related_project ? _relChips([item.related_project]) : '';
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1112,6 +1164,7 @@ function openBotDetail(name) {
           (item.summary||headline?`<div class="dt-line"><span class="dt-key">الوصف</span> ${E(item.summary||headline)}</div>`:'')+
           meta.map(m=>`<div class="dt-line">${E(m)}</div>`).join('')+
         `</div>`+
+        (related ? `<div class="detail-meta-box dt-meta-box"><div class="detail-meta-line">يرتبط بالمشروع</div><div class="meta-chip-row">${related}</div></div>` : '') +
         (stats.length?`<div class="dt-prompt">$ bot stats</div><div class="dt-stats">${stats.map(s=>`<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join('')}</div>`:'')+
         (function(){
           const catMap = {'🔧':'tech','📊':'stats','🔐':'security','🛡️':'security','⏰':'schedule','🤖':'tech','👥':'tech','🛠️':'tech','🔗':'links','🚀':'deploy','💾':'deploy','📱':'tech','📸':'tech','🧠':'tech','💹':'stats','📈':'stats','🔔':'schedule'};
@@ -1158,6 +1211,8 @@ function openToolDetail(name) {
     item.category ? `الفئة: ${categoryMap[item.category] || item.category}` : '',
     item.used_in?.length ? `يُستخدم في: ${item.used_in.join(' · ')}` : ''
   ].filter(Boolean);
+  const rels = _relChips(item.used_in || []);
+  const pathRows = [item.path].filter(Boolean);
 
   const el = document.createElement('div');
   el.id = 'detail-view';
@@ -1174,8 +1229,9 @@ function openToolDetail(name) {
       `<div class="dsp-content">`+
         (item.summary||headline?`<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary||headline)}</p>`:'')+
         (metaRows.length ? `<div style="margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px">${metaRows.map(r=>`<div style="font-size:12px;color:var(--t2);line-height:1.8">${E(r)}</div>`).join('')}</div>` : '') +
+        (rels ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>` : '') +
         _sectionsHTML(sections)+
-        _pathHTML(item.path)+
+        (pathRows.length ? _pathHTML(pathRows[0]) : '')+
         _linksHTML(item.links,cl)+
       `</div>`+
     `</div>`;
