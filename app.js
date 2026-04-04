@@ -111,8 +111,8 @@ function _entityLookup(name) {
   if (!name) return null;
   return PRJ.find(x => x.name === name || x.ar === name)
     || BOT.find(x => x.name === name || x.ar === name)
-    || TL.find(x => x.name === name || x.ar === name)
     || CLD.find(x => x.nm === name)
+    || TL.find(x => x.name === name || x.ar === name)
     || ARC.find(x => x.name === name || x.ar === name)
     || IDEAS.find(x => x.name === name)
     || SVC.find(x => x.name === name)
@@ -1467,17 +1467,16 @@ function openServiceDetail(name) {
     item.st ? 'الحالة: نشط' : 'الحالة: متوقف'
   ].filter(Boolean);
   const bodyRows = [
-    item.info ? item.info : '',
-    item.dt ? item.dt : ''
+    item.info ? item.info : ''
   ].filter(Boolean);
   const runtimeRows = [
+    item.dt ? item.dt : '',
     item.runtime ? `التشغيل: ${item.runtime}` : '',
     item.schedule ? `الجدولة: ${item.schedule}` : '',
     item.port && item.port !== '—' ? `المنفذ: ${item.port}` : ''
   ].filter(Boolean);
   const accessRows = [
     item.path ? `المسار: ${item.path}` : '',
-    item.host ? `المضيف: ${item.host}` : '',
     owner ? `${item.owner_type === 'bot' ? 'المالك runtime' : 'يتبع'}: ${owner}` : ''
   ].filter(Boolean);
 
