@@ -107,6 +107,44 @@ function _processIcons(){
   });
   lucide.createIcons();
 }
+
+let RUNTIME_STATE = {
+  generated_at: null,
+  checker: null,
+  coverage: {},
+  service: {},
+  tool: {},
+  cloud: {}
+};
+
+async function _loadRuntimeData() {
+  try {
+    const response = await fetch(`data.runtime.json?v=${Date.now()}`, {cache: 'no-store'});
+    if (!response.ok) return;
+    const payload = await response.json();
+    if (payload && typeof payload === 'object') {
+      RUNTIME_STATE = {
+        generated_at: payload.generated_at || null,
+        checker: payload.checker || null,
+        coverage: payload.coverage || {},
+        service: payload.service || {},
+        tool: payload.tool || {},
+        cloud: payload.cloud || {}
+      };
+    }
+  } catch (_) {}
+}
+
+function _refreshHomeRuntimeOnly() {
+  if (cur !== 'home') return;
+  if (document.getElementById('detail-view')) return;
+  const home = document.getElementById('page-home');
+  if (!home) return;
+  home.innerHTML = R.home();
+  _updateCountdown();
+  requestAnimationFrame(_processIcons);
+}
+
 function _entityLookup(name) {
   if (!name) return null;
   return PRJ.find(x => x.name === name || x.ar === name)
@@ -122,6 +160,36 @@ function _entityLookup(name) {
 function _entityColor(name, fallback) {
   const entity = _entityLookup(name);
   return entity?.cl || _prjColor(name) || fallback || '#888';
+}
+
+function _runtimeRecord(kind, item) {
+  if (!item?.id || !RUNTIME_STATE?.[kind]) return null;
+  return RUNTIME_STATE[kind][item.id] || null;
+}
+
+function _runtimeStatusMeta(status) {
+  return {
+    ok:{label:'مؤكد', color:'#059669'},
+    warn:{label:'يحتاج انتباهًا', color:'#D97706'},
+    fail:{label:'فشل التحقق', color:'#DC2626'},
+    manual:{label:'مراجعة يدوية', color:'#6B7280'},
+    unknown:{label:'غير معروف', color:'#6B7280'}
+  }[status] || {label:status || 'غير معروف', color:'#6B7280'};
+}
+
+function _fmtRuntimeDate(iso) {
+  if (!iso) return '—';
+  try {
+    return new Date(iso).toLocaleString('ar-EG', {
+      year:'numeric',
+      month:'short',
+      day:'numeric',
+      hour:'2-digit',
+      minute:'2-digit'
+    });
+  } catch {
+    return iso;
+  }
 }
 
 function _relChips(names) {
@@ -254,14 +322,23 @@ function _metaModeLabel(mode) {
 
 function _entityTrustBox(item, kind) {
   const meta = _entityMeta(item, kind);
+  const runtime = _runtimeRecord(kind, item);
+  const runtimeMeta = runtime ? _runtimeStatusMeta(runtime.verification_status) : null;
   if (!meta || (!meta.source && !meta.refresh_mode && !meta.stale_after && !meta.auto_refresh)) return '';
   return `<div class="trust-box">`+
-    `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
+    `<div class="trust-box-head"><strong>مصدر وتحديث البيانات</strong><span>سياسة: ${E(_metaModeLabel(meta.refresh_mode))}</span></div>`+
+    `<div class="trust-section-head">وصف ثابت للعنصر</div>`+
     `<div class="trust-grid">`+
       (meta.source ? `<div class="trust-item"><span>المصدر</span><strong>${E(meta.source)}</strong></div>` : '')+
       (meta.stale_after ? `<div class="trust-item"><span>حد التقادم</span><strong>${E(meta.stale_after)}</strong></div>` : '')+
-      (meta.auto_refresh ? `<div class="trust-item trust-item-wide"><span>التحديث المقترح لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
+      (meta.auto_refresh ? `<div class="trust-item trust-item-wide trust-item-plan"><span>مسار الأتمتة لاحقًا</span><strong>${E(meta.auto_refresh)}</strong></div>` : '')+
     `</div>`+
+    (runtime ? `<div class="trust-live"><div class="trust-section-head">نتيجة آخر فحص آلي متاح</div><div class="trust-grid">`+
+      `<div class="trust-item"><span>حالة آخر تحقق</span><strong><span class="runtime-badge" style="--rb:${runtimeMeta.color}">${E(runtimeMeta.label)}</span></strong></div>`+
+      `<div class="trust-item"><span>آخر تحقق</span><strong>${E(_fmtRuntimeDate(runtime.verified_at))}</strong></div>`+
+      (runtime?.checked_from ? `<div class="trust-item"><span>من أين تم التحقق</span><strong>${E(runtime.checked_from)}</strong></div>` : '')+
+      (runtime?.summary ? `<div class="trust-item trust-item-wide"><span>النتيجة الحالية</span><strong>${E(runtime.summary)}</strong>${runtime.facts?.length ? `<div class="runtime-facts">${runtime.facts.map(f => `<span class="runtime-fact">${E(f)}</span>`).join('')}</div>` : ''}</div>` : '')+
+    `</div></div>` : '')+
   `</div>`;
 }
 
@@ -383,6 +460,7 @@ const _validPages = new Set(PG.map(p => p.id));
 function _readHash() { const h = location.hash.slice(1).split('/')[0]; return _validPages.has(h) ? h : 'home'; }
 let cur = _readHash();
 const MOBILE_ITEMS = ['home','projects','server','bots','tools'];
+let _countdownTimer = null;
 
 function _setHashSilently(nextHash) {
   const normalized = nextHash.startsWith('#') ? nextHash : `#${nextHash}`;
@@ -421,17 +499,19 @@ function init() {
     `<a class="bar-item" onclick="openSearch()"><span class="bar-icon">⌕</span><span class="bar-label">بحث</span></a>` +
     `<a class="bar-item" onclick="openMore()"><span class="bar-icon">⋯</span><span class="bar-label">المزيد</span></a>`;
 
-    const sheet = document.createElement('div');
-    sheet.id = 'more-sheet';
-    sheet.className = 'more-sheet';
-    sheet.innerHTML = '<div class="more-sheet-overlay" onclick="closeMore()"></div>' +
-      '<div class="more-sheet-content">' +
-      '<div class="more-sheet-handle"></div>' +
-      morePage.map(p =>
-        `<a class="more-item" data-page="${p.id}" onclick="go('${p.id}');closeMore()">`+
-        `<span class="more-icon">${p.ic}</span><span class="more-label">${E(p.n)}</span></a>`
-      ).join('') + '</div>';
-    document.body.appendChild(sheet);
+    if (!document.getElementById('more-sheet')) {
+      const sheet = document.createElement('div');
+      sheet.id = 'more-sheet';
+      sheet.className = 'more-sheet';
+      sheet.innerHTML = '<div class="more-sheet-overlay" onclick="closeMore()"></div>' +
+        '<div class="more-sheet-content">' +
+        '<div class="more-sheet-handle"></div>' +
+        morePage.map(p =>
+          `<a class="more-item" data-page="${p.id}" onclick="go('${p.id}');closeMore()">`+
+          `<span class="more-icon">${p.ic}</span><span class="more-label">${E(p.n)}</span></a>`
+        ).join('') + '</div>';
+      document.body.appendChild(sheet);
+    }
   }
 
   if (!document.getElementById('global-search')) {
@@ -459,7 +539,8 @@ function init() {
   }
 
   _updateCountdown();
-  setInterval(_updateCountdown, 60000);
+  if (_countdownTimer) clearInterval(_countdownTimer);
+  _countdownTimer = setInterval(_updateCountdown, 60000);
   requestAnimationFrame(_processIcons);
   _renderSearchResults('');
 
@@ -536,6 +617,13 @@ R.home = function() {
   const focus = focusNames.map(n => PRJ.find(p => p.name === n)).filter(Boolean);
   const urgentIdeas = IDEAS.filter(i => i.pr === 1 || i.pr === 2);
   const activeRefs = ARC.filter(a => a.st === 'a');
+  const runtimeGenerated = RUNTIME_STATE.generated_at;
+  const runtimeCoverage = RUNTIME_STATE.coverage || {};
+  const runtimeCards = [
+    {t:'الخدمات', n:runtimeCoverage.service?.ok ?? 0, d:`${runtimeCoverage.service?.manual ?? 0} يدوي · ${(runtimeCoverage.service?.warn ?? 0)+(runtimeCoverage.service?.fail ?? 0)} يحتاج متابعة`, c:'#0284C7'},
+    {t:'الأدوات', n:runtimeCoverage.tool?.ok ?? 0, d:`${runtimeCoverage.tool?.manual ?? 0} يدوي · ${(runtimeCoverage.tool?.warn ?? 0)+(runtimeCoverage.tool?.fail ?? 0)} يحتاج متابعة`, c:'#7C3AED'},
+    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`${runtimeCoverage.cloud?.manual ?? 0} يدوي · ${(runtimeCoverage.cloud?.warn ?? 0)+(runtimeCoverage.cloud?.fail ?? 0)} يحتاج متابعة`, c:'#059669'}
+  ];
   const trustSummary = [
     {t:'Runtime', n:SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'خدمات وبوتات يمكن ربطها لاحقًا بفحص حي من السيرفر.', c:'#0EA5E9'},
     {t:'Config', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length, d:'أدوات وإعدادات يمكن تتبعها عبر الملفات مباشرة.', c:'#6C3AED'},
@@ -567,7 +655,7 @@ R.home = function() {
         `<p class="hq-sub">هذه الصفحة يجب أن تجيب بسرعة على ثلاثة أسئلة: ما الذي تملكه، ما الذي يعمل الآن، وأين يجب أن تذهب لاحقًا.</p>`+
       `</div>`+
       `<div class="hq-hero-meta">`+
-        `<div class="hq-status"><span class="hb-pulse"></span>مراجعة من المصدر المحلي والسيرفر</div>`+
+        `<div class="hq-status"><span class="hb-pulse"></span>جرد موثق من المصدر المحلي والسيرفر</div>`+
         `<div class="hq-date">${dateStr}</div>`+
       `</div>`+
     `</section>`+
@@ -588,7 +676,7 @@ R.home = function() {
     `</section>`+
 
     `<section class="hq-card hq-health">`+
-      `<div class="hq-head"><h2>تشغيل حي</h2><span onclick="go('server')" class="hq-inline-link">افتح السيرفر</span></div>`+
+      `<div class="hq-head"><h2>ملخص التشغيل الموثق</h2><span onclick="go('server')" class="hq-inline-link">افتح السيرفر</span></div>`+
       `<div class="hq-health-list">`+
         `<div class="hq-health-row"><span>خدمات عاملة</span><strong>${activeSvc}/${SVC.length}</strong></div>`+
         `<div class="hq-health-row"><span>حاويات Docker</span><strong>${runningContainers}</strong></div>`+
@@ -601,13 +689,14 @@ R.home = function() {
     `</section>`+
 
     `<section class="hq-card hq-trust">`+
-      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>قاعدة عامة لكل عنصر</span></div>`+
+      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>سياسة التوثيق + آخر فحص آلي محدود</span></div>`+
       `<div class="hq-layer-grid">`+
         trustSummary.map(x =>
           `<div class="hq-layer" style="--lc:${x.c}"><strong>${x.t}</strong><span class="hq-layer-num">${x.n}</span><p>${x.d}</p></div>`
         ).join('')+
       `</div>`+
-      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. التنفيذ الحالي يعرّف هذا النموذج بصراحة، والخطوة التالية هي ربطه لاحقًا بمجاميع فحص دورية أو file/runtime watchers أو API checks حسب نوع العنصر.</div>`+
+      (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
+      `<div class="hq-mini-note">الفكرة العامة: كل عنصر يجب أن يحمل مصدره، طريقة مراجعته، وحد تقادمه. الفحص الآلي الحالي محدود النطاق ويغطي فقط بعض عناصر <strong>services + tools + cloud</strong>، ولا يحدّث المشاريع أو الأفكار أو الأرشيف تلقائيًا بعد. لتشغيله يدويًا من داخل <code>/tmp/cc-push</code> استخدم <code>node runtime-sync.js</code>. الناتج المتوقع: تحديث ملف <code>data.runtime.json</code> ثم ظهور وقت آخر تحقق داخل اللوحة بعد إعادة التحميل${runtimeGenerated ? ` · آخر تشغيل: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
     `</section>`+
 
     `<section class="hq-card hq-focus">`+
@@ -1517,7 +1606,7 @@ function openCloudDetail(name) {
   const metaRows = [
     item.category ? `الدور: ${_cloudCategoryLabel(item.category)}` : '',
     item.prj ? `يرتبط أساسًا بـ: ${item.prj}` : '',
-    item.active === false ? 'الحالة: متوقف' : 'الحالة: نشط',
+    item.active === false ? 'حالة الكتالوج: متوقف' : 'حالة الكتالوج: نشط',
     item.lk ? `الرابط: ${item.lk}` : ''
   ].filter(Boolean);
 
@@ -1811,7 +1900,14 @@ function _updateCountdown() {
 
 /* ─────────────── 8. INIT ─────────────── */
 
-init();
+async function bootstrap() {
+  init();
+  _loadRuntimeData().then(() => {
+    if (RUNTIME_STATE.generated_at) _refreshHomeRuntimeOnly();
+  });
+}
+
+bootstrap();
 
 window.addEventListener('hashchange', function() {
   if (_suppressHash) { _suppressHash = false; return; }
