@@ -560,7 +560,7 @@ R.bots = function() {
 R.tools = function() {
   const hero = TL[0];
   const rest = TL.slice(1);
-  const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍"};
+  const emojiMap = {"Claude Code":"⚡","Meta MCP":"📢","GitHub":"🐙","Tailscale":"🔒","Notion":"📝","Perplexity":"🔍","Filesystem":"📁","Memory":"🧠","Sequential Thinking":"💡","Firecrawl":"🕷️","Magic":"🎨","Supabase":"⚡","Vercel":"▲","Railway":"🚂","TestSprite":"🔧"};
   const dials = [
     {v:"14",l:"وكيل",cl:"var(--purple)"},
     {v:"49",l:"مهارة",cl:"var(--blue)"},
@@ -1062,7 +1062,7 @@ document.addEventListener('keydown', function(e) {
 function _updateCountdown() {
   const weddingDate = new Date(2026, 3, 21);
   const days = Math.max(0, Math.ceil((weddingDate - new Date()) / 86400000));
-  const circumference = 2 * Math.PI * 52;
+  const circumference = 2 * Math.PI * 34;
   const totalDays = 365;
   const pct = Math.min(1, Math.max(0, (totalDays - days) / totalDays));
 
