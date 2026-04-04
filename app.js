@@ -662,6 +662,20 @@ R.map = function() {
       const hint = p.deploy_url ? `نشر: ${p.deploy_url}` : (p.summary || _projectKindLabel(p.kind));
       return {name:p.name,n:p.ar||p.name,e:p.em,l:loc,p:path,g:repoName,gp:!!p.deploy_url,s:status,c:p.cl,t:hint,kind:_projectKindLabel(p.kind),action:`openProjectDetail('${E(p.name)}')`};
     }),
+    ...TL.filter(t => t.category === 'developer-env').map(t => ({
+      name:t.name,
+      n:t.ar || t.name,
+      e:t.name === 'Codex CLI' ? '🧭' : '⚡',
+      l:'local',
+      p:t.path || '—',
+      g:'',
+      gp:0,
+      s:t.st === 'a' ? 'نشط' : 'متوقف',
+      c:t.cl || '#0EA5E9',
+      t:(t.config_paths || []).slice(0,2).join(' · ') || t.summary || '',
+      kind:'AI CLI',
+      action:`openToolDetail('${E(t.name)}')`
+    })),
     {name:"Argaz Bot",n:"بوت أرقاز",e:"🧠",l:"server",p:"server:/home/argaz/.openclaw/",g:"",gp:0,s:"نشط",c:"#6C3AED",t:"Runtime متعدد الوكلاء على Contabo",kind:"runtime وكلاء",action:`openBotDetail('Argaz Bot')`},
     {name:"Tron Address Bot",n:"بوت عناوين ترون",e:"🕵️",l:"local",p:"/Users/rabeeshaban/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot",g:"",gp:0,s:"عند الطلب",c:"#EF4444",t:"نظام حساس أمنيًا يعمل محليًا فقط",kind:"بوت Telegram",action:`openBotDetail('Tron Address Bot')`}
   ];
