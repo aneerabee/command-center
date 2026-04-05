@@ -142,7 +142,7 @@ async function _loadRuntimeData() {
 }
 
 function _refreshRuntimeBoundViews() {
-  const parts = location.hash.slice(1).split('/');
+  const parts = _hashParts();
   const page = parts[0];
   const itemName = parts[1] ? decodeURIComponent(parts[1]) : null;
   if (itemName && _entityLookup(itemName) && document.getElementById('detail-view')) {
@@ -470,7 +470,16 @@ function _buildSearchIndex() {
 
 let SEARCH_INDEX = [];
 const _validPages = new Set(PG.map(p => p.id));
-function _readHash() { const h = location.hash.slice(1).split('/')[0]; return _validPages.has(h) ? h : 'home'; }
+function _hashParts() {
+  const raw = location.hash.replace(/^#\/?/, '');
+  const parts = raw.split('/').filter(Boolean);
+  return parts;
+}
+
+function _readHash() {
+  const h = _hashParts()[0];
+  return _validPages.has(h) ? h : 'home';
+}
 let cur = _readHash();
 const MOBILE_ITEMS = ['home','projects','server','bots','tools'];
 let _countdownTimer = null;
@@ -557,7 +566,7 @@ function init() {
   requestAnimationFrame(_processIcons);
   _renderSearchResults('');
 
-  const hashParts = location.hash.slice(1).split('/');
+  const hashParts = _hashParts();
   if (hashParts[1]) {
     const itemName = decodeURIComponent(hashParts[1]);
     if (_entityLookup(itemName)) {
@@ -2002,7 +2011,7 @@ bootstrap();
 
 window.addEventListener('hashchange', function() {
   if (_suppressHash) { _suppressHash = false; return; }
-  const parts = location.hash.slice(1).split('/');
+  const parts = _hashParts();
   const page = parts[0];
   if (_validPages.has(page) && page !== cur) _activatePage(page, false);
   if (!parts[1] && document.getElementById('detail-view')) closeDetail(true);

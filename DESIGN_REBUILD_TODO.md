@@ -39,6 +39,6 @@
 - [x] تحسين typography, spacing, density, contrast
 - [x] فحص JS syntax
 - [x] تشغيل runtime sync
-- [ ] فحص desktop/mobile
-- [ ] فحص console errors
-- [ ] تنظيف نهائي ثم commit/push
+- [x] فحص desktop/mobile
+- [x] فحص console errors
+- [x] تنظيف نهائي ثم commit/push
