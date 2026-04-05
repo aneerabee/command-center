@@ -613,6 +613,19 @@ function closeMore() {
 
 const R = {};
 
+function _sectionHero({tone='violet',kicker='',title='',desc='',stats=[]}) {
+  return `<div class="sec-hero sec-hero--${tone}">`+
+    `<div class="sec-hero-copy">`+
+      (kicker ? `<span class="sec-hero-kicker">${E(kicker)}</span>` : '')+
+      `<h2 class="sec-hero-title">${E(title)}</h2>`+
+      (desc ? `<p class="sec-hero-desc">${E(desc)}</p>` : '')+
+    `</div>`+
+    (stats.length ? `<div class="sec-hero-stats">`+
+      stats.map(s=>`<div class="sec-hero-stat"><strong>${E(String(s.v))}</strong><span>${E(s.l)}</span></div>`).join('')+
+    `</div>` : '')+
+  `</div>`;
+}
+
 /* ── HOME — Warm Bento Dashboard ── */
 R.home = function() {
   const now = new Date();
@@ -787,7 +800,14 @@ R.projects = function() {
   const heroLinks = Object.entries(hero.links||{}).slice(0,4);
   const heroStats = [{v:'1,450+',l:'اختبار'},{v:'7',l:'كتل LEGO'},{v:'30',l:'مرحلة'},{v:'10',l:'خطوات'}];
 
-  return `<div class="prj-hero" onclick="openProjectDetail('${E(hero.name)}')">`+
+  return _sectionHero({
+    tone:'projects',
+    kicker:'Operating Portfolio',
+    title:'محفظة المشاريع والأنظمة',
+    desc:'هذا القسم يوضح المنتجات والأنظمة الداخلية والمواقع الحية، مع فصل أوضح بين المنتج، البنية، والأدوات التابعة له.',
+    stats:[{v:PRJ.length,l:'إجمالي المشاريع'},{v:PRJ.filter(p=>p.st==='a').length,l:'نشط'},{v:PRJ.filter(p=>p.kind==='product' || p.kind==='umbrella').length,l:'منتجات/منظومات'},{v:PRJ.filter(p=>p.deploy_url).length,l:'عناصر لها نشر'}]
+  })+
+  `<div class="prj-hero" onclick="openProjectDetail('${E(hero.name)}')">`+
     `<div class="prj-hero-accent" style="background:linear-gradient(135deg,${hero.cl},${hero.cl}aa)"></div>`+
     `<div class="prj-hero-content">`+
       `<div class="prj-hero-top">`+
@@ -861,7 +881,13 @@ R.map = function() {
   mapData.forEach(d => counts[d.l]++);
   const locLabel = {github:'مرتبط بـ GitHub',local:'محلي',server:'على السيرفر'};
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🗺️',20)}</span> خريطة المشاريع</h2>` +
+  return _sectionHero({
+    tone:'map',
+    kicker:'Paths + surfaces',
+    title:'خريطة الوصول والمسارات',
+    desc:'خريطة تشغيلية توضح أين يعيش كل شيء: محليًا، على السيرفر، أو عبر GitHub، مع المسار المرجعي لكل عنصر.',
+    stats:[{v:counts.local,l:'محلي'},{v:counts.server,l:'سيرفر'},{v:counts.github,l:'GitHub'},{v:mapData.length,l:'عناصر معروضة'}]
+  }) +
     '<div class="map-stats">' +
       `<div class="map-stat"><span class="map-stat-val">${counts.github}</span><span class="map-stat-label">GitHub</span></div>`+
       `<div class="map-stat"><span class="map-stat-val">${counts.local}</span><span class="map-stat-label">محلي</span></div>`+
@@ -911,7 +937,14 @@ R.auto = function() {
     ).join('') +
     '</div>';
 
-  return '<div class="auto-header">' +
+  return _sectionHero({
+    tone:'auto',
+    kicker:'Schedulers + hooks + runtime tasks',
+    title:'طبقة الأتمتة والتشغيل الدوري',
+    desc:'كل مهمة هنا توضح المصدر، التكرار، والكيان الذي تتبعه، حتى لا تبقى الأتمتة مجرد أسماء مبهمة أو hooks غير مفهومة.',
+    stats:[{v:totalTasks,l:'مهمة معروفة'},{v:onTasks,l:'مفعلة'},{v:allGroups.length,l:'طبقات تشغيل'},{v:allTasks.filter(t=>t.kind==='automation' || t.kind==='cron').length,l:'مهام دورية'}]
+  }) +
+    '<div class="auto-header">' +
     '<div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-text">حالة الأتمتة — جميع الأنظمة</span></div>' +
     '</div>' +
     '<div class="auto-stats">' +
@@ -948,7 +981,14 @@ R.server = function() {
     {label:'مهام cron',val:String(SVC.filter(s=>s.service_type==='cron').length),pct:100,cl:'#10B981'},
     {label:'خدمات user',val:String(SVC.filter(s=>s.service_type==='user-service').length),pct:100,cl:'#F59E0B'}
   ];
-  return '<div class="server-header">' +
+  return _sectionHero({
+    tone:'server',
+    kicker:'Infra + runtime',
+    title:'طبقة السيرفر والتشغيل',
+    desc:'جرد تشغيلي موثق من السيرفر يوضح الحاويات، خدمات systemd، المهام المجدولة، والطبقات التي تملك كل خدمة.',
+    stats:[{v:SVC.length,l:'إجمالي الخدمات'},{v:SVC.filter(s=>s.service_type==='container').length,l:'Docker'},{v:SVC.filter(s=>s.service_type==='cron').length,l:'cron'},{v:SVC.filter(s=>s.service_type==='user-service').length,l:'systemd user'}]
+  }) +
+    '<div class="server-header">' +
     `<h2 class="page-title server-title"><span class="page-icon">${_ic('🖥️',20)}</span> CONTABO VPS</h2>` +
     '<span class="server-ip">62.171.128.44 · Ubuntu 24 · `vmi3061403` · جرد موثق من السيرفر</span>' +
     '</div>' +
@@ -995,7 +1035,13 @@ R.bots = function() {
     'assistant-channel':'قناة مساعد',
     'financial-app':'تطبيق/API'
   };
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🤖',20)}</span> البوتات والـ runtimes <small style="font-size:.6em;opacity:.5">Telegram + agent runtimes + قنوات المساعدة</small></h2>` +
+  return _sectionHero({
+    tone:'bots',
+    kicker:'Agents + channels',
+    title:'البوتات والـ runtimes',
+    desc:'هذا القسم يفرق بين runtime حي متعدد الوكلاء، وبوتات Telegram عند الطلب، وقنوات المساعدة المرتبطة ببيئات التطوير.',
+    stats:[{v:BOT.length,l:'إجمالي العناصر'},{v:BOT.filter(b=>b.kind==='agent-runtime').length,l:'runtimes'},{v:BOT.filter(b=>b.kind==='telegram-bot').length,l:'Telegram bots'},{v:BOT.filter(b=>b.st==='a').length,l:'نشطة'}]
+  }) +
     '<div class="bot-list">' + BOT.map(b => {
       const stats = BSTATS[b.name] || [];
       const tags = (b.tags||[]).slice(0,4);
@@ -1041,7 +1087,13 @@ R.tools = function() {
   const dialMaxes = [Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length), Math.max(1, TL.length)];
   const groups = ['developer-env','internal-tool','platform','infra-access','mcp'];
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🛠️',20)}</span> أدوات التطوير <small style="font-size:.6em;opacity:.5">AI CLI + MCP + الإعدادات</small></h2>` +
+  return _sectionHero({
+    tone:'tools',
+    kicker:'AI CLI + MCP + workbench',
+    title:'أدوات التطوير وبيئات AI CLI',
+    desc:'جرد أدوات العمل نفسه: البيئات التي نستخدمها، الخوادم المتصلة، وأين يتم تعديل إعداد كل أداة أو نظام مساعد.',
+    stats:[{v:cliItems.length,l:'AI CLI'},{v:byCategory('mcp'),l:'MCP'},{v:byCategory('internal-tool'),l:'أدوات داخلية'},{v:TL.length,l:'إجمالي الأدوات'}]
+  }) +
     `<div class="tool-note">هذه الصفحة توثق أدوات العمل نفسها، وخصوصًا بيئات AI CLI: أين يوجد إعداد كل أداة، ما التخصيصات المضافة، وما المشاريع التي تُستخدم فيها.</div>` +
     `<div class="tool-cli-grid">`+
       cliItems.map(t => `<button class="tool-cli-card" style="--tc:${t.cl}" onclick="openToolDetail('${E(t.name)}')"><strong>${E(t.ar||t.name)}</strong><p>${E(t.summary||'')}</p><span>${E((t.capabilities||[]).slice(0,3).join(' · '))}</span></button>`).join('')+
@@ -1102,7 +1154,13 @@ R.cloud = function() {
   const deploymentCount = CLD.filter(c => c.category === 'deployment').length;
   const mcpLinkedCount = CLD.filter(c => c.category === 'mcp-linked').length;
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('☁️',20)}</span> الخدمات السحابية <small style="font-size:.6em;opacity:.5">${CLD.length} عنصر تشغيل</small></h2>` +
+  return _sectionHero({
+    tone:'cloud',
+    kicker:'Platforms + APIs + network',
+    title:'السطح السحابي والخدمات الخارجية',
+    desc:'بدل خلط كل المنصات معًا، يعرض هذا القسم دور كل خدمة: منصة، نشر، API، شبكة، تخزين، أو طبقة متصلة عبر MCP.',
+    stats:[{v:CLD.length,l:'إجمالي العناصر'},{v:activeCount,l:'نشط في الكتالوج'},{v:groups.length,l:'فئات تشغيل'},{v:mcpLinkedCount,l:'مرتبط عبر MCP'}]
+  }) +
     `<div class="cloud-overview">`+
       `<div class="cloud-overview-stat"><strong>${activeCount}</strong><span>نشط حاليًا</span></div>`+
       `<div class="cloud-overview-stat"><strong>${deploymentCount}</strong><span>نشر واستضافة</span></div>`+
@@ -1144,10 +1202,13 @@ R.ideas = function() {
   const prColors = {1:'#EF4444',2:'#F59E0B',3:'#6366F1'};
   const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 2.5];
 
-  return '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">' +
-    '<span style="font-size:.7rem;padding:.2rem .6rem;border-radius:20px;background:var(--elevated);color:var(--t3)">خريطة الطريق</span>' +
-    `<h2 class="page-title" style="margin:0"><span class="page-icon">${_ic('💡',20)}</span> أفكار المستقبل <small style="font-size:.6em;opacity:.5">${IDEAS.length}</small></h2>` +
-    '</div>' +
+  return _sectionHero({
+    tone:'ideas',
+    kicker:'Strategy board',
+    title:'الأفكار وخارطة الطريق',
+    desc:'الأفكار هنا ليست زينة. كل بطاقة يجب أن توضّح الأولوية، النطاق، الخطوة التالية، وما المشاريع التي ستتأثر بها إن نُفذت.',
+    stats:[{v:IDEAS.length,l:'إجمالي الأفكار'},{v:IDEAS.filter(i=>i.pr===1).length,l:'عاجل'},{v:IDEAS.filter(i=>i.pr===2).length,l:'قريب'},{v:IDEAS.filter(i=>i.pr===3).length,l:'يوماً ما'}]
+  }) +
     '<div class="idea-filters">' +
       `<button class="filter-btn active" data-priority="all" onclick="filterIdeas('all')">الكل</button>`+
       `<button class="filter-btn" data-priority="1" onclick="filterIdeas(1)"><span class="pr-dot" style="background:#EF4444"></span> عاجل</button>`+
@@ -1213,7 +1274,13 @@ R.archive = function() {
         `</div></div>`;
   };
 
-  return `<h2 class="page-title"><span class="page-icon">${_ic('🗄️',20)}</span> الأرشيف <small style="font-size:.6em;opacity:.5">الأرشيف الحقيقي + الطبقات النشطة التي كانت مختلطة معه</small></h2>` +
+  return _sectionHero({
+    tone:'archive',
+    kicker:'Archive + active references',
+    title:'الأرشيف والطبقات المرجعية',
+    desc:'هذا القسم يميز بين ما أُرشف فعلًا وما بقي كمرجع أمني أو runtime نشط. الهدف هو منع خلط النشط بالمحفوظ بصريًا ومفهوميًا.',
+    stats:[{v:archived.length,l:'مؤرشف فعليًا'},{v:activeRefs.length,l:'مراجع نشطة'},{v:ARC.filter(a=>a.kind==='archived-project').length,l:'مشاريع قديمة'},{v:ARC.length,l:'إجمالي العناصر'}]
+  }) +
     `<div class="archive-section">`+
       `<div class="archive-section-head"><h3>المؤرشف فعليًا</h3><span>${archived.length}</span></div>`+
       `<div class="archive-shelf">` + archived.map(a => renderCard(a, false)).join('') + `</div>`+
@@ -1372,7 +1439,7 @@ function openProjectDetail(name) {
 
   const el = document.createElement('section');
   el.id = 'detail-view';
-  el.className = 'prj-detail';
+  el.className = 'prj-detail prj-detail--project';
   el.innerHTML =
     `<button class="prj-detail-back" onclick="closeDetail()">← رجوع للمشاريع</button>`+
     `<div class="prj-detail-banner" style="background:linear-gradient(135deg,${cl},${cl}88)">`+
@@ -1432,7 +1499,7 @@ function openBotDetail(name) {
   if (item.kind !== 'agent-runtime') {
     const el = document.createElement('div');
     el.id = 'detail-view';
-    el.className = 'detail-split';
+    el.className = 'detail-split detail-split--bot';
     el.innerHTML =
       `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
       `<div class="dsp-panel">`+
@@ -1535,7 +1602,7 @@ function openToolDetail(name) {
 
   const el = document.createElement('div');
   el.id = 'detail-view';
-  el.className = 'detail-split';
+  el.className = 'detail-split detail-split--tool';
   el.innerHTML =
     `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
     `<div class="dsp-panel">`+
@@ -1595,7 +1662,7 @@ function openServiceDetail(name) {
 
   const el = document.createElement('div');
   el.id = 'detail-view';
-  el.className = 'detail-split';
+  el.className = 'detail-split detail-split--service';
   el.innerHTML =
     `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
     `<div class="dsp-panel">`+
@@ -1636,7 +1703,7 @@ function openCloudDetail(name) {
 
   const el = document.createElement('div');
   el.id = 'detail-view';
-  el.className = 'detail-split';
+  el.className = 'detail-split detail-split--cloud';
   el.innerHTML =
     `<div class="dsp-overlay" onclick="closeDetail()"></div>`+
     `<div class="dsp-panel">`+
@@ -1676,7 +1743,7 @@ function openIdeaDetail(name) {
 
   const el = document.createElement('div');
   el.id = 'detail-view';
-  el.className = 'detail-idea';
+  el.className = 'detail-idea detail-idea--idea';
   el.innerHTML =
     `<div class="di-overlay" onclick="closeDetail()"></div>`+
     `<div class="di-card" style="border-top:4px solid ${cl}">`+
@@ -1712,7 +1779,7 @@ function openArchiveDetail(name) {
 
   const el = document.createElement('div');
   el.id = 'detail-view';
-  el.className = 'detail-archive';
+  el.className = 'detail-archive detail-archive--archive';
   el.innerHTML =
     `<div class="da-overlay" onclick="closeDetail()"></div>`+
     `<div class="da-paper">`+

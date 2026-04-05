@@ -6,11 +6,11 @@
 const PG=[{id:'home',n:'الرئيسية',ic:'🏠'},{id:'projects',n:'المشاريع',ic:'🚀'},{id:'map',n:'الخريطة',ic:'🗺️'},{id:'auto',n:'الأتمتة',ic:'⚙️'},{id:'server',n:'السيرفر',ic:'🖥️'},{id:'bots',n:'البوتات',ic:'🤖'},{id:'tools',n:'الأدوات',ic:'🛠️'},{id:'ideas',n:'الأفكار',ic:'💡'},{id:'cloud',n:'السحابية',ic:'☁️'},{id:'archive',n:'الأرشيف',ic:'🗄️'}];
 
 const DATA_TRUST_MODEL={
-  project:{source:"ملفات المصدر + المسارات الفعلية",refresh_mode:"runtime-audit",stale_after:"14d",auto_refresh:"نشط الآن: git + deploy + filesystem check كل 6 ساعات"},
+  project:{source:"ملفات المصدر + git + المسارات الفعلية + فحص نشر عند توفره",refresh_mode:"runtime-audit",stale_after:"14d",auto_refresh:"نشط الآن: git + deploy + filesystem check كل 6 ساعات"},
   service:{source:"runtime على السيرفر",refresh_mode:"runtime-audit",stale_after:"3d",auto_refresh:"نشط الآن: ssh + docker + systemd + cron كل 6 ساعات"},
-  tool:{source:"ملفات الإعداد أو الجرد اليدوي",refresh_mode:"file-audit",stale_after:"7d",auto_refresh:"نشط الآن: config/filesystem checks كل 6 ساعات عند توفر دليل مباشر"},
-  cloud:{source:"ربط يدوي مع المنصات",refresh_mode:"runtime-audit",stale_after:"14d",auto_refresh:"نشط الآن: ssh/http/git/filesystem checks كل 6 ساعات بحسب كل عنصر"},
-  bot:{source:"runtime/config حسب النوع",refresh_mode:"runtime-audit",stale_after:"7d",auto_refresh:"future: runtime + channel checks"},
+  tool:{source:"ملفات الإعداد والجرد المحلي المؤكد",refresh_mode:"file-audit",stale_after:"7d",auto_refresh:"نشط الآن: config/filesystem checks كل 6 ساعات عند توفر دليل مباشر"},
+  cloud:{source:"ربط يدوي مع probes نوعية حسب كل منصة",refresh_mode:"runtime-audit",stale_after:"14d",auto_refresh:"نشط الآن: ssh/http/git/filesystem checks كل 6 ساعات بحسب كل عنصر"},
+  bot:{source:"runtime/config حسب النوع",refresh_mode:"runtime-audit",stale_after:"7d",auto_refresh:"نشط الآن: runtime + filesystem checks كل 6 ساعات؛ فحص القناة ليس شاملًا بعد"},
   idea:{source:"تحرير يدوي",refresh_mode:"manual-curation",stale_after:"30d",auto_refresh:"future: review queue"},
   archive:{source:"catalog يدوي",refresh_mode:"file-audit",stale_after:"60d",auto_refresh:"نشط الآن: existence-check للمسارات المعروفة كل 6 ساعات؛ معنى المحتوى يبقى يدويًا"}
 };
