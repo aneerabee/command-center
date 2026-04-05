@@ -635,7 +635,7 @@ function _sectionHero({tone='violet',kicker='',title='',desc='',stats=[]}) {
   `</div>`;
 }
 
-/* ── HOME — Warm Bento Dashboard ── */
+/* ── HOME — Executive Briefing Board ── */
 R.home = function() {
   const now = new Date();
   const dateStr = now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
@@ -643,30 +643,57 @@ R.home = function() {
   const pausedP = PRJ.filter(p=>p.st==='p');
   const activeSvc = SVC.filter(s=>s.st).length;
   const activeBots = BOT.filter(b=>b.st==='a').length;
-  const allTasks = AUTO.flatMap(g => g.tasks);
-  const activeTasks = allTasks.filter(t => t.on).length;
-  const runningContainers = SVC.filter(s => s.service_type === 'container' && s.st).length;
-  const runningCron = SVC.filter(s => s.service_type === 'cron' && s.st).length;
-  const runningUserServices = SVC.filter(s => s.service_type === 'user-service' && s.st).length;
+  const allTasks = AUTO.flatMap(g=>g.tasks);
+  const activeTasks = allTasks.filter(t=>t.on).length;
+  const runningContainers = SVC.filter(s=>s.service_type === 'container' && s.st).length;
+  const runningCron = SVC.filter(s=>s.service_type === 'cron' && s.st).length;
+  const runningUserServices = SVC.filter(s=>s.service_type === 'user-service' && s.st).length;
   const focusNames = ['BRIX Travel System','EasyBooking','Wapy.dev','WhatsApp CRM','Command Center'];
-  const focus = focusNames.map(n => PRJ.find(p => p.name === n)).filter(Boolean);
-  const urgentIdeas = IDEAS.filter(i => i.pr === 1 || i.pr === 2);
-  const activeRefs = ARC.filter(a => a.st === 'a');
+  const focus = focusNames.map(n=>PRJ.find(p=>p.name === n)).filter(Boolean);
+  const urgentIdeas = IDEAS.filter(i=>i.pr === 1 || i.pr === 2);
+  const activeRefs = ARC.filter(a=>a.st === 'a');
   const runtimeGenerated = RUNTIME_STATE.generated_at;
   const runtimeCoverage = RUNTIME_STATE.coverage || {};
-  const runtimeCards = [
-    {t:'المشاريع', n:runtimeCoverage.project?.ok ?? 0, d:`تحذير ${runtimeCoverage.project?.warn ?? 0} · فشل ${runtimeCoverage.project?.fail ?? 0} · يدوي ${runtimeCoverage.project?.manual ?? 0}`, c:'#6C3AED'},
-    {t:'الخدمات', n:runtimeCoverage.service?.ok ?? 0, d:`تحذير ${runtimeCoverage.service?.warn ?? 0} · فشل ${runtimeCoverage.service?.fail ?? 0} · يدوي ${runtimeCoverage.service?.manual ?? 0}`, c:'#0284C7'},
-    {t:'الأدوات', n:runtimeCoverage.tool?.ok ?? 0, d:`تحذير ${runtimeCoverage.tool?.warn ?? 0} · فشل ${runtimeCoverage.tool?.fail ?? 0} · يدوي ${runtimeCoverage.tool?.manual ?? 0}`, c:'#7C3AED'},
-    {t:'السحابة', n:runtimeCoverage.cloud?.ok ?? 0, d:`تحذير ${runtimeCoverage.cloud?.warn ?? 0} · فشل ${runtimeCoverage.cloud?.fail ?? 0} · يدوي ${runtimeCoverage.cloud?.manual ?? 0}`, c:'#059669'},
-    {t:'البوتات', n:runtimeCoverage.bot?.ok ?? 0, d:`تحذير ${runtimeCoverage.bot?.warn ?? 0} · فشل ${runtimeCoverage.bot?.fail ?? 0} · يدوي ${runtimeCoverage.bot?.manual ?? 0}`, c:'#9333EA'},
-    {t:'الأرشيف', n:runtimeCoverage.archive?.ok ?? 0, d:`تحذير ${runtimeCoverage.archive?.warn ?? 0} · فشل ${runtimeCoverage.archive?.fail ?? 0} · يدوي ${runtimeCoverage.archive?.manual ?? 0}`, c:'#EA580C'}
-  ];
+  const coverageEntries = [
+    {key:'project', label:'المشاريع', color:'#6C3AED', page:'projects'},
+    {key:'service', label:'الخدمات', color:'#0284C7', page:'server'},
+    {key:'tool', label:'الأدوات', color:'#7C3AED', page:'tools'},
+    {key:'cloud', label:'السحابة', color:'#059669', page:'cloud'},
+    {key:'bot', label:'البوتات', color:'#9333EA', page:'bots'},
+    {key:'archive', label:'الأرشيف', color:'#EA580C', page:'archive'}
+  ].map(entry => {
+    const cov = runtimeCoverage[entry.key] || {};
+    const ok = cov.ok ?? 0;
+    const warn = cov.warn ?? 0;
+    const fail = cov.fail ?? 0;
+    const manual = cov.manual ?? 0;
+    const total = ok + warn + fail + manual;
+    const state = fail ? 'fail' : warn ? 'warn' : manual ? 'manual' : 'ok';
+    const rate = total ? Math.round((ok / total) * 100) : 0;
+    return {...entry, ok, warn, fail, manual, total, state, rate};
+  });
+  const runtimeTotals = coverageEntries.reduce((acc, entry) => ({
+    ok: acc.ok + entry.ok,
+    warn: acc.warn + entry.warn,
+    fail: acc.fail + entry.fail,
+    manual: acc.manual + entry.manual,
+    total: acc.total + entry.total
+  }), {ok:0,warn:0,fail:0,manual:0,total:0});
+  const trustScore = runtimeTotals.total ? Math.round((runtimeTotals.ok / runtimeTotals.total) * 100) : 0;
+  const prioritySignals = coverageEntries
+    .filter(entry => entry.total)
+    .sort((a,b) => (b.fail - a.fail) || (b.warn - a.warn) || (b.manual - a.manual) || (a.ok - b.ok))
+    .slice(0,4)
+    .map(entry => ({
+      ...entry,
+      action: `go('${entry.page}')`,
+      note: entry.fail ? `يوجد ${entry.fail} فشل يحتاج إغلاقه` : entry.warn ? `يوجد ${entry.warn} تحذير يحتاج مراجعة` : entry.manual ? `${entry.manual} عنصر ما زال يدويًا` : 'التحقق الحالي مطمئن'
+    }));
   const trustSummary = [
     {t:'فحص حي/تشغيلي', n:PRJ.filter(p => _entityMeta(p,'project').refresh_mode === 'runtime-audit').length + SVC.filter(s => _entityMeta(s,'service').refresh_mode === 'runtime-audit').length + CLD.filter(c => _entityMeta(c,'cloud').refresh_mode === 'runtime-audit').length + BOT.filter(b => _entityMeta(b,'bot').refresh_mode === 'runtime-audit').length, d:'عناصر يجري لها تحقق دوري من runtime أو من السيرفر أو من أسطح النشر المعروفة.', c:'#0EA5E9'},
     {t:'فحص ملفات/مسارات', n:TL.filter(t => _entityMeta(t,'tool').refresh_mode === 'file-audit').length + ARC.filter(a => _entityMeta(a,'archive').refresh_mode === 'file-audit').length, d:'عناصر تعتمد على ملفات إعداد أو مسارات معروفة، لذلك يتحقق منها النظام بوجودها لا بمعنى محتواها بالكامل.', c:'#6C3AED'},
     {t:'مراجعة يدوية', n:IDEAS.filter(i => _entityMeta(i,'idea').refresh_mode === 'manual-curation').length, d:'الأفكار ومنطقة التخطيط لا يوجد لها checker دوري موثوق، لذلك تبقى مرتبطة بالمراجعة البشرية.', c:'#D97706'},
-    {t:'أرشيف مرجعي', n:ARC.length, d:'الأرشيف يُفحص دوريًا من جهة وجود المسارات، لكن معنى المحتوى وسياقه يبقيان مرجعيين لا تشغيلًا حيًا.', c:'#E11D48'}
+    {t:'مراجع حساسة', n:activeRefs.length, d:'مراجع الوصول والأمن يجب التعامل معها كطبقة تشغيلية حساسة لا كأرشيف بصري فقط.', c:'#E11D48'}
   ];
   const aiCliTools = TL.filter(t => t.category === 'developer-env').map(t => ({
     t: t.ar || t.name,
@@ -675,92 +702,131 @@ R.home = function() {
     a: `openToolDetail('${E(t.name)}')`
   }));
   const layerCards = [
-    {t:'أنظمة ومنتجات', n: PRJ.filter(p => ['product','service-app','website','content-product','financial-app','dashboard'].includes(p.kind)).length, d:'مشاريع وتشغيل فعلي يملك كودًا أو نشرًا أو خدمة حية.', c:'#6C3AED'},
-    {t:'تسويق وأتمتة', n: ['EasyBooking','WhatsApp CRM','Meta MCP'].length, d:'منظومات الإعلانات والتحويل والـ MCP الداخلي.', c:'#2563EB'},
-    {t:'بوتات وأمن', n: BOT.length + activeRefs.length, d:'Argaz وTelegram bots والمراجع الأمنية الحساسة.', c:'#E11D48'},
-    {t:'تشغيل ومعرفة', n: TL.length + CLD.length, d:'أدوات التطوير، السحابة، الوصول، والبنية التشغيلية.', c:'#0EA5E9'}
+    {t:'أنظمة ومنتجات', n:PRJ.filter(p => ['product','service-app','website','content-product','financial-app','dashboard'].includes(p.kind)).length, d:'مشاريع وتشغيل فعلي يملك كودًا أو نشرًا أو خدمة حية.', c:'#6C3AED'},
+    {t:'تسويق وأتمتة', n:['EasyBooking','WhatsApp CRM','Meta MCP'].length, d:'منظومات الإعلانات والتحويل والـ MCP الداخلي.', c:'#2563EB'},
+    {t:'بوتات وأمن', n:BOT.length + activeRefs.length, d:'Argaz وTelegram bots والمراجع الأمنية الحساسة.', c:'#E11D48'},
+    {t:'تشغيل ومعرفة', n:TL.length + CLD.length, d:'أدوات التطوير، السحابة، الوصول، والبنية التشغيلية.', c:'#0EA5E9'}
   ];
   const attention = [
     ...pausedP.map(p => ({t:'مشروع متوقف', n:p.ar, d:p.summary || '', c:p.cl, a:`openProjectDetail('${E(p.name)}')`})),
     ...BOT.filter(b => b.st !== 'a').map(b => ({t:'بوت غير نشط', n:b.ar, d:b.summary || '', c:b.cl, a:`openBotDetail('${E(b.name)}')`})),
     ...urgentIdeas.map(i => ({t:`فكرة ${i.horizon}`, n:i.name, d:i.next_step || i.summary || '', c:i.cl, a:`openIdeaDetail('${E(i.name)}')`}))
   ].slice(0,6);
-  return `<div class="hq">`+
-    `<section class="hq-card hq-hero">`+
-      `<div class="hq-hero-copy">`+
-        `<span class="hq-kicker">موجز تشغيلي</span>`+
-        `<h1 class="hq-title">لوحة قرار، لا صفحة استعراض</h1>`+
-        `<p class="hq-sub">هذه الصفحة يجب أن تجيب بسرعة على ثلاثة أسئلة: ما الذي تملكه، ما الذي يعمل الآن، وأين يجب أن تذهب لاحقًا.</p>`+
+  const quickLinks = [
+    {n:'GitHub',h:'https://github.com/aneerabee',e:'🐙'},
+    {n:'Meta Business',h:'https://business.facebook.com',e:'📢'},
+    {n:'Supabase',h:'https://supabase.com/dashboard',e:'⚡'},
+    {n:'Railway',h:'https://railway.app',e:'🚂'},
+    {n:'Vercel',h:'https://vercel.com',e:'▲'},
+    {n:'Airtable',h:'https://airtable.com',e:'📊'}
+  ];
+  const overviewCards = [
+    {l:'محفظة حية', v:activeP.length, note:`من أصل ${PRJ.length} مشروع`, c:'#6C3AED'},
+    {l:'تشغيل موثق', v:activeSvc, note:`${runningContainers} حاوية · ${runningUserServices} خدمة user`, c:'#0284C7'},
+    {l:'أتمتة نشطة', v:activeTasks, note:`من أصل ${allTasks.length} مهمة`, c:'#D97706'},
+    {l:'بوتات نشطة', v:activeBots, note:`من أصل ${BOT.length} بوت`, c:'#9333EA'}
+  ];
+
+  return `<div class="hqx">`+
+    `<section class="hqx-card hqx-hero">`+
+      `<div class="hqx-hero-copy">`+
+        `<span class="hqx-kicker">Executive briefing</span>`+
+        `<h1 class="hqx-title">هذه الصفحة هي غرفة القراءة الأولى للمنظومة كلها</h1>`+
+        `<p class="hqx-sub">ليست Dashboard عامة. هي موجز تنفيذي يوضح الجرد، حالة الثقة، أولوياتك الحالية، وأسرع مسارات الوصول إلى الطبقات التشغيلية الحساسة.</p>`+
+        `<div class="hqx-hero-tags">`+
+          `<span class="hqx-pill">محدث حتى ${E(dateStr)}</span>`+
+          `<span class="hqx-pill">جرد محلي + سيرفر + سحابة</span>`+
+          `<span class="hqx-pill">AI CLI موثق داخل الأدوات</span>`+
+        `</div>`+
       `</div>`+
-      `<div class="hq-hero-meta">`+
-        `<div class="hq-status"><span class="hb-pulse"></span>جرد موثق من المصدر المحلي والسيرفر</div>`+
-        `<div class="hq-date">${dateStr}</div>`+
+      `<div class="hqx-score-shell">`+
+        `<div class="hqx-score-ring" style="--score:${trustScore}">`+
+          `<div class="hqx-score-core"><strong>${trustScore}%</strong><span>درجة الثقة الحالية</span></div>`+
+        `</div>`+
+        `<div class="hqx-score-meta">`+
+          `<div class="hqx-score-row"><span>تم التحقق منه</span><strong>${runtimeTotals.ok}</strong></div>`+
+          `<div class="hqx-score-row"><span>يحتاج مراجعة</span><strong>${runtimeTotals.warn + runtimeTotals.fail}</strong></div>`+
+          `<div class="hqx-score-row"><span>ما زال يدويًا</span><strong>${runtimeTotals.manual}</strong></div>`+
+        `</div>`+
       `</div>`+
     `</section>`+
 
-    `<section class="hq-card hq-metrics">`+
-      [{l:'مشاريع',v:PRJ.length,c:'#6C3AED'},{l:'خدمات',v:SVC.length,c:'#0EA5E9'},{l:'أتمتة',v:allTasks.length,c:'#D97706'},{l:'بوتات',v:BOT.length,c:'#7C3AED'},{l:'أدوات',v:TL.length,c:'#2563EB'},{l:'سحابي',v:CLD.length,c:'#059669'}].map(m=>
-        `<div class="hq-metric"><span class="hq-metric-val" style="color:${m.c}">${m.v}</span><span class="hq-metric-label">${m.l}</span></div>`
+    `<section class="hqx-card hqx-overview">`+
+      overviewCards.map(card =>
+        `<div class="hqx-overview-card" style="--accent:${card.c}"><strong>${card.v}</strong><span>${card.l}</span><small>${card.note}</small></div>`
       ).join('')+
     `</section>`+
 
-    `<section class="hq-card hq-layers">`+
-      `<div class="hq-head"><h2>طبقات العمل</h2><span>كيف تُقرأ المنظومة</span></div>`+
-      `<div class="hq-layer-grid">`+
-        layerCards.map(x =>
-          `<div class="hq-layer" style="--lc:${x.c}"><strong>${x.t}</strong><span class="hq-layer-num">${x.n}</span><p>${x.d}</p></div>`
-        ).join('')+
-      `</div>`+
-    `</section>`+
-
-    `<section class="hq-card hq-health">`+
-      `<div class="hq-head"><h2>الجرد التشغيلي</h2><span onclick="go('server')" class="hq-inline-link">افتح السيرفر</span></div>`+
-      `<div class="hq-health-list">`+
-        `<div class="hq-health-row"><span>خدمات في الكتالوج</span><strong>${activeSvc}/${SVC.length}</strong></div>`+
-        `<div class="hq-health-row"><span>حاويات موثقة</span><strong>${runningContainers}</strong></div>`+
-        `<div class="hq-health-row"><span>مهام cron موثقة</span><strong>${runningCron}</strong></div>`+
-        `<div class="hq-health-row"><span>خدمات user موثقة</span><strong>${runningUserServices}</strong></div>`+
-        `<div class="hq-health-row"><span>بوتات نشطة في الجرد</span><strong>${activeBots}/${BOT.length}</strong></div>`+
-        `<div class="hq-health-row"><span>أتمتة مفعلة في الجرد</span><strong>${activeTasks}/${allTasks.length}</strong></div>`+
-      `</div>`+
-      `<div class="hq-mini-note">هذا القسم يصف الجرد التشغيلي الموثق في <code>data.js</code>. أما نتائج التحقق الحي فتظهر في بطاقات مصدر وتحديث البيانات أدناه.</div>`+
-    `</section>`+
-
-    `<section class="hq-card hq-trust">`+
-      `<div class="hq-head"><h2>مصدر وتحديث البيانات</h2><span>ما هو موثق ثابتًا وما الذي فُحص آليًا فعلاً</span></div>`+
-      `<div class="hq-layer-grid">`+
-        trustSummary.map(x =>
-          `<div class="hq-layer" style="--lc:${x.c}"><strong>${x.t}</strong><span class="hq-layer-num">${x.n}</span><p>${x.d}</p></div>`
-        ).join('')+
-      `</div>`+
-      (runtimeGenerated ? `<div class="hq-runtime-strip">${runtimeCards.map(x => `<div class="hq-runtime-item"><strong style="color:${x.c}">${x.n}</strong><span>${E(x.t)}</span><small>${E(x.d)}</small></div>`).join('')}</div>` : '')+
-      `<div class="hq-trust-brief">`+
-        `<div class="hq-trust-card"><strong>ما الذي يحدث آليًا الآن</strong><p>يوجد LaunchAgent على الماك يشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> كل 6 ساعات. هذا المسار يحدّث <code>data.runtime.json</code> ثم يدفعه فقط إذا تغيّرت النتيجة.</p></div>`+
-        `<div class="hq-trust-card"><strong>ما الذي يشمله هذا فعليًا</strong><p>التغطية الحالية هي <strong>projects + services + tools + cloud + bots + archive</strong>. لكن مستوى الفحص يختلف من عنصر لآخر: بعضه SSH، بعضه filesystem أو Git أو HTTP، وليس كل حقل مغطى checker مستقل.</p></div>`+
-        `<div class="hq-trust-card"><strong>ما الذي ما زال يدويًا</strong><p><strong>ideas</strong> ما زالت تعتمد على التوثيق داخل <code>data.js</code> فقط. الأرشيف نفسه صار له existence-check دوري، لكن معنى المحتوى وسياقه ما زالا مرجعيين لا runtime حيًا.</p></div>`+
-      `</div>`+
-      `<div class="hq-mini-note">مصدر الحقيقة الثابت هو <code>data.js</code>، أما <code>data.runtime.json</code> فهو آخر نتيجة تحقق محفوظة${runtimeGenerated ? ` · آخر نتيجة محفوظة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : ''}</div>`+
-    `</section>`+
-
-    `<section class="hq-card hq-focus">`+
-      `<div class="hq-head"><h2>المحاور الحالية</h2><span onclick="go('projects')" class="hq-inline-link">كل المشاريع</span></div>`+
-      `<div class="hq-focus-list">`+
-        focus.map(p =>
-          `<button class="hq-focus-item" onclick="openProjectDetail('${E(p.name)}')">`+
-            `<span class="hq-focus-icon">${_ic(p.em,20)}</span>`+
-            `<div class="hq-focus-body"><strong>${E(p.ar)}</strong><p>${E(p.summary || '')}</p><span class="hq-focus-meta">${E(_projectKindLabel(p.kind))} · ${p.pct}%</span></div>`+
-            `<span class="hq-focus-bar"><span style="width:${p.pct}%;background:${p.cl}"></span></span>`+
+    `<section class="hqx-card hqx-signals">`+
+      `<div class="hqx-head"><h2>إشارات التشغيل</h2><span>أين يوجد ضغط أو فجوة ثقة الآن</span></div>`+
+      `<div class="hqx-signal-list">`+
+        prioritySignals.map(entry =>
+          `<button class="hqx-signal" onclick="${entry.action}" style="--signal:${entry.color}">`+
+            `<div class="hqx-signal-top"><strong>${entry.label}</strong><span class="hqx-state hqx-state--${entry.state}">${entry.state === 'fail' ? 'فشل' : entry.state === 'warn' ? 'تحذير' : entry.state === 'manual' ? 'يدوي' : 'مطمئن'}</span></div>`+
+            `<p>${entry.note}</p>`+
+            `<div class="hqx-signal-bar"><span style="width:${entry.rate}%;background:${entry.color}"></span></div>`+
+            `<div class="hqx-signal-meta"><span>ok ${entry.ok}</span><span>warn ${entry.warn}</span><span>manual ${entry.manual}</span></div>`+
           `</button>`
         ).join('')+
       `</div>`+
     `</section>`+
 
-    `<section class="hq-card hq-attn">`+
-      `<div class="hq-head"><h2>يحتاج انتباهًا</h2><span>${attention.length}</span></div>`+
-      `<div class="hq-attention-list">`+
+    `<section class="hqx-card hqx-focus">`+
+      `<div class="hqx-head"><h2>المحاور الحالية</h2><span onclick="go('projects')" class="hqx-inline-link">كل المشاريع</span></div>`+
+      `<div class="hqx-focus-list">`+
+        focus.map(p =>
+          `<button class="hqx-focus-item" onclick="openProjectDetail('${E(p.name)}')" style="--focus:${p.cl}">`+
+            `<div class="hqx-focus-top"><span class="hqx-focus-icon">${_ic(p.em,20)}</span><span class="hqx-focus-kind">${E(_projectKindLabel(p.kind))}</span></div>`+
+            `<strong>${E(p.ar)}</strong>`+
+            `<p>${E(p.summary || '')}</p>`+
+            `<div class="hqx-focus-bottom"><span>${p.pct}%</span><span class="hqx-focus-track"><i style="width:${p.pct}%;background:${p.cl}"></i></span></div>`+
+          `</button>`
+        ).join('')+
+      `</div>`+
+    `</section>`+
+
+    `<section class="hqx-card hqx-layers">`+
+      `<div class="hqx-head"><h2>طبقات العمل</h2><span>كيف تُقرأ المنظومة</span></div>`+
+      `<div class="hqx-layer-grid">`+
+        layerCards.map(x =>
+          `<div class="hqx-layer" style="--layer:${x.c}"><small>${x.t}</small><strong>${x.n}</strong><p>${x.d}</p></div>`
+        ).join('')+
+      `</div>`+
+    `</section>`+
+
+    `<section class="hqx-card hqx-runtime">`+
+      `<div class="hqx-head"><h2>مصدر وتحديث البيانات</h2><span>${runtimeGenerated ? `آخر نتيجة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : 'لا توجد لقطة تحقق محفوظة'}</span></div>`+
+      `<div class="hqx-runtime-grid">`+
+        trustSummary.map(x =>
+          `<div class="hqx-runtime-card" style="--runtime:${x.c}"><strong>${x.n}</strong><span>${x.t}</span><p>${x.d}</p></div>`
+        ).join('')+
+      `</div>`+
+      `<div class="hqx-runtime-strip">`+
+        coverageEntries.map(x =>
+          `<button class="hqx-runtime-chip" onclick="go('${x.page}')" style="--runtime:${x.color}"><strong>${x.ok}</strong><span>${x.label}</span><small>${x.fail ? `${x.fail} فشل` : x.warn ? `${x.warn} تحذير` : x.manual ? `${x.manual} يدوي` : 'مغطى'}</small></button>`
+        ).join('')+
+      `</div>`+
+      `<div class="hqx-runtime-note">التشغيل الدوري يتم عبر <code>launchd</code> على الماك ويشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> كل 6 ساعات. الحقيقة الثابتة في <code>data.js</code>، واللقطة المحفوظة في <code>data.runtime.json</code>.</div>`+
+    `</section>`+
+
+    `<section class="hqx-card hqx-ops">`+
+      `<div class="hqx-head"><h2>الجرد التشغيلي</h2><span onclick="go('server')" class="hqx-inline-link">افتح السيرفر</span></div>`+
+      `<div class="hqx-ops-list">`+
+        `<div class="hqx-ops-row"><span>الخدمات الموثقة</span><strong>${activeSvc}/${SVC.length}</strong></div>`+
+        `<div class="hqx-ops-row"><span>الحاويات العاملة</span><strong>${runningContainers}</strong></div>`+
+        `<div class="hqx-ops-row"><span>مهام cron</span><strong>${runningCron}</strong></div>`+
+        `<div class="hqx-ops-row"><span>خدمات user-level</span><strong>${runningUserServices}</strong></div>`+
+        `<div class="hqx-ops-row"><span>بوتات نشطة</span><strong>${activeBots}/${BOT.length}</strong></div>`+
+        `<div class="hqx-ops-row"><span>أتمتة مفعلة</span><strong>${activeTasks}/${allTasks.length}</strong></div>`+
+      `</div>`+
+    `</section>`+
+
+    `<section class="hqx-card hqx-attn">`+
+      `<div class="hqx-head"><h2>يحتاج انتباهًا</h2><span>${attention.length}</span></div>`+
+      `<div class="hqx-attention-list">`+
         attention.map(a =>
-          `<button class="hq-attention-item" onclick="${a.a}">`+
-            `<span class="hq-attention-tag" style="background:${a.c}15;color:${a.c}">${E(a.t)}</span>`+
+          `<button class="hqx-attention-item" onclick="${a.a}" style="--attention:${a.c}">`+
+            `<span class="hqx-attention-tag">${E(a.t)}</span>`+
             `<strong>${E(a.n)}</strong>`+
             `<p>${E(a.d)}</p>`+
           `</button>`
@@ -768,32 +834,31 @@ R.home = function() {
       `</div>`+
     `</section>`+
 
-    `<section class="hq-card hq-access">`+
-      `<div class="hq-head"><h2>مسارات الوصول</h2><span>أين يوجد كل شيء</span></div>`+
-      `<div class="hq-access-grid">`+
-        `<div class="hq-access-item"><strong>محلي</strong><p>Desktop/Projects يحتوي منتجاتك الحية ومشاريع EasyBooking وBRIX وMoney Manager.</p></div>`+
-        `<div class="hq-access-item"><strong>سيرفر</strong><p>Contabo يشغّل Wapy وWedding وArgaz والمهام المجدولة والخدمات user-level.</p></div>`+
-        `<div class="hq-access-item"><strong>سحابي</strong><p>GitHub وRailway وSupabase وMeta Business وHostinger هي طبقات النشر والتشغيل.</p></div>`+
-        `<div class="hq-access-item"><strong>حساس</strong><p>Vault وTron Address Bot وTailscale ليست أرشيفًا؛ هي طبقات وصول وأمن حية.</p></div>`+
-      `</div>`+
-    `</section>`+
-
-    `<section class="hq-card hq-standard">`+
-      `<div class="hq-head"><h2>بيئات AI CLI وإعداداتها</h2><span onclick="go('tools')" class="hq-inline-link">افتح الأدوات</span></div>`+
-      `<div class="hq-mini-note">هنا نوثق الأدوات التي نعمل بها نحن كوكلاء CLI مثل Codex وClaude Code: أين ملفاتها، ما إعداداتها الحالية، وما الذي أضفناه أو غيرناه فيها. هذا هو المكان الصحيح لهذا النوع من التوثيق.</div>`+
-      `<div class="hq-standard-path"><strong>المسارات الحالية:</strong><code>/Users/rabeeshaban/.codex</code><code>/Users/rabeeshaban/.claude</code></div>`+
-      `<div class="hq-standard-grid">`+
+    `<section class="hqx-card hqx-cli">`+
+      `<div class="hqx-head"><h2>بيئات AI CLI</h2><span onclick="go('tools')" class="hqx-inline-link">افتح الأدوات</span></div>`+
+      `<div class="hqx-cli-paths"><code>/Users/rabeeshaban/.codex</code><code>/Users/rabeeshaban/.claude</code></div>`+
+      `<div class="hqx-cli-list">`+
         aiCliTools.map(x =>
-          `<button class="hq-standard-item hq-standard-item-btn" onclick="${x.a}"><strong>${x.t}</strong><p>${x.d}</p>${x.f ? `<span class="hq-standard-fact">${x.f}</span>` : ''}</button>`
+          `<button class="hqx-cli-item" onclick="${x.a}"><strong>${x.t}</strong><p>${x.d}</p>${x.f ? `<span>${x.f}</span>` : ''}</button>`
         ).join('')+
       `</div>`+
     `</section>`+
 
-    `<section class="hq-card hq-links">`+
-      `<div class="hq-head"><h2>اختصارات تشغيل</h2><span>روابط مباشرة</span></div>`+
-      `<div class="hq-link-grid">`+
-        [{n:'GitHub',h:'https://github.com/aneerabee',e:'🐙'},{n:'Meta Business',h:'https://business.facebook.com',e:'📢'},{n:'Supabase',h:'https://supabase.com/dashboard',e:'⚡'},{n:'Railway',h:'https://railway.app',e:'🚂'},{n:'Vercel',h:'https://vercel.com',e:'▲'},{n:'Airtable',h:'https://airtable.com',e:'📊'}].map(l=>
-          `<a class="hq-link" href="${l.h}" target="_blank" rel="noopener">${_ic(l.e,14)}<span>${l.n}</span></a>`
+    `<section class="hqx-card hqx-access">`+
+      `<div class="hqx-head"><h2>مسارات الوصول</h2><span>أين يوجد كل شيء</span></div>`+
+      `<div class="hqx-access-grid">`+
+        `<div class="hqx-access-item"><strong>محلي</strong><p>Desktop/Projects يحتوي منتجاتك الحية ومشاريع EasyBooking وBRIX وMoney Manager.</p></div>`+
+        `<div class="hqx-access-item"><strong>سيرفر</strong><p>Contabo يشغّل Wapy وWedding وArgaz والمهام المجدولة والخدمات user-level.</p></div>`+
+        `<div class="hqx-access-item"><strong>سحابي</strong><p>GitHub وRailway وSupabase وMeta Business وHostinger هي طبقات النشر والتشغيل.</p></div>`+
+        `<div class="hqx-access-item"><strong>حساس</strong><p>Vault وTron Address Bot وTailscale ليست أرشيفًا؛ هي طبقات وصول وأمن حية.</p></div>`+
+      `</div>`+
+    `</section>`+
+
+    `<section class="hqx-card hqx-links">`+
+      `<div class="hqx-head"><h2>اختصارات تشغيل</h2><span>روابط مباشرة</span></div>`+
+      `<div class="hqx-link-grid">`+
+        quickLinks.map(l =>
+          `<a class="hqx-link" href="${l.h}" target="_blank" rel="noopener">${_ic(l.e,14)}<span>${l.n}</span></a>`
         ).join('')+
       `</div>`+
     `</section>`+
