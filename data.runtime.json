@@ -1,29 +1,29 @@
 {
   "version": 2,
   "checker": "runtime-sync.js",
-  "generated_at": "2026-04-05T09:51:28.171Z",
+  "generated_at": "2026-04-06T13:46:05.283Z",
   "project": {
     "brix-travel-system": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:30.949Z",
+      "stale_at": "2026-04-20T13:46:34.323Z",
       "summary": "رابط النشر يرد بحالة غير متوقعة",
       "facts": [
         "local path: ok",
-        "repo remote: ok",
+        "repo remote: unknown",
         "deploy: HTTP 404"
       ],
-      "source_hash": "ae0b45fda4e630ebd883e18aa343899fffb0bef0",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "6be33ac08927c5428689f05686675ae033db5df4",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wedding-planner": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "ssh + http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:31.125Z",
+      "stale_at": "2026-04-20T13:46:34.767Z",
       "summary": "مسار السيرفر موجود",
       "facts": [
         "server path: ok",
@@ -33,11 +33,11 @@
       "last_change_detected": "2026-04-04T21:37:04.034Z"
     },
     "easybooking": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:31.125Z",
+      "stale_at": "2026-04-20T13:46:34.771Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok"
@@ -46,25 +46,25 @@
       "last_change_detected": "2026-04-04T21:37:04.034Z"
     },
     "meta-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:31.145Z",
-      "summary": "المسار المحلي موجود",
+      "stale_at": "2026-04-20T13:46:35.076Z",
+      "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
-        "repo remote: ok"
+        "repo remote: unknown"
       ],
-      "source_hash": "0b06995d5285c55a36e5e9855fac784eb132c34c",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "6eb3e4f6a8d7749654e3cb0e8991d7fa2cb857ec",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-dev": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "ssh + http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:31.311Z",
+      "stale_at": "2026-04-20T13:46:35.451Z",
       "summary": "مسار السيرفر موجود",
       "facts": [
         "server path: ok",
@@ -74,271 +74,268 @@
       "last_change_detected": "2026-04-04T21:37:04.034Z"
     },
     "command-center": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:31.709Z",
-      "summary": "المسار المحلي موجود",
+      "stale_at": "2026-04-20T13:46:42.932Z",
+      "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
-        "repo remote: ok",
+        "repo remote: unknown",
         "deploy: HTTP 200"
       ],
-      "source_hash": "05df59a0dcfdf023306b95f49c5b25bbcb244d7c",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "ae35a62edfc220fe7a0b3bac1e16426f93593152",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "whatsapp-crm": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:32.388Z",
-      "summary": "المسار المحلي موجود",
+      "stale_at": "2026-04-20T13:46:47.967Z",
+      "summary": "تعذر تأكيد رابط النشر الآن",
       "facts": [
         "local path: ok",
-        "repo remote: ok",
-        "deploy: HTTP 200"
+        "repo remote: unknown",
+        "deploy: probe inconclusive"
       ],
-      "source_hash": "05df59a0dcfdf023306b95f49c5b25bbcb244d7c",
-      "last_change_detected": "2026-04-04T23:46:06.163Z"
+      "source_hash": "3b48ce7d5a4d3a5dd3847ec71b4e4798c48d02e8",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "money-manager": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:32.412Z",
-      "summary": "المسار المحلي موجود",
+      "stale_at": "2026-04-20T13:46:49.406Z",
+      "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
-        "repo remote: ok"
+        "repo remote: unknown"
       ],
-      "source_hash": "0b06995d5285c55a36e5e9855fac784eb132c34c",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "6eb3e4f6a8d7749654e3cb0e8991d7fa2cb857ec",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "brix-travel-website": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:32.434Z",
-      "summary": "المسار المحلي موجود",
+      "stale_at": "2026-04-20T13:46:50.652Z",
+      "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
-        "repo remote: ok"
+        "repo remote: unknown"
       ],
-      "source_hash": "0b06995d5285c55a36e5e9855fac784eb132c34c",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "6eb3e4f6a8d7749654e3cb0e8991d7fa2cb857ec",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "chess-academy": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:32.782Z",
-      "summary": "رابط النشر متاح",
+      "stale_at": "2026-04-20T13:46:56.512Z",
+      "summary": "تعذر تأكيد رابط النشر الآن",
       "facts": [
-        "deploy: HTTP 200"
+        "deploy: probe inconclusive"
       ],
-      "source_hash": "06cfad34f18145fc83a85ece0ab3b5081ead11c7",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "188fa1edc9f9a47d7b8b999d5ae69749af621c59",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     }
   },
   "service": {
     "wedding-planner-app": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "service: activating/auto-restart",
+      "stale_at": "2026-04-09T13:46:57.369Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "unit: wedding-planner.service",
-        "description: Wedding"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "23ef20f2f44dc1770def8e8803b0cfdfc634031f",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-app": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "Up 12 days",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "container: wapydev-app"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "7c8217c3dbf4d85046e227849910c03a1cf856d5",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-cron": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "Up 12 days",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "container: wapydev-cron"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "9640627154f7fe37e06d4c9901c97397dad903e4",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-db": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "Up 12 days",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "container: wapydev-db"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "958ae09f5409316b389a19597c3bcf5ecc1dec76",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "argaz-gateway": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "gateway: activating/auto-restart",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "unit: openclaw-gateway.service",
-        "description: OpenClaw"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "862516d81ed832766fd15e768f0d03e0e92540a0",
-      "last_change_detected": "2026-04-04T23:46:06.163Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "chrome-headless": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "service: active/running",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "unit: chrome-headless.service"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "990b9aa77a5af5b9dbd350dc77c4a3e5924ac4b6",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "reminders-scheduler": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "service: active/running",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "unit: reminders-scheduler.service"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "eccb71a4ca4978e3b82f418e91995656e3e41413",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wedding-backup-cron": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "cron موجود",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "pattern: backup-wedding.sh"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "e7b344d5afb87d0b78d7e7a6f839bedd365b644c",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-backup-cron": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "cron موجود",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "pattern: /opt/wapy/scripts/backup.sh"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "22c6bb166075dfa7951a1bc629ea007921880fec",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "wapy-cleanup-cron": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "cron موجود",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "pattern: find /opt/wapy/.backup"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "6f9c3ad8d4d10525f4ee74a4558a5b873ec2d792",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "gateway-watchdog": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "cron موجود",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "pattern: gateway-watchdog.sh"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "3b2bef2d9ab1a0e863b15061092d99060802f76f",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "config-backup": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "cron موجود",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "pattern: backup-config.sh"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "7372d5084c7dc4d97dc632c796a7b97bac5bc182",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "openclaw-gateway-service": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "unit: activating/auto-restart",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "unit: openclaw-gateway.service",
-        "health التفصيلي يُفهم من Argaz Gateway runtime لتجنب التكرار"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "e0b0cab69bc008209ca8218f619191d028ab7326",
-      "last_change_detected": "2026-04-04T23:46:06.163Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "tailscale-vpn": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
-      "checked_from": "command",
+      "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-08T09:51:32.792Z",
-      "summary": "tailscale CLI غير متاح في هذه الجلسة؛ تعذر تشغيل التحقق الآلي للـ VPN",
+      "stale_at": "2026-04-09T13:46:57.370Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
       "facts": [
-        "الحالة ليست فشل شبكة مؤكدًا بل تعذر في بيئة الفحص المحلية"
+        "فشل checker لا يعني فشل الخدمة نفسها"
       ],
-      "source_hash": "10f7ef6a97040d77f6c01e07ac63564ed59ffa0f",
-      "last_change_detected": "2026-04-04T21:37:04.034Z"
+      "source_hash": "60eeb09a48b5057b38d6a0b06ef4747ec53cb200",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     }
   },
   "tool": {
     "codex-cli": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:33.987Z",
+      "stale_at": "2026-04-13T13:47:05.056Z",
       "summary": "ملفات Codex الأساسية موجودة",
       "facts": [
         "path: ok",
@@ -349,11 +346,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "claude-code": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:33.988Z",
+      "stale_at": "2026-04-13T13:47:05.069Z",
       "summary": "ملفات Claude الأساسية موجودة",
       "facts": [
         "root: ok",
@@ -365,11 +362,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "runtime-sync-system": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem + launchd",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.003Z",
+      "stale_at": "2026-04-13T13:47:05.162Z",
       "summary": "ملفات النظام موجودة وLaunchAgent محمّل",
       "facts": [
         "config paths: 4/4",
@@ -379,43 +376,38 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "meta-mcp-tool": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
-      "summary": "المسار موجود وهو مستودع Git",
+      "stale_at": "2026-04-13T13:47:05.241Z",
+      "summary": "المسار موجود لكن Git غير مؤكد",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp",
-        "git: ok"
+        "git: unknown"
       ],
-      "source_hash": "8ed6d4a688a6a1e189e776191d83fb0461ea8f75",
-      "last_change_detected": "2026-04-05T09:51:28.171Z"
+      "source_hash": "1ce1ec8bc98ce0a2aac7be4f265c9922d3fab1e6",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "github-tool": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "git",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
-      "summary": "تم تأكيد 6 remote محليًا على GitHub",
+      "stale_at": "2026-04-13T13:47:05.241Z",
+      "summary": "تم تأكيد 1 remote محليًا على GitHub",
       "facts": [
-        "repo: BRIX Travel System",
-        "repo: Meta MCP",
-        "repo: Command Center",
-        "repo: WhatsApp CRM",
-        "repo: Money Manager",
-        "repo: BRIX Travel Website"
+        "repo: Money Manager"
       ],
-      "source_hash": "a477d3fa449885de888deec8ee5603969b15a26a",
-      "last_change_detected": "2026-04-04T23:33:25.556Z"
+      "source_hash": "adf4bdc691de8a6b9a87105da62d2a04b9978de4",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "tailscale-tool": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "ssh via tailscale",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
+      "stale_at": "2026-04-13T13:47:05.241Z",
       "summary": "Tailscale SSH reachable on vmi3061403",
       "facts": [
         "host: vmi3061403"
@@ -424,11 +416,11 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "notion-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
+      "stale_at": "2026-04-13T13:47:05.242Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__claude_ai_Notion__"
@@ -437,11 +429,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "perplexity-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
+      "stale_at": "2026-04-13T13:47:05.242Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__perplexity__"
@@ -450,11 +442,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "filesystem-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
+      "stale_at": "2026-04-13T13:47:05.242Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__filesystem__"
@@ -463,11 +455,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "memory-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.027Z",
+      "stale_at": "2026-04-13T13:47:05.242Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__memory__"
@@ -476,11 +468,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "sequential-thinking-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.245Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__sequential-thinking__"
@@ -489,11 +481,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "firecrawl-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.245Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__firecrawl__"
@@ -502,11 +494,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "magic-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.245Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__magic__"
@@ -515,11 +507,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "supabase-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.245Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__supabase__"
@@ -528,22 +520,22 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "vercel-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.246Z",
       "summary": "لا يوجد checker آلي مباشر لهذا النوع بعد",
       "facts": [],
       "source_hash": "af0100461763b8bdf8512f4f658a11b2ee5f4870",
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "railway-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.246Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__railway__"
@@ -552,11 +544,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "testsprite-mcp": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-04-12T09:51:34.028Z",
+      "stale_at": "2026-04-13T13:47:05.246Z",
       "summary": "لا يوجد checker آلي مباشر لهذا النوع بعد",
       "facts": [],
       "source_hash": "af0100461763b8bdf8512f4f658a11b2ee5f4870",
@@ -565,29 +557,25 @@
   },
   "cloud": {
     "github": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "git",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:35.117Z",
-      "summary": "تم تأكيد 6 repo محليًا",
+      "stale_at": "2026-04-20T13:47:07.391Z",
+      "summary": "تم تأكيد 2 repo محليًا",
       "facts": [
-        "repo: BRIX Travel System",
-        "repo: Meta MCP",
         "repo: Command Center",
-        "repo: WhatsApp CRM",
-        "repo: Money Manager",
-        "repo: BRIX Travel Website"
+        "repo: Money Manager"
       ],
-      "source_hash": "3325daa7d1952820e2cb378157e452ef522b8503",
-      "last_change_detected": "2026-04-04T23:33:25.556Z"
+      "source_hash": "500019ee930fa8eeb1e41dd8fd0f554873368a56",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "supabase": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:35.686Z",
+      "stale_at": "2026-04-20T13:47:09.262Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://supabase.com/dashboard"
@@ -596,11 +584,11 @@
       "last_change_detected": "2026-04-04T20:52:39.303Z"
     },
     "vercel": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:36.006Z",
+      "stale_at": "2026-04-20T13:47:10.099Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://vercel.com"
@@ -609,11 +597,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "railway": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:36.696Z",
+      "stale_at": "2026-04-20T13:47:12.005Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://railway.app"
@@ -622,11 +610,11 @@
       "last_change_detected": "2026-04-04T20:47:25.962Z"
     },
     "heroku": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:36.953Z",
+      "stale_at": "2026-04-20T13:47:13.945Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://dashboard.heroku.com"
@@ -635,11 +623,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "meta-business": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:38.225Z",
+      "stale_at": "2026-04-20T13:47:15.229Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://business.facebook.com"
@@ -648,24 +636,24 @@
       "last_change_detected": "2026-04-04T20:47:25.962Z"
     },
     "airtable": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.552Z",
-      "summary": "HTTP 200",
+      "stale_at": "2026-04-20T13:47:24.756Z",
+      "summary": "curl: (28) Operation timed out after 1392 milliseconds with 0 bytes received",
       "facts": [
         "url: https://airtable.com"
       ],
-      "source_hash": "4a2254b6be012b392654d2dcd40999a8313ec1fb",
-      "last_change_detected": "2026-04-04T23:39:21.333Z"
+      "source_hash": "e538d7772858bd242945f3a4d8a726ee064a8713",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "telegram": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem + claude settings",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.552Z",
+      "stale_at": "2026-04-20T13:47:25.163Z",
       "summary": "قناة Telegram المحلية وصلاحية Claude مؤكدة",
       "facts": [
         "path: /Users/rabeeshaban/.claude/channels/telegram",
@@ -675,36 +663,33 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "contabo-vps": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "fail",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.552Z",
-      "summary": "ssh reachable on vmi3061403",
-      "facts": [
-        "ssh: ok",
-        "runtime host confirmed"
-      ],
-      "source_hash": "18b3b7021e5dcdce68b642c228abb894f7f58ad2",
-      "last_change_detected": "2026-04-04T20:43:11.104Z"
+      "stale_at": "2026-04-20T13:47:25.172Z",
+      "summary": "ssh: connect to host 62.171.128.44 port 22: Operation timed out",
+      "facts": [],
+      "source_hash": "b3212226722fb56a77164afab27fe8abd35b34fa",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "hostinger": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-04-19T09:51:39.552Z",
+      "stale_at": "2026-04-20T13:47:25.173Z",
       "summary": "لا يوجد checker آلي مباشر لهذا العنصر بعد",
       "facts": [],
       "source_hash": "afc17eb77703f582b7c2850671c75c9c7cf38c67",
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "icloud-drive": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.552Z",
+      "stale_at": "2026-04-20T13:47:25.173Z",
       "summary": "iCloud Drive root موجود",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs"
@@ -713,11 +698,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "perplexity": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.553Z",
+      "stale_at": "2026-04-20T13:47:25.204Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__perplexity__"
@@ -726,11 +711,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "firecrawl": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.553Z",
+      "stale_at": "2026-04-20T13:47:25.210Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__firecrawl__"
@@ -739,11 +724,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "notion": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.553Z",
+      "stale_at": "2026-04-20T13:47:25.210Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__claude_ai_Notion__"
@@ -752,11 +737,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "tailscale": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "ssh via tailscale",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:39.553Z",
+      "stale_at": "2026-04-20T13:47:25.210Z",
       "summary": "Tailscale SSH reachable on vmi3061403",
       "facts": [
         "host: vmi3061403"
@@ -765,39 +750,39 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "trongrid": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
-      "checked_from": "http",
-      "stale": false,
-      "stale_at": "2026-04-19T09:51:41.225Z",
-      "summary": "HTTP 200",
-      "facts": [
-        "url: https://trongrid.io"
-      ],
-      "source_hash": "4ea8f264c9ac89a5da262de88c6b420048ffe181",
-      "last_change_detected": "2026-04-04T23:33:25.556Z"
-    },
-    "coingecko": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-04-19T09:51:41.919Z",
-      "summary": "HTTP 403",
+      "stale_at": "2026-04-20T13:47:29.334Z",
+      "summary": "spawnSync /bin/sh ETIMEDOUT",
+      "facts": [
+        "url: https://trongrid.io"
+      ],
+      "source_hash": "7cf98ee5a2989723856848af8ca311f36a0c3405",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
+    },
+    "coingecko": {
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
+      "checked_from": "http",
+      "stale": false,
+      "stale_at": "2026-04-20T13:47:32.065Z",
+      "summary": "curl: (28) Operation timed out after 447 milliseconds with 0 bytes received",
       "facts": [
         "url: https://coingecko.com"
       ],
-      "source_hash": "ad35d8b294ed157be320a3a8273e2e27500d002f",
-      "last_change_detected": "2026-04-04T20:52:39.303Z"
+      "source_hash": "f3a8a56a5ae0df25f2b538cdcce2dccc2277a758",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     }
   },
   "bot": {
     "tron-address-bot": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:41.920Z",
+      "stale_at": "2026-04-13T13:47:32.137Z",
       "summary": "المسار المحلي للبوت موجود",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot"
@@ -806,11 +791,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "bank-bot": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "warn",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:41.920Z",
+      "stale_at": "2026-04-13T13:47:32.144Z",
       "summary": "الكود المؤرشف موجود محليًا لكن التشغيل نفسه متوقف",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/bank-bot"
@@ -819,25 +804,25 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "argaz-bot": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
-      "verification_status": "ok",
+      "verified_at": "2026-04-06T13:46:05.283Z",
+      "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:42.804Z",
-      "summary": "runtime path ok · gateway activating/auto-restart",
+      "stale_at": "2026-04-13T13:47:35.988Z",
+      "summary": "بعض طبقات runtime غير مؤكدة بالكامل",
       "facts": [
         "path: /home/argaz/.openclaw",
-        "gateway: activating/auto-restart"
+        "gateway unit missing"
       ],
-      "source_hash": "2f5bcb71f9925528e4163eb49d9485e44f5bc568",
-      "last_change_detected": "2026-04-05T09:51:28.171Z"
+      "source_hash": "1b1805853d0e940a72f230d79f367dbad318122b",
+      "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "claude-code-bot": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem + claude settings",
       "stale": false,
-      "stale_at": "2026-04-12T09:51:42.804Z",
+      "stale_at": "2026-04-13T13:47:35.993Z",
       "summary": "قناة Telegram وصلاحيتها موجودتان",
       "facts": [
         "path: /Users/rabeeshaban/.claude/channels/telegram",
@@ -849,11 +834,11 @@
   },
   "archive": {
     "exchanger": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.014Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/💱 Exchanger"
@@ -862,11 +847,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "etranex": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.015Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/📦 أرشيف-مشاريع/etranex"
@@ -875,11 +860,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "boyner-pipeline": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.015Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/boyner"
@@ -888,11 +873,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "brix-real-estate": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.015Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/brix-studio-export"
@@ -901,11 +886,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "smart-media-indexer": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.015Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/📦 أرشيف-مشاريع/Smart-Media-Indexer"
@@ -914,11 +899,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "vault": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:42.804Z",
+      "stale_at": "2026-06-05T13:47:36.016Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/🔐 Vault.dmg"
@@ -927,11 +912,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "lobster": {
-      "verified_at": "2026-04-05T09:51:28.171Z",
+      "verified_at": "2026-04-06T13:46:05.283Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-06-04T09:51:43.631Z",
+      "stale_at": "2026-06-05T13:47:37.988Z",
       "summary": "المرجع موجود على السيرفر",
       "facts": [
         "path: /home/argaz/.local/lobster"
@@ -943,40 +928,40 @@
   "coverage": {
     "project": {
       "total": 10,
-      "ok": 9,
-      "warn": 1,
+      "ok": 3,
+      "warn": 7,
       "fail": 0,
       "manual": 0,
       "unknown": 0
     },
     "service": {
       "total": 14,
-      "ok": 11,
-      "warn": 3,
+      "ok": 0,
+      "warn": 14,
       "fail": 0,
       "manual": 0,
       "unknown": 0
     },
     "tool": {
       "total": 17,
-      "ok": 15,
-      "warn": 0,
+      "ok": 14,
+      "warn": 1,
       "fail": 0,
       "manual": 2,
       "unknown": 0
     },
     "cloud": {
       "total": 17,
-      "ok": 14,
-      "warn": 2,
-      "fail": 0,
+      "ok": 11,
+      "warn": 4,
+      "fail": 1,
       "manual": 1,
       "unknown": 0
     },
     "bot": {
       "total": 4,
-      "ok": 3,
-      "warn": 1,
+      "ok": 2,
+      "warn": 2,
       "fail": 0,
       "manual": 0,
       "unknown": 0
