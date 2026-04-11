@@ -450,6 +450,60 @@ const PRJ = [
       GitHub: "https://github.com/aneerabee/chess-academy",
     },
   },
+  {
+    name: "Western Office",
+    id: "western-office",
+    kind: "internal-tool",
+    ar: "نظام مكتب الحوالات",
+    st: "a",
+    em: "💸",
+    cl: "#0f766e",
+    pct: 55,
+    summary:
+      "نظام تشغيل داخلي لمكتب حوالات ويسترن يونيون — يدير الزبائن والحوالات والتسويات والإقفال اليومي.",
+    local_path:
+      "/Users/rabeeshaban/Documents/New project/western-office",
+    server_path: null,
+    repo_url: "https://github.com/aneerabee/western-office",
+    deploy_url: "https://aneerabee.github.io/western-office/",
+    stack: [
+      "React 19",
+      "Vite 8",
+      "Vitest",
+      "Supabase",
+      "GitHub Pages",
+    ],
+    subsystems: [
+      "transfer-lifecycle",
+      "customer-ledger",
+      "settlement-engine",
+      "daily-closing",
+      "dual-persistence",
+    ],
+    related_services: [],
+    related_tools: ["Claude Code"],
+    related_cloud: ["GitHub", "Supabase"],
+    ops: [
+      "نشر تلقائي على GitHub Pages",
+      "تخزين مزدوج: localStorage + Supabase",
+      "41 اختبار Vitest",
+    ],
+    desc: "نظام تشغيل يومي لمكتب حوالات ويسترن يونيون\n\n🔄 دورة الحوالة:\nوصلت → عند الموظف → مراجعة لاحقة / تم السحب / مشكلة\nتحقق ذكي: لا إرسال بدون مبالغ، لا سحب بدون مستلم\n\n💰 النظام المالي:\nمبلغ الحوالة (معلوماتي) + للزبون + المستلم من الموظف = الربح\nدفتر حسابات ledger حقيقي لكل زبون\nكشف حساب بأرصدة تراكمية\nتسوية: المحاسب يسلّم → المكتب يدفع للزبون → الربح يبقى\nمطالبة الأرباح (Claim) مع سجل زمني\n\n📊 الأقسام:\nالحوالات — عرض ذكي بالأولوية + وضع قراءة/تعديل\nالزبائن — حوالات كل زبون + كشف حساب + تسوية\nالتسويات — اختيار حوالات وتأكيد الدفع\nالإقفال اليومي — 3 مستويات: زبائن تراكمي + مكتب يومي + محاسب تراكمي\nالمشاكل — تجميع حسب النوع + حل سريع\n\n🗄️ التخزين:\nمحلي (localStorage v3) + سحابي (Supabase JSONB)\nهجرة تلقائية من الصيغ القديمة\nنسخ احتياطي + استرجاع JSON\n\n🛣️ خارطة التطوير:\n✅ نموذج بيانات + ledger + تسويات + إقفال يومي\n✅ تحقق ذكي + وضع قراءة/تعديل\n✅ 41 اختبار + مراجعة 4 وكلاء\n⏳ ربط Supabase سحابي كامل\n⏳ ربط Telegram Bot\n⏳ تقارير PDF",
+    tags: [
+      "React 19",
+      "Vite 8",
+      "Vitest",
+      "Supabase",
+      "Ledger",
+      "RTL Arabic",
+      "GitHub Pages",
+    ],
+    path: "/Users/rabeeshaban/Documents/New project/western-office",
+    links: {
+      التطبيق: "https://aneerabee.github.io/western-office/",
+      GitHub: "https://github.com/aneerabee/western-office",
+    },
+  },
 ];
 
 const SVC = [
