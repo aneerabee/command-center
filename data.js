@@ -194,8 +194,7 @@ const PRJ = [
     pct: 88,
     summary:
       "خادم MCP داخلي مطور خصيصًا للتحكم في إعلانات Meta عبر وحدات قراءة وكتابة واستهداف ونسخ وتحويلات.",
-    local_path:
-      "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp",
+    local_path: "/Users/rabeeshaban/Developer/meta-mcp",
     server_path: null,
     repo_url: "https://github.com/aneerabee/meta-mcp",
     deploy_url: null,
@@ -215,7 +214,7 @@ const PRJ = [
     ops: ["أداة تشغيل داخلية وليست SaaS", "تتحكم بحساب Meta Ads مباشرة"],
     desc: "خادم MCP داخلي لإدارة إعلانات Meta عبر وحدات مستقلة\n\n📦 الوحدات:\nread.py · write.py · targeting.py\nduplicate.py · conversions.py · utility.py\n\n🔧 التقنيات:\nPython + MCP stdio + httpx\nMeta Graph API\n\n🎯 الاستخدام:\nقراءة الحملات والإعلانات\nإنشاء وتعديل ونسخ الأصول\nإدارة الاستهداف والتحويلات\n\n🔒 الريبو خاص على GitHub",
     tags: ["Python", "MCP", "Meta Graph API", "httpx", "Internal Tool"],
-    path: "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp",
+    path: "/Users/rabeeshaban/Developer/meta-mcp",
     links: { GitHub: "https://github.com/aneerabee/meta-mcp" },
   },
   {
@@ -1217,7 +1216,7 @@ const TL = [
     summary: "خادم MCP داخلي للتحكم الكامل بإعلانات Meta",
     desc: "37 أداة في 6 وحدات — بديل مجاني لـ Pipeboard\nPython + httpx + Meta Graph API v22.0\nحساب: act_840190289038740\n\n🔒 محفوظ على GitHub (خاص)",
     tags: ["37 Tools", "MCP", "Python"],
-    path: "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/🤖 meta-mcp",
+    path: "/Users/rabeeshaban/Developer/meta-mcp",
     links: { GitHub: "https://github.com/aneerabee/meta-mcp" },
   },
   {
