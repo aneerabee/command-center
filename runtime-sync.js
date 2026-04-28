@@ -241,12 +241,6 @@ function checkServices(services, previous, serverSnapshot) {
   const tailscale = safeExec('command -v tailscale >/dev/null 2>&1 && tailscale ip -4');
 
   const matchers = {
-    'wedding-planner-app': () => {
-      const unit = systemdByUnit['wedding-planner.service'];
-      if (!unit) return {verification_status: 'fail', checked_from: 'ssh', summary: 'خدمة wedding-planner.service غير ظاهرة', facts: []};
-      const status = unit.active === 'active' ? 'ok' : unit.active === 'activating' ? 'warn' : 'fail';
-      return {verification_status: status, checked_from: 'ssh', summary: `service: ${unit.active}/${unit.sub}`, facts: [`unit: ${unit.unit}`, `description: ${unit.description}`]};
-    },
     'wapy-app': () => {
       const row = dockerByName['wapydev-app'];
       if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: 'حاوية wapydev-app غير ظاهرة', facts: []};
@@ -271,15 +265,6 @@ function checkServices(services, previous, serverSnapshot) {
       const unit = systemdByUnit['chrome-headless.service'];
       if (!unit) return {verification_status: 'fail', checked_from: 'ssh', summary: 'chrome-headless.service غير ظاهرة', facts: []};
       return {verification_status: unit.active === 'active' ? 'ok' : 'warn', checked_from: 'ssh', summary: `service: ${unit.active}/${unit.sub}`, facts: [`unit: ${unit.unit}`]};
-    },
-    'reminders-scheduler': () => {
-      const unit = systemdByUnit['reminders-scheduler.service'];
-      if (!unit) return {verification_status: 'fail', checked_from: 'ssh', summary: 'reminders-scheduler.service غير ظاهرة', facts: []};
-      return {verification_status: unit.active === 'active' ? 'ok' : 'warn', checked_from: 'ssh', summary: `service: ${unit.active}/${unit.sub}`, facts: [`unit: ${unit.unit}`]};
-    },
-    'wedding-backup-cron': () => {
-      const exists = crontab.includes('/home/argaz/wedding-planner/backup-wedding.sh');
-      return {verification_status: exists ? 'ok' : 'fail', checked_from: 'ssh', summary: exists ? 'cron موجود' : 'cron غير موجود', facts: ['pattern: backup-wedding.sh']};
     },
     'wapy-backup-cron': () => {
       const exists = crontab.includes('/opt/wapy') && crontab.includes('./scripts/backup.sh');

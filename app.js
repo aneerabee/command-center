@@ -1674,7 +1674,6 @@ function _prjColor(name) {
     system: "#8B5CF6",
     Contabo: "#0EA5E9",
     "BRIX Travel": "#6C3AED",
-    "Wedding Planner": "#E8453C",
     "Wapy.dev": "#10B981",
     "Argaz Bot": "#6C3AED",
     EasyBooking: "#2563EB",

@@ -1506,8 +1506,8 @@ const CLD = [
     category: "infrastructure",
     dt: "62.171.128.44 · Ubuntu 24",
     prj: "Wapy.dev",
-    related_entities: ["Wapy.dev", "Wedding Planner", "Argaz Bot"],
-    used_in: ["Wapy.dev", "Wedding Planner", "Argaz Bot"],
+    related_entities: ["Wapy.dev", "Argaz Bot"],
+    used_in: ["Wapy.dev", "Argaz Bot"],
   },
   {
     nm: "Hostinger",
