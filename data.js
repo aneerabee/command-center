@@ -80,7 +80,7 @@ const PRJ = [
       "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     server_path: null,
     repo_url: "https://github.com/aneerabee/brix-travel-system",
-    deploy_url: "https://hotel-web-app-ten.vercel.app",
+    deploy_url: null,
     stack: [
       "Next.js 16",
       "TypeScript",
@@ -98,9 +98,12 @@ const PRJ = [
     ],
     related_services: [],
     related_tools: [],
-    related_cloud: ["GitHub", "Supabase", "Vercel", "Airtable"],
-    ops: ["auto-deploy على Vercel", "source of truth عبر Supabase/Airtable"],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار\n\n📐 البنية: LEGO Architecture (7 كتل مستقلة)\ntypes → db → pricing → infra → validation → testing → ui\n\n🔧 التقنيات:\nNext.js 16 + React 18 + TypeScript 5.7 + Tailwind 4\nSupabase (PostgreSQL) + Zod 4 + Vitest + Playwright\n\n📊 الأرقام:\n1,450+ اختبار (وحدة + تكامل + E2E)\n30 مرحلة تطوير مكتملة\n10 خطوات Contract Wizard\n\n🔄 سير البيانات:\nAirtable (11 جدول) → n8n → Supabase → Next.js → واجهة\n\n🚀 النشر: Vercel (تلقائي من GitHub)",
+    related_cloud: ["GitHub", "Supabase", "Railway", "Airtable"],
+    ops: [
+      "النشر على Railway (معطّل حالياً — يحتاج إنعاش)",
+      "source of truth عبر Supabase/Airtable",
+    ],
+    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار\n\n📐 البنية: LEGO Architecture (7 كتل مستقلة)\ntypes → db → pricing → infra → validation → testing → ui\n\n🔧 التقنيات:\nNext.js 16 + React 18 + TypeScript 5.7 + Tailwind 4\nSupabase (PostgreSQL) + Zod 4 + Vitest + Playwright\n\n📊 الأرقام:\n1,873+ اختبار يمر (وحدة + تكامل + E2E)\n30 مرحلة تطوير مكتملة\n10 خطوات Contract Wizard\n\n🔄 سير البيانات:\nAirtable (11 جدول) → n8n → Supabase → Next.js → واجهة\n\n🚀 النشر: Railway (معطّل حالياً، آخر deployment ناجح 4 أبريل 2026 — يحتاج إنعاش)",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -111,10 +114,65 @@ const PRJ = [
     ],
     path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     links: {
-      الموقع: "https://hotel-web-app-ten.vercel.app",
+      Railway: "https://railway.com/dashboard",
       GitHub: "https://github.com/aneerabee/brix-travel-system",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
       Airtable: "https://airtable.com",
+    },
+    links_desc: {
+      Railway:
+        "لوحة النشر — اللوغات، المتغيرات، إعادة التشغيل (الخدمة معطّلة الآن وتحتاج إنعاش)",
+      GitHub:
+        "الكود المصدري الكامل — Next.js 16 + Supabase + 1873 اختبار",
+      Supabase:
+        "قاعدة البيانات — جداول العقود، الفترات، الأسعار، الخصومات، معاملات الإشغال",
+      Airtable:
+        "مصدر بيانات العقود الأصلية — يُزامَن مع Supabase عبر n8n",
+    },
+    current_status: {
+      updated: "2026-05-05",
+      where:
+        "النظام مبني بالكامل (1873 اختبار يمر، نظام Discount Groups مكتمل، المصادقة معطّلة مؤقتاً في 3 طبقات). آخر عمل في 4 أبريل 2026 — أُدخل عقد Rixos Downtown يدوياً وفُحص بدقة، وتبيّن وجود 3 أخطاء حرجة على الأسعار + 22 خطأ متوسط على سعات الغرف. الأخطاء موثّقة بالكامل في docs/reports/RIXOS-DOWNTOWN-Contract-Entry-Guide.html ولم تُصلَح بعد. النشر على Railway معطّل ويحتاج إنعاش.",
+      next_step:
+        "إصلاح الأخطاء الثلاثة الحرجة في عقد Rixos Downtown (9 معاملات إشغال في فترة الذروة، خصم EXD 25% المفقود، تصحيح قابلية دمج الخصومات إلى EXCLUSIVE)، ثم إصلاح أخطاء عقد Sueno الثمانية المعلّقة، ثم فحص شامل للنظام.",
+      blockers: [
+        {
+          text: "9 معاملات إشغال خاطئة في فترة الذروة بعقد Rixos — فرق يصل إلى 140 يورو لليلة الواحدة",
+          priority: "high",
+        },
+        {
+          text: "خصم الحالات العاجلة 25% غير مدخل أصلاً في عقد Rixos",
+          priority: "high",
+        },
+        {
+          text: "كل الخصومات في Rixos مضبوطة CAN_COMBINE والصحيح EXCLUSIVE — العقد ينص خصم واحد فقط",
+          priority: "high",
+        },
+        {
+          text: "8 أخطاء في عقد Sueno Deluxe محدّدة من جلسة سابقة ولم تُصلَح",
+          priority: "high",
+        },
+        {
+          text: "نظام المصادقة معطّل في 3 طبقات (middleware + wizard page + contract-edit hook) ويحتاج تطبيق حقيقي",
+          priority: "high",
+        },
+        {
+          text: "النشر على Railway معطّل (Application not found) — يحتاج railway login ثم إعادة نشر",
+          priority: "high",
+        },
+      ],
+      use_guide:
+        "للاستخدام اليومي: لا يوجد استخدام حي حالياً لأن النشر معطّل. للتطوير المحلي: افتح iTerm2 ونفّذ أمر استئناف Claude بالأسفل، ثم شغّل npm run dev داخل hotel-web-app. لإدخال عقد فندق جديد: افتح صفحة /contract-wizard وامرّ على الخطوات العشر. لتصحيح عقد موجود: افتح /contracts ثم اختر تعديل. للنشر: بعد الإنعاش، ادفع لـ GitHub و Railway ينشر تلقائياً.",
+    },
+    claude_session: {
+      session_name: "[brix system]",
+      terminal: "iTerm2",
+      cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
+      command:
+        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel/hotel-web-app && claude",
+      memory_file:
+        "~/.claude/projects/-Users-rabeeshaban-Desktop-Projects----BRIX-Travel/memory/MEMORY.md",
+      note: "بعد فتح Claude اكتب /resume واختر الجلسة المسماة [brix system] لمتابعة آخر نقطة — إصلاح الأخطاء الثلاثة الحرجة في عقد Rixos Downtown. ملف الذاكرة يحوي 12 ملفاً منظّماً (ملف المستخدم، التغذية الراجعة، حالة المشروع، أخطاء Rixos، Sueno، Auth، النشر المعطّل، المسارات، أرشيف الجلسة القديمة).",
     },
   },
   {
