@@ -314,10 +314,75 @@ const PRJ = [
     ],
     path: "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/💬 whatsapp-crm",
     links: {
-      التطبيق:
+      "لوحة التحكم":
         "https://easybooking-whatsapp-crm-production.up.railway.app/#inbox",
-      Railway: "https://railway.app",
+      "صفحة الربط":
+        "https://easybooking-whatsapp-crm-production.up.railway.app/signup",
       GitHub: "https://github.com/aneerabee/easybooking-whatsapp-crm",
+      Railway: "https://railway.com/dashboard",
+      "Meta Console":
+        "https://developers.facebook.com/apps/1424331552514758/dashboard/",
+      "API Setup":
+        "https://developers.facebook.com/apps/1424331552514758/whatsapp-business/wa-dev-console/",
+      "WhatsApp Manager": "https://business.facebook.com/wa/manage/",
+      "Events Manager":
+        "https://business.facebook.com/events_manager2/list/pixel/",
+      "App Review":
+        "https://developers.facebook.com/apps/1424331552514758/app-review/",
+    },
+    links_desc: {
+      "لوحة التحكم":
+        "الإنبوكس الحي — مشاهدة المحادثات والحجوزات وإدارة الفريق",
+      "صفحة الربط": "ربط رقم واتساب جديد عبر Embedded Signup",
+      GitHub: "الكود المصدري الكامل — FastAPI + dashboard",
+      Railway: "لوحة النشر — اللوغات، المتغيرات، إعادة التشغيل",
+      "Meta Console":
+        "EasyBooking-API (App ID 1424331552514758) — الإعدادات الأساسية",
+      "API Setup":
+        "إرسال رسائل تجريبية وأخذ التوكن — يُستخدم في الفيديو الأول",
+      "WhatsApp Manager":
+        "إدارة الأرقام، إنشاء قوالب الرسائل — يُستخدم في الفيديو الثاني",
+      "Events Manager":
+        "للحصول على META_PIXEL_ID المفقود (عائق حرج)",
+      "App Review":
+        "تقديم طلب Advanced Access ورفع الفيديوهين بعد التسجيل",
+    },
+    current_status: {
+      updated: "2026-05-05",
+      where:
+        "النظام مبني بالكامل ومنشور على Railway ويعمل (58 endpoint، 13+ جدول، لوحة تحكم، 14 أداة MCP، CAPI جاهز). توقفنا في 28 مارس عند مرحلة مراجعة التطبيق عند ميتا.",
+      next_step:
+        "تسجيل فيديوهين لمراجعة التطبيق: (1) إرسال واستقبال رسالة، (2) إنشاء قالب booking_confirmation. ثم رفعهما في صفحة App Review.",
+      blockers: [
+        {
+          text: "META_PIXEL_ID مفقود — أحداث CAPI لا تُرسل بدونه (يُؤخذ من Events Manager)",
+          priority: "high",
+        },
+        {
+          text: "Standard Access فقط — يلزم Advanced Access للإرسال لأي رقم (يحتاج الفيديوهين + مراجعة التطبيق)",
+          priority: "high",
+        },
+        {
+          text: "BRIX غير مسجّلة كمزوّد تقني — حل سريع: اشتراك بـ Wati ($59/شهر) أو respond.io ($79)",
+          priority: "med",
+        },
+        {
+          text: "الرقم التجريبي محدود — فقط أرقام مسجّلة مسبقاً يمكنها المراسلة",
+          priority: "low",
+        },
+      ],
+      use_guide:
+        "للاستخدام اليومي: افتح 'لوحة التحكم' لمتابعة المحادثات والحجوزات. للتطوير: افتح Core Shell ونفّذ أمر استئناف Claude بالأسفل. للنشر: ادفع لـ GitHub والنشر تلقائي عبر Railway.",
+    },
+    claude_session: {
+      session_name: "[crm whats brix]",
+      terminal: "Core Shell",
+      cwd: "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/💬 whatsapp-crm",
+      command:
+        "cd ~/Desktop/Projects/📢\\ EasyBooking/💬\\ whatsapp-crm && claude",
+      memory_file:
+        "~/.claude/projects/-Users-rabeeshaban/memory/whatsapp-crm-full-status.md",
+      note: "بعد فتح Claude اكتب /resume واختر الجلسة المسماة [crm whats brix] لمتابعة آخر نقطة وصلنا لها (تسجيل فيديوهات مراجعة ميتا).",
     },
   },
   {

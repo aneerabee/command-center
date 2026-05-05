@@ -2569,6 +2569,182 @@ function _projectMergedSections(item, legacySections) {
 }
 
 /* ── 1. PROJECT DETAIL — صفحة كاملة تحل محل المحتوى ── */
+function _currentStatusCard(item) {
+  const cs = item && item.current_status;
+  if (!cs) return "";
+  const cl = item.cl || "#6C3AED";
+  const where = cs.where || "";
+  const next = cs.next_step || cs.next || "";
+  const blockers = Array.isArray(cs.blockers) ? cs.blockers : [];
+  const updated = cs.updated || "";
+  const useGuide = cs.use_guide || cs.usage || "";
+  return (
+    `<div class="prj-status-card" style="--st-cl:${cl}">` +
+    `<div class="prj-status-head">` +
+    `<div class="prj-status-badge">${_ic("📍", 16)} أين وصلنا</div>` +
+    (updated
+      ? `<div class="prj-status-updated">آخر تحديث: ${E(updated)}</div>`
+      : "") +
+    `</div>` +
+    (where
+      ? `<div class="prj-status-block prj-status-where"><div class="prj-status-label">الموقف الحالي</div><div class="prj-status-text">${E(where)}</div></div>`
+      : "") +
+    (next
+      ? `<div class="prj-status-block prj-status-next"><div class="prj-status-label">الخطوة التالية</div><div class="prj-status-text"><strong>${E(next)}</strong></div></div>`
+      : "") +
+    (blockers.length
+      ? `<div class="prj-status-block prj-status-blockers">` +
+        `<div class="prj-status-label">العوائق الحالية</div>` +
+        `<ul class="prj-status-blockers-list">` +
+        blockers
+          .map((b) => {
+            const text = typeof b === "string" ? b : b.text || "";
+            const pri = typeof b === "object" ? b.priority || "" : "";
+            const priCls = pri ? ` prj-blocker--${E(pri)}` : "";
+            const priLabel =
+              pri === "high"
+                ? "حرج"
+                : pri === "med" || pri === "medium"
+                  ? "متوسط"
+                  : pri === "low"
+                    ? "منخفض"
+                    : "";
+            return (
+              `<li class="prj-blocker${priCls}">` +
+              (priLabel
+                ? `<span class="prj-blocker-pri">${E(priLabel)}</span>`
+                : "") +
+              `<span class="prj-blocker-text">${E(text)}</span>` +
+              `</li>`
+            );
+          })
+          .join("") +
+        `</ul></div>`
+      : "") +
+    (useGuide
+      ? `<div class="prj-status-block prj-status-use"><div class="prj-status-label">${_ic("🎯", 13)} كيف أستخدمه</div><div class="prj-status-text">${E(useGuide)}</div></div>`
+      : "") +
+    `</div>`
+  );
+}
+
+function _quickLinksCard(item, cl) {
+  const links = item.links || {};
+  const desc = item.links_desc || {};
+  const entries = Object.entries(links);
+  if (!entries.length) return "";
+  const linkIcons = {
+    GitHub: "💻",
+    Railway: "🚂",
+    Supabase: "🗄️",
+    Vercel: "▲",
+    Hostinger: "🌐",
+    Telegram: "✈️",
+    Notion: "📝",
+    التطبيق: "🚀",
+    "لوحة التحكم": "📊",
+    "صفحة الربط": "🔗",
+    Meta: "Ⓜ️",
+    "Meta Console": "🛠️",
+    "WhatsApp Manager": "💬",
+    "Events Manager": "📊",
+    "App Review": "✅",
+    "API Setup": "📡",
+  };
+  return (
+    `<div class="prj-info-card prj-info-card--quick-links" style="--ql-cl:${cl}">` +
+    `<h3 class="prj-info-title">${_ic("🔗", 14)} روابط سريعة</h3>` +
+    `<div class="prj-quick-links">` +
+    entries
+      .map(([k, v]) => {
+        const ico = linkIcons[k] || "🔗";
+        const d = desc[k] || "";
+        return (
+          `<a class="prj-quick-link" href="${E(v)}" target="_blank" rel="noopener">` +
+          `<div class="pql-row">` +
+          `<span class="pql-icon">${_ic(ico, 16)}</span>` +
+          `<span class="pql-name">${E(k)}</span>` +
+          `<span class="pql-arrow">↗</span>` +
+          `</div>` +
+          (d ? `<div class="pql-desc">${E(d)}</div>` : "") +
+          `</a>`
+        );
+      })
+      .join("") +
+    `</div></div>`
+  );
+}
+
+function _claudeSessionCard(item) {
+  const cs = item && item.claude_session;
+  if (!cs || !cs.command) return "";
+  const cl = item.cl || "#25D366";
+  const cmd = cs.command;
+  const sessionName = cs.session_name || "";
+  const terminal = cs.terminal || "Terminal";
+  const cwd = cs.cwd || "";
+  const memoryFile = cs.memory_file || "";
+  const note = cs.note || "";
+  return (
+    `<div class="prj-claude-card" style="--cs-cl:${cl}">` +
+    `<div class="prj-claude-head">` +
+    `<div class="prj-claude-badge">${_ic("💬", 18)} استئناف محادثة Claude Code</div>` +
+    (sessionName
+      ? `<div class="prj-claude-session">${E(sessionName)}</div>`
+      : "") +
+    `</div>` +
+    `<p class="prj-claude-intro">هذه المحادثة محفوظة محلياً في Claude Code. لمتابعة آخر نقطة وصلنا لها بدون فقدان السياق، نفّذ الأمر التالي في <strong>${E(terminal)}</strong>.</p>` +
+    `<div class="prj-claude-cmd-wrap">` +
+    `<code class="prj-claude-cmd" dir="ltr">${E(cmd)}</code>` +
+    `<button class="prj-claude-copy" onclick="copyClaudeCmd(this, ${JSON.stringify(cmd).replace(/"/g, "&quot;")})" aria-label="نسخ الأمر">${_ic("📋", 14)} نسخ</button>` +
+    `</div>` +
+    `<ol class="prj-claude-steps">` +
+    `<li>افتح <strong>${E(terminal)}</strong></li>` +
+    `<li>الصق الأمر بـ ⌘V ثم اضغط Enter</li>` +
+    `<li>داخل Claude اكتب <code>/resume</code></li>` +
+    (sessionName
+      ? `<li>اختر الجلسة المسماة <strong>${E(sessionName)}</strong></li>`
+      : `<li>اختر الجلسة الأحدث للمشروع</li>`) +
+    `</ol>` +
+    (note
+      ? `<div class="prj-claude-note">${_ic("📌", 13)} ${E(note)}</div>`
+      : "") +
+    (cwd || memoryFile
+      ? `<div class="prj-claude-meta">` +
+        (cwd
+          ? `<div class="prj-claude-meta-row"><span>المجلد</span><code dir="ltr">${E(cwd)}</code></div>`
+          : "") +
+        (memoryFile
+          ? `<div class="prj-claude-meta-row"><span>ملف الذاكرة</span><code dir="ltr">${E(memoryFile)}</code></div>`
+          : "") +
+        `</div>`
+      : "") +
+    `</div>`
+  );
+}
+
+function copyClaudeCmd(btn, cmd) {
+  if (!navigator.clipboard) {
+    const ta = document.createElement("textarea");
+    ta.value = cmd;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+    } catch (e) {}
+    document.body.removeChild(ta);
+  } else {
+    navigator.clipboard.writeText(cmd).catch(() => {});
+  }
+  const original = btn.innerHTML;
+  btn.innerHTML = "✓ نُسخ";
+  btn.classList.add("copied");
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.classList.remove("copied");
+  }, 1600);
+}
+
 function openProjectDetail(name) {
   const item = PRJ.find((p) => p.name === name);
   if (!item) return;
@@ -2619,6 +2795,8 @@ function openProjectDetail(name) {
       .join("") +
     `</div>` +
     _entityTrustBox(item, "project") +
+    _currentStatusCard(item) +
+    _claudeSessionCard(item) +
     `<div class="prj-detail-grid">` +
     sections
       .map((s) => {
@@ -2678,16 +2856,7 @@ function openProjectDetail(name) {
     (!item.local_path && !item.server_path && item.path
       ? `<div class="prj-info-card"><h3 class="prj-info-title">${_ic("📁", 14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`
       : "") +
-    (!item.repo_url && !item.deploy_url && Object.keys(links).length
-      ? `<div class="prj-info-card"><h3 class="prj-info-title">${_ic("🔗", 14)} الروابط</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(
-          links,
-        )
-          .map(
-            ([k, v]) =>
-              `<a href="${E(v)}" target="_blank" rel="noopener" style="padding:8px 20px;border-radius:10px;background:${cl};color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${E(k)}</a>`,
-          )
-          .join("")}</div></div>`
-      : "") +
+    _quickLinksCard(item, cl) +
     `</div>`;
   document.getElementById("app").appendChild(el);
   _setHashSilently(cur + "/" + encodeURIComponent(name));
