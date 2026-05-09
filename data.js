@@ -621,6 +621,113 @@ const PRJ = [
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
     },
   },
+  {
+    name: "Mohammad Ledger",
+    id: "mohammad-ledger",
+    kind: "financial-ledger",
+    ar: "دفتر محمد",
+    st: "a",
+    em: "📒",
+    cl: "#16A34A",
+    pct: 62,
+    summary:
+      "دفتر مالي شخصي/تشغيلي لمحمد مبني من ملف Numbers قديم، مع أرصدة أشخاص وحسابات كاش/مصرفي وأصول ومصروفات، وتجهيز بوت Telegram للإدخال والمراجعة.",
+    local_path:
+      "/Users/rabeeshaban/Documents/New project/western-office",
+    server_path: null,
+    repo_url: "https://github.com/aneerabee/mohammad-ledger",
+    deploy_url: "https://aneerabee.github.io/mohammad-ledger/",
+    stack: [
+      "React 19",
+      "Vite 8",
+      "Supabase",
+      "Telegram Bot API",
+      "Node.js",
+      "GitHub Pages",
+      "Vitest",
+    ],
+    subsystems: [
+      "ledger-core",
+      "account-catalog",
+      "movement-entry-wizard",
+      "balance-review",
+      "history-audit",
+      "supabase-state",
+      "local-safety-backups",
+      "telegram-bot-foundation",
+      "idempotent-telegram-posting",
+    ],
+    related_services: [],
+    related_tools: ["Claude Code"],
+    related_cloud: ["GitHub", "Supabase", "Telegram"],
+    ops: [
+      "الواجهة منشورة على GitHub Pages كرابط مستقل لمحمد",
+      "مصدر البيانات الحالي: صف واحد في Supabase ml_state مع mirror محلي ونسخ محلية تلقائية",
+      "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
+      "Telegram Bot في مرحلة الأساس: خدمة مشتركة + repository آمن + منع تكرار التأكيد",
+      "اختبارات المرحلة الأولى: 17 اختبارًا تمر، وبناء Vite ناجح",
+    ],
+    desc: "دفتر محمد — منظومة مالية مبنية بعناية من منظومة Numbers قديمة\n\n🎯 الهدف:\nصديق لا يعرف استخدام الكمبيوتر يحتاج طريقة سهلة جدًا لإدخال ومراجعة حركاته المالية من الهاتف، مع واجهة ويب وبوت Telegram لاحقًا.\n\n💰 نطاق الدفتر:\nأشخاص وجهات: أقبض منهم / أدفع لهم\nأماكن المال: كاش ومصرفي منفصلان لأن قيمتهما قد تختلف\nأصول: شاحنة، أرض، ألعاب، أشياء لها قيمة\nمصروف: مصروف شخصي وتكاليف نهائية\nمراجعة: حسابات أو حركات غير مؤكدة لا تؤثر حتى تُحل\n\n🔄 أنواع الحركات:\nتحويل من حساب إلى حساب\nمصروف من طرف واحد\nبيع دولار: دولار يخرج ودينار يدخل بسعر صرف\nشراء دولار: دينار يخرج ودولار يدخل بسعر صرف\nتصحيح ورصيد افتتاحي وحركات مراجعة عند الحاجة\n\n🧠 المنطق:\nكل حركة تعرض تأثيرها قبل الحفظ\nلا حفظ لحركة ناقصة كحركة مؤثرة\nلا تحويل من نفس الحساب لنفس الحساب\nلا تحويل بين نفس الاسم ونفس التفصيل\nإلغاء/تعديل مباشر للحركات الحديثة فقط، والقديم يتم عبر تصحيح\nالأرقام تظهر بفواصل آلاف وبدون كسور إلا أسعار الصرف\n\n📱 الواجهة:\nمصممة للهاتف أولًا\nإدخال الحركة كخطوات متتابعة وليس نموذجًا مزدحمًا\nالأرصدة مقسمة: مالي، أقبض منهم، أدفع لهم، صفر، أصول، مصروف، مراجعة\nكل حساب يفتح ملخصه وحركاته وتعديل تصنيفه\n\n🤖 Telegram Bot:\nبدأت المرحلة الأولى: خدمة مشتركة على السيرفر تستخدم نفس ledgerCore\nRepository آمن يقرأ/يحفظ ml_state مع حماية من تضارب الكتابة\nجلسات إدخال مؤقتة في Telegram\nتأكيد نهائي قبل الحفظ\nمنع تكرار الحفظ عند ضغط زر التأكيد مرتين عبر idempotencyKey\n\n🛡️ الأمان وحفظ البيانات:\nSupabase هو المصدر السحابي\nlocalStorage mirror ونسخ محلية تلقائية كشبكة أمان\nالبوت لن يعمل إلا لمستخدم Telegram مسموح\nمفتاح Supabase service role يجب أن يبقى في السيرفر فقط وليس GitHub Pages",
+    tags: [
+      "React 19",
+      "Vite 8",
+      "Supabase",
+      "Telegram Bot",
+      "Ledger",
+      "RTL Arabic",
+      "Financial Workflow",
+      "GitHub Pages",
+      "Idempotency",
+    ],
+    path: "/Users/rabeeshaban/Documents/New project/western-office",
+    links: {
+      التطبيق: "https://aneerabee.github.io/mohammad-ledger/",
+      GitHub: "https://github.com/aneerabee/mohammad-ledger",
+      Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
+      Telegram: "https://core.telegram.org/bots",
+    },
+    links_desc: {
+      التطبيق: "الرابط الحي الذي يستخدمه محمد من الهاتف والكمبيوتر",
+      GitHub: "مستودع النشر الخاص بدفتر محمد على GitHub Pages",
+      Supabase: "قاعدة البيانات السحابية التي تحتوي ml_state ومصدر الحقيقة الحالي",
+      Telegram: "مرجع Telegram Bot API المستخدم لبناء تجربة الإدخال والمراجعة",
+    },
+    current_status: {
+      updated: "2026-05-09",
+      where:
+        "الواجهة الحية منشورة ومثبتة على رابط مستقل. منطق الدفتر والأرصدة والحركات يعمل عبر ledgerCore وSupabase. بدأت مرحلة Telegram Bot بأساس تقني مشترك: repository آمن، service للبوت، wizard للحركة، ومنع تكرار التأكيد.",
+      next_step:
+        "ضبط TELEGRAM_BOT_TOKEN وMOHAMMAD_TELEGRAM_USER_ID وSUPABASE_SERVICE_ROLE_KEY في بيئة سيرفر آمنة، ثم اختبار أول حركة من Telegram وظهورها في الموقع.",
+      blockers: [
+        {
+          text: "لم يتم ضبط توكن Telegram والـ user id المسموح بعد",
+          priority: "high",
+        },
+        {
+          text: "يجب اختيار مكان تشغيل دائم للبوت: Railway أو VPS أو Render",
+          priority: "high",
+        },
+        {
+          text: "الحفظ الحالي ما زال في صف ml_state واحد؛ مناسب للمرحلة الأولى لكن يحتاج مراقبة عند تشغيل الموقع والبوت معًا",
+          priority: "med",
+        },
+        {
+          text: "قسم المراجعة الكامل من Telegram لم يُبن بعد؛ المرحلة الأولى تركز على إدخال الحركة والحفظ الآمن",
+          priority: "med",
+        },
+      ],
+      use_guide:
+        "للاستخدام اليومي: افتح رابط التطبيق لمراجعة الأرصدة والسجل. للتطوير: افتح المشروع المحلي وشغّل اختبارات ledger قبل أي تعديل. للبوت: لا تشغّل إلا بمتغيرات بيئة آمنة، ولا تضع service role في الواجهة أو GitHub Pages.",
+    },
+    claude_session: {
+      session_name: "[mohammad ledger telegram bot]",
+      terminal: "Codex / Core Shell",
+      cwd: "/Users/rabeeshaban/Documents/New project/western-office",
+      command:
+        "cd /Users/rabeeshaban/Documents/New\\ project/western-office && claude",
+      note: "آخر نقطة: المرحلة الأولى للبوت أُنشئت محليًا — shared ledger state + server repository + telegram movement wizard + idempotency، مع 17 اختبارًا ناجحًا وبناء Vite ناجح.",
+    },
+  },
 ];
 
 const SVC = [
@@ -1073,6 +1180,37 @@ const BOT = [
       "allowlist",
     ],
     path: "/Users/rabeeshaban/.claude/channels/telegram",
+  },
+  {
+    name: "Mohammad Ledger Bot",
+    id: "mohammad-ledger-bot",
+    kind: "telegram-bot",
+    ar: "بوت دفتر محمد",
+    st: "p",
+    em: "📒",
+    cl: "#16A34A",
+    host: "غير محدد بعد",
+    runtime: "Node.js",
+    channel: "Telegram",
+    related_entities: ["Mohammad Ledger", "Supabase", "GitHub"],
+    summary:
+      "بوت Telegram لإدخال حركات دفتر محمد ومراجعة الحسابات والسجل من الهاتف، مبني فوق نفس منطق ledgerCore.",
+    desc: "بوت دفتر محمد — مرحلة الأساس\n\n🎯 الهدف:\nجعل محمد يدخل الحركات ويراجع الأرصدة والسجل من Telegram بدون فتح الكمبيوتر.\n\n✅ المنجز:\nهيكل بوت Node.js\nحماية allowlist عبر Telegram user id\nجلسات إدخال مؤقتة\nWizard للحركة: نوع → مبلغ → عملة/سعر → مصدر → وجهة → ملاحظة → مراجعة → تأكيد\nمعاينة التأثير قبل الحفظ\nالحفظ عبر نفس ledgerCore المستخدم في الموقع\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase\n\n⏳ التالي:\nتشغيل بتوكن حقيقي في بيئة آمنة\nاختبار أول حركة من Telegram وظهورها في الموقع\nإضافة الحسابات والبحث والسجل والمراجعة الكاملة\nاختيار استضافة دائمة للبوت\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY في السيرفر فقط\nالبوت مغلق على user id محدد\nلا حفظ بدون تأكيد نهائي\nلا استخدام لحسابات مخفية أو ملخصات",
+    tags: [
+      "Telegram",
+      "Node.js",
+      "Supabase",
+      "Ledger",
+      "Idempotency",
+      "Allowlist",
+      "Arabic UX",
+    ],
+    path: "/Users/rabeeshaban/Documents/New project/western-office/server/telegram/bot.js",
+    related_projects: ["Mohammad Ledger"],
+    links: {
+      GitHub: "https://github.com/aneerabee/mohammad-ledger",
+      "Telegram Bot API": "https://core.telegram.org/bots",
+    },
   },
 ];
 
