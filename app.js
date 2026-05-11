@@ -941,19 +941,10 @@ function _setHashSilently(nextHash) {
 
 /* ─────────────── 2. NAVIGATION ─────────────── */
 
-/* ── DARK MODE ── */
-window.toggleTheme = function () {
-  const cur = document.documentElement.getAttribute("data-theme");
-  const next = cur === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  localStorage.setItem("cc_theme", next);
-  const btn = document.getElementById("theme-toggle");
-  if (btn) btn.textContent = next === "dark" ? "☀️" : "🌙";
-};
-
-(function applySavedTheme() {
-  const saved = localStorage.getItem("cc_theme");
-  if (saved) document.documentElement.setAttribute("data-theme", saved);
+/* الوضع الداكن مُلغى — ثيم موحّد فقط (نظيف من تفضيلات قديمة) */
+(function clearOldTheme() {
+  document.documentElement.removeAttribute("data-theme");
+  try { localStorage.removeItem("cc_theme"); } catch (e) {}
 })();
 
 function init() {
@@ -961,20 +952,6 @@ function init() {
   const bottomBar = document.getElementById("bottom-bar");
   const app = document.getElementById("app");
   SEARCH_INDEX = _buildSearchIndex();
-
-  // ── Theme toggle button (دائم في الزاوية) ──
-  if (!document.getElementById("theme-toggle")) {
-    const tbtn = document.createElement("button");
-    tbtn.id = "theme-toggle";
-    tbtn.className = "theme-toggle";
-    tbtn.title = "تبديل الوضع الداكن (يُحفظ تلقائياً)";
-    tbtn.textContent =
-      document.documentElement.getAttribute("data-theme") === "dark"
-        ? "☀️"
-        : "🌙";
-    tbtn.onclick = window.toggleTheme;
-    document.body.appendChild(tbtn);
-  }
 
   if (sidebar) {
     sidebar.innerHTML =
@@ -1636,13 +1613,13 @@ R.home = function () {
         `</div>` +
         `</section>`
       : "") +
-    // ──── شريط Runtime نشط — يظهر بعد الأقسام الذكية ────
-    `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border:1px solid var(--brd);border-radius:14px;margin-bottom:16px">` +
-    `<div style="display:flex;align-items:center;gap:10px">` +
+    // ──── شريط Runtime نشط — معلومة دقيقة بدون كذب ────
+    `<div class="cc-runtime-bar">` +
     `<span class="cc-runtime-badge"><span class="cc-pulse-dot"></span>Runtime نشط</span>` +
-    `<span style="font-size:11.5px;color:var(--t3)">يفحص ويحدّث كل 6 ساعات تلقائياً عبر launchd</span>` +
-    `</div>` +
-    `<button class="cc-greet-action cc-clickable" onclick="ccTriggerSync(this)" title="تشغيل فحص فوري">⟳ تحديث الآن</button>` +
+    `<span class="cc-runtime-info">يفحص ويُحدّث ${arPluralProj(PRJ.length).replace(/^لا /, "0 ")} تلقائياً كل 6 ساعات عبر launchd</span>` +
+    (RUNTIME_STATE && RUNTIME_STATE.generated_at
+      ? `<span class="cc-runtime-time" data-live-time="${E(RUNTIME_STATE.generated_at)}">${E(relTime(RUNTIME_STATE.generated_at))}</span>`
+      : "") +
     `</div>` +
     // ──── الجزء التنفيذي القديم — قابل للطي ────
     `<details class="hqx-collapsible" style="margin-top:16px">` +
@@ -1805,19 +1782,7 @@ R.home = function () {
   );
 };
 
-/* زر "تحديث الآن" — يستدعي runtime sync يدوياً عبر backend script */
-window.ccTriggerSync = function (btn) {
-  btn.classList.add("spinning");
-  btn.textContent = "⟳ جاري...";
-  // هذا الزر يُذكّرك فقط — التحديث الفعلي يحدث محلياً عبر launchd كل 6 ساعات
-  setTimeout(() => {
-    btn.classList.remove("spinning");
-    btn.textContent = "✓ تذكير: التحديث التلقائي كل 6 ساعات";
-    setTimeout(() => {
-      btn.textContent = "⟳ تحديث الآن";
-    }, 3000);
-  }, 800);
-};
+/* زر التحديث المُضلِّل تم حذفه — Runtime Sync يعمل تلقائياً عبر launchd */
 
 /* ── PROJECTS — Hero + Grid ── */
 R.projects = function () {

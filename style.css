@@ -8586,71 +8586,7 @@ a.emp-field-val:hover { color: #6366f1; }
   gap: 8px;
 }
 
-/* ═══════════════════════════════════════════════
-   DARK MODE — وضع داكن
-   ═══════════════════════════════════════════════ */
-[data-theme="dark"] {
-  --bg: #0b0f1a;
-  --surface: #131826;
-  --elevated: #1a2030;
-  --hover: #232a3d;
-  --t1: #e2e8f0;
-  --t2: #94a3b8;
-  --t3: #64748b;
-  --brd: rgba(255, 255, 255, 0.08);
-  --brdH: rgba(255, 255, 255, 0.16);
-  --bg-2: #1a2030;
-  --card: #131826;
-  --border: rgba(255, 255, 255, 0.08);
-  --sh: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px rgba(0, 0, 0, 0.2);
-  --sh2: 0 10px 30px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2);
-  --sh3: 0 16px 48px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.25);
-}
-[data-theme="dark"] .emp-card,
-[data-theme="dark"] .umb-card,
-[data-theme="dark"] .team-card,
-[data-theme="dark"] .prj-card {
-  background: var(--surface);
-}
-[data-theme="dark"] .emp-section,
-[data-theme="dark"] .umb-dept,
-[data-theme="dark"] .umb-member {
-  background: rgba(255, 255, 255, 0.04);
-}
-[data-theme="dark"] .emp-section.sensitive {
-  background: rgba(239, 68, 68, 0.08);
-}
-
-/* ── Theme Toggle Button ── */
-.theme-toggle {
-  position: fixed;
-  bottom: 80px;
-  left: 16px;
-  z-index: 100;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--brd);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  box-shadow: var(--sh2);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.theme-toggle:hover {
-  transform: scale(1.08);
-  box-shadow: var(--sh3);
-}
-@media (max-width: 640px) {
-  .theme-toggle {
-    bottom: 92px;
-    right: 16px;
-    left: auto;
-  }
-}
+/* الوضع الداكن مُلغى — ثيم نهاري موحّد فقط */
 
 /* ── Survey link ── */
 .survey-link {
@@ -8698,14 +8634,6 @@ a.emp-field-val:hover { color: #6366f1; }
   --s6: 32px;
   --s7: 48px;
 }
-[data-theme="dark"] {
-  --st-fresh: #34d399;
-  --st-recent: #38bdf8;
-  --st-ok: #818cf8;
-  --st-stale: #fbbf24;
-  --st-critical: #f87171;
-}
-
 /* نقطة حية نابضة عامة */
 .cc-pulse-dot {
   display: inline-block;
@@ -9204,14 +9132,6 @@ a.emp-field-val:hover { color: #6366f1; }
 .cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
-[data-theme="dark"] .cc-greet,
-[data-theme="dark"] .cc-brief,
-[data-theme="dark"] .cc-pulse,
-[data-theme="dark"] .cc-feed,
-[data-theme="dark"] .cc-sug {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
 /* استخدم اللون البراند للمشاريع بدل تعميم اللون */
 .prj-card[style*="--prj"] .prj-card-name { color: var(--t1); }
 .prj-card[style*="--prj"]:hover .prj-card-name { color: var(--prj); }
@@ -9254,7 +9174,268 @@ a.emp-field-val:hover { color: #6366f1; }
   font-size: 11px;
   font-weight: 700;
 }
-[data-theme="dark"] .cc-runtime-badge {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
+
+/* ═══════════════════════════════════════════════
+   MOBILE & ZOOM CONTROL — ثيم موحّد، بدون زوم
+   ═══════════════════════════════════════════════ */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: pan-x pan-y; /* يسمح فقط بالتمرير، لا zoom */
+}
+body {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+input, select, textarea, button {
+  font-size: 16px !important; /* يمنع iOS من zoom تلقائي عند focus */
+  font-family: inherit;
+}
+@media (max-width: 640px) {
+  /* تحجيم آمن للموبايل */
+  .hqx-card, .cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug,
+  .umb-card, .emp-card, .prj-card, .team-dept, .umb-dept {
+    border-radius: 14px;
+  }
+  /* مسافات مريحة */
+  main#app { padding: 12px !important; padding-bottom: 80px !important; }
+  /* عناوين صغيرة على الموبايل */
+  h1, .hqx-title, .cc-greet-title { font-size: 19px !important; line-height: 1.3 !important; }
+  h2, .cc-section-title { font-size: 14px !important; }
+  h3 { font-size: 13.5px !important; }
+  /* tap targets آمنة (44px+) */
+  button, a.cc-greet-action, .cc-brief-cta, .cc-sug-cta,
+  .team-view-btn, .salary-toggle, .survey-link {
+    min-height: 40px;
+  }
+  /* جداول صغيرة، إخفاء بعض الأعمدة */
+  .umb-card-stats { gap: 4px; }
+  .umb-stat strong { font-size: 14px; }
+  /* قراءة أسهل */
+  body { font-size: 14px; }
+}
+
+/* ═══════════════════════════════════════════════
+   UNIFIED VISUAL SYSTEM v3 — تناغم لكل الأقسام
+   ═══════════════════════════════════════════════ */
+
+/* Runtime bar — حياً ومُختصر */
+.cc-runtime-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--brd);
+  border-radius: 12px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+.cc-runtime-info {
+  font-size: 11.5px;
+  color: var(--t3);
+  flex: 1;
+  min-width: 0;
+}
+.cc-runtime-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--st-fresh);
+  background: rgba(16, 185, 129, 0.08);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ── HEADER UNIFICATION لكل الأقسام (hqx + cc + umb + emp + team + prj) ── */
+.hqx-card,
+.cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug,
+.umb-card, .emp-card, .prj-card, .prj-hero,
+.team-dept, .umb-dept,
+.tool-card-tags, .bot-card,
+.cld-card, .arc-card, .ideas-card,
+.ideas-cell, .map-card, .map-pin-card,
+.svc-card, .auto-task {
+  background: var(--surface);
+  border: 1px solid var(--brd);
+  border-radius: 14px;
+  transition: border-color var(--motion-base), transform var(--motion-base), box-shadow var(--motion-base);
+}
+
+/* تنعيم جميع البطاقات عند الـhover */
+.hqx-card:hover,
+.umb-card:hover, .emp-card:hover, .prj-card:hover,
+.team-dept:hover, .umb-dept:hover {
+  border-color: var(--brdH);
+}
+
+/* ═══════════════════════════════════════════════
+   GLOBAL MOBILE OPTIMIZATION
+   ═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* الـsidebar يصبح bottom bar فقط */
+  .sidebar { display: none !important; }
+  main#app { 
+    margin: 0 !important; 
+    width: 100vw !important; 
+    max-width: 100vw !important;
+    padding: 12px !important;
+    padding-bottom: 90px !important;
+  }
+  
+  /* جميع الـgrids تصبح عمود واحد */
+  .prj-grid, .emp-cards-grid, .umb-grid,
+  .cld-grid, .bot-grid, .tool-grid,
+  .team-all-grid, .team-grid, .ideas-grid,
+  .arc-grid, .svc-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  
+  /* بطاقات بحجم ودي للموبايل */
+  .umb-card, .emp-card, .prj-card,
+  .cc-pulse-card, .ideas-card, .arc-card {
+    padding: 14px !important;
+  }
+  
+  /* عناوين البطاقات مقروءة */
+  .umb-card-name, .emp-name, .prj-card-name { font-size: 14px !important; }
+  
+  /* أرقام الإحصائيات أصغر لكن واضحة */
+  .umb-stat strong, .cc-pulse-stat strong { font-size: 15px !important; }
+  
+  /* إخفاء بعض التفاصيل الثانوية */
+  .prj-umb-specialty, .emp-name-en,
+  .team-dept-ar, .cc-runtime-info { display: none; }
+  
+  /* الـRuntime bar أبسط */
+  .cc-runtime-bar { padding: 8px 12px; gap: 8px; }
+  .cc-runtime-time { font-size: 10px; padding: 3px 8px; }
+  
+  /* أزرار سهلة اللمس */
+  .emp-action, .cc-greet-action, .cc-brief-cta,
+  .cc-sug-cta, .team-view-btn, .salary-toggle,
+  .survey-link, .umb-member-btn, .emp-copy {
+    min-height: 40px !important;
+    padding: 10px 12px !important;
+  }
+  
+  /* التحية والترحيب أبسط */
+  .cc-greet { padding: 14px !important; flex-direction: column; }
+  .cc-greet-actions { width: 100%; }
+  .cc-greet-action { flex: 1; justify-content: center; min-height: 40px; }
+  .cc-greet-em { font-size: 28px !important; }
+  
+  /* قسم Brief يصبح stack */
+  .cc-brief-item { 
+    flex-wrap: wrap !important;
+    padding: 12px !important;
+  }
+  .cc-brief-cta { width: 100%; margin-top: 6px; }
+  
+  /* قسم Pulse مكدس */
+  .cc-pulse-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .cc-pulse-card { padding: 12px !important; }
+  
+  /* قسم Feed مدمج */
+  .cc-feed-item { 
+    grid-template-columns: auto 1fr !important;
+    grid-template-rows: auto auto;
+    padding: 10px !important;
+  }
+  .cc-feed-time { 
+    grid-column: 2 !important; 
+    grid-row: 2 !important;
+    text-align: end;
+    font-size: 10.5px;
+  }
+  
+  /* اقتراحات مكدسة */
+  .cc-sug-item { flex-wrap: wrap !important; }
+  .cc-sug-cta { width: 100%; margin-top: 6px; }
+  
+  /* صفحة الفريق - أزرار التحكم */
+  .team-controls { 
+    flex-direction: column !important; 
+    gap: 8px !important; 
+  }
+  .team-search { width: 100%; }
+  .team-view-switcher { width: 100%; }
+  .team-view-btn { flex: 1; }
+  
+  /* بطاقة موظف على الموبايل */
+  .emp-card-contacts { gap: 4px !important; }
+  .emp-action span { display: none; }
+  .emp-action { padding: 12px 6px !important; }
+  
+  /* صفحة الأدوات والسحابة */
+  .tool-category-strip { 
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .tool-card-grid, .cld-cards, .bot-grid,
+  .ideas-cells {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* صفحة السيرفر */
+  .svc-list, .svc-cards { 
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* hero للمشاريع — أصغر */
+  .prj-hero { padding: 16px !important; }
+  .prj-hero-stats { 
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .prj-hero-stat { padding: 10px !important; }
+  .prj-hero-title { font-size: 18px !important; }
+  .prj-hero-progress { height: 6px !important; }
+  
+  /* المظلات على الموبايل */
+  .umb-projects-list, .umb-members-list { gap: 4px !important; }
+  .umb-project, .umb-member { padding: 8px 10px !important; }
+  .umb-project-role { display: none; }
+  
+  /* الأرشيف والأفكار */
+  .arc-grid, .ideas-cells {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Survey link كامل العرض */
+  .survey-link { width: 100%; justify-content: center; }
+  
+  /* الجدول أو القائمة الطويلة */
+  table { font-size: 12px; }
+}
+
+/* ═══════════════════════════════════════════════
+   PROJECT VISUAL: شريط لون موحّد ومُحكم
+   ═══════════════════════════════════════════════ */
+/* لون البراند يستخدم على شكل شريط جانبي خفيف، لا يطغى على البطاقة */
+.prj-card { position: relative; overflow: hidden; }
+.prj-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: var(--prj, currentColor);
+  border-radius: 0 14px 14px 0;
+  opacity: 0.85;
+}
+.prj-card:hover::after { width: 5px; opacity: 1; }
+
+/* استخدام cl_brand فقط للحدود والـaccents، لا للخلفيات */
+.umb-card-icon, .cc-pulse-em, .cc-feed-name { color: inherit; }
+
+/* تخفيف tags الملونة (كانت صاخبة) */
+.tag {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: var(--t2) !important;
+  border: 1px solid var(--brd);
 }
