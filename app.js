@@ -1493,99 +1493,260 @@ R.projects = function () {
   );
 };
 
-/* ── TEAM — عرض الموظفين بالأقسام ── */
+/* ── TEAM — عرض ذكي للموظفين بـ3 مجموعات + راتب حساس ── */
+
+/* أزرار سريعة + نسخ + تبديل عرض الراتب — عبر window */
+window.teamCopy = function (text, btnId) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      const orig = btn.innerHTML;
+      btn.innerHTML = "✓";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.classList.remove("copied");
+      }, 1500);
+    }
+  });
+};
+
+window.teamToggleSalary = function () {
+  const cur = localStorage.getItem("cc_show_salary") === "1";
+  localStorage.setItem("cc_show_salary", cur ? "0" : "1");
+  document.querySelectorAll(".team-salary-row").forEach((el) => {
+    el.classList.toggle("revealed", !cur);
+  });
+  const btn = document.getElementById("salary-toggle-btn");
+  if (btn) btn.textContent = !cur ? "إخفاء الرواتب" : "إظهار الرواتب";
+};
+
+window.teamSwitchView = function (mode) {
+  document.querySelectorAll(".team-view-btn").forEach((b) =>
+    b.classList.toggle("active", b.dataset.view === mode),
+  );
+  const grid = document.getElementById("team-content");
+  if (grid) grid.dataset.view = mode;
+};
+
+window.teamFilter = function (q) {
+  const norm = (s) => (s || "").toLowerCase();
+  const term = norm(q);
+  document.querySelectorAll("[data-employee-card]").forEach((card) => {
+    const hay = norm(card.dataset.search);
+    card.style.display = !term || hay.includes(term) ? "" : "none";
+  });
+};
+
 R.team = function () {
   const teamData = typeof TEAM !== "undefined" ? TEAM : [];
   const deptData = typeof DEPARTMENTS !== "undefined" ? DEPARTMENTS : [];
+  const prjData = typeof PRJ !== "undefined" ? PRJ : [];
+  const umbData = typeof UMBRELLAS !== "undefined" ? UMBRELLAS : [];
 
   const byDept = (deptId) => teamData.filter((t) => t.department === deptId);
-  const orphaned = teamData.filter(
-    (t) => !deptData.find((d) => d.id === t.department),
-  );
+  const lookupDept = (id) => deptData.find((d) => d.id === id);
+  const lookupUmb = (id) => umbData.find((u) => u.id === id);
+  const lookupProj = (id) => prjData.find((p) => p.id === id);
 
   const totalEmployees = teamData.length;
+  const totalActive = teamData.filter((t) => t.status !== "terminated").length;
   const totalDepts = deptData.filter((d) => byDept(d.id).length > 0).length;
+  const totalWA = teamData.filter((t) => t.whatsapp).length;
 
+  // ── بطاقة موظف ذكية (تجمع 3 مجموعات + راتب) ──
+  const renderEmployeeCard = (m) => {
+    const initial = (m.name || "?").slice(0, 1);
+    const dept = lookupDept(m.department);
+    const umb = lookupUmb(m.parent);
+    const projs = (m.assigned_projects || [])
+      .map(lookupProj)
+      .filter(Boolean);
+    const langs = m.languages || [];
+    const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
+    const telUrl = m.phone ? `tel:${m.phone}` : null;
+    const smsUrl = m.phone ? `sms:${m.phone}` : null;
+    const mailUrl = m.email_work ? `mailto:${m.email_work}` : null;
+    const tgUrl = m.telegram
+      ? `https://t.me/${m.telegram.replace(/^@/, "")}`
+      : null;
+
+    const searchHay = [
+      m.name, m.name_en, m.full_name, m.role, m.phone, m.whatsapp,
+      m.email_work, m.telegram, m.location_office, m.nationality,
+      dept?.name, umb?.name, ...langs,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    const statusBadge = {
+      active: { label: "نشط", cl: "#10b981" },
+      "on-leave": { label: "إجازة", cl: "#f59e0b" },
+      terminated: { label: "منتهي", cl: "#ef4444" },
+    }[m.status] || { label: "—", cl: "#94a3b8" };
+
+    const fillNote = (label, val) =>
+      val
+        ? `<div class="emp-field"><span class="emp-field-label">${E(label)}</span><span class="emp-field-val">${E(val)}</span></div>`
+        : `<div class="emp-field empty"><span class="emp-field-label">${E(label)}</span><span class="emp-field-val">—</span></div>`;
+
+    const copyBtn = (text, id, title) =>
+      `<button class="emp-copy" id="${id}" onclick="teamCopy('${E(text)}','${id}')" title="${E(title)}">📋</button>`;
+
+    return (
+      `<div class="emp-card" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}">` +
+      // ── HEADER: Identity ──
+      `<div class="emp-header">` +
+      `<div class="emp-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
+      `<div class="emp-header-info">` +
+      `<div class="emp-name-row">` +
+      `<h3 class="emp-name">${E(m.full_name || m.name)}</h3>` +
+      `<span class="emp-status-badge" style="background:${statusBadge.cl}18;color:${statusBadge.cl}">${E(statusBadge.label)}</span>` +
+      `</div>` +
+      (m.name_en
+        ? `<div class="emp-name-en" dir="ltr">${E(m.name_en)}</div>`
+        : "") +
+      `<div class="emp-role">${E(m.role || "")}</div>` +
+      `<div class="emp-context">` +
+      (dept
+        ? `<span class="emp-chip" style="background:${dept.cl}18;color:${dept.cl}">${_ic(dept.em, 11)} ${E(dept.name)}</span>`
+        : "") +
+      (umb
+        ? `<span class="emp-chip" style="background:${umb.cl}18;color:${umb.cl}">${_ic(umb.em, 11)} ${E(umb.name)}</span>`
+        : "") +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      // ── ACTION BAR (سريع جداً) ──
+      `<div class="emp-action-bar">` +
+      (telUrl
+        ? `<a class="emp-action call" href="${E(telUrl)}" title="اتصال">${_ic("📞", 16)}<span>اتصال</span></a>`
+        : "") +
+      (waUrl
+        ? `<a class="emp-action wa" href="${E(waUrl)}" target="_blank" rel="noopener" title="فتح واتساب">${_ic("💬", 16)}<span>واتساب</span></a>`
+        : "") +
+      (smsUrl
+        ? `<a class="emp-action sms" href="${E(smsUrl)}" title="رسالة SMS">${_ic("📱", 16)}<span>SMS</span></a>`
+        : "") +
+      (mailUrl
+        ? `<a class="emp-action mail" href="${E(mailUrl)}" title="بريد إلكتروني">${_ic("📧", 16)}<span>بريد</span></a>`
+        : "") +
+      `</div>` +
+      // ── GROUP 1: CONTACT (تواصل) ──
+      `<div class="emp-section">` +
+      `<div class="emp-section-title">📞 التواصل</div>` +
+      (m.phone_local
+        ? `<div class="emp-field with-copy"><span class="emp-field-label">رقم الهاتف</span><span class="emp-field-val mono" dir="ltr">${E(m.phone_local)}</span>${copyBtn(m.phone_local, "cp-phone-" + m.id, "نسخ الرقم")}</div>`
+        : `<div class="emp-field empty"><span class="emp-field-label">رقم الهاتف</span><span class="emp-field-val">—</span></div>`) +
+      (m.whatsapp
+        ? `<div class="emp-field with-copy"><span class="emp-field-label">واتساب</span><span class="emp-field-val mono" dir="ltr">wa.me/${E(m.whatsapp)}</span>${copyBtn("wa.me/" + m.whatsapp, "cp-wa-" + m.id, "نسخ رابط واتساب")}</div>`
+        : "") +
+      fillNote("اسم العرض على واتساب", m.whatsapp_display_name) +
+      fillNote("البريد الإلكتروني", m.email_work) +
+      (m.telegram
+        ? `<div class="emp-field"><span class="emp-field-label">تيليجرام</span><a class="emp-field-val mono" href="${E(tgUrl)}" target="_blank" rel="noopener" dir="ltr">${E(m.telegram)}</a></div>`
+        : `<div class="emp-field empty"><span class="emp-field-label">تيليجرام</span><span class="emp-field-val">—</span></div>`) +
+      fillNote("موقع المكتب", m.location_office) +
+      `</div>` +
+      // ── GROUP 2: IDENTITY (هوية) ──
+      `<div class="emp-section">` +
+      `<div class="emp-section-title">👤 الهوية</div>` +
+      fillNote("الاسم بالإنجليزية", m.name_en) +
+      fillNote("الاسم الكامل", m.full_name) +
+      fillNote("الجنسية", m.nationality) +
+      `<div class="emp-field"><span class="emp-field-label">اللغات</span>` +
+      (langs.length
+        ? `<span class="emp-langs">${langs.map((l) => `<span class="emp-lang-tag">${E(l)}</span>`).join("")}</span>`
+        : `<span class="emp-field-val empty-val">—</span>`) +
+      `</div>` +
+      `</div>` +
+      // ── GROUP 3: WORK (عمل) ──
+      `<div class="emp-section">` +
+      `<div class="emp-section-title">💼 العمل</div>` +
+      (projs.length
+        ? `<div class="emp-field"><span class="emp-field-label">المشاريع</span>` +
+          `<span class="emp-projs">` +
+          projs
+            .map(
+              (p) =>
+                `<a class="emp-proj-tag" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
+            )
+            .join("") +
+          `</span></div>`
+        : `<div class="emp-field empty"><span class="emp-field-label">المشاريع</span><span class="emp-field-val">—</span></div>`) +
+      fillNote("المدير المباشر", m.manager) +
+      fillNote("تاريخ الانضمام", m.hire_date) +
+      fillNote("نوع التعاقد", m.contract_type) +
+      fillNote("ساعات العمل", m.working_hours) +
+      `</div>` +
+      // ── SENSITIVE: SALARY ──
+      `<div class="emp-section sensitive">` +
+      `<div class="emp-section-title sensitive">🔒 معلومات حساسة</div>` +
+      `<div class="emp-field team-salary-row${localStorage.getItem("cc_show_salary") === "1" ? " revealed" : ""}">` +
+      `<span class="emp-field-label">الراتب الشهري</span>` +
+      `<span class="emp-salary-val">${m.salary_usd ? `$${m.salary_usd}` : "—"}</span>` +
+      `<span class="emp-salary-mask">••••• USD</span>` +
+      `</div>` +
+      `</div>` +
+      `</div>`
+    );
+  };
+
+  // ── الواجهة الكاملة ──
   return (
     _sectionHero({
       tone: "team",
       kicker: "Team & Employees",
       title: "الفريق والموظفون",
-      desc: "كل الموظفين منظَّمين تحت أقسامهم. كل بطاقة بها رقم الهاتف ورابط واتساب مباشر — اضغط للاتصال أو فتح المحادثة فوراً.",
+      desc: "ملف ذكي شامل لكل موظف: تواصل + هوية + عمل. أزرار اتصال وواتساب وSMS وبريد، نسخ سريع للأرقام والروابط، وبحث فوري عبر كل الحقول.",
       stats: [
-        { v: totalEmployees, l: "إجمالي الموظفين" },
-        { v: totalDepts, l: "أقسام نشطة" },
-        { v: UMBRELLAS.filter((u) => u.id === "brix").length, l: "شركة BRIX" },
-        {
-          v: teamData.filter((t) => t.whatsapp).length,
-          l: "متصلون عبر واتساب",
-        },
+        { v: totalEmployees, l: "إجمالي" },
+        { v: totalActive, l: "نشط" },
+        { v: totalDepts, l: "أقسام" },
+        { v: totalWA, l: "متصل بواتساب" },
       ],
     }) +
+    // ── شريط التحكم ──
+    `<div class="team-controls">` +
+    `<input type="search" class="team-search" placeholder="🔍 ابحث: اسم، رقم، بريد، لغة، مشروع..." oninput="teamFilter(this.value)" />` +
+    `<div class="team-view-switcher">` +
+    `<button class="team-view-btn active" data-view="grouped" onclick="teamSwitchView('grouped')">📂 بالأقسام</button>` +
+    `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
+    `</div>` +
+    `<button id="salary-toggle-btn" class="salary-toggle" onclick="teamToggleSalary()">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
+    `</div>` +
+    // ── المحتوى ──
+    `<div id="team-content" class="team-content" data-view="grouped">` +
+    // عرض الكل (يظهر في وضع "الكل")
+    `<div class="team-all-grid">` +
+    teamData.map(renderEmployeeCard).join("") +
+    `</div>` +
+    // عرض بالأقسام (الافتراضي)
+    `<div class="team-grouped">` +
     deptData
       .map((d) => {
         const members = byDept(d.id);
         if (!members.length) return "";
+        const umb = lookupUmb(d.parent);
         return (
           `<div class="team-dept" style="--dept:${d.cl}">` +
           `<div class="team-dept-header">` +
           `<span class="team-dept-ic" style="background:${d.cl}22;color:${d.cl}">${_ic(d.em, 24)}</span>` +
           `<div class="team-dept-titles">` +
           `<h3 class="team-dept-name">${E(d.name)}</h3>` +
-          `<p class="team-dept-ar">${E(d.ar || "")}</p>` +
+          `<p class="team-dept-ar">${E(d.ar || "")}${umb ? ` · ${E(umb.name)}` : ""}</p>` +
           `</div>` +
           `<span class="team-dept-count">${members.length} موظف</span>` +
           `</div>` +
-          `<div class="team-grid">` +
-          members
-            .map((m) => {
-              const initial = (m.name || "?").slice(0, 1);
-              const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
-              const telUrl = m.phone ? `tel:${m.phone}` : null;
-              return (
-                `<div class="team-card" style="--mc:${m.cl}">` +
-                `<div class="team-card-top">` +
-                `<div class="team-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
-                `<div class="team-card-info">` +
-                `<h4 class="team-name">${E(m.full_name || m.name)}</h4>` +
-                `<p class="team-role">${E(m.role || "")}</p>` +
-                `</div>` +
-                `</div>` +
-                `<div class="team-card-contacts">` +
-                (telUrl
-                  ? `<a class="team-contact tel" href="${E(telUrl)}" onclick="event.stopPropagation()">` +
-                    `<span class="team-contact-ic">${_ic("📞", 14)}</span>` +
-                    `<span class="team-contact-val" dir="ltr">${E(m.phone_local || m.phone)}</span>` +
-                    `</a>`
-                  : "") +
-                (waUrl
-                  ? `<a class="team-contact wa" href="${E(waUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">` +
-                    `<span class="team-contact-ic">${_ic("💬", 14)}</span>` +
-                    `<span class="team-contact-val" dir="ltr">wa.me/${E(m.whatsapp)}</span>` +
-                    `</a>`
-                  : "") +
-                (m.email
-                  ? `<a class="team-contact em" href="mailto:${E(m.email)}">` +
-                    `<span class="team-contact-ic">${_ic("📧", 14)}</span>` +
-                    `<span class="team-contact-val">${E(m.email)}</span>` +
-                    `</a>`
-                  : "") +
-                `</div>` +
-                (m.notes
-                  ? `<p class="team-notes">${E(m.notes)}</p>`
-                  : "") +
-                `</div>`
-              );
-            })
-            .join("") +
+          `<div class="emp-cards-grid">` +
+          members.map(renderEmployeeCard).join("") +
           `</div>` +
           `</div>`
         );
       })
       .join("") +
-    (orphaned.length
-      ? `<div class="team-dept" style="--dept:#94a3b8"><div class="team-dept-header"><span class="team-dept-ic">${_ic("👥", 24)}</span><h3 class="team-dept-name">بدون قسم</h3><span class="team-dept-count">${orphaned.length}</span></div></div>`
-      : "")
+    `</div>` +
+    `</div>`
   );
 };
 
