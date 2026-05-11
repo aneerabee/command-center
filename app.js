@@ -1589,78 +1589,164 @@ R.team = function () {
   );
 };
 
-/* ── UMBRELLAS — عرض الشركات الأم ── */
+/* ── UMBRELLAS — عرض هرمي: مظلة → أقسام → مشاريع + موظفون ── */
 R.umbrellas = function () {
   const projByParent = (id) => PRJ.filter((p) => p.parent === id);
-  const ideasByParent = (id) => (typeof IDEAS !== "undefined" ? IDEAS.filter((i) => i.parent === id) : []);
+  const ideasByParent = (id) =>
+    typeof IDEAS !== "undefined"
+      ? IDEAS.filter((i) => i.parent === id)
+      : [];
+  const deptsByParent = (id) =>
+    typeof DEPARTMENTS !== "undefined"
+      ? DEPARTMENTS.filter((d) => d.parent === id)
+      : [];
+  const teamByDept = (deptId) =>
+    typeof TEAM !== "undefined" ? TEAM.filter((t) => t.department === deptId) : [];
+  const projByDept = (deptId) => PRJ.filter((p) => p.department === deptId);
+  const teamByParent = (parentId) =>
+    typeof TEAM !== "undefined"
+      ? TEAM.filter((t) => t.parent === parentId)
+      : [];
 
   const totalProjects = PRJ.length;
   const totalActive = PRJ.filter((p) => p.st === "a").length;
+  const totalTeam = typeof TEAM !== "undefined" ? TEAM.length : 0;
   const totalRevenue = PRJ.reduce(
     (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
     0,
   );
+
+  // مكوّن: بطاقة مشروع مصغّرة داخل قسم
+  const renderProjectRow = (p) =>
+    `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
+    `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
+    `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
+    (p.parent_role
+      ? `<span class="umb-project-role">${E(p.parent_role)}</span>`
+      : "") +
+    `<span class="umb-project-pct">${p.pct || 0}%</span>` +
+    `</div>`;
+
+  // مكوّن: بطاقة موظف مصغّرة داخل قسم
+  const renderMemberRow = (m) => {
+    const initial = (m.name || "?").slice(0, 1);
+    const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
+    const telUrl = m.phone ? `tel:${m.phone}` : null;
+    return (
+      `<div class="umb-member" style="--mc:${m.cl}">` +
+      `<div class="umb-member-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
+      `<div class="umb-member-info">` +
+      `<div class="umb-member-name">${E(m.full_name || m.name)}</div>` +
+      `<div class="umb-member-role">${E(m.role || "")}</div>` +
+      `</div>` +
+      `<div class="umb-member-actions">` +
+      (telUrl
+        ? `<a class="umb-member-btn tel" href="${E(telUrl)}" onclick="event.stopPropagation()" title="${E(m.phone_local || m.phone)}">${_ic("📞", 14)}</a>`
+        : "") +
+      (waUrl
+        ? `<a class="umb-member-btn wa" href="${E(waUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="wa.me/${E(m.whatsapp)}">${_ic("💬", 14)}</a>`
+        : "") +
+      `</div>` +
+      `</div>`
+    );
+  };
+
+  // مكوّن: قسم داخل مظلة (BRIX-B2B, EasyBooking, Rihlaty…)
+  const renderDepartment = (d) => {
+    const dProjects = projByDept(d.id);
+    const dTeam = teamByDept(d.id);
+    return (
+      `<div class="umb-dept" style="--dept:${d.cl}">` +
+      `<div class="umb-dept-header">` +
+      `<span class="umb-dept-ic" style="background:${d.cl}22;color:${d.cl}">${_ic(d.em, 18)}</span>` +
+      `<div class="umb-dept-titles">` +
+      `<div class="umb-dept-name">${E(d.name)}</div>` +
+      `<div class="umb-dept-ar">${E(d.ar || "")}</div>` +
+      `</div>` +
+      `<div class="umb-dept-counts">` +
+      `<span class="umb-dept-count">📦 ${dProjects.length}</span>` +
+      `<span class="umb-dept-count">👥 ${dTeam.length}</span>` +
+      `</div>` +
+      `</div>` +
+      (dProjects.length
+        ? `<div class="umb-dept-block"><div class="umb-dept-block-label">المشاريع</div>` +
+          `<div class="umb-projects-list">${dProjects.map(renderProjectRow).join("")}</div></div>`
+        : "") +
+      (dTeam.length
+        ? `<div class="umb-dept-block"><div class="umb-dept-block-label">الموظفون</div>` +
+          `<div class="umb-members-list">${dTeam.map(renderMemberRow).join("")}</div></div>`
+        : "") +
+      (!dProjects.length && !dTeam.length
+        ? `<div class="umb-dept-empty">— لا يوجد مشاريع أو موظفون بعد —</div>`
+        : "") +
+      `</div>`
+    );
+  };
 
   return (
     _sectionHero({
       tone: "umbrellas",
       kicker: "Companies & Umbrellas",
       title: "الشركات والمظلات",
-      desc: "كل ما تملك مُنظَّم تحت 4 مظلات: شركتان حقيقيتان، خط منتجات SaaS، وبنية تحتية شخصية. اضغط أي مظلة لرؤية مشاريعها وأفكارها.",
+      desc: "عرض هرمي كامل: كل مظلة تكشف أقسامها، وكل قسم يعرض مشاريعه وموظفيه في مكان واحد. اضغط أي مشروع لفتح تفاصيله، أو رقم/واتساب للاتصال مباشرة.",
       stats: [
         { v: UMBRELLAS.length, l: "مظلات" },
         { v: totalProjects, l: "مشاريع" },
         { v: totalActive, l: "نشط" },
-        { v: `$${totalRevenue}`, l: "إيراد شهري/USD" },
+        { v: totalTeam, l: "موظفين" },
       ],
     }) +
     `<div class="umb-grid">` +
     UMBRELLAS.map((u) => {
       const projects = projByParent(u.id);
       const ideas = ideasByParent(u.id);
+      const depts = deptsByParent(u.id);
       const activeCount = projects.filter((p) => p.st === "a").length;
       const revenue = projects.reduce(
         (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
         0,
       );
-      const users = projects.reduce(
-        (s, p) => s + (Number(p.users_count) || 0),
-        0,
+      const umbTeamCount = teamByParent(u.id).length;
+
+      // مشاريع لا تنتمي لأي قسم محدد (مظلات بلا أقسام)
+      const unassignedProjects = projects.filter(
+        (p) => !depts.find((d) => d.id === p.department),
       );
 
       return (
         `<div class="umb-card" style="--umb:${u.cl}">` +
+        // ── HEADER ──
         `<div class="umb-card-header">` +
         `<div class="umb-card-icon" style="background:${u.cl}22;color:${u.cl}">${_ic(u.em, 32)}</div>` +
         `<div class="umb-card-titles">` +
         `<h3 class="umb-card-name">${E(u.name)}</h3>` +
         `<p class="umb-card-specialty">${E(u.specialty)}</p>` +
-        (u.location ? `<span class="umb-card-loc">📍 ${E(u.location)}</span>` : "") +
+        (u.location
+          ? `<span class="umb-card-loc">📍 ${E(u.location)}</span>`
+          : "") +
         `</div>` +
         `</div>` +
         `<p class="umb-card-summary">${E(u.summary)}</p>` +
+        // ── STATS ──
         `<div class="umb-card-stats">` +
         `<div class="umb-stat"><strong>${projects.length}</strong><span>مشاريع</span></div>` +
         `<div class="umb-stat"><strong>${activeCount}</strong><span>نشط</span></div>` +
+        `<div class="umb-stat"><strong>${umbTeamCount}</strong><span>موظفين</span></div>` +
         `<div class="umb-stat"><strong>${ideas.length}</strong><span>أفكار</span></div>` +
         `<div class="umb-stat"><strong>$${revenue}</strong><span>شهري</span></div>` +
         `</div>` +
-        (projects.length
-          ? `<div class="umb-projects-title">المشاريع</div>` +
-            `<div class="umb-projects-list">` +
-            projects
-              .map(
-                (p) =>
-                  `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
-                  `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
-                  `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
-                  `<span class="umb-project-role">${E(p.parent_role || "")}</span>` +
-                  `<span class="umb-project-pct">${p.pct || 0}%</span>` +
-                  `</div>`,
-              )
-              .join("") +
+        // ── DEPARTMENTS (هرمي للمظلات التي لها أقسام) ──
+        (depts.length
+          ? `<div class="umb-depts-wrapper">` +
+            depts.map(renderDepartment).join("") +
             `</div>`
           : "") +
+        // ── مشاريع غير مصنّفة لقسم (مظلات بلا أقسام) ──
+        (unassignedProjects.length
+          ? `<div class="umb-projects-title">${depts.length ? "مشاريع أخرى" : "المشاريع"}</div>` +
+            `<div class="umb-projects-list">${unassignedProjects.map(renderProjectRow).join("")}</div>`
+          : "") +
+        // ── الأفكار ──
         (ideas.length
           ? `<div class="umb-projects-title">الأفكار</div>` +
             `<div class="umb-ideas-list">` +
