@@ -12,6 +12,144 @@ const E = (s) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
+/* ══════════════════════════════════════════════
+   DESIGN SYSTEM — Smart Helpers
+   ══════════════════════════════════════════════ */
+
+/* تنسيق رقم: 1234 -> "1,234", 1234567 -> "1.2M" */
+function fmtNum(n) {
+  n = Number(n) || 0;
+  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (Math.abs(n) >= 10_000) return (n / 1000).toFixed(1) + "K";
+  return n.toLocaleString("en-US");
+}
+
+/* عملة بفاصلات ورمز */
+function fmtCurrency(n, code = "USD") {
+  const symbol = { USD: "$", TRY: "₺", EUR: "€" }[code] || code;
+  return symbol + fmtNum(Math.abs(n));
+}
+
+/* تعدد عربي صحيح */
+function arPlural(n, singular, dual, plural3to10, plural11plus) {
+  if (n === 0) return `لا ${plural3to10}`;
+  if (n === 1) return singular;
+  if (n === 2) return dual;
+  if (n >= 3 && n <= 10) return `${n} ${plural3to10}`;
+  return `${n} ${plural11plus || plural3to10}`;
+}
+const arPluralEmp = (n) => arPlural(n, "موظف واحد", "موظفان", "موظفين", "موظفاً");
+const arPluralProj = (n) => arPlural(n, "مشروع واحد", "مشروعان", "مشاريع", "مشروعاً");
+const arPluralDept = (n) => arPlural(n, "قسم واحد", "قسمان", "أقسام", "قسماً");
+const arPluralIdea = (n) => arPlural(n, "فكرة واحدة", "فكرتان", "أفكار", "فكرة");
+
+/* وقت نسبي بالعربية — يحدّث تلقائياً */
+function relTime(iso) {
+  if (!iso) return "";
+  const then = new Date(iso);
+  const diff = (Date.now() - then.getTime()) / 1000;
+  if (diff < 30) return "الآن";
+  if (diff < 60) return `منذ ${Math.floor(diff)} ثانية`;
+  if (diff < 120) return "منذ دقيقة";
+  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
+  if (diff < 7200) return "منذ ساعة";
+  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
+  if (diff < 172800) return "أمس";
+  if (diff < 604800) return `منذ ${Math.floor(diff / 86400)} أيام`;
+  if (diff < 2592000) return `منذ ${Math.floor(diff / 604800)} أسابيع`;
+  if (diff < 31536000) return `منذ ${Math.floor(diff / 2592000)} أشهر`;
+  return `منذ ${Math.floor(diff / 31536000)} سنوات`;
+}
+
+/* تحية ذكية حسب الوقت */
+function smartGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return { text: "صباح الخير", em: "☀️", tone: "morning" };
+  if (h >= 12 && h < 17) return { text: "مساء النور", em: "🌞", tone: "afternoon" };
+  if (h >= 17 && h < 21) return { text: "مساء الخير", em: "🌆", tone: "evening" };
+  return { text: "ليلة سعيدة", em: "🌙", tone: "night" };
+}
+
+/* تاريخ اليوم بصيغة عربية */
+function todayLong() {
+  return new Date().toLocaleDateString("ar-EG", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+/* تصنيف "طزاجة" حسب آخر تحديث */
+function staleness(iso) {
+  if (!iso) return { level: "unknown", label: "لم يُحدّث", cl: "#94a3b8" };
+  const days = (Date.now() - new Date(iso).getTime()) / 86400000;
+  if (days < 1) return { level: "fresh", label: "اليوم", cl: "#10b981" };
+  if (days < 7) return { level: "recent", label: "هذا الأسبوع", cl: "#0ea5e9" };
+  if (days < 30) return { level: "ok", label: "هذا الشهر", cl: "#6366f1" };
+  if (days < 60) return { level: "stale", label: "متأخر", cl: "#f59e0b" };
+  return { level: "very-stale", label: "قديم جداً", cl: "#ef4444" };
+}
+
+/* اشتقاق لون حالة من رقم مع هدف */
+function statusFromTarget(value, target) {
+  if (!target || value <= 0) return "#94a3b8";
+  const pct = (value / target) * 100;
+  if (pct >= 100) return "#10b981";
+  if (pct >= 70) return "#84cc16";
+  if (pct >= 40) return "#f59e0b";
+  return "#ef4444";
+}
+
+/* الأبجدية الأولى من اسم — يدعم العربي */
+function nameInitial(s) {
+  return (String(s || "?").trim().match(/\S/) || ["?"])[0];
+}
+
+/* نسخ آمن للحافظة مع feedback */
+window.copyToClipboard = function (text, btn) {
+  return navigator.clipboard.writeText(text).then(() => {
+    if (btn) {
+      const orig = btn.textContent;
+      const wasDisabled = btn.disabled;
+      btn.textContent = "✓ تم النسخ";
+      btn.disabled = true;
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.disabled = wasDisabled;
+        btn.classList.remove("copied");
+      }, 1500);
+    }
+  });
+};
+
+/* mini sparkline من قائمة أرقام */
+function _miniSpark(values, color = "#6366f1", w = 60, h = 18) {
+  if (!values || !values.length) return "";
+  const max = Math.max(...values, 1);
+  const step = w / Math.max(values.length - 1, 1);
+  const points = values
+    .map((v, i) => `${(i * step).toFixed(1)},${(h - (v / max) * h).toFixed(1)}`)
+    .join(" ");
+  return (
+    `<svg class="cc-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">` +
+    `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` +
+    `</svg>`
+  );
+}
+
+/* تشغيل tick حي لتحديث الأوقات النسبية كل دقيقة */
+let _liveTickInterval = null;
+function _startLiveTicks() {
+  if (_liveTickInterval) clearInterval(_liveTickInterval);
+  _liveTickInterval = setInterval(() => {
+    document.querySelectorAll("[data-live-time]").forEach((el) => {
+      el.textContent = relTime(el.dataset.liveTime);
+    });
+  }, 60_000);
+}
+
 /* ── ICON SYSTEM — Lucide SVG icons replace emojis ── */
 const IC = {
   "🏠": "home",
@@ -1222,8 +1360,255 @@ R.home = function () {
     },
   ];
 
+  // ──── SMART HOME v2 — منطق ذكي يستنبط من البيانات ────
+  const greet = smartGreeting();
+  const hourNow = new Date().getHours();
+
+  // اكتشاف العناصر التي تحتاج انتباه
+  const staleProjects = PRJ.filter((p) => {
+    const days = p.current_status?.updated
+      ? (Date.now() - new Date(p.current_status.updated).getTime()) / 86400000
+      : 999;
+    return days > 14 && p.priority === "high";
+  });
+  const projectsWithBlockers = PRJ.filter(
+    (p) =>
+      p.current_status?.blockers?.some(
+        (b) => b.priority === "high" || b.priority === "med",
+      ),
+  );
+  const teamMissingData = (typeof TEAM !== "undefined" ? TEAM : []).filter(
+    (t) => !t.full_name || !t.email_work,
+  );
+  const projectsWithNoRevenue = PRJ.filter(
+    (p) =>
+      p.revenue_model !== "none" &&
+      (!p.monthly_revenue_usd || p.monthly_revenue_usd === 0),
+  );
+
+  // briefs ذكية
+  const briefs = [];
+  projectsWithBlockers.slice(0, 2).forEach((p) => {
+    const b = p.current_status.blockers.find((x) => x.priority === "high") ||
+      p.current_status.blockers[0];
+    briefs.push({
+      level: b.priority === "high" ? "critical" : "warn",
+      icon: b.priority === "high" ? "🔴" : "🟡",
+      title: p.ar || p.name,
+      detail: b.text.slice(0, 80) + (b.text.length > 80 ? "…" : ""),
+      action: `openProjectDetail('${E(p.name)}')`,
+      actionLabel: "افتح المشروع",
+      tone: b.priority === "high" ? "#ef4444" : "#f59e0b",
+    });
+  });
+  if (teamMissingData.length > 2) {
+    briefs.push({
+      level: "info",
+      icon: "📋",
+      title: `${teamMissingData.length} موظفون ببيانات ناقصة`,
+      detail: "أرسل لهم رابط الاستبيان لاستكمال الملفات",
+      action: `window.open('survey.html','_blank')`,
+      actionLabel: "افتح الاستبيان",
+      tone: "#6366f1",
+    });
+  }
+  if (staleProjects.length) {
+    briefs.push({
+      level: "warn",
+      icon: "⏰",
+      title: `${staleProjects.length} مشاريع ذات أولوية عالية لم تُحدّث`,
+      detail: staleProjects.map((p) => p.ar || p.name).join(" · "),
+      action: `go('projects')`,
+      actionLabel: "راجع",
+      tone: "#f59e0b",
+    });
+  }
+  if (projectsWithNoRevenue.length > 0 && hourNow >= 10 && hourNow < 19) {
+    briefs.push({
+      level: "info",
+      icon: "💰",
+      title: `${projectsWithNoRevenue.length} مشاريع بدون تتبّع إيراد`,
+      detail: "ابدأ بتسجيل الإيراد الشهري لكل مشروع",
+      action: `go('umbrellas')`,
+      actionLabel: "افتح الشركات",
+      tone: "#10b981",
+    });
+  }
+
+  // pulse: الإيرادات الحية لكل مظلة
+  const umbPulse = UMBRELLAS.map((u) => {
+    const projs = PRJ.filter((p) => p.parent === u.id);
+    const rev = projs.reduce(
+      (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
+      0,
+    );
+    const active = projs.filter((p) => p.st === "a").length;
+    const teamCount = (typeof TEAM !== "undefined" ? TEAM : []).filter(
+      (t) => t.parent === u.id,
+    ).length;
+    // mock trend data for sparkline (في الحقيقة من تاريخ التحديثات)
+    const trend = projs.map((p) => p.pct || 0).slice(0, 7);
+    return { ...u, rev, active, teamCount, prjCount: projs.length, trend };
+  });
+
+  // activity feed: آخر التحديثات
+  const activityFeed = PRJ.filter((p) => p.current_status?.updated)
+    .sort(
+      (a, b) =>
+        new Date(b.current_status.updated) - new Date(a.current_status.updated),
+    )
+    .slice(0, 6);
+
+  // smart suggestions
+  const suggestions = [];
+  const incompleteTeam = teamMissingData.length;
+  if (incompleteTeam > 0)
+    suggestions.push({
+      em: "👤",
+      text: `بيانات ${incompleteTeam} موظفين غير مكتملة`,
+      cta: "أرسل الاستبيان",
+      action: `window.open('survey.html','_blank')`,
+    });
+  const rihlaty = PRJ.find((p) => p.id === "rihlaty-travel");
+  if (rihlaty && rihlaty.pct < 50)
+    suggestions.push({
+      em: "✈️",
+      text: "Rihlaty Travel تحت 50% — صفحات السوشيال لم تُنشأ",
+      cta: "افتح المشروع",
+      action: `openProjectDetail('Rihlaty Travel')`,
+    });
+  const mm = PRJ.find((p) => p.id === "money-manager");
+  if (mm && mm.st === "p")
+    suggestions.push({
+      em: "💰",
+      text: "Money Manager متوقف رغم أنه قاعدة مالية للكل",
+      cta: "إنعاش",
+      action: `openProjectDetail('Money Manager')`,
+    });
+
   return (
     `<div class="hqx">` +
+    // ──── SMART HEADER v2 — الترحيب + التاريخ + الحالة العامة ────
+    `<section class="cc-greet" data-tone="${greet.tone}">` +
+    `<div class="cc-greet-main">` +
+    `<div class="cc-greet-row">` +
+    `<span class="cc-greet-em">${greet.em}</span>` +
+    `<h1 class="cc-greet-title">${E(greet.text)}، ربيع</h1>` +
+    `<span class="cc-pulse-dot" title="النظام متصل"></span>` +
+    `</div>` +
+    `<p class="cc-greet-sub">${E(todayLong())} · ${arPluralProj(PRJ.length)} · ${arPluralEmp(TEAM ? TEAM.length : 0)} · ${arPluralDept(DEPARTMENTS ? DEPARTMENTS.length : 0)}</p>` +
+    `</div>` +
+    `<div class="cc-greet-actions">` +
+    `<button class="cc-greet-action cc-clickable" onclick="openSearch()" title="بحث (Cmd+K)">🔍 بحث</button>` +
+    `<a class="cc-greet-action cc-clickable" href="survey.html" target="_blank" title="استبيان موظف">📋 استبيان</a>` +
+    `</div>` +
+    `</section>` +
+    // ──── TODAY'S BRIEF — ما يحتاج انتباهك الآن ────
+    (briefs.length
+      ? `<section class="cc-brief">` +
+        `<h2 class="cc-section-title">` +
+        `<span class="cc-section-em">🔥</span>` +
+        `يحتاج انتباهك الآن` +
+        `<span class="cc-section-badge">${briefs.length}</span>` +
+        `</h2>` +
+        `<div class="cc-brief-list">` +
+        briefs
+          .map(
+            (b) =>
+              `<div class="cc-brief-item cc-clickable" onclick="${b.action}" style="--bt:${b.tone}">` +
+              `<span class="cc-brief-icon">${b.icon}</span>` +
+              `<div class="cc-brief-body">` +
+              `<div class="cc-brief-title">${E(b.title)}</div>` +
+              `<div class="cc-brief-detail">${E(b.detail)}</div>` +
+              `</div>` +
+              `<button class="cc-brief-cta">${E(b.actionLabel)} ←</button>` +
+              `</div>`,
+          )
+          .join("") +
+        `</div>` +
+        `</section>`
+      : `<section class="cc-brief cc-brief-empty">` +
+        `<span class="cc-pulse-dot"></span>` +
+        `لا شيء حرج الآن — كل شيء يعمل بسلاسة ✓` +
+        `</section>`) +
+    // ──── LIVE PULSE — نبض الشركات الحي ────
+    `<section class="cc-pulse">` +
+    `<h2 class="cc-section-title">` +
+    `<span class="cc-section-em">⚡</span>` +
+    `نبض الشركات الحي` +
+    `</h2>` +
+    `<div class="cc-pulse-grid">` +
+    umbPulse
+      .map(
+        (u) =>
+          `<div class="cc-pulse-card cc-clickable" onclick="go('umbrellas')" style="--umb:${u.cl}">` +
+          `<div class="cc-pulse-head">` +
+          `<span class="cc-pulse-em">${_ic(u.em, 18)}</span>` +
+          `<span class="cc-pulse-name">${E(u.name)}</span>` +
+          `</div>` +
+          `<div class="cc-pulse-stats">` +
+          `<div class="cc-pulse-stat"><strong>${u.prjCount}</strong><span>مشاريع</span></div>` +
+          `<div class="cc-pulse-stat"><strong>${u.teamCount}</strong><span>فريق</span></div>` +
+          `<div class="cc-pulse-stat"><strong>${u.rev ? fmtCurrency(u.rev) : "—"}</strong><span>شهري</span></div>` +
+          `</div>` +
+          `<div class="cc-pulse-spark">${_miniSpark(u.trend.length ? u.trend : [1], u.cl, 100, 24)}</div>` +
+          `</div>`,
+      )
+      .join("") +
+    `</div>` +
+    `</section>` +
+    // ──── ACTIVITY FEED — آخر التحديثات بوقت حي ────
+    `<section class="cc-feed">` +
+    `<h2 class="cc-section-title">` +
+    `<span class="cc-section-em">🕐</span>` +
+    `آخر التحديثات` +
+    `</h2>` +
+    `<div class="cc-feed-list">` +
+    activityFeed
+      .map((p) => {
+        const u = UMBRELLAS.find((x) => x.id === p.parent);
+        const updatedISO = p.current_status.updated;
+        return (
+          `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${E(p.name)}')">` +
+          `<div class="cc-feed-dot" style="background:${p.cl}"></div>` +
+          `<div class="cc-feed-body">` +
+          `<div class="cc-feed-top">` +
+          `<span class="cc-feed-name">${_ic(p.em, 14)} ${E(p.ar || p.name)}</span>` +
+          (u
+            ? `<span class="cc-feed-umb" style="background:${u.cl}18;color:${u.cl}">${E(u.name)}</span>`
+            : "") +
+          `</div>` +
+          `<div class="cc-feed-text">${E((p.current_status.where || "").slice(0, 100))}${(p.current_status.where || "").length > 100 ? "…" : ""}</div>` +
+          `</div>` +
+          `<div class="cc-feed-time" data-live-time="${E(updatedISO)}">${E(relTime(updatedISO))}</div>` +
+          `</div>`
+        );
+      })
+      .join("") +
+    `</div>` +
+    `</section>` +
+    // ──── SMART SUGGESTIONS ────
+    (suggestions.length
+      ? `<section class="cc-sug">` +
+        `<h2 class="cc-section-title">` +
+        `<span class="cc-section-em">💡</span>` +
+        `اقتراحات ذكية` +
+        `</h2>` +
+        `<div class="cc-sug-list">` +
+        suggestions
+          .map(
+            (s) =>
+              `<div class="cc-sug-item">` +
+              `<span class="cc-sug-em">${s.em}</span>` +
+              `<span class="cc-sug-text">${E(s.text)}</span>` +
+              `<button class="cc-sug-cta cc-clickable" onclick="${s.action}">${E(s.cta)} →</button>` +
+              `</div>`,
+          )
+          .join("") +
+        `</div>` +
+        `</section>`
+      : "") +
+    // ──── الجزء التنفيذي القديم يبقى كطبقة عمق ────
     `<section class="hqx-card hqx-hero">` +
     `<div class="hqx-hero-copy">` +
     `<span class="hqx-kicker">Executive briefing</span>` +
@@ -4103,6 +4488,7 @@ function _updateCountdown() {
 
 async function bootstrap() {
   init();
+  _startLiveTicks();
   _loadRuntimeData().then(() => {
     if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   });
