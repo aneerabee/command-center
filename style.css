@@ -9844,3 +9844,143 @@ input, select, textarea, button {
   }
   .exec-action-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   BRIDGE — نظام الربط الذكي (banner + إضاءة العنصر)
+   ════════════════════════════════════════════════════════════ */
+
+/* banner السبب يظهر فوق الصفحة الجديدة */
+.cc-bridge-banner {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: -12px -12px 16px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-100%);
+  transition: transform var(--motion-base);
+  animation: bridgeSlide 5.5s ease-in-out;
+}
+.cc-bridge-banner.show {
+  transform: translateY(0);
+}
+@keyframes bridgeSlide {
+  0%, 90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-100%); }
+}
+.cc-bridge-em {
+  font-size: 18px;
+  animation: bridgeArrow 1s ease-in-out infinite;
+}
+@keyframes bridgeArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.cc-bridge-text {
+  flex: 1;
+  min-width: 0;
+}
+.cc-bridge-count {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.cc-bridge-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: 0;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: inherit;
+  transition: background var(--motion-fast);
+}
+.cc-bridge-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* إضاءة بطاقة Bridge — تأثير نبض ملحوظ */
+.cc-highlight {
+  animation: ccHighlight 1.5s ease-in-out 3;
+  position: relative;
+  z-index: 5;
+}
+@keyframes ccHighlight {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px rgba(245, 158, 11, 0.4),
+      0 12px 32px -8px rgba(245, 158, 11, 0.5);
+    transform: scale(1.02);
+  }
+}
+.cc-highlight::before {
+  content: "🎯";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #f59e0b;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+  animation: ccTargetPulse 2s ease-in-out infinite;
+}
+@keyframes ccTargetPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PROJECT CARD — بادج العوائق المرئية
+   ════════════════════════════════════════════════════════════ */
+.prj-card-blockers-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+  z-index: 2;
+}
+.prj-card-stale-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #f59e0b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 999px;
+  z-index: 2;
+}

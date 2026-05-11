@@ -178,6 +178,81 @@ function _startLiveTicks() {
   }, 60_000);
 }
 
+/* ════════════════════════════════════════════════════════════
+   BRIDGE — نظام الربط الذكي بين كل الأقسام
+   عند أي ضغط على تحذير: ينقلك للقسم + يُضيء العنصر + سبب الانتقال
+   ════════════════════════════════════════════════════════════ */
+
+window.__bridge = null;
+
+/* استخدام: نمرر السياق ثم نتنقل */
+window.ccGoWithContext = function (page, context) {
+  window.__bridge = {
+    ...context,
+    timestamp: Date.now(),
+    fromPage: window.cur || "home",
+  };
+  go(page);
+};
+
+/* بعد كل render نطبّق الإضاءة إن وُجد bridge */
+function _applyBridgeHighlight() {
+  const b = window.__bridge;
+  if (!b) return;
+  // تجاهل bridge قديم (>30 ثانية)
+  if (Date.now() - b.timestamp > 30_000) {
+    window.__bridge = null;
+    return;
+  }
+  // banner شرحي في أعلى الصفحة
+  const main = document.getElementById("app");
+  if (main && b.reason) {
+    const banner = document.createElement("div");
+    banner.className = "cc-bridge-banner";
+    banner.innerHTML =
+      `<span class="cc-bridge-em">↓</span>` +
+      `<span class="cc-bridge-text">${E(b.reason)}</span>` +
+      (b.highlight && b.highlight.length
+        ? `<span class="cc-bridge-count">${b.highlight.length}</span>`
+        : "") +
+      `<button class="cc-bridge-close" onclick="this.parentElement.remove();window.__bridge=null">×</button>`;
+    main.insertBefore(banner, main.firstChild);
+    setTimeout(() => banner.classList.add("show"), 50);
+  }
+  // إضاءة العناصر المستهدفة
+  if (b.highlight && b.highlight.length) {
+    setTimeout(() => {
+      let firstEl = null;
+      b.highlight.forEach((name) => {
+        // ابحث بالاسم في أي بطاقة
+        document.querySelectorAll("[data-cc-name]").forEach((el) => {
+          if (el.dataset.ccName === name || el.dataset.ccName.includes(name)) {
+            el.classList.add("cc-highlight");
+            if (!firstEl) firstEl = el;
+          }
+        });
+        // fallback: ابحث في النصوص
+        if (!firstEl) {
+          document.querySelectorAll(".prj-card, .emp-card, .umb-card").forEach((el) => {
+            if (el.textContent.includes(name) && !el.classList.contains("cc-highlight")) {
+              el.classList.add("cc-highlight");
+              if (!firstEl) firstEl = el;
+            }
+          });
+        }
+      });
+      // scroll للأول
+      if (firstEl) {
+        firstEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(() => {
+          document.querySelectorAll(".cc-highlight").forEach((el) => el.classList.remove("cc-highlight"));
+          window.__bridge = null;
+        }, 6000);
+      }
+    }, 200);
+  }
+}
+
 /* ── ICON SYSTEM — Lucide SVG icons replace emojis ── */
 const IC = {
   "🏠": "home",
@@ -1078,6 +1153,8 @@ function _activatePage(id, syncHash) {
     .forEach((el) => el.classList.toggle("active", el.dataset.page === id));
   window.scrollTo(0, 0);
   requestAnimationFrame(_processIcons);
+  // ✨ تطبيق إضاءة Bridge بعد render الصفحة
+  setTimeout(_applyBridgeHighlight, 100);
 }
 
 function go(id) {
@@ -1418,24 +1495,26 @@ R.home = function () {
     });
   }
   if (staleProjects.length) {
+    const names = staleProjects.map((p) => p.name);
     briefs.push({
       level: "warn",
       icon: "⏰",
       title: `${staleProjects.length} مشاريع ذات أولوية عالية لم تُحدّث`,
       detail: staleProjects.map((p) => p.ar || p.name).join(" · "),
-      action: `go('projects')`,
+      action: `ccGoWithContext('projects',{highlight:${JSON.stringify(names)},reason:'مشاريع متأخرة في التحديث'})`,
       actionLabel: "راجع",
       tone: "#f59e0b",
     });
   }
   if (projectsWithNoRevenue.length > 0 && hourNow >= 10 && hourNow < 19) {
+    const names = projectsWithNoRevenue.map((p) => p.name);
     briefs.push({
       level: "info",
       icon: "💰",
       title: `${projectsWithNoRevenue.length} مشاريع بدون تتبّع إيراد`,
-      detail: "ابدأ بتسجيل الإيراد الشهري لكل مشروع",
-      action: `go('umbrellas')`,
-      actionLabel: "افتح الشركات",
+      detail: projectsWithNoRevenue.map((p) => p.ar || p.name).slice(0,3).join(" · "),
+      action: `ccGoWithContext('projects',{highlight:${JSON.stringify(names)},reason:'مشاريع تحتاج تسجيل إيراد شهري'})`,
+      actionLabel: "افتح",
       tone: "#10b981",
     });
   }
@@ -1856,20 +1935,35 @@ R.projects = function () {
               : null;
             const isFresh = ageDays !== null && ageDays <= 7;
             return (
-              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
-              `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
-              `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
-              `<div class="prj-card-body">` +
-              `<div class="prj-card-head">` +
-              `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
-              (segLabel
-                ? `<span class="prj-card-seg" style="background:${segCl}18;color:${segCl}">${segLabel}</span>`
-                : "") +
-              (isFresh
-                ? `<span class="prj-card-fresh" title="مُحدّث ${ageDays === 0 ? "اليوم" : `قبل ${ageDays} يوم`}">جديد</span>`
-                : "") +
-              `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
-              `</div>` +
+              (() => {
+                const blockers = p.current_status?.blockers || [];
+                const highBlockers = blockers.filter(
+                  (b) => typeof b === "object" && (b.priority === "high" || b.priority === "med"),
+                );
+                const isStale = ageDays !== null && ageDays > 14 && p.priority === "high";
+                const badge = highBlockers.length
+                  ? `<span class="prj-card-blockers-badge" title="${highBlockers.length} عوائق">⚠ ${highBlockers.length}</span>`
+                  : isStale
+                    ? `<span class="prj-card-stale-badge" title="لم يُحدّث منذ ${ageDays} يوم">⏰ متأخر</span>`
+                    : "";
+                return (
+                  `<div class="prj-card" data-cc-name="${E(p.name)}" onclick="openProjectDetail('${E(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
+                  badge +
+                  `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
+                  `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
+                  `<div class="prj-card-body">` +
+                  `<div class="prj-card-head">` +
+                  `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
+                  (segLabel
+                    ? `<span class="prj-card-seg" style="background:${segCl}18;color:${segCl}">${segLabel}</span>`
+                    : "") +
+                  (isFresh
+                    ? `<span class="prj-card-fresh" title="مُحدّث ${ageDays === 0 ? "اليوم" : `قبل ${ageDays} يوم`}">جديد</span>`
+                    : "") +
+                  `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
+                  `</div>`
+                );
+              })()
               `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +
               `<p class="prj-card-desc">${E(firstLine)}</p>` +
               (p.parent_role || p.priority
@@ -2000,7 +2094,7 @@ R.team = function () {
       `<button class="emp-copy" id="${id}" onclick="teamCopy('${E(text)}','${id}')" title="${E(title)}">📋</button>`;
 
     return (
-      `<div class="emp-card" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}">` +
+      `<div class="emp-card" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}">` +
       // ── HEADER: Identity ──
       `<div class="emp-header">` +
       `<div class="emp-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
@@ -2282,7 +2376,7 @@ R.umbrellas = function () {
       );
 
       return (
-        `<div class="umb-card" style="--umb:${u.cl}">` +
+        `<div class="umb-card" data-cc-name="${E(u.name)}" style="--umb:${u.cl}">` +
         // ── HEADER ──
         `<div class="umb-card-header">` +
         `<div class="umb-card-icon" style="background:${u.cl}22;color:${u.cl}">${_ic(u.em, 32)}</div>` +
