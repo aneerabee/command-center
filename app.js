@@ -760,7 +760,7 @@ function _readHash() {
   return _validPages.has(h) ? h : "home";
 }
 let cur = _readHash();
-const MOBILE_ITEMS = ["home", "projects", "server", "bots", "tools"];
+const MOBILE_ITEMS = ["home", "umbrellas", "projects", "server", "tools"];
 let _countdownTimer = null;
 
 function _setHashSilently(nextHash) {
@@ -1439,32 +1439,246 @@ R.projects = function () {
       )
       .join("") +
     `</div>` +
-    `<div class="prj-grid">` +
-    rest
-      .map((p) => {
-        const firstLine = (p.desc || "").split("\n")[0];
-        const tags = (p.tags || []).slice(0, 3);
-        const links = Object.entries(p.links || {}).slice(0, 2);
+    UMBRELLAS.map((u) => {
+      const items = rest.filter((p) => p.parent === u.id);
+      if (!items.length) return "";
+      return (
+        `<div class="prj-umb-section" style="--umb:${u.cl}">` +
+        `<div class="prj-umb-header">` +
+        `<span class="prj-umb-ic" style="background:${u.cl}22;color:${u.cl}">${_ic(u.em, 22)}</span>` +
+        `<span class="prj-umb-name">${E(u.name)}</span>` +
+        `<span class="prj-umb-count">${items.length} مشروع</span>` +
+        `<span class="prj-umb-specialty">${E(u.specialty)}</span>` +
+        `</div>` +
+        `<div class="prj-grid">` +
+        items
+          .map((p) => {
+            const firstLine = (p.desc || "").split("\n")[0];
+            const tags = (p.tags || []).slice(0, 3);
+            const links = Object.entries(p.links || {}).slice(0, 2);
+            return (
+              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')">` +
+              `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
+              `<div class="prj-card-body">` +
+              `<div class="prj-card-head">` +
+              `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
+              `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
+              `</div>` +
+              `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +
+              `<p class="prj-card-desc">${E(firstLine)}</p>` +
+              (p.parent_role || p.priority
+                ? `<div class="prj-card-meta">` +
+                  (p.parent_role
+                    ? `<span class="prj-card-role">${E(p.parent_role)}</span>`
+                    : "") +
+                  (p.priority
+                    ? `<span class="prj-card-priority prio-${E(p.priority)}">${p.priority === "high" ? "أولوية عالية" : p.priority === "med" ? "متوسطة" : "منخفضة"}</span>`
+                    : "") +
+                  `</div>`
+                : "") +
+              `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px">${tags.map((t) => `<span class="tag" style="background:${p.cl}12;color:${p.cl}">${E(t)}</span>`).join("")}</div>` +
+              (links.length
+                ? `<div class="prj-card-links">${links.map(([k, v]) => `<a href="${E(v)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${E(k)}</a>`).join("")}</div>`
+                : "") +
+              `<div class="prj-progress" style="margin-top:12px"><div class="prj-progress-bar" style="width:${p.pct || 0}%;background:${p.cl}"></div></div>` +
+              `</div>` +
+              `</div>`
+            );
+          })
+          .join("") +
+        `</div>` +
+        `</div>`
+      );
+    }).join("")
+  );
+};
+
+/* ── TEAM — عرض الموظفين بالأقسام ── */
+R.team = function () {
+  const teamData = typeof TEAM !== "undefined" ? TEAM : [];
+  const deptData = typeof DEPARTMENTS !== "undefined" ? DEPARTMENTS : [];
+
+  const byDept = (deptId) => teamData.filter((t) => t.department === deptId);
+  const orphaned = teamData.filter(
+    (t) => !deptData.find((d) => d.id === t.department),
+  );
+
+  const totalEmployees = teamData.length;
+  const totalDepts = deptData.filter((d) => byDept(d.id).length > 0).length;
+
+  return (
+    _sectionHero({
+      tone: "team",
+      kicker: "Team & Employees",
+      title: "الفريق والموظفون",
+      desc: "كل الموظفين منظَّمين تحت أقسامهم. كل بطاقة بها رقم الهاتف ورابط واتساب مباشر — اضغط للاتصال أو فتح المحادثة فوراً.",
+      stats: [
+        { v: totalEmployees, l: "إجمالي الموظفين" },
+        { v: totalDepts, l: "أقسام نشطة" },
+        { v: UMBRELLAS.filter((u) => u.id === "brix").length, l: "شركة BRIX" },
+        {
+          v: teamData.filter((t) => t.whatsapp).length,
+          l: "متصلون عبر واتساب",
+        },
+      ],
+    }) +
+    deptData
+      .map((d) => {
+        const members = byDept(d.id);
+        if (!members.length) return "";
         return (
-          `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')">` +
-          `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
-          `<div class="prj-card-body">` +
-          `<div class="prj-card-head">` +
-          `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
-          `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
+          `<div class="team-dept" style="--dept:${d.cl}">` +
+          `<div class="team-dept-header">` +
+          `<span class="team-dept-ic" style="background:${d.cl}22;color:${d.cl}">${_ic(d.em, 24)}</span>` +
+          `<div class="team-dept-titles">` +
+          `<h3 class="team-dept-name">${E(d.name)}</h3>` +
+          `<p class="team-dept-ar">${E(d.ar || "")}</p>` +
           `</div>` +
-          `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +
-          `<p class="prj-card-desc">${E(firstLine)}</p>` +
-          `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px">${tags.map((t) => `<span class="tag" style="background:${p.cl}12;color:${p.cl}">${E(t)}</span>`).join("")}</div>` +
-          (links.length
-            ? `<div class="prj-card-links">${links.map(([k, v]) => `<a href="${E(v)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${E(k)}</a>`).join("")}</div>`
-            : "") +
-          `<div class="prj-progress" style="margin-top:12px"><div class="prj-progress-bar" style="width:${p.pct || 0}%;background:${p.cl}"></div></div>` +
+          `<span class="team-dept-count">${members.length} موظف</span>` +
+          `</div>` +
+          `<div class="team-grid">` +
+          members
+            .map((m) => {
+              const initial = (m.name || "?").slice(0, 1);
+              const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
+              const telUrl = m.phone ? `tel:${m.phone}` : null;
+              return (
+                `<div class="team-card" style="--mc:${m.cl}">` +
+                `<div class="team-card-top">` +
+                `<div class="team-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
+                `<div class="team-card-info">` +
+                `<h4 class="team-name">${E(m.full_name || m.name)}</h4>` +
+                `<p class="team-role">${E(m.role || "")}</p>` +
+                `</div>` +
+                `</div>` +
+                `<div class="team-card-contacts">` +
+                (telUrl
+                  ? `<a class="team-contact tel" href="${E(telUrl)}" onclick="event.stopPropagation()">` +
+                    `<span class="team-contact-ic">${_ic("📞", 14)}</span>` +
+                    `<span class="team-contact-val" dir="ltr">${E(m.phone_local || m.phone)}</span>` +
+                    `</a>`
+                  : "") +
+                (waUrl
+                  ? `<a class="team-contact wa" href="${E(waUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">` +
+                    `<span class="team-contact-ic">${_ic("💬", 14)}</span>` +
+                    `<span class="team-contact-val" dir="ltr">wa.me/${E(m.whatsapp)}</span>` +
+                    `</a>`
+                  : "") +
+                (m.email
+                  ? `<a class="team-contact em" href="mailto:${E(m.email)}">` +
+                    `<span class="team-contact-ic">${_ic("📧", 14)}</span>` +
+                    `<span class="team-contact-val">${E(m.email)}</span>` +
+                    `</a>`
+                  : "") +
+                `</div>` +
+                (m.notes
+                  ? `<p class="team-notes">${E(m.notes)}</p>`
+                  : "") +
+                `</div>`
+              );
+            })
+            .join("") +
           `</div>` +
           `</div>`
         );
       })
       .join("") +
+    (orphaned.length
+      ? `<div class="team-dept" style="--dept:#94a3b8"><div class="team-dept-header"><span class="team-dept-ic">${_ic("👥", 24)}</span><h3 class="team-dept-name">بدون قسم</h3><span class="team-dept-count">${orphaned.length}</span></div></div>`
+      : "")
+  );
+};
+
+/* ── UMBRELLAS — عرض الشركات الأم ── */
+R.umbrellas = function () {
+  const projByParent = (id) => PRJ.filter((p) => p.parent === id);
+  const ideasByParent = (id) => (typeof IDEAS !== "undefined" ? IDEAS.filter((i) => i.parent === id) : []);
+
+  const totalProjects = PRJ.length;
+  const totalActive = PRJ.filter((p) => p.st === "a").length;
+  const totalRevenue = PRJ.reduce(
+    (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
+    0,
+  );
+
+  return (
+    _sectionHero({
+      tone: "umbrellas",
+      kicker: "Companies & Umbrellas",
+      title: "الشركات والمظلات",
+      desc: "كل ما تملك مُنظَّم تحت 4 مظلات: شركتان حقيقيتان، خط منتجات SaaS، وبنية تحتية شخصية. اضغط أي مظلة لرؤية مشاريعها وأفكارها.",
+      stats: [
+        { v: UMBRELLAS.length, l: "مظلات" },
+        { v: totalProjects, l: "مشاريع" },
+        { v: totalActive, l: "نشط" },
+        { v: `$${totalRevenue}`, l: "إيراد شهري/USD" },
+      ],
+    }) +
+    `<div class="umb-grid">` +
+    UMBRELLAS.map((u) => {
+      const projects = projByParent(u.id);
+      const ideas = ideasByParent(u.id);
+      const activeCount = projects.filter((p) => p.st === "a").length;
+      const revenue = projects.reduce(
+        (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
+        0,
+      );
+      const users = projects.reduce(
+        (s, p) => s + (Number(p.users_count) || 0),
+        0,
+      );
+
+      return (
+        `<div class="umb-card" style="--umb:${u.cl}">` +
+        `<div class="umb-card-header">` +
+        `<div class="umb-card-icon" style="background:${u.cl}22;color:${u.cl}">${_ic(u.em, 32)}</div>` +
+        `<div class="umb-card-titles">` +
+        `<h3 class="umb-card-name">${E(u.name)}</h3>` +
+        `<p class="umb-card-specialty">${E(u.specialty)}</p>` +
+        (u.location ? `<span class="umb-card-loc">📍 ${E(u.location)}</span>` : "") +
+        `</div>` +
+        `</div>` +
+        `<p class="umb-card-summary">${E(u.summary)}</p>` +
+        `<div class="umb-card-stats">` +
+        `<div class="umb-stat"><strong>${projects.length}</strong><span>مشاريع</span></div>` +
+        `<div class="umb-stat"><strong>${activeCount}</strong><span>نشط</span></div>` +
+        `<div class="umb-stat"><strong>${ideas.length}</strong><span>أفكار</span></div>` +
+        `<div class="umb-stat"><strong>$${revenue}</strong><span>شهري</span></div>` +
+        `</div>` +
+        (projects.length
+          ? `<div class="umb-projects-title">المشاريع</div>` +
+            `<div class="umb-projects-list">` +
+            projects
+              .map(
+                (p) =>
+                  `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
+                  `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
+                  `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
+                  `<span class="umb-project-role">${E(p.parent_role || "")}</span>` +
+                  `<span class="umb-project-pct">${p.pct || 0}%</span>` +
+                  `</div>`,
+              )
+              .join("") +
+            `</div>`
+          : "") +
+        (ideas.length
+          ? `<div class="umb-projects-title">الأفكار</div>` +
+            `<div class="umb-ideas-list">` +
+            ideas
+              .map(
+                (i) =>
+                  `<div class="umb-idea" style="--pc:${i.cl}">` +
+                  `<span class="umb-project-ic">${_ic(i.em, 16)}</span>` +
+                  `<span class="umb-project-name">${E(i.name)}</span>` +
+                  `<span class="umb-idea-stage">${E(i.stage || i.horizon || "")}</span>` +
+                  `</div>`,
+              )
+              .join("") +
+            `</div>`
+          : "") +
+        `</div>`
+      );
+    }).join("") +
     `</div>`
   );
 };
