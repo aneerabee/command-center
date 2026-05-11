@@ -1963,7 +1963,7 @@ R.projects = function () {
                   `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
                   `</div>`
                 );
-              })()
+              })() +
               `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +
               `<p class="prj-card-desc">${E(firstLine)}</p>` +
               (p.parent_role || p.priority
