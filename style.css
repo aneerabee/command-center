@@ -9984,3 +9984,92 @@ input, select, textarea, button {
   border-radius: 999px;
   z-index: 2;
 }
+
+/* ════════════════════════════════════════════════════════════
+   SMART CONTEXT CHIPS — ربط بصري عبر كل التفاصيل
+   ════════════════════════════════════════════════════════════ */
+
+/* شريط السياق في تفاصيل المشروع: اضغط المظلة → عودة لها مع إضاءة */
+.prj-status-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 14px 12px;
+  border-bottom: 1px dashed var(--brd);
+  margin-bottom: 8px;
+}
+.prj-ctx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: color-mix(in srgb, var(--c) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--c);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--motion-fast);
+}
+.prj-ctx-chip:hover {
+  background: color-mix(in srgb, var(--c) 20%, var(--surface));
+  transform: translateY(-1px);
+}
+
+/* شريحة موظف داخل تفاصيل المشروع */
+.prj-status-team-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.prj-team-chip {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 1px 10px;
+  align-items: center;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--c) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--c) 18%, transparent);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: right;
+  transition: all var(--motion-fast);
+}
+.prj-team-chip:hover {
+  background: color-mix(in srgb, var(--c) 14%, var(--surface));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px var(--c);
+}
+.prj-team-avatar {
+  grid-row: 1 / -1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: "Inter", sans-serif;
+}
+.prj-team-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--t1);
+  line-height: 1.2;
+}
+.prj-team-role {
+  font-size: 10.5px;
+  color: var(--t3);
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .prj-team-chip { width: 100%; }
+}

@@ -1625,7 +1625,7 @@ R.home = function () {
     umbPulse
       .map(
         (u) =>
-          `<div class="cc-pulse-card cc-clickable" onclick="go('umbrellas')" style="--umb:${u.cl}">` +
+          `<div class="cc-pulse-card cc-clickable" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(u.name)}],reason:${JSON.stringify(u.name)}})" style="--umb:${u.cl}">` +
           `<div class="cc-pulse-head">` +
           `<span class="cc-pulse-em">${_ic(u.em, 18)}</span>` +
           `<span class="cc-pulse-name">${E(u.name)}</span>` +
@@ -1739,7 +1739,7 @@ R.home = function () {
       .map((e) => {
         const pct = e.total ? Math.round((e.ok / e.total) * 100) : 0;
         return (
-          `<button class="exec-cov" onclick="go('${e.page}')" style="--c:${e.color}">` +
+          `<button class="exec-cov" onclick="ccGoWithContext('${e.page}',{reason:${JSON.stringify(e.label + ' · ' + (e.fail ? e.fail+' فشل' : e.warn ? e.warn+' تحذير' : e.manual ? e.manual+' يدوي' : 'مغطى'))}})" style="--c:${e.color}">` +
           `<div class="exec-cov-top">` +
           `<span class="exec-cov-label">${E(e.label)}</span>` +
           `<span class="exec-cov-num"><strong>${e.ok}</strong>/${e.total}</span>` +
@@ -3533,21 +3533,45 @@ function _projectMergedSections(item, legacySections) {
 /* ── 1. PROJECT DETAIL — صفحة كاملة تحل محل المحتوى ── */
 function _currentStatusCard(item) {
   const cs = item && item.current_status;
-  if (!cs) return "";
+  if (!cs && !item.parent) return "";
+  const safeCS = cs || {};
   const cl = item.cl || "#6C3AED";
-  const where = cs.where || "";
-  const next = cs.next_step || cs.next || "";
-  const blockers = Array.isArray(cs.blockers) ? cs.blockers : [];
-  const updated = cs.updated || "";
-  const useGuide = cs.use_guide || cs.usage || "";
+  const where = safeCS.where || "";
+  const next = safeCS.next_step || safeCS.next || "";
+  const blockers = Array.isArray(safeCS.blockers) ? safeCS.blockers : [];
+  const updated = safeCS.updated || "";
+  const useGuide = safeCS.use_guide || safeCS.usage || "";
+
+  // 🆕 ذكاء العلاقات: اعرف فريق المشروع + المظلة + القسم
+  const team = typeof TEAM !== "undefined"
+    ? TEAM.filter((t) => (t.assigned_projects || []).includes(item.id))
+    : [];
+  const umb = typeof UMBRELLAS !== "undefined"
+    ? UMBRELLAS.find((u) => u.id === item.parent)
+    : null;
+  const dept = typeof DEPARTMENTS !== "undefined"
+    ? DEPARTMENTS.find((d) => d.id === item.department)
+    : null;
+
   return (
     `<div class="prj-status-card" style="--st-cl:${cl}">` +
     `<div class="prj-status-head">` +
     `<div class="prj-status-badge">${_ic("📍", 16)} أين وصلنا</div>` +
     (updated
-      ? `<div class="prj-status-updated">آخر تحديث: ${E(updated)}</div>`
+      ? `<div class="prj-status-updated">آخر تحديث: ${E(updated)} · <span data-live-time="${E(updated)}">${E(typeof relTime === "function" ? relTime(updated) : "")}</span></div>`
       : "") +
     `</div>` +
+    // 🆕 شريط السياق (المظلة + القسم) يربط المشروع بكل المنظومة
+    (umb || dept
+      ? `<div class="prj-status-context">` +
+        (umb
+          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(umb.name)}],reason:'مظلة ${E(umb.name)}'})" style="--c:${umb.cl}">${_ic(umb.em, 12)} ${E(umb.name)}</button>`
+          : "") +
+        (dept
+          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(umb ? umb.name : '')}],reason:'قسم ${E(dept.name)} داخل ${E(umb ? umb.name : '')}'})" style="--c:${dept.cl}">${_ic(dept.em, 12)} ${E(dept.name)}</button>`
+          : "") +
+        `</div>`
+      : "") +
     (where
       ? `<div class="prj-status-block prj-status-where"><div class="prj-status-label">الموقف الحالي</div><div class="prj-status-text">${E(where)}</div></div>`
       : "") +
@@ -3585,6 +3609,23 @@ function _currentStatusCard(item) {
       : "") +
     (useGuide
       ? `<div class="prj-status-block prj-status-use"><div class="prj-status-label">${_ic("🎯", 13)} كيف أستخدمه</div><div class="prj-status-text">${E(useGuide)}</div></div>`
+      : "") +
+    // 🆕 الفريق المسؤول — يظهر تلقائياً إن وُجد موظفون مرتبطون
+    (team.length
+      ? `<div class="prj-status-block prj-status-team">` +
+        `<div class="prj-status-label">${_ic("👥", 13)} الفريق المسؤول (${team.length})</div>` +
+        `<div class="prj-status-team-list">` +
+        team
+          .map(
+            (m) =>
+              `<button class="prj-team-chip" onclick="ccGoWithContext('team',{highlight:[${JSON.stringify(m.name)}],reason:'موظف مسؤول عن ${E(item.ar || item.name)}'})" style="--c:${m.cl}">` +
+              `<span class="prj-team-avatar" style="background:${m.cl}">${E((m.name || '?').slice(0,1))}</span>` +
+              `<span class="prj-team-name">${E(m.full_name || m.name)}</span>` +
+              `<span class="prj-team-role">${E(m.role || '')}</span>` +
+              `</button>`,
+          )
+          .join("") +
+        `</div></div>`
       : "") +
     `</div>`
   );
