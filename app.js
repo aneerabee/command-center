@@ -775,11 +775,40 @@ function _setHashSilently(nextHash) {
 
 /* ─────────────── 2. NAVIGATION ─────────────── */
 
+/* ── DARK MODE ── */
+window.toggleTheme = function () {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("cc_theme", next);
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = next === "dark" ? "☀️" : "🌙";
+};
+
+(function applySavedTheme() {
+  const saved = localStorage.getItem("cc_theme");
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+})();
+
 function init() {
   const sidebar = document.getElementById("sidebar");
   const bottomBar = document.getElementById("bottom-bar");
   const app = document.getElementById("app");
   SEARCH_INDEX = _buildSearchIndex();
+
+  // ── Theme toggle button (دائم في الزاوية) ──
+  if (!document.getElementById("theme-toggle")) {
+    const tbtn = document.createElement("button");
+    tbtn.id = "theme-toggle";
+    tbtn.className = "theme-toggle";
+    tbtn.title = "تبديل الوضع الداكن (يُحفظ تلقائياً)";
+    tbtn.textContent =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "☀️"
+        : "🌙";
+    tbtn.onclick = window.toggleTheme;
+    document.body.appendChild(tbtn);
+  }
 
   if (sidebar) {
     sidebar.innerHTML =
@@ -1731,6 +1760,7 @@ R.team = function () {
     `<button class="team-view-btn active" data-view="grouped" onclick="teamSwitchView('grouped')">📂 بالأقسام</button>` +
     `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
     `</div>` +
+    `<a href="survey.html" target="_blank" class="survey-link" title="رابط استبيان لملء بيانات موظف جديد">📋 استبيان موظف</a>` +
     `<button id="salary-toggle-btn" class="salary-toggle" onclick="teamToggleSalary()">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
     `</div>` +
     // ── المحتوى ──
