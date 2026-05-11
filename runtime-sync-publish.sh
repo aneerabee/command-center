@@ -1,9 +1,9 @@
 #!/bin/zsh
 set -euo pipefail
 
-ROOT="/tmp/cc-push"
-NODE_BIN="/usr/local/bin/node"
-GIT_BIN="/usr/bin/git"
+ROOT="/Users/rabeeshaban/Documents/New project/command-center"
+NODE_BIN="$(command -v node || echo /usr/local/bin/node)"
+GIT_BIN="$(command -v git || echo /usr/bin/git)"
 LOCK_DIR="$ROOT/.runtime-sync.lock"
 
 cd "$ROOT"

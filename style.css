@@ -9154,3 +9154,107 @@ a.emp-field-val:hover { color: #6366f1; }
     text-align: end;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   COLOR HARMONY v2 — توحيد بصري للصفحة
+   ═══════════════════════════════════════════════ */
+
+/* تخفيف ألوان المظلات لتقليل التشتت — نسخة هادئة */
+:root {
+  --umb-etranex-soft: rgba(15, 118, 110, 0.08);
+  --umb-brix-soft: rgba(232, 69, 60, 0.08);
+  --umb-saas-soft: rgba(16, 185, 129, 0.08);
+  --umb-infra-soft: rgba(139, 92, 246, 0.08);
+}
+
+/* جميع الأقسام تستخدم نفس مستوى الظل والحواف */
+.cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug,
+.umb-card, .emp-card, .prj-card,
+.team-dept, .umb-dept {
+  border-radius: 16px;
+  transition: all var(--motion-base);
+}
+
+/* القسم القديم hqx يصبح أكثر هدوءاً (سيُخفى عبر JS) */
+.hqx-card {
+  opacity: 0.92;
+}
+
+/* تنسيق هيدرات الأقسام بنمط واحد */
+.cc-section-title {
+  padding: 0 4px;
+  border-right: 3px solid;
+  padding-right: 12px;
+  margin-right: -4px;
+}
+.cc-brief .cc-section-title { border-color: #ef4444; }
+.cc-pulse .cc-section-title { border-color: #6366f1; }
+.cc-feed .cc-section-title { border-color: #0ea5e9; }
+.cc-sug .cc-section-title { border-color: #8b5cf6; }
+
+/* فاصل لطيف بين الأقسام */
+.cc-greet + .cc-brief,
+.cc-brief + .cc-pulse,
+.cc-pulse + .cc-feed,
+.cc-feed + .cc-sug {
+  position: relative;
+}
+
+/* تحسين التضليل العام */
+.cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+[data-theme="dark"] .cc-greet,
+[data-theme="dark"] .cc-brief,
+[data-theme="dark"] .cc-pulse,
+[data-theme="dark"] .cc-feed,
+[data-theme="dark"] .cc-sug {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* استخدم اللون البراند للمشاريع بدل تعميم اللون */
+.prj-card[style*="--prj"] .prj-card-name { color: var(--t1); }
+.prj-card[style*="--prj"]:hover .prj-card-name { color: var(--prj); }
+
+/* زر "تحديث الآن" للأداة */
+.cc-refresh-btn {
+  position: fixed;
+  bottom: 132px;
+  left: 16px;
+  z-index: 99;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--brd);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: var(--sh2);
+  transition: transform var(--motion-fast);
+}
+.cc-refresh-btn:hover { transform: scale(1.1) rotate(180deg); }
+.cc-refresh-btn.spinning { animation: ccSpin 1s linear infinite; }
+@keyframes ccSpin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) {
+  .cc-refresh-btn { bottom: 144px; right: 70px; left: auto; }
+}
+
+/* العلامة "أداة نشطة" بجوار التحديث */
+.cc-runtime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+[data-theme="dark"] .cc-runtime-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}

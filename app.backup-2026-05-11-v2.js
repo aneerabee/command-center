@@ -12,172 +12,6 @@ const E = (s) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-/* ══════════════════════════════════════════════
-   DESIGN SYSTEM — Smart Helpers
-   ══════════════════════════════════════════════ */
-
-/* تنسيق رقم: 1234 -> "1,234", 1234567 -> "1.2M" */
-function fmtNum(n) {
-  n = Number(n) || 0;
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
-  if (Math.abs(n) >= 10_000) return (n / 1000).toFixed(1) + "K";
-  return n.toLocaleString("en-US");
-}
-
-/* عملة بفاصلات ورمز */
-function fmtCurrency(n, code = "USD") {
-  const symbol = { USD: "$", TRY: "₺", EUR: "€" }[code] || code;
-  return symbol + fmtNum(Math.abs(n));
-}
-
-/* تعدد عربي صحيح */
-function arPlural(n, singular, dual, plural3to10, plural11plus) {
-  if (n === 0) return `لا ${plural3to10}`;
-  if (n === 1) return singular;
-  if (n === 2) return dual;
-  if (n >= 3 && n <= 10) return `${n} ${plural3to10}`;
-  return `${n} ${plural11plus || plural3to10}`;
-}
-const arPluralEmp = (n) => arPlural(n, "موظف واحد", "موظفان", "موظفين", "موظفاً");
-const arPluralProj = (n) => arPlural(n, "مشروع واحد", "مشروعان", "مشاريع", "مشروعاً");
-const arPluralDept = (n) => arPlural(n, "قسم واحد", "قسمان", "أقسام", "قسماً");
-const arPluralIdea = (n) => arPlural(n, "فكرة واحدة", "فكرتان", "أفكار", "فكرة");
-
-/* صيغة وحدة زمنية عربية صحيحة:
-   1     → "منذ أسبوع"        (مفرد بدون رقم)
-   2     → "منذ أسبوعين"      (مثنى بدون رقم)
-   3-10  → "منذ 3 أسابيع"     (جمع كثرة)
-   11+   → "منذ 15 أسبوعاً"   (مفرد منصوب)             */
-function _arTimeUnit(n, single, dual, plural3to10, singularAccusative) {
-  if (n === 1) return `منذ ${single}`;
-  if (n === 2) return `منذ ${dual}`;
-  if (n >= 3 && n <= 10) return `منذ ${n} ${plural3to10}`;
-  return `منذ ${n} ${singularAccusative || single}`;
-}
-
-/* وقت نسبي بالعربية — يحدّث تلقائياً */
-function relTime(iso) {
-  if (!iso) return "";
-  const then = new Date(iso);
-  const diff = (Date.now() - then.getTime()) / 1000;
-  if (diff < 30) return "الآن";
-  if (diff < 60) return `منذ ${Math.floor(diff)} ثانية`;
-  if (diff < 120) return "منذ دقيقة";
-  if (diff < 3600) {
-    const m = Math.floor(diff / 60);
-    return _arTimeUnit(m, "دقيقة", "دقيقتين", "دقائق", "دقيقة");
-  }
-  if (diff < 7200) return "منذ ساعة";
-  if (diff < 86400) {
-    const hr = Math.floor(diff / 3600);
-    return _arTimeUnit(hr, "ساعة", "ساعتين", "ساعات", "ساعة");
-  }
-  if (diff < 172800) return "أمس";
-  if (diff < 604800) {
-    const d = Math.floor(diff / 86400);
-    return _arTimeUnit(d, "يوم", "يومين", "أيام", "يوماً");
-  }
-  if (diff < 2592000) {
-    const w = Math.floor(diff / 604800);
-    return _arTimeUnit(w, "أسبوع", "أسبوعين", "أسابيع", "أسبوعاً");
-  }
-  if (diff < 31536000) {
-    const mo = Math.floor(diff / 2592000);
-    return _arTimeUnit(mo, "شهر", "شهرين", "أشهر", "شهراً");
-  }
-  const yr = Math.floor(diff / 31536000);
-  return _arTimeUnit(yr, "سنة", "سنتين", "سنوات", "سنة");
-}
-
-/* تحية ذكية حسب الوقت */
-function smartGreeting() {
-  const h = new Date().getHours();
-  if (h >= 5 && h < 12) return { text: "صباح الخير", em: "☀️", tone: "morning" };
-  if (h >= 12 && h < 17) return { text: "مساء النور", em: "🌞", tone: "afternoon" };
-  if (h >= 17 && h < 21) return { text: "مساء الخير", em: "🌆", tone: "evening" };
-  return { text: "ليلة سعيدة", em: "🌙", tone: "night" };
-}
-
-/* تاريخ اليوم بصيغة عربية */
-function todayLong() {
-  return new Date().toLocaleDateString("ar-EG", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-/* تصنيف "طزاجة" حسب آخر تحديث */
-function staleness(iso) {
-  if (!iso) return { level: "unknown", label: "لم يُحدّث", cl: "#94a3b8" };
-  const days = (Date.now() - new Date(iso).getTime()) / 86400000;
-  if (days < 1) return { level: "fresh", label: "اليوم", cl: "#10b981" };
-  if (days < 7) return { level: "recent", label: "هذا الأسبوع", cl: "#0ea5e9" };
-  if (days < 30) return { level: "ok", label: "هذا الشهر", cl: "#6366f1" };
-  if (days < 60) return { level: "stale", label: "متأخر", cl: "#f59e0b" };
-  return { level: "very-stale", label: "قديم جداً", cl: "#ef4444" };
-}
-
-/* اشتقاق لون حالة من رقم مع هدف */
-function statusFromTarget(value, target) {
-  if (!target || value <= 0) return "#94a3b8";
-  const pct = (value / target) * 100;
-  if (pct >= 100) return "#10b981";
-  if (pct >= 70) return "#84cc16";
-  if (pct >= 40) return "#f59e0b";
-  return "#ef4444";
-}
-
-/* الأبجدية الأولى من اسم — يدعم العربي */
-function nameInitial(s) {
-  return (String(s || "?").trim().match(/\S/) || ["?"])[0];
-}
-
-/* نسخ آمن للحافظة مع feedback */
-window.copyToClipboard = function (text, btn) {
-  return navigator.clipboard.writeText(text).then(() => {
-    if (btn) {
-      const orig = btn.textContent;
-      const wasDisabled = btn.disabled;
-      btn.textContent = "✓ تم النسخ";
-      btn.disabled = true;
-      btn.classList.add("copied");
-      setTimeout(() => {
-        btn.textContent = orig;
-        btn.disabled = wasDisabled;
-        btn.classList.remove("copied");
-      }, 1500);
-    }
-  });
-};
-
-/* mini sparkline من قائمة أرقام */
-function _miniSpark(values, color = "#6366f1", w = 60, h = 18) {
-  if (!values || !values.length) return "";
-  const max = Math.max(...values, 1);
-  const step = w / Math.max(values.length - 1, 1);
-  const points = values
-    .map((v, i) => `${(i * step).toFixed(1)},${(h - (v / max) * h).toFixed(1)}`)
-    .join(" ");
-  return (
-    `<svg class="cc-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">` +
-    `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` +
-    `</svg>`
-  );
-}
-
-/* تشغيل tick حي لتحديث الأوقات النسبية كل دقيقة */
-let _liveTickInterval = null;
-function _startLiveTicks() {
-  if (_liveTickInterval) clearInterval(_liveTickInterval);
-  _liveTickInterval = setInterval(() => {
-    document.querySelectorAll("[data-live-time]").forEach((el) => {
-      el.textContent = relTime(el.dataset.liveTime);
-    });
-  }, 60_000);
-}
-
 /* ── ICON SYSTEM — Lucide SVG icons replace emojis ── */
 const IC = {
   "🏠": "home",
@@ -941,40 +775,11 @@ function _setHashSilently(nextHash) {
 
 /* ─────────────── 2. NAVIGATION ─────────────── */
 
-/* ── DARK MODE ── */
-window.toggleTheme = function () {
-  const cur = document.documentElement.getAttribute("data-theme");
-  const next = cur === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  localStorage.setItem("cc_theme", next);
-  const btn = document.getElementById("theme-toggle");
-  if (btn) btn.textContent = next === "dark" ? "☀️" : "🌙";
-};
-
-(function applySavedTheme() {
-  const saved = localStorage.getItem("cc_theme");
-  if (saved) document.documentElement.setAttribute("data-theme", saved);
-})();
-
 function init() {
   const sidebar = document.getElementById("sidebar");
   const bottomBar = document.getElementById("bottom-bar");
   const app = document.getElementById("app");
   SEARCH_INDEX = _buildSearchIndex();
-
-  // ── Theme toggle button (دائم في الزاوية) ──
-  if (!document.getElementById("theme-toggle")) {
-    const tbtn = document.createElement("button");
-    tbtn.id = "theme-toggle";
-    tbtn.className = "theme-toggle";
-    tbtn.title = "تبديل الوضع الداكن (يُحفظ تلقائياً)";
-    tbtn.textContent =
-      document.documentElement.getAttribute("data-theme") === "dark"
-        ? "☀️"
-        : "🌙";
-    tbtn.onclick = window.toggleTheme;
-    document.body.appendChild(tbtn);
-  }
 
   if (sidebar) {
     sidebar.innerHTML =
@@ -1388,266 +1193,8 @@ R.home = function () {
     },
   ];
 
-  // ──── SMART HOME v2 — منطق ذكي يستنبط من البيانات ────
-  const greet = smartGreeting();
-  const hourNow = new Date().getHours();
-
-  // اكتشاف العناصر التي تحتاج انتباه
-  const staleProjects = PRJ.filter((p) => {
-    const days = p.current_status?.updated
-      ? (Date.now() - new Date(p.current_status.updated).getTime()) / 86400000
-      : 999;
-    return days > 14 && p.priority === "high";
-  });
-  const projectsWithBlockers = PRJ.filter(
-    (p) =>
-      p.current_status?.blockers?.some(
-        (b) => b.priority === "high" || b.priority === "med",
-      ),
-  );
-  const teamMissingData = (typeof TEAM !== "undefined" ? TEAM : []).filter(
-    (t) => !t.full_name || !t.email_work,
-  );
-  const projectsWithNoRevenue = PRJ.filter(
-    (p) =>
-      p.revenue_model !== "none" &&
-      (!p.monthly_revenue_usd || p.monthly_revenue_usd === 0),
-  );
-
-  // briefs ذكية
-  const briefs = [];
-  projectsWithBlockers.slice(0, 2).forEach((p) => {
-    const b = p.current_status.blockers.find((x) => x.priority === "high") ||
-      p.current_status.blockers[0];
-    briefs.push({
-      level: b.priority === "high" ? "critical" : "warn",
-      icon: b.priority === "high" ? "🔴" : "🟡",
-      title: p.ar || p.name,
-      detail: b.text.slice(0, 80) + (b.text.length > 80 ? "…" : ""),
-      action: `openProjectDetail('${E(p.name)}')`,
-      actionLabel: "افتح المشروع",
-      tone: b.priority === "high" ? "#ef4444" : "#f59e0b",
-    });
-  });
-  if (teamMissingData.length > 2) {
-    briefs.push({
-      level: "info",
-      icon: "📋",
-      title: `${teamMissingData.length} موظفون ببيانات ناقصة`,
-      detail: "أرسل لهم رابط الاستبيان لاستكمال الملفات",
-      action: `window.open('survey.html','_blank')`,
-      actionLabel: "افتح الاستبيان",
-      tone: "#6366f1",
-    });
-  }
-  if (staleProjects.length) {
-    briefs.push({
-      level: "warn",
-      icon: "⏰",
-      title: `${staleProjects.length} مشاريع ذات أولوية عالية لم تُحدّث`,
-      detail: staleProjects.map((p) => p.ar || p.name).join(" · "),
-      action: `go('projects')`,
-      actionLabel: "راجع",
-      tone: "#f59e0b",
-    });
-  }
-  if (projectsWithNoRevenue.length > 0 && hourNow >= 10 && hourNow < 19) {
-    briefs.push({
-      level: "info",
-      icon: "💰",
-      title: `${projectsWithNoRevenue.length} مشاريع بدون تتبّع إيراد`,
-      detail: "ابدأ بتسجيل الإيراد الشهري لكل مشروع",
-      action: `go('umbrellas')`,
-      actionLabel: "افتح الشركات",
-      tone: "#10b981",
-    });
-  }
-
-  // pulse: الإيرادات الحية لكل مظلة
-  const umbPulse = UMBRELLAS.map((u) => {
-    const projs = PRJ.filter((p) => p.parent === u.id);
-    const rev = projs.reduce(
-      (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
-      0,
-    );
-    const active = projs.filter((p) => p.st === "a").length;
-    const teamCount = (typeof TEAM !== "undefined" ? TEAM : []).filter(
-      (t) => t.parent === u.id,
-    ).length;
-    // mock trend data for sparkline (في الحقيقة من تاريخ التحديثات)
-    const trend = projs.map((p) => p.pct || 0).slice(0, 7);
-    return { ...u, rev, active, teamCount, prjCount: projs.length, trend };
-  });
-
-  // activity feed: آخر التحديثات
-  const activityFeed = PRJ.filter((p) => p.current_status?.updated)
-    .sort(
-      (a, b) =>
-        new Date(b.current_status.updated) - new Date(a.current_status.updated),
-    )
-    .slice(0, 6);
-
-  // smart suggestions
-  const suggestions = [];
-  const incompleteTeam = teamMissingData.length;
-  if (incompleteTeam > 0)
-    suggestions.push({
-      em: "👤",
-      text: `بيانات ${incompleteTeam} موظفين غير مكتملة`,
-      cta: "أرسل الاستبيان",
-      action: `window.open('survey.html','_blank')`,
-    });
-  const rihlaty = PRJ.find((p) => p.id === "rihlaty-travel");
-  if (rihlaty && rihlaty.pct < 50)
-    suggestions.push({
-      em: "✈️",
-      text: "Rihlaty Travel تحت 50% — صفحات السوشيال لم تُنشأ",
-      cta: "افتح المشروع",
-      action: `openProjectDetail('Rihlaty Travel')`,
-    });
-  const mm = PRJ.find((p) => p.id === "money-manager");
-  if (mm && mm.st === "p")
-    suggestions.push({
-      em: "💰",
-      text: "Money Manager متوقف رغم أنه قاعدة مالية للكل",
-      cta: "إنعاش",
-      action: `openProjectDetail('Money Manager')`,
-    });
-
   return (
     `<div class="hqx">` +
-    // ──── SMART HEADER v2 — الترحيب + التاريخ + الحالة العامة ────
-    `<section class="cc-greet" data-tone="${greet.tone}">` +
-    `<div class="cc-greet-main">` +
-    `<div class="cc-greet-row">` +
-    `<span class="cc-greet-em">${greet.em}</span>` +
-    `<h1 class="cc-greet-title">${E(greet.text)}، ربيع</h1>` +
-    `<span class="cc-pulse-dot" title="النظام متصل"></span>` +
-    `</div>` +
-    `<p class="cc-greet-sub">${E(todayLong())} · ${arPluralProj(PRJ.length)} · ${arPluralEmp(TEAM ? TEAM.length : 0)} · ${arPluralDept(DEPARTMENTS ? DEPARTMENTS.length : 0)}</p>` +
-    `</div>` +
-    `<div class="cc-greet-actions">` +
-    `<button class="cc-greet-action cc-clickable" onclick="openSearch()" title="بحث (Cmd+K)">🔍 بحث</button>` +
-    `<a class="cc-greet-action cc-clickable" href="survey.html" target="_blank" title="استبيان موظف">📋 استبيان</a>` +
-    `</div>` +
-    `</section>` +
-    // ──── TODAY'S BRIEF — ما يحتاج انتباهك الآن ────
-    (briefs.length
-      ? `<section class="cc-brief">` +
-        `<h2 class="cc-section-title">` +
-        `<span class="cc-section-em">🔥</span>` +
-        `يحتاج انتباهك الآن` +
-        `<span class="cc-section-badge">${briefs.length}</span>` +
-        `</h2>` +
-        `<div class="cc-brief-list">` +
-        briefs
-          .map(
-            (b) =>
-              `<div class="cc-brief-item cc-clickable" onclick="${b.action}" style="--bt:${b.tone}">` +
-              `<span class="cc-brief-icon">${b.icon}</span>` +
-              `<div class="cc-brief-body">` +
-              `<div class="cc-brief-title">${E(b.title)}</div>` +
-              `<div class="cc-brief-detail">${E(b.detail)}</div>` +
-              `</div>` +
-              `<button class="cc-brief-cta">${E(b.actionLabel)} ←</button>` +
-              `</div>`,
-          )
-          .join("") +
-        `</div>` +
-        `</section>`
-      : `<section class="cc-brief cc-brief-empty">` +
-        `<span class="cc-pulse-dot"></span>` +
-        `لا شيء حرج الآن — كل شيء يعمل بسلاسة ✓` +
-        `</section>`) +
-    // ──── LIVE PULSE — نبض الشركات الحي ────
-    `<section class="cc-pulse">` +
-    `<h2 class="cc-section-title">` +
-    `<span class="cc-section-em">⚡</span>` +
-    `نبض الشركات الحي` +
-    `</h2>` +
-    `<div class="cc-pulse-grid">` +
-    umbPulse
-      .map(
-        (u) =>
-          `<div class="cc-pulse-card cc-clickable" onclick="go('umbrellas')" style="--umb:${u.cl}">` +
-          `<div class="cc-pulse-head">` +
-          `<span class="cc-pulse-em">${_ic(u.em, 18)}</span>` +
-          `<span class="cc-pulse-name">${E(u.name)}</span>` +
-          `</div>` +
-          `<div class="cc-pulse-stats">` +
-          `<div class="cc-pulse-stat"><strong>${u.prjCount}</strong><span>مشاريع</span></div>` +
-          `<div class="cc-pulse-stat"><strong>${u.teamCount}</strong><span>فريق</span></div>` +
-          `<div class="cc-pulse-stat"><strong>${u.rev ? fmtCurrency(u.rev) : "—"}</strong><span>شهري</span></div>` +
-          `</div>` +
-          `<div class="cc-pulse-spark">${_miniSpark(u.trend.length ? u.trend : [1], u.cl, 100, 24)}</div>` +
-          `</div>`,
-      )
-      .join("") +
-    `</div>` +
-    `</section>` +
-    // ──── ACTIVITY FEED — آخر التحديثات بوقت حي ────
-    `<section class="cc-feed">` +
-    `<h2 class="cc-section-title">` +
-    `<span class="cc-section-em">🕐</span>` +
-    `آخر التحديثات` +
-    `</h2>` +
-    `<div class="cc-feed-list">` +
-    activityFeed
-      .map((p) => {
-        const u = UMBRELLAS.find((x) => x.id === p.parent);
-        const updatedISO = p.current_status.updated;
-        return (
-          `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${E(p.name)}')">` +
-          `<div class="cc-feed-dot" style="background:${p.cl}"></div>` +
-          `<div class="cc-feed-body">` +
-          `<div class="cc-feed-top">` +
-          `<span class="cc-feed-name">${_ic(p.em, 14)} ${E(p.ar || p.name)}</span>` +
-          (u
-            ? `<span class="cc-feed-umb" style="background:${u.cl}18;color:${u.cl}">${E(u.name)}</span>`
-            : "") +
-          `</div>` +
-          `<div class="cc-feed-text">${E((p.current_status.where || "").slice(0, 100))}${(p.current_status.where || "").length > 100 ? "…" : ""}</div>` +
-          `</div>` +
-          `<div class="cc-feed-time" data-live-time="${E(updatedISO)}">${E(relTime(updatedISO))}</div>` +
-          `</div>`
-        );
-      })
-      .join("") +
-    `</div>` +
-    `</section>` +
-    // ──── SMART SUGGESTIONS ────
-    (suggestions.length
-      ? `<section class="cc-sug">` +
-        `<h2 class="cc-section-title">` +
-        `<span class="cc-section-em">💡</span>` +
-        `اقتراحات ذكية` +
-        `</h2>` +
-        `<div class="cc-sug-list">` +
-        suggestions
-          .map(
-            (s) =>
-              `<div class="cc-sug-item">` +
-              `<span class="cc-sug-em">${s.em}</span>` +
-              `<span class="cc-sug-text">${E(s.text)}</span>` +
-              `<button class="cc-sug-cta cc-clickable" onclick="${s.action}">${E(s.cta)} →</button>` +
-              `</div>`,
-          )
-          .join("") +
-        `</div>` +
-        `</section>`
-      : "") +
-    // ──── شريط Runtime نشط — يظهر بعد الأقسام الذكية ────
-    `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border:1px solid var(--brd);border-radius:14px;margin-bottom:16px">` +
-    `<div style="display:flex;align-items:center;gap:10px">` +
-    `<span class="cc-runtime-badge"><span class="cc-pulse-dot"></span>Runtime نشط</span>` +
-    `<span style="font-size:11.5px;color:var(--t3)">يفحص ويحدّث كل 6 ساعات تلقائياً عبر launchd</span>` +
-    `</div>` +
-    `<button class="cc-greet-action cc-clickable" onclick="ccTriggerSync(this)" title="تشغيل فحص فوري">⟳ تحديث الآن</button>` +
-    `</div>` +
-    // ──── الجزء التنفيذي القديم — قابل للطي ────
-    `<details class="hqx-collapsible" style="margin-top:16px">` +
-    `<summary style="cursor:pointer;padding:10px 14px;background:var(--surface);border:1px solid var(--brd);border-radius:12px;font-size:13px;font-weight:600;color:var(--t2);user-select:none">📊 الموجز التنفيذي التفصيلي (الموثوقية، التغطية، الجرد)</summary>` +
-    `<div style="margin-top:12px">` +
     `<section class="hqx-card hqx-hero">` +
     `<div class="hqx-hero-copy">` +
     `<span class="hqx-kicker">Executive briefing</span>` +
@@ -1799,24 +1346,8 @@ R.home = function () {
       .join("") +
     `</div>` +
     `</section>` +
-    `</div>` +
-    `</details>` +
     `</div>`
   );
-};
-
-/* زر "تحديث الآن" — يستدعي runtime sync يدوياً عبر backend script */
-window.ccTriggerSync = function (btn) {
-  btn.classList.add("spinning");
-  btn.textContent = "⟳ جاري...";
-  // هذا الزر يُذكّرك فقط — التحديث الفعلي يحدث محلياً عبر launchd كل 6 ساعات
-  setTimeout(() => {
-    btn.classList.remove("spinning");
-    btn.textContent = "✓ تذكير: التحديث التلقائي كل 6 ساعات";
-    setTimeout(() => {
-      btn.textContent = "⟳ تحديث الآن";
-    }, 3000);
-  }, 800);
 };
 
 /* ── PROJECTS — Hero + Grid ── */
@@ -1909,8 +1440,7 @@ R.projects = function () {
       .join("") +
     `</div>` +
     UMBRELLAS.map((u) => {
-      // عرض كل مشاريع المظلة (بما فيها hero لإكمال صورة الشركة)
-      const items = PRJ.filter((p) => p.parent === u.id);
+      const items = rest.filter((p) => p.parent === u.id);
       if (!items.length) return "";
       return (
         `<div class="prj-umb-section" style="--umb:${u.cl}">` +
@@ -1926,30 +1456,12 @@ R.projects = function () {
             const firstLine = (p.desc || "").split("\n")[0];
             const tags = (p.tags || []).slice(0, 3);
             const links = Object.entries(p.links || {}).slice(0, 2);
-            const role = p.parent_role || "";
-            const isB2B = role.includes("b2b");
-            const isB2C = role.includes("b2c");
-            const segLabel = isB2B ? "B2B" : isB2C ? "B2C" : "";
-            const segCl = isB2B ? "#7c3aed" : isB2C ? "#0EA5E9" : null;
-            const today = new Date();
-            const updated = p.current_status?.updated;
-            const ageDays = updated
-              ? Math.floor((today - new Date(updated)) / 86400000)
-              : null;
-            const isFresh = ageDays !== null && ageDays <= 7;
             return (
-              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
-              `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
+              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')">` +
               `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
               `<div class="prj-card-body">` +
               `<div class="prj-card-head">` +
               `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
-              (segLabel
-                ? `<span class="prj-card-seg" style="background:${segCl}18;color:${segCl}">${segLabel}</span>`
-                : "") +
-              (isFresh
-                ? `<span class="prj-card-fresh" title="مُحدّث ${ageDays === 0 ? "اليوم" : `قبل ${ageDays} يوم`}">جديد</span>`
-                : "") +
               `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
               `</div>` +
               `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +
@@ -1981,422 +1493,78 @@ R.projects = function () {
   );
 };
 
-/* ── TEAM — عرض ذكي للموظفين بـ3 مجموعات + راتب حساس ── */
-
-/* أزرار سريعة + نسخ + تبديل عرض الراتب — عبر window */
-window.teamCopy = function (text, btnId) {
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById(btnId);
-    if (btn) {
-      const orig = btn.innerHTML;
-      btn.innerHTML = "✓";
-      btn.classList.add("copied");
-      setTimeout(() => {
-        btn.innerHTML = orig;
-        btn.classList.remove("copied");
-      }, 1500);
-    }
-  });
-};
-
-window.teamToggleSalary = function () {
-  const cur = localStorage.getItem("cc_show_salary") === "1";
-  localStorage.setItem("cc_show_salary", cur ? "0" : "1");
-  document.querySelectorAll(".team-salary-row").forEach((el) => {
-    el.classList.toggle("revealed", !cur);
-  });
-  const btn = document.getElementById("salary-toggle-btn");
-  if (btn) btn.textContent = !cur ? "إخفاء الرواتب" : "إظهار الرواتب";
-};
-
-window.teamSwitchView = function (mode) {
-  document.querySelectorAll(".team-view-btn").forEach((b) =>
-    b.classList.toggle("active", b.dataset.view === mode),
-  );
-  const grid = document.getElementById("team-content");
-  if (grid) grid.dataset.view = mode;
-};
-
-window.teamFilter = function (q) {
-  const norm = (s) => (s || "").toLowerCase();
-  const term = norm(q);
-  document.querySelectorAll("[data-employee-card]").forEach((card) => {
-    const hay = norm(card.dataset.search);
-    card.style.display = !term || hay.includes(term) ? "" : "none";
-  });
-};
-
-R.team = function () {
-  const teamData = typeof TEAM !== "undefined" ? TEAM : [];
-  const deptData = typeof DEPARTMENTS !== "undefined" ? DEPARTMENTS : [];
-  const prjData = typeof PRJ !== "undefined" ? PRJ : [];
-  const umbData = typeof UMBRELLAS !== "undefined" ? UMBRELLAS : [];
-
-  const byDept = (deptId) => teamData.filter((t) => t.department === deptId);
-  const lookupDept = (id) => deptData.find((d) => d.id === id);
-  const lookupUmb = (id) => umbData.find((u) => u.id === id);
-  const lookupProj = (id) => prjData.find((p) => p.id === id);
-
-  const totalEmployees = teamData.length;
-  const totalActive = teamData.filter((t) => t.status !== "terminated").length;
-  const totalDepts = deptData.filter((d) => byDept(d.id).length > 0).length;
-  const totalWA = teamData.filter((t) => t.whatsapp).length;
-
-  // ── بطاقة موظف ذكية (تجمع 3 مجموعات + راتب) ──
-  const renderEmployeeCard = (m) => {
-    const initial = (m.name || "?").slice(0, 1);
-    const dept = lookupDept(m.department);
-    const umb = lookupUmb(m.parent);
-    const projs = (m.assigned_projects || [])
-      .map(lookupProj)
-      .filter(Boolean);
-    const langs = m.languages || [];
-    const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
-    const telUrl = m.phone ? `tel:${m.phone}` : null;
-    const smsUrl = m.phone ? `sms:${m.phone}` : null;
-    const mailUrl = m.email_work ? `mailto:${m.email_work}` : null;
-    const tgUrl = m.telegram
-      ? `https://t.me/${m.telegram.replace(/^@/, "")}`
-      : null;
-
-    const searchHay = [
-      m.name, m.name_en, m.full_name, m.role, m.phone, m.whatsapp,
-      m.email_work, m.telegram, m.location_office, m.nationality,
-      dept?.name, umb?.name, ...langs,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const statusBadge = {
-      active: { label: "نشط", cl: "#10b981" },
-      "on-leave": { label: "إجازة", cl: "#f59e0b" },
-      terminated: { label: "منتهي", cl: "#ef4444" },
-    }[m.status] || { label: "—", cl: "#94a3b8" };
-
-    const fillNote = (label, val) =>
-      val
-        ? `<div class="emp-field"><span class="emp-field-label">${E(label)}</span><span class="emp-field-val">${E(val)}</span></div>`
-        : `<div class="emp-field empty"><span class="emp-field-label">${E(label)}</span><span class="emp-field-val">—</span></div>`;
-
-    const copyBtn = (text, id, title) =>
-      `<button class="emp-copy" id="${id}" onclick="teamCopy('${E(text)}','${id}')" title="${E(title)}">📋</button>`;
-
-    return (
-      `<div class="emp-card" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}">` +
-      // ── HEADER: Identity ──
-      `<div class="emp-header">` +
-      `<div class="emp-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
-      `<div class="emp-header-info">` +
-      `<div class="emp-name-row">` +
-      `<h3 class="emp-name">${E(m.full_name || m.name)}</h3>` +
-      `<span class="emp-status-badge" style="background:${statusBadge.cl}18;color:${statusBadge.cl}">${E(statusBadge.label)}</span>` +
-      `</div>` +
-      (m.name_en
-        ? `<div class="emp-name-en" dir="ltr">${E(m.name_en)}</div>`
-        : "") +
-      `<div class="emp-role">${E(m.role || "")}</div>` +
-      `<div class="emp-context">` +
-      (dept
-        ? `<span class="emp-chip" style="background:${dept.cl}18;color:${dept.cl}">${_ic(dept.em, 11)} ${E(dept.name)}</span>`
-        : "") +
-      (umb
-        ? `<span class="emp-chip" style="background:${umb.cl}18;color:${umb.cl}">${_ic(umb.em, 11)} ${E(umb.name)}</span>`
-        : "") +
-      `</div>` +
-      `</div>` +
-      `</div>` +
-      // ── ACTION BAR (سريع جداً) ──
-      `<div class="emp-action-bar">` +
-      (telUrl
-        ? `<a class="emp-action call" href="${E(telUrl)}" title="اتصال">${_ic("📞", 16)}<span>اتصال</span></a>`
-        : "") +
-      (waUrl
-        ? `<a class="emp-action wa" href="${E(waUrl)}" target="_blank" rel="noopener" title="فتح واتساب">${_ic("💬", 16)}<span>واتساب</span></a>`
-        : "") +
-      (smsUrl
-        ? `<a class="emp-action sms" href="${E(smsUrl)}" title="رسالة SMS">${_ic("📱", 16)}<span>SMS</span></a>`
-        : "") +
-      (mailUrl
-        ? `<a class="emp-action mail" href="${E(mailUrl)}" title="بريد إلكتروني">${_ic("📧", 16)}<span>بريد</span></a>`
-        : "") +
-      `</div>` +
-      // ── GROUP 1: CONTACT (تواصل) ──
-      `<div class="emp-section">` +
-      `<div class="emp-section-title">📞 التواصل</div>` +
-      (m.phone_local
-        ? `<div class="emp-field with-copy"><span class="emp-field-label">رقم الهاتف</span><span class="emp-field-val mono" dir="ltr">${E(m.phone_local)}</span>${copyBtn(m.phone_local, "cp-phone-" + m.id, "نسخ الرقم")}</div>`
-        : `<div class="emp-field empty"><span class="emp-field-label">رقم الهاتف</span><span class="emp-field-val">—</span></div>`) +
-      (m.whatsapp
-        ? `<div class="emp-field with-copy"><span class="emp-field-label">واتساب</span><span class="emp-field-val mono" dir="ltr">wa.me/${E(m.whatsapp)}</span>${copyBtn("wa.me/" + m.whatsapp, "cp-wa-" + m.id, "نسخ رابط واتساب")}</div>`
-        : "") +
-      fillNote("اسم العرض على واتساب", m.whatsapp_display_name) +
-      fillNote("البريد الإلكتروني", m.email_work) +
-      (m.telegram
-        ? `<div class="emp-field"><span class="emp-field-label">تيليجرام</span><a class="emp-field-val mono" href="${E(tgUrl)}" target="_blank" rel="noopener" dir="ltr">${E(m.telegram)}</a></div>`
-        : `<div class="emp-field empty"><span class="emp-field-label">تيليجرام</span><span class="emp-field-val">—</span></div>`) +
-      fillNote("موقع المكتب", m.location_office) +
-      `</div>` +
-      // ── GROUP 2: IDENTITY (هوية) ──
-      `<div class="emp-section">` +
-      `<div class="emp-section-title">👤 الهوية</div>` +
-      fillNote("الاسم بالإنجليزية", m.name_en) +
-      fillNote("الاسم الكامل", m.full_name) +
-      fillNote("الجنسية", m.nationality) +
-      `<div class="emp-field"><span class="emp-field-label">اللغات</span>` +
-      (langs.length
-        ? `<span class="emp-langs">${langs.map((l) => `<span class="emp-lang-tag">${E(l)}</span>`).join("")}</span>`
-        : `<span class="emp-field-val empty-val">—</span>`) +
-      `</div>` +
-      `</div>` +
-      // ── GROUP 3: WORK (عمل) ──
-      `<div class="emp-section">` +
-      `<div class="emp-section-title">💼 العمل</div>` +
-      (projs.length
-        ? `<div class="emp-field"><span class="emp-field-label">المشاريع</span>` +
-          `<span class="emp-projs">` +
-          projs
-            .map(
-              (p) =>
-                `<a class="emp-proj-tag" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
-            )
-            .join("") +
-          `</span></div>`
-        : `<div class="emp-field empty"><span class="emp-field-label">المشاريع</span><span class="emp-field-val">—</span></div>`) +
-      fillNote("المدير المباشر", m.manager) +
-      fillNote("تاريخ الانضمام", m.hire_date) +
-      fillNote("نوع التعاقد", m.contract_type) +
-      fillNote("ساعات العمل", m.working_hours) +
-      `</div>` +
-      // ── SENSITIVE: SALARY ──
-      `<div class="emp-section sensitive">` +
-      `<div class="emp-section-title sensitive">🔒 معلومات حساسة</div>` +
-      `<div class="emp-field team-salary-row${localStorage.getItem("cc_show_salary") === "1" ? " revealed" : ""}">` +
-      `<span class="emp-field-label">الراتب الشهري</span>` +
-      `<span class="emp-salary-val">${m.salary_usd ? `$${m.salary_usd}` : "—"}</span>` +
-      `<span class="emp-salary-mask">••••• USD</span>` +
-      `</div>` +
-      `</div>` +
-      `</div>`
-    );
-  };
-
-  // ── الواجهة الكاملة ──
-  return (
-    _sectionHero({
-      tone: "team",
-      kicker: "Team & Employees",
-      title: "الفريق والموظفون",
-      desc: "ملف ذكي شامل لكل موظف: تواصل + هوية + عمل. أزرار اتصال وواتساب وSMS وبريد، نسخ سريع للأرقام والروابط، وبحث فوري عبر كل الحقول.",
-      stats: [
-        { v: totalEmployees, l: "إجمالي" },
-        { v: totalActive, l: "نشط" },
-        { v: totalDepts, l: "أقسام" },
-        { v: totalWA, l: "متصل بواتساب" },
-      ],
-    }) +
-    // ── شريط التحكم ──
-    `<div class="team-controls">` +
-    `<input type="search" class="team-search" placeholder="🔍 ابحث: اسم، رقم، بريد، لغة، مشروع..." oninput="teamFilter(this.value)" />` +
-    `<div class="team-view-switcher">` +
-    `<button class="team-view-btn active" data-view="grouped" onclick="teamSwitchView('grouped')">📂 بالأقسام</button>` +
-    `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
-    `</div>` +
-    `<a href="survey.html" target="_blank" class="survey-link" title="رابط استبيان لملء بيانات موظف جديد">📋 استبيان موظف</a>` +
-    `<button id="salary-toggle-btn" class="salary-toggle" onclick="teamToggleSalary()">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
-    `</div>` +
-    // ── المحتوى ──
-    `<div id="team-content" class="team-content" data-view="grouped">` +
-    // عرض الكل (يظهر في وضع "الكل")
-    `<div class="team-all-grid">` +
-    teamData.map(renderEmployeeCard).join("") +
-    `</div>` +
-    // عرض بالأقسام (الافتراضي)
-    `<div class="team-grouped">` +
-    deptData
-      .map((d) => {
-        const members = byDept(d.id);
-        if (!members.length) return "";
-        const umb = lookupUmb(d.parent);
-        return (
-          `<div class="team-dept" style="--dept:${d.cl}">` +
-          `<div class="team-dept-header">` +
-          `<span class="team-dept-ic" style="background:${d.cl}22;color:${d.cl}">${_ic(d.em, 24)}</span>` +
-          `<div class="team-dept-titles">` +
-          `<h3 class="team-dept-name">${E(d.name)}</h3>` +
-          `<p class="team-dept-ar">${E(d.ar || "")}${umb ? ` · ${E(umb.name)}` : ""}</p>` +
-          `</div>` +
-          `<span class="team-dept-count">${members.length} موظف</span>` +
-          `</div>` +
-          `<div class="emp-cards-grid">` +
-          members.map(renderEmployeeCard).join("") +
-          `</div>` +
-          `</div>`
-        );
-      })
-      .join("") +
-    `</div>` +
-    `</div>`
-  );
-};
-
-/* ── UMBRELLAS — عرض هرمي: مظلة → أقسام → مشاريع + موظفون ── */
+/* ── UMBRELLAS — عرض الشركات الأم ── */
 R.umbrellas = function () {
   const projByParent = (id) => PRJ.filter((p) => p.parent === id);
-  const ideasByParent = (id) =>
-    typeof IDEAS !== "undefined"
-      ? IDEAS.filter((i) => i.parent === id)
-      : [];
-  const deptsByParent = (id) =>
-    typeof DEPARTMENTS !== "undefined"
-      ? DEPARTMENTS.filter((d) => d.parent === id)
-      : [];
-  const teamByDept = (deptId) =>
-    typeof TEAM !== "undefined" ? TEAM.filter((t) => t.department === deptId) : [];
-  const projByDept = (deptId) => PRJ.filter((p) => p.department === deptId);
-  const teamByParent = (parentId) =>
-    typeof TEAM !== "undefined"
-      ? TEAM.filter((t) => t.parent === parentId)
-      : [];
+  const ideasByParent = (id) => (typeof IDEAS !== "undefined" ? IDEAS.filter((i) => i.parent === id) : []);
 
   const totalProjects = PRJ.length;
   const totalActive = PRJ.filter((p) => p.st === "a").length;
-  const totalTeam = typeof TEAM !== "undefined" ? TEAM.length : 0;
   const totalRevenue = PRJ.reduce(
     (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
     0,
   );
-
-  // مكوّن: بطاقة مشروع مصغّرة داخل قسم
-  const renderProjectRow = (p) =>
-    `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
-    `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
-    `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
-    (p.parent_role
-      ? `<span class="umb-project-role">${E(p.parent_role)}</span>`
-      : "") +
-    `<span class="umb-project-pct">${p.pct || 0}%</span>` +
-    `</div>`;
-
-  // مكوّن: بطاقة موظف مصغّرة داخل قسم
-  const renderMemberRow = (m) => {
-    const initial = (m.name || "?").slice(0, 1);
-    const waUrl = m.whatsapp ? `https://wa.me/${m.whatsapp}` : null;
-    const telUrl = m.phone ? `tel:${m.phone}` : null;
-    return (
-      `<div class="umb-member" style="--mc:${m.cl}">` +
-      `<div class="umb-member-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
-      `<div class="umb-member-info">` +
-      `<div class="umb-member-name">${E(m.full_name || m.name)}</div>` +
-      `<div class="umb-member-role">${E(m.role || "")}</div>` +
-      `</div>` +
-      `<div class="umb-member-actions">` +
-      (telUrl
-        ? `<a class="umb-member-btn tel" href="${E(telUrl)}" onclick="event.stopPropagation()" title="${E(m.phone_local || m.phone)}">${_ic("📞", 14)}</a>`
-        : "") +
-      (waUrl
-        ? `<a class="umb-member-btn wa" href="${E(waUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="wa.me/${E(m.whatsapp)}">${_ic("💬", 14)}</a>`
-        : "") +
-      `</div>` +
-      `</div>`
-    );
-  };
-
-  // مكوّن: قسم داخل مظلة (BRIX-B2B, EasyBooking, Rihlaty…)
-  const renderDepartment = (d) => {
-    const dProjects = projByDept(d.id);
-    const dTeam = teamByDept(d.id);
-    return (
-      `<div class="umb-dept" style="--dept:${d.cl}">` +
-      `<div class="umb-dept-header">` +
-      `<span class="umb-dept-ic" style="background:${d.cl}22;color:${d.cl}">${_ic(d.em, 18)}</span>` +
-      `<div class="umb-dept-titles">` +
-      `<div class="umb-dept-name">${E(d.name)}</div>` +
-      `<div class="umb-dept-ar">${E(d.ar || "")}</div>` +
-      `</div>` +
-      `<div class="umb-dept-counts">` +
-      `<span class="umb-dept-count">📦 ${dProjects.length}</span>` +
-      `<span class="umb-dept-count">👥 ${dTeam.length}</span>` +
-      `</div>` +
-      `</div>` +
-      (dProjects.length
-        ? `<div class="umb-dept-block"><div class="umb-dept-block-label">المشاريع</div>` +
-          `<div class="umb-projects-list">${dProjects.map(renderProjectRow).join("")}</div></div>`
-        : "") +
-      (dTeam.length
-        ? `<div class="umb-dept-block"><div class="umb-dept-block-label">الموظفون</div>` +
-          `<div class="umb-members-list">${dTeam.map(renderMemberRow).join("")}</div></div>`
-        : "") +
-      (!dProjects.length && !dTeam.length
-        ? `<div class="umb-dept-empty">— لا يوجد مشاريع أو موظفون بعد —</div>`
-        : "") +
-      `</div>`
-    );
-  };
 
   return (
     _sectionHero({
       tone: "umbrellas",
       kicker: "Companies & Umbrellas",
       title: "الشركات والمظلات",
-      desc: "عرض هرمي كامل: كل مظلة تكشف أقسامها، وكل قسم يعرض مشاريعه وموظفيه في مكان واحد. اضغط أي مشروع لفتح تفاصيله، أو رقم/واتساب للاتصال مباشرة.",
+      desc: "كل ما تملك مُنظَّم تحت 4 مظلات: شركتان حقيقيتان، خط منتجات SaaS، وبنية تحتية شخصية. اضغط أي مظلة لرؤية مشاريعها وأفكارها.",
       stats: [
         { v: UMBRELLAS.length, l: "مظلات" },
         { v: totalProjects, l: "مشاريع" },
         { v: totalActive, l: "نشط" },
-        { v: totalTeam, l: "موظفين" },
+        { v: `$${totalRevenue}`, l: "إيراد شهري/USD" },
       ],
     }) +
     `<div class="umb-grid">` +
     UMBRELLAS.map((u) => {
       const projects = projByParent(u.id);
       const ideas = ideasByParent(u.id);
-      const depts = deptsByParent(u.id);
       const activeCount = projects.filter((p) => p.st === "a").length;
       const revenue = projects.reduce(
         (s, p) => s + (Number(p.monthly_revenue_usd) || 0),
         0,
       );
-      const umbTeamCount = teamByParent(u.id).length;
-
-      // مشاريع لا تنتمي لأي قسم محدد (مظلات بلا أقسام)
-      const unassignedProjects = projects.filter(
-        (p) => !depts.find((d) => d.id === p.department),
+      const users = projects.reduce(
+        (s, p) => s + (Number(p.users_count) || 0),
+        0,
       );
 
       return (
         `<div class="umb-card" style="--umb:${u.cl}">` +
-        // ── HEADER ──
         `<div class="umb-card-header">` +
         `<div class="umb-card-icon" style="background:${u.cl}22;color:${u.cl}">${_ic(u.em, 32)}</div>` +
         `<div class="umb-card-titles">` +
         `<h3 class="umb-card-name">${E(u.name)}</h3>` +
         `<p class="umb-card-specialty">${E(u.specialty)}</p>` +
-        (u.location
-          ? `<span class="umb-card-loc">📍 ${E(u.location)}</span>`
-          : "") +
+        (u.location ? `<span class="umb-card-loc">📍 ${E(u.location)}</span>` : "") +
         `</div>` +
         `</div>` +
         `<p class="umb-card-summary">${E(u.summary)}</p>` +
-        // ── STATS ──
         `<div class="umb-card-stats">` +
         `<div class="umb-stat"><strong>${projects.length}</strong><span>مشاريع</span></div>` +
         `<div class="umb-stat"><strong>${activeCount}</strong><span>نشط</span></div>` +
-        `<div class="umb-stat"><strong>${umbTeamCount}</strong><span>موظفين</span></div>` +
         `<div class="umb-stat"><strong>${ideas.length}</strong><span>أفكار</span></div>` +
         `<div class="umb-stat"><strong>$${revenue}</strong><span>شهري</span></div>` +
         `</div>` +
-        // ── DEPARTMENTS (هرمي للمظلات التي لها أقسام) ──
-        (depts.length
-          ? `<div class="umb-depts-wrapper">` +
-            depts.map(renderDepartment).join("") +
+        (projects.length
+          ? `<div class="umb-projects-title">المشاريع</div>` +
+            `<div class="umb-projects-list">` +
+            projects
+              .map(
+                (p) =>
+                  `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
+                  `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
+                  `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
+                  `<span class="umb-project-role">${E(p.parent_role || "")}</span>` +
+                  `<span class="umb-project-pct">${p.pct || 0}%</span>` +
+                  `</div>`,
+              )
+              .join("") +
             `</div>`
           : "") +
-        // ── مشاريع غير مصنّفة لقسم (مظلات بلا أقسام) ──
-        (unassignedProjects.length
-          ? `<div class="umb-projects-title">${depts.length ? "مشاريع أخرى" : "المشاريع"}</div>` +
-            `<div class="umb-projects-list">${unassignedProjects.map(renderProjectRow).join("")}</div>`
-          : "") +
-        // ── الأفكار ──
         (ideas.length
           ? `<div class="umb-projects-title">الأفكار</div>` +
             `<div class="umb-ideas-list">` +
@@ -4543,7 +3711,6 @@ function _updateCountdown() {
 
 async function bootstrap() {
   init();
-  _startLiveTicks();
   _loadRuntimeData().then(() => {
     if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   });
