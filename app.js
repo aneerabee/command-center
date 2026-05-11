@@ -43,6 +43,18 @@ const arPluralProj = (n) => arPlural(n, "مشروع واحد", "مشروعان",
 const arPluralDept = (n) => arPlural(n, "قسم واحد", "قسمان", "أقسام", "قسماً");
 const arPluralIdea = (n) => arPlural(n, "فكرة واحدة", "فكرتان", "أفكار", "فكرة");
 
+/* صيغة وحدة زمنية عربية صحيحة:
+   1     → "منذ أسبوع"        (مفرد بدون رقم)
+   2     → "منذ أسبوعين"      (مثنى بدون رقم)
+   3-10  → "منذ 3 أسابيع"     (جمع كثرة)
+   11+   → "منذ 15 أسبوعاً"   (مفرد منصوب)             */
+function _arTimeUnit(n, single, dual, plural3to10, singularAccusative) {
+  if (n === 1) return `منذ ${single}`;
+  if (n === 2) return `منذ ${dual}`;
+  if (n >= 3 && n <= 10) return `منذ ${n} ${plural3to10}`;
+  return `منذ ${n} ${singularAccusative || single}`;
+}
+
 /* وقت نسبي بالعربية — يحدّث تلقائياً */
 function relTime(iso) {
   if (!iso) return "";
@@ -51,14 +63,30 @@ function relTime(iso) {
   if (diff < 30) return "الآن";
   if (diff < 60) return `منذ ${Math.floor(diff)} ثانية`;
   if (diff < 120) return "منذ دقيقة";
-  if (diff < 3600) return `منذ ${Math.floor(diff / 60)} دقيقة`;
+  if (diff < 3600) {
+    const m = Math.floor(diff / 60);
+    return _arTimeUnit(m, "دقيقة", "دقيقتين", "دقائق", "دقيقة");
+  }
   if (diff < 7200) return "منذ ساعة";
-  if (diff < 86400) return `منذ ${Math.floor(diff / 3600)} ساعة`;
+  if (diff < 86400) {
+    const hr = Math.floor(diff / 3600);
+    return _arTimeUnit(hr, "ساعة", "ساعتين", "ساعات", "ساعة");
+  }
   if (diff < 172800) return "أمس";
-  if (diff < 604800) return `منذ ${Math.floor(diff / 86400)} أيام`;
-  if (diff < 2592000) return `منذ ${Math.floor(diff / 604800)} أسابيع`;
-  if (diff < 31536000) return `منذ ${Math.floor(diff / 2592000)} أشهر`;
-  return `منذ ${Math.floor(diff / 31536000)} سنوات`;
+  if (diff < 604800) {
+    const d = Math.floor(diff / 86400);
+    return _arTimeUnit(d, "يوم", "يومين", "أيام", "يوماً");
+  }
+  if (diff < 2592000) {
+    const w = Math.floor(diff / 604800);
+    return _arTimeUnit(w, "أسبوع", "أسبوعين", "أسابيع", "أسبوعاً");
+  }
+  if (diff < 31536000) {
+    const mo = Math.floor(diff / 2592000);
+    return _arTimeUnit(mo, "شهر", "شهرين", "أشهر", "شهراً");
+  }
+  const yr = Math.floor(diff / 31536000);
+  return _arTimeUnit(yr, "سنة", "سنتين", "سنوات", "سنة");
 }
 
 /* تحية ذكية حسب الوقت */
