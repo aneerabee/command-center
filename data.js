@@ -74,8 +74,8 @@ const PRJ = [
     st: "a",
     em: "🏨",
     cl: "#6C3AED",
-    pct: 85,
-    summary: "النظام الرئيسي لإدارة عقود الفنادق والتسعير والبحث والنتائج.",
+    pct: 92,
+    summary: "النظام الرئيسي لإدارة عقود الفنادق والتسعير والبحث والنتائج، مع بوت تلجرام مرتبط ١٠٠٪ بنفس محرك الأسعار.",
     local_path:
       "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     server_path: null,
@@ -92,18 +92,23 @@ const PRJ = [
     subsystems: [
       "pricing-engine",
       "contract-wizard",
+      "contract-edit",
       "results-ui",
       "api-layer",
       "alerts-dashboard",
+      "telegram-bot",
+      "time-machine",
+      "daily-backup",
     ],
-    related_services: [],
+    related_services: ["telegram-bot @BrixPrice_bot"],
     related_tools: [],
-    related_cloud: ["GitHub", "Supabase", "Railway"],
+    related_cloud: ["GitHub", "Supabase", "Railway", "Telegram"],
     ops: [
       "النشر التلقائي على Railway من فرع main",
       "Supabase هو مصدر الحقيقة الوحيد (v15.0+)",
+      "النسخ الاحتياطي اليومي إلى مستودع brix-backups كل ٠٢:٠٠ صباحاً",
     ],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار\n\n📐 البنية: LEGO Architecture (7 كتل مستقلة)\ntypes → db → pricing → infra → validation → testing → ui\n\n🔧 التقنيات:\nNext.js 16 + React 18 + TypeScript 5.7 + Tailwind 4\nSupabase (PostgreSQL) + Zod 4 + Vitest + Playwright\n\n📊 الأرقام:\n1,873+ اختبار يمر (وحدة + تكامل + E2E)\n30 مرحلة تطوير مكتملة\n10 خطوات Contract Wizard\n\n🔄 سير البيانات:\nAirtable (11 جدول) → n8n → Supabase → Next.js → واجهة\n\n🚀 النشر: Railway (معطّل حالياً، آخر deployment ناجح 4 أبريل 2026 — يحتاج إنعاش)",
+    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16 + React 18 + TypeScript 5.9 + Tailwind 4\nSupabase (PostgreSQL) + Zod 4 + Vitest + Playwright\n\nالأرقام:\nألفان واثنا عشر اختبار يمر، صفر ثغرات حرجة\nعشر خطوات لإدخال عقد جديد\nستة خطوات في تدفّق البوت\nترجمة كاملة عربي وإنجليزي\n\nسير البيانات:\nالمستعمل يدخل العقد من شاشة إدخال العقود ← Supabase ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع\n\nالنشر: ريلواي حي وشغّال، آخر تحديث اليوم ٢٠٢٦-٠٥-١١، يطابق ١٠٠٪ ما يعرضه البوت.",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -122,6 +127,8 @@ const PRJ = [
         "https://brix-hotel-web-app-production.up.railway.app/contract-wizard",
       "قائمة العقود":
         "https://brix-hotel-web-app-production.up.railway.app/contracts",
+      "بوت تلجرام":
+        "https://t.me/BrixPrice_bot",
       "النسخ الاحتياطي اليومي":
         "https://github.com/aneerabee/brix-backups",
       "آخر تشغيل نسخ":
@@ -139,6 +146,8 @@ const PRJ = [
         "شاشة إدخال عقد فندق بعشر خطوات، يطلب تسجيل الدخول",
       "قائمة العقود":
         "كل العقود المحفوظة، للمراجعة والتعديل والحذف، يطلب تسجيل الدخول",
+      "بوت تلجرام":
+        "بوت بحث الأسعار للوكلاء، يعطي نفس النتيجة بالضبط التي يعطيها الويب. ست خطوات بالأزرار، عربي أو إنجليزي.",
       "النسخ الاحتياطي اليومي":
         "مستودع خاص فيه نسخة كاملة من كل جداول العقود ليوم. تحقق منه أسبوعياً — يجب أن ترى مجلد ديلي بتاريخ كل يوم.",
       "آخر تشغيل نسخ":
