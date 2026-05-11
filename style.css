@@ -9439,3 +9439,408 @@ input, select, textarea, button {
   color: var(--t2) !important;
   border: 1px solid var(--brd);
 }
+
+/* ════════════════════════════════════════════════════════════
+   EXECUTIVE DASHBOARD v3 — لوحة قيادة عملية ومتميزة
+   ════════════════════════════════════════════════════════════ */
+
+.exec-collapsible {
+  margin-top: 16px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 18px;
+  overflow: hidden;
+  color: #e2e8f0;
+  position: relative;
+}
+.exec-collapsible::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+.exec-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+  font-family: inherit;
+}
+.exec-summary::-webkit-details-marker { display: none; }
+.exec-summary-icon { font-size: 20px; }
+.exec-summary-text {
+  font-size: 15px;
+  font-weight: 700;
+  flex: 1;
+  letter-spacing: -0.01em;
+}
+.exec-summary-score {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.exec-summary-arrow {
+  font-size: 18px;
+  opacity: 0.6;
+  transition: transform 0.3s;
+}
+.exec-collapsible[open] .exec-summary-arrow { transform: rotate(180deg); }
+
+.exec-body {
+  padding: 0 22px 22px;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ─── Panel 1: HEALTH ─── */
+.exec-health {
+  grid-column: 1 / -1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 22px;
+  align-items: center;
+}
+.exec-health[data-state="healthy"] { color: #34d399; }
+.exec-health[data-state="warn"] { color: #fbbf24; }
+.exec-health[data-state="critical"] { color: #f87171; }
+
+.exec-health-ring {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+.exec-health-svg {
+  width: 100%;
+  height: 100%;
+  transition: all var(--motion-slow);
+}
+.exec-health-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+}
+.exec-health-num strong {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+}
+.exec-health-num span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+}
+.exec-health-info { display: flex; flex-direction: column; gap: 6px; }
+.exec-health-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.exec-health-state {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.exec-health-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.exec-mini {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.exec-mini.ok { color: #34d399; background: rgba(52, 211, 153, 0.12); }
+.exec-mini.warn { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+.exec-mini.man { color: #94a3b8; background: rgba(148, 163, 184, 0.12); }
+.exec-health-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 6px;
+  font-family: "Inter", sans-serif;
+}
+
+/* ─── Panel 2: COVERAGE ─── */
+.exec-coverage {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.exec-cov {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all var(--motion-fast);
+  font-family: inherit;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.exec-cov:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+.exec-cov-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.exec-cov-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+.exec-cov-num {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.exec-cov-num strong {
+  color: var(--c);
+  font-size: 16px;
+  font-weight: 800;
+}
+.exec-cov-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.exec-cov-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.6s ease;
+}
+.exec-cov-state {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+}
+.exec-cov-state.exec-state-ok { color: #34d399; }
+.exec-cov-state.exec-state-warn { color: #fbbf24; }
+.exec-cov-state.exec-state-fail { color: #f87171; }
+.exec-cov-state.exec-state-manual { color: #94a3b8; }
+
+/* ─── Panel 3: PROGRESS ─── */
+.exec-progress, .exec-access, .exec-actions {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.exec-progress { grid-column: 1 / -1; }
+
+.exec-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.exec-section-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+.exec-section-link {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: color var(--motion-fast);
+}
+.exec-section-link:hover { color: #34d399; }
+
+.exec-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.exec-prog-row {
+  display: grid;
+  grid-template-columns: auto 1fr 110px auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--motion-fast);
+  font-family: inherit;
+  text-align: right;
+}
+.exec-prog-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--c);
+  transform: translateX(-3px);
+}
+.exec-prog-icon { color: var(--c); display: inline-flex; }
+.exec-prog-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+.exec-prog-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.exec-prog-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 50%, transparent));
+  border-radius: inherit;
+  transition: width 0.6s ease;
+}
+.exec-prog-pct {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c);
+  min-width: 32px;
+  text-align: end;
+}
+.exec-prog-time {
+  font-family: "Inter", sans-serif;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ─── Panel 4: ACCESS ─── */
+.exec-access-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.exec-acc-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+.exec-acc-row:last-child { border-bottom: 0; }
+.exec-acc-key {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+.exec-acc-val {
+  font-family: "Inter", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px 9px;
+  border-radius: 6px;
+  word-break: break-all;
+}
+
+/* ─── Panel 5: ACTIONS ─── */
+.exec-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.exec-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all var(--motion-fast);
+}
+.exec-action:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+}
+.exec-action-icon {
+  color: rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+}
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 640px) {
+  .exec-summary { padding: 14px 16px; }
+  .exec-summary-text { font-size: 13.5px; }
+  .exec-body { padding: 0 14px 14px; gap: 10px; grid-template-columns: 1fr; }
+  .exec-health {
+    grid-template-columns: 100px 1fr;
+    padding: 16px;
+    gap: 14px;
+  }
+  .exec-health-ring { width: 100px; height: 100px; }
+  .exec-health-num strong { font-size: 24px; }
+  .exec-health-state { font-size: 15px; }
+  .exec-coverage {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .exec-cov { padding: 10px 12px; }
+  .exec-prog-row {
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px;
+  }
+  .exec-prog-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .exec-prog-time { display: none; }
+  .exec-acc-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 8px 0;
+  }
+  .exec-action-grid { grid-template-columns: 1fr 1fr; }
+}

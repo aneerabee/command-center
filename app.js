@@ -1621,161 +1621,114 @@ R.home = function () {
       ? `<span class="cc-runtime-time" data-live-time="${E(RUNTIME_STATE.generated_at)}">${E(relTime(RUNTIME_STATE.generated_at))}</span>`
       : "") +
     `</div>` +
-    // ──── الجزء التنفيذي القديم — قابل للطي ────
-    `<details class="hqx-collapsible" style="margin-top:16px">` +
-    `<summary style="cursor:pointer;padding:10px 14px;background:var(--surface);border:1px solid var(--brd);border-radius:12px;font-size:13px;font-weight:600;color:var(--t2);user-select:none">📊 الموجز التنفيذي التفصيلي (الموثوقية، التغطية، الجرد)</summary>` +
-    `<div style="margin-top:12px">` +
-    `<section class="hqx-card hqx-hero">` +
-    `<div class="hqx-hero-copy">` +
-    `<span class="hqx-kicker">Executive briefing</span>` +
-    `<h1 class="hqx-title">هذه الصفحة هي غرفة القراءة الأولى للمنظومة كلها</h1>` +
-    `<p class="hqx-sub">ليست Dashboard عامة. هي موجز تنفيذي يوضح الجرد، حالة الثقة، أولوياتك الحالية، وأسرع مسارات الوصول إلى الطبقات التشغيلية الحساسة.</p>` +
-    `<div class="hqx-hero-tags">` +
-    `<span class="hqx-pill">محدث حتى ${E(dateStr)}</span>` +
-    `<span class="hqx-pill">جرد محلي + سيرفر + سحابة</span>` +
-    `<span class="hqx-pill">AI CLI موثق داخل الأدوات</span>` +
+    // ════════════════════════════════════════════════════════════
+    // EXECUTIVE BRIEFING v3 — لوحة قيادة عملية مدمجة
+    // ════════════════════════════════════════════════════════════
+    `<details class="exec-collapsible" open>` +
+    `<summary class="exec-summary">` +
+    `<span class="exec-summary-icon">📊</span>` +
+    `<span class="exec-summary-text">لوحة القيادة التنفيذية</span>` +
+    `<span class="exec-summary-score">${trustScore}%</span>` +
+    `<span class="exec-summary-arrow">⌄</span>` +
+    `</summary>` +
+    `<div class="exec-body">` +
+    // ─── Panel 1: HEALTH SCORE — مؤشر الصحة الكبير ───
+    `<div class="exec-health" data-state="${trustScore >= 80 ? "healthy" : trustScore >= 60 ? "warn" : "critical"}">` +
+    `<div class="exec-health-ring" style="--score:${trustScore}">` +
+    `<svg viewBox="0 0 100 100" class="exec-health-svg">` +
+    `<circle cx="50" cy="50" r="42" fill="none" stroke="var(--brd)" stroke-width="8"/>` +
+    `<circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(trustScore / 100) * 264} 264" transform="rotate(-90 50 50)"/>` +
+    `</svg>` +
+    `<div class="exec-health-num"><strong>${trustScore}</strong><span>%</span></div>` +
+    `</div>` +
+    `<div class="exec-health-info">` +
+    `<div class="exec-health-label">صحة المنظومة</div>` +
+    `<div class="exec-health-state">${trustScore >= 80 ? "✓ ممتاز" : trustScore >= 60 ? "⚠ يحتاج مراجعة" : "✗ حرج"}</div>` +
+    `<div class="exec-health-meta">` +
+    `<span class="exec-mini ok">✓ ${runtimeTotals.ok}</span>` +
+    `<span class="exec-mini warn">⚠ ${runtimeTotals.warn + runtimeTotals.fail}</span>` +
+    `<span class="exec-mini man">✋ ${runtimeTotals.manual}</span>` +
+    `</div>` +
+    (runtimeGenerated
+      ? `<div class="exec-health-time" data-live-time="${E(runtimeGenerated)}">${E(relTime(runtimeGenerated))}</div>`
+      : "") +
     `</div>` +
     `</div>` +
-    `<div class="hqx-score-shell">` +
-    `<div class="hqx-score-ring" style="--score:${trustScore}">` +
-    `<div class="hqx-score-core"><strong>${trustScore}%</strong><span>درجة الثقة الحالية</span></div>` +
-    `</div>` +
-    `<div class="hqx-score-meta">` +
-    `<div class="hqx-score-row"><span>تم التحقق منه</span><strong>${runtimeTotals.ok}</strong></div>` +
-    `<div class="hqx-score-row"><span>يحتاج مراجعة</span><strong>${runtimeTotals.warn + runtimeTotals.fail}</strong></div>` +
-    `<div class="hqx-score-row"><span>ما زال يدويًا</span><strong>${runtimeTotals.manual}</strong></div>` +
-    `</div>` +
-    `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-overview">` +
-    overviewCards
-      .map(
-        (card) =>
-          `<div class="hqx-overview-card" style="--accent:${card.c}"><strong>${card.v}</strong><span>${card.l}</span><small>${card.note}</small></div>`,
-      )
-      .join("") +
-    `</section>` +
-    `<section class="hqx-card hqx-signals">` +
-    `<div class="hqx-head"><h2>إشارات التشغيل</h2><span>أين يوجد ضغط أو فجوة ثقة الآن</span></div>` +
-    `<div class="hqx-signal-list">` +
-    prioritySignals
-      .map(
-        (entry) =>
-          `<button class="hqx-signal" onclick="${entry.action}" style="--signal:${entry.color}">` +
-          `<div class="hqx-signal-top"><strong>${entry.label}</strong><span class="hqx-state hqx-state--${entry.state}">${entry.state === "fail" ? "فشل" : entry.state === "warn" ? "تحذير" : entry.state === "manual" ? "يدوي" : "مطمئن"}</span></div>` +
-          `<p>${entry.note}</p>` +
-          `<div class="hqx-signal-bar"><span style="width:${entry.rate}%;background:${entry.color}"></span></div>` +
-          `<div class="hqx-signal-meta"><span>ok ${entry.ok}</span><span>warn ${entry.warn}</span><span>manual ${entry.manual}</span></div>` +
-          `</button>`,
-      )
-      .join("") +
-    `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-focus">` +
-    `<div class="hqx-head"><h2>المحاور الحالية</h2><span onclick="go('projects')" class="hqx-inline-link">كل المشاريع</span></div>` +
-    `<div class="hqx-focus-list">` +
-    focus
-      .map(
-        (p) =>
-          `<button class="hqx-focus-item" onclick="openProjectDetail('${E(p.name)}')" style="--focus:${p.cl}">` +
-          `<div class="hqx-focus-top"><span class="hqx-focus-icon">${_ic(p.em, 20)}</span><span class="hqx-focus-kind">${E(_projectKindLabel(p.kind))}</span></div>` +
-          `<strong>${E(p.ar)}</strong>` +
-          `<p>${E(p.summary || "")}</p>` +
-          `<div class="hqx-focus-bottom"><span>${p.pct}%</span><span class="hqx-focus-track"><i style="width:${p.pct}%;background:${p.cl}"></i></span></div>` +
-          `</button>`,
-      )
-      .join("") +
-    `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-layers">` +
-    `<div class="hqx-head"><h2>طبقات العمل</h2><span>كيف تُقرأ المنظومة</span></div>` +
-    `<div class="hqx-layer-grid">` +
-    layerCards
-      .map(
-        (x) =>
-          `<div class="hqx-layer" style="--layer:${x.c}"><small>${x.t}</small><strong>${x.n}</strong><p>${x.d}</p></div>`,
-      )
-      .join("") +
-    `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-runtime">` +
-    `<div class="hqx-head"><h2>مصدر وتحديث البيانات</h2><span>${runtimeGenerated ? `آخر نتيجة: ${E(_fmtRuntimeDate(runtimeGenerated))}` : "لا توجد لقطة تحقق محفوظة"}</span></div>` +
-    `<div class="hqx-runtime-grid">` +
-    trustSummary
-      .map(
-        (x) =>
-          `<div class="hqx-runtime-card" style="--runtime:${x.c}"><strong>${x.n}</strong><span>${x.t}</span><p>${x.d}</p></div>`,
-      )
-      .join("") +
-    `</div>` +
-    `<div class="hqx-runtime-strip">` +
+    // ─── Panel 2: COVERAGE METER — تغطية بصرية ───
+    `<div class="exec-coverage">` +
     coverageEntries
-      .map(
-        (x) =>
-          `<button class="hqx-runtime-chip" onclick="go('${x.page}')" style="--runtime:${x.color}"><strong>${x.ok}</strong><span>${x.label}</span><small>${x.fail ? `${x.fail} فشل` : x.warn ? `${x.warn} تحذير` : x.manual ? `${x.manual} يدوي` : "مغطى"}</small></button>`,
-      )
+      .map((e) => {
+        const pct = e.total ? Math.round((e.ok / e.total) * 100) : 0;
+        return (
+          `<button class="exec-cov" onclick="go('${e.page}')" style="--c:${e.color}">` +
+          `<div class="exec-cov-top">` +
+          `<span class="exec-cov-label">${E(e.label)}</span>` +
+          `<span class="exec-cov-num"><strong>${e.ok}</strong>/${e.total}</span>` +
+          `</div>` +
+          `<div class="exec-cov-bar"><i style="width:${pct}%;background:${e.color}"></i></div>` +
+          `<div class="exec-cov-state exec-state-${e.state}">${e.fail ? `${e.fail} فشل` : e.warn ? `${e.warn} تحذير` : e.manual ? `${e.manual} يدوي` : `${pct}% مغطى`}</div>` +
+          `</button>`
+        );
+      })
       .join("") +
     `</div>` +
-    `<div class="hqx-runtime-note">التشغيل الدوري يتم عبر <code>launchd</code> على الماك ويشغّل <code>/tmp/cc-push/runtime-sync-publish.sh</code> كل 6 ساعات. الحقيقة الثابتة في <code>data.js</code>، واللقطة المحفوظة في <code>data.runtime.json</code>.</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-ops">` +
-    `<div class="hqx-head"><h2>الجرد التشغيلي</h2><span onclick="go('server')" class="hqx-inline-link">افتح السيرفر</span></div>` +
-    `<div class="hqx-ops-list">` +
-    `<div class="hqx-ops-row"><span>الخدمات الموثقة</span><strong>${activeSvc}/${SVC.length}</strong></div>` +
-    `<div class="hqx-ops-row"><span>الحاويات العاملة</span><strong>${runningContainers}</strong></div>` +
-    `<div class="hqx-ops-row"><span>مهام cron</span><strong>${runningCron}</strong></div>` +
-    `<div class="hqx-ops-row"><span>خدمات user-level</span><strong>${runningUserServices}</strong></div>` +
-    `<div class="hqx-ops-row"><span>بوتات نشطة</span><strong>${activeBots}/${BOT.length}</strong></div>` +
-    `<div class="hqx-ops-row"><span>أتمتة مفعلة</span><strong>${activeTasks}/${allTasks.length}</strong></div>` +
+    // ─── Panel 3: TOP PROJECTS PROGRESS — تقدم المشاريع المحورية ───
+    `<div class="exec-progress">` +
+    `<div class="exec-section-head">` +
+    `<span class="exec-section-title">المحاور النشطة</span>` +
+    `<button class="exec-section-link" onclick="go('projects')">كل المشاريع ←</button>` +
     `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-attn">` +
-    `<div class="hqx-head"><h2>يحتاج انتباهًا</h2><span>${attention.length}</span></div>` +
-    `<div class="hqx-attention-list">` +
-    attention
-      .map(
-        (a) =>
-          `<button class="hqx-attention-item" onclick="${a.a}" style="--attention:${a.c}">` +
-          `<span class="hqx-attention-tag">${E(a.t)}</span>` +
-          `<strong>${E(a.n)}</strong>` +
-          `<p>${E(a.d)}</p>` +
-          `</button>`,
-      )
+    `<div class="exec-progress-list">` +
+    focus
+      .map((p) => {
+        const days = p.current_status?.updated
+          ? Math.floor((Date.now() - new Date(p.current_status.updated).getTime()) / 86400000)
+          : null;
+        return (
+          `<button class="exec-prog-row" onclick="openProjectDetail('${E(p.name)}')" style="--c:${p.cl}">` +
+          `<span class="exec-prog-icon">${_ic(p.em, 16)}</span>` +
+          `<span class="exec-prog-name">${E(p.ar || p.name)}</span>` +
+          `<span class="exec-prog-bar"><i style="width:${p.pct}%"></i></span>` +
+          `<span class="exec-prog-pct">${p.pct}%</span>` +
+          (days !== null
+            ? `<span class="exec-prog-time">${days === 0 ? "اليوم" : days === 1 ? "أمس" : `${days}د`}</span>`
+            : `<span class="exec-prog-time">—</span>`) +
+          `</button>`
+        );
+      })
       .join("") +
     `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-cli">` +
-    `<div class="hqx-head"><h2>بيئات AI CLI</h2><span onclick="go('tools')" class="hqx-inline-link">افتح الأدوات</span></div>` +
-    `<div class="hqx-cli-paths"><code>/Users/rabeeshaban/.codex</code><code>/Users/rabeeshaban/.claude</code></div>` +
-    `<div class="hqx-cli-list">` +
-    aiCliTools
-      .map(
-        (x) =>
-          `<button class="hqx-cli-item" onclick="${x.a}"><strong>${x.t}</strong><p>${x.d}</p>${x.f ? `<span>${x.f}</span>` : ""}</button>`,
-      )
-      .join("") +
     `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-access">` +
-    `<div class="hqx-head"><h2>مسارات الوصول</h2><span>أين يوجد كل شيء</span></div>` +
-    `<div class="hqx-access-grid">` +
-    `<div class="hqx-access-item"><strong>محلي</strong><p>Desktop/Projects يحتوي منتجاتك الحية ومشاريع EasyBooking وBRIX وMoney Manager.</p></div>` +
-    `<div class="hqx-access-item"><strong>سيرفر</strong><p>Contabo يشغّل Wapy وWedding وArgaz والمهام المجدولة والخدمات user-level.</p></div>` +
-    `<div class="hqx-access-item"><strong>سحابي</strong><p>GitHub وRailway وSupabase وMeta Business وHostinger هي طبقات النشر والتشغيل.</p></div>` +
-    `<div class="hqx-access-item"><strong>حساس</strong><p>Vault وTron Address Bot وTailscale ليست أرشيفًا؛ هي طبقات وصول وأمن حية.</p></div>` +
+    // ─── Panel 4: ACCESS LAYERS — طبقات الوصول مدمجة ───
+    `<div class="exec-access">` +
+    `<div class="exec-section-head">` +
+    `<span class="exec-section-title">طبقات الوصول</span>` +
+    `<span class="exec-section-link" style="cursor:default">أين كل شيء</span>` +
     `</div>` +
-    `</section>` +
-    `<section class="hqx-card hqx-links">` +
-    `<div class="hqx-head"><h2>اختصارات تشغيل</h2><span>روابط مباشرة</span></div>` +
-    `<div class="hqx-link-grid">` +
+    `<div class="exec-access-rows">` +
+    `<div class="exec-acc-row"><span class="exec-acc-key">💻 محلي</span><code class="exec-acc-val">~/Desktop/Projects · ~/Documents/New project</code></div>` +
+    `<div class="exec-acc-row"><span class="exec-acc-key">☁️ سيرفر</span><code class="exec-acc-val">62.171.128.44 · Tailscale: 100.116.69.101</code></div>` +
+    `<div class="exec-acc-row"><span class="exec-acc-key">🌐 سحابي</span><code class="exec-acc-val">GitHub · Railway · Supabase · Hostinger · Meta Business</code></div>` +
+    `<div class="exec-acc-row"><span class="exec-acc-key">🔐 حساس</span><code class="exec-acc-val">Vault · Tron Bot · Tailscale (طبقات أمنية حيّة)</code></div>` +
+    `</div>` +
+    `</div>` +
+    // ─── Panel 5: QUICK ACTIONS — اختصارات تشغيل ===
+    `<div class="exec-actions">` +
+    `<div class="exec-section-head">` +
+    `<span class="exec-section-title">اختصارات سريعة</span>` +
+    `</div>` +
+    `<div class="exec-action-grid">` +
     quickLinks
       .map(
         (l) =>
-          `<a class="hqx-link" href="${l.h}" target="_blank" rel="noopener">${_ic(l.e, 14)}<span>${l.n}</span></a>`,
+          `<a class="exec-action" href="${l.h}" target="_blank" rel="noopener">` +
+          `<span class="exec-action-icon">${_ic(l.e, 16)}</span>` +
+          `<span class="exec-action-label">${E(l.n)}</span>` +
+          `</a>`,
       )
       .join("") +
     `</div>` +
-    `</section>` +
+    `</div>` +
     `</div>` +
     `</details>` +
     `</div>`
