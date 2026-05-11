@@ -1469,7 +1469,8 @@ R.projects = function () {
       .join("") +
     `</div>` +
     UMBRELLAS.map((u) => {
-      const items = rest.filter((p) => p.parent === u.id);
+      // عرض كل مشاريع المظلة (بما فيها hero لإكمال صورة الشركة)
+      const items = PRJ.filter((p) => p.parent === u.id);
       if (!items.length) return "";
       return (
         `<div class="prj-umb-section" style="--umb:${u.cl}">` +
@@ -1490,7 +1491,7 @@ R.projects = function () {
             const isB2C = role.includes("b2c");
             const segLabel = isB2B ? "B2B" : isB2C ? "B2C" : "";
             const segCl = isB2B ? "#7c3aed" : isB2C ? "#0EA5E9" : null;
-            const today = new Date("2026-05-11");
+            const today = new Date();
             const updated = p.current_status?.updated;
             const ageDays = updated
               ? Math.floor((today - new Date(updated)) / 86400000)
