@@ -8534,3 +8534,54 @@ a.emp-field-val:hover { color: #6366f1; }
   .emp-action { padding: 11px 6px; }
   .emp-action-bar { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ═══════════════════════════════════════════════
+   PRJ CARD ENHANCEMENTS — شريط الشركة + بادج B2B/B2C + مؤشر جديد
+   ═══════════════════════════════════════════════ */
+.prj-card {
+  position: relative;
+  overflow: hidden;
+}
+.prj-card-strip {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--umb, var(--prj));
+  border-radius: 0 16px 16px 0;
+  opacity: 0.85;
+  transition: width 0.2s, opacity 0.2s;
+}
+.prj-card:hover .prj-card-strip {
+  width: 6px;
+  opacity: 1;
+}
+.prj-card-seg {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  margin-right: auto;
+}
+.prj-card-fresh {
+  font-size: 9.5px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+  animation: freshPulse 2s ease-in-out infinite;
+}
+@keyframes freshPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.prj-card-head {
+  align-items: center;
+  gap: 8px;
+}

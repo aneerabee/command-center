@@ -1456,12 +1456,30 @@ R.projects = function () {
             const firstLine = (p.desc || "").split("\n")[0];
             const tags = (p.tags || []).slice(0, 3);
             const links = Object.entries(p.links || {}).slice(0, 2);
+            const role = p.parent_role || "";
+            const isB2B = role.includes("b2b");
+            const isB2C = role.includes("b2c");
+            const segLabel = isB2B ? "B2B" : isB2C ? "B2C" : "";
+            const segCl = isB2B ? "#7c3aed" : isB2C ? "#0EA5E9" : null;
+            const today = new Date("2026-05-11");
+            const updated = p.current_status?.updated;
+            const ageDays = updated
+              ? Math.floor((today - new Date(updated)) / 86400000)
+              : null;
+            const isFresh = ageDays !== null && ageDays <= 7;
             return (
-              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')">` +
+              `<div class="prj-card" onclick="openProjectDetail('${E(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
+              `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
               `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
               `<div class="prj-card-body">` +
               `<div class="prj-card-head">` +
               `<span style="font-size:30px">${_ic(p.em, 30)}</span>` +
+              (segLabel
+                ? `<span class="prj-card-seg" style="background:${segCl}18;color:${segCl}">${segLabel}</span>`
+                : "") +
+              (isFresh
+                ? `<span class="prj-card-fresh" title="مُحدّث ${ageDays === 0 ? "اليوم" : `قبل ${ageDays} يوم`}">جديد</span>`
+                : "") +
               `<span class="prj-card-dot" style="background:${p.st === "a" ? "var(--green)" : "var(--t3)"}"></span>` +
               `</div>` +
               `<h3 class="prj-card-name">${E(p.ar || p.name)}</h3>` +

@@ -78,7 +78,9 @@ const UMBRELLAS = [
     specialty: "صرافة عملات",
     location: "أنطاليا",
     em: "🏢",
-    cl: "#3B82F6",
+    cl: "#0F766E",
+    cl_dark: "#0B5953",
+    cl_light: "#14B8A6",
     summary: "شركة صرافة العملات — السنتر في أنطاليا، مكتب فعلي مع عمليات يومية.",
     desc: "شركة Etranex متخصصة في صرافة العملات.\n\n📍 الموقع: أنطاليا — مكتب السنتر\n💱 الخدمات: تبادل عملات، تحويلات، أسعار صرف لحظية\n🔗 ترتبط تاريخياً بمشاريع: Exchanger، Etranex المؤرشفة",
   },
@@ -91,6 +93,8 @@ const UMBRELLAS = [
     location: "أنطاليا",
     em: "🏨",
     cl: "#E8453C",
+    cl_dark: "#B91C1C",
+    cl_light: "#FCA5A5",
     summary: "شركة حجوزات الفنادق — ليمان والتسويق السياحي عبر EasyBooking.",
     desc: "شركة BRIX TRAVEL متخصصة في:\n\n🏨 حجوزات الفنادق — قسم ليمان\n📢 التسويق السياحي — عبر EasyBooking\n📍 الموقع: أنطاليا\n🔗 المشاريع: نظام الحجز، الموقع، CRM واتساب، حملات Meta",
   },
@@ -102,6 +106,8 @@ const UMBRELLAS = [
     specialty: "منتجات اشتراك ومحتوى",
     em: "🚀",
     cl: "#10B981",
+    cl_dark: "#047857",
+    cl_light: "#6EE7B7",
     summary: "خط منتجات SaaS — تطبيقات اشتراك ومنتجات محتوى موجهة للسوق.",
     desc: "خط منتجات SaaS يضم تطبيقات اشتراك ومنتجات محتوى.\n\n🚀 Wapy.dev — إدارة الاشتراكات\n💼 Mohammad Ledger — دفتر مالي متعدد المستخدمين\n♟️ Chess Academy — منتج تعليمي قيد التحقق التسويقي",
   },
@@ -113,6 +119,8 @@ const UMBRELLAS = [
     specialty: "أدوات إدارة وتشغيل",
     em: "🛠️",
     cl: "#8B5CF6",
+    cl_dark: "#6D28D9",
+    cl_light: "#C4B5FD",
     summary: "أدوات شخصية تخدمك في إدارة وتشغيل كل شركاتك ومشاريعك.",
     desc: "البنية التحتية الشخصية:\n\n🛠️ Command Center — لوحة التحكم\n🧠 Meta MCP — محرك تشغيل ادوات AI من الترمينال\n💰 Money Manager — المركز المالي الموحد لكل شركاتك واستثماراتك",
   },
@@ -489,6 +497,13 @@ const PRJ = [
         "https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=840190289038740",
       "Business Suite": "https://business.facebook.com",
     },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "ذراع B2C الرئيسية تحت BRIX TRAVEL. حملة Sueno Deluxe Belek قائمة على 6 مناطق جغرافية. الفريق: 3 موظفين (رباب، تسنيم، وسام).",
+      next_step:
+        "إطلاق حملات مرتبطة مباشرة بـBRIX Travel System، توحيد قنوات الحجز عبر CRM واتساب، فصل ROAS لكل قسم.",
+    },
   },
   {
     name: "Rihlaty Travel",
@@ -526,7 +541,28 @@ const PRJ = [
     desc: "رحلتي ترافل — ذراع B2C ثانية تحت BRIX TRAVEL\n\n🎯 الدور:\nصفحة بيع وإعلانات مستقلة بهوية منفصلة عن EasyBooking\nتستهدف شرائح/أسواق مختلفة\nنفس محرك الحجز الخلفي (BRIX Travel System)\n\n📱 القنوات:\nصفحة فيسبوك + إنستاجرام\nواتساب كقناة بيع مباشرة\nحملات Meta منفصلة\n\n👥 الفريق:\nحنان + محمد",
     tags: ["Meta Ads", "WhatsApp", "B2C", "Instagram", "صفحة بيع"],
     path: null,
-    links: {},
+    links: {
+      "Meta Business": "https://business.facebook.com",
+      "Ads Manager":
+        "https://adsmanager.facebook.com/adsmanager/manage/campaigns",
+    },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "ذراع B2C ثانية مضافة حديثاً تحت BRIX TRAVEL. الصفحات الإعلانية قيد التحضير، تتقاسم محرك الحجز BRIX خلف الكواليس مع حنان ومحمد كفريق مبدئي.",
+      next_step:
+        "إنشاء صفحات السوشيال (FB + IG) باسم Rihlaty Travel، تجهيز حملة Meta أولى، تحديد رقم واتساب رئيسي للحجوزات.",
+      blockers: [
+        {
+          text: "الصفحات الرسمية لـRihlaty على Facebook/Instagram لم تُنشأ بعد",
+          priority: "high",
+        },
+        {
+          text: "لا يوجد فاصل واضح بين عملاء EasyBooking وعملاء Rihlaty في CRM",
+          priority: "med",
+        },
+      ],
+    },
   },
   {
     name: "Meta MCP",
@@ -568,6 +604,15 @@ const PRJ = [
     tags: ["Python", "MCP", "Meta Graph API", "httpx", "Internal Tool"],
     path: "/Users/rabeeshaban/Developer/meta-mcp",
     links: { GitHub: "https://github.com/aneerabee/meta-mcp" },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "خادم MCP داخلي للتحكم بإعلانات Meta من الترمينال. 37 أداة جاهزة. يخدم EasyBooking + Rihlaty Travel.",
+      next_step:
+        "ربطه بـ AI workflow لإطلاق وإيقاف الحملات تلقائياً بناءً على ROAS.",
+    },
+    dual_role_note:
+      "هذا العنصر يظهر مرتين: مرة كمشروع (PRJ) ومرة كأداة (TL) — لأنه مشروع مطوّر داخلياً ويُستخدم كأداة في باقي المشاريع.",
   },
   {
     name: "Wapy.dev",
@@ -619,6 +664,13 @@ const PRJ = [
     tags: ["Next.js", "Prisma", "Docker", "PostgreSQL", "Paddle", "shadcn/ui"],
     path: "server:/opt/wapy",
     links: { "التطبيق الداخلي": "http://100.116.69.101:3000" },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "تطبيق حي على Docker (3 حاويات: app + db + cron) على Contabo VPS، الوصول مقيد عبر Tailscale. مستخدم واحد (أنت).",
+      next_step:
+        "إطلاق عام للسوق، تجهيز صفحة هبوط ودفع Paddle، استهداف 100 مستخدم خلال 3 أشهر.",
+    },
   },
   {
     name: "Command Center",
@@ -638,7 +690,7 @@ const PRJ = [
     next_milestone: "إضافة عرض المظلات (Umbrellas View) للتنقل بين الشركات",
     summary:
       "لوحة تحكم شخصية تعرض المشاريع والخدمات والبوتات والأدوات والسحابية من مكان واحد.",
-    local_path: "/tmp/cc-push",
+    local_path: "/Users/rabeeshaban/Documents/New project/command-center",
     server_path: null,
     repo_url: "https://github.com/aneerabee/command-center",
     deploy_url: "https://aneerabee.github.io/command-center/",
@@ -665,6 +717,13 @@ const PRJ = [
     links: {
       الموقع: "https://aneerabee.github.io/command-center/",
       GitHub: "https://github.com/aneerabee/command-center",
+    },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "نشطة ومنشورة. شملت دفعة 11 مايو إضافة UMBRELLAS + DEPARTMENTS + TEAM + Rihlaty Travel + إصلاح مسارات + ربط هرمي بين الشركات والأقسام والموظفين.",
+      next_step:
+        "إضافة بحث Cmd+K موحّد، وضع داكن، KPIs لكل مشروع، استبيان لجمع بيانات الموظفين.",
     },
   },
   {
@@ -846,6 +905,13 @@ const PRJ = [
     ],
     path: "/Users/rabeeshaban/Desktop/Projects/💰 Money-Manager",
     links: { GitHub: "https://github.com/aneerabee/money-manager" },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "60% مبني — 39 endpoint جاهز (حسابات، معاملات، كيانات، ديون، أصول، إيجارات، استثمارات، dashboard). متوقف حالياً كقاعدة كود فعالة.",
+      next_step:
+        "إنعاش المشروع، إنشاء كيانات (Entities) لكل شركة (Etranex/BRIX/SaaS)، ربط بـWestern Office لتغذية الصرافة، ربط بـEasyBooking لتغذية ROAS.",
+    },
   },
   {
     name: "BRIX Travel Website",
@@ -879,6 +945,13 @@ const PRJ = [
     tags: ["WordPress", "PHP", "Hostinger", "HTML", "يحتاج تطوير"],
     path: "/Users/rabeeshaban/Desktop/Projects/🌐 brixtravelwebsite",
     links: { GitHub: "https://github.com/aneerabee/brixtravel" },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "موقع WordPress حي على Hostinger، عربي + إنجليزي. يخدم B2B (وكلاء وشركات). يحتاج تطوير واجهة حجز مباشر.",
+      next_step:
+        "إضافة واجهة حجز مربوطة بـBRIX Travel System، تحديث المحتوى، تفعيل صفحة كل فندق.",
+    },
   },
   {
     name: "Chess Academy",
@@ -930,6 +1003,13 @@ const PRJ = [
       العربي: "https://aneerabee.github.io/chess-academy/",
       English: "https://aneerabee.github.io/chess-academy/en.html",
       GitHub: "https://github.com/aneerabee/chess-academy",
+    },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "منتج تعليمي ثنائي اللغة جاهز 95%، منشور على GitHub Pages. حالياً في مرحلة التحقق التسويقي عبر السوشيال ميديا قبل البيع.",
+      next_step:
+        "إطلاق حملة سوشيال ميديا مدفوعة لقياس الطلب، اختيار قناة بيع (Gumroad أو موقع مستقل)، تحديد التسعير.",
     },
   },
   {
@@ -1011,6 +1091,13 @@ const PRJ = [
       "مشاهدة مثال": "https://aneerabee.github.io/western-office/?viewer=1776004308716001",
       GitHub: "https://github.com/aneerabee/western-office",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
+    },
+    current_status: {
+      updated: "2026-05-11",
+      where:
+        "نظام تشغيل يومي حي لمكتب Etranex (السنتر) في أنطاليا. 88% مكتمل، 203 اختبار يمر، 7 تبويبات تشغيلية + وضع مشاهدة آمن للزبائن. تخزين مزدوج Supabase + localStorage.",
+      next_step:
+        "ربطه بـMoney Manager لتغذية تقارير الصرافة الموحدة، تطوير بوت تليجرام للإشعارات، تقارير PDF شهرية، استبدال $ بـ₺ في الواجهة.",
     },
   },
   {
@@ -1741,11 +1828,11 @@ const TL = [
       "نظام محلي على macOS يشغّل فحصًا دوريًا عبر launchd، ثم يحدّث data.runtime.json ويدفعه إلى GitHub عند وجود تغيير فقط.",
     desc: "هذا ليس MCP ولا خدمة سحابية.\nإنه نظام محلي على الماك مكوّن من 3 طبقات:\n\n1) runtime-sync.js\nيفحص projects + services + tools + cloud + bots + archive بدرجات تحقق متفاوتة حسب كل نوع\n\n2) runtime-sync-publish.sh\nيشغّل الفحص ثم commit/push فقط إذا تغيّر data.runtime.json\n\n3) LaunchAgent على macOS\nيشغّل النظام كل 6 ساعات عبر launchd\n\nالمهم:\nالذي يُعرض في اللوحة هو آخر نتيجة محفوظة في data.runtime.json، وليس ضمانًا أن كل عنصر مغطى checker مستقل بنفس الجودة.\n\nالغرض:\nتقليل المعلومات القديمة في اللوحة المنشورة بدون الاعتماد على تشغيل يدوي مستمر.",
     tags: ["launchd", "runtime-sync", "GitHub push", "Command Center"],
-    path: "/tmp/cc-push",
+    path: "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync.js",
     config_paths: [
-      "/tmp/cc-push/runtime-sync.js",
-      "/tmp/cc-push/runtime-sync-publish.sh",
-      "/tmp/cc-push/RUNTIME_SYNC.md",
+      "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync.js",
+      "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync-publish.sh",
+      "/Users/rabeeshaban/Documents/New project/command-center/RUNTIME_SYNC.md",
       "/Users/rabeeshaban/Library/LaunchAgents/com.rabeeshaban.command-center-runtime-publish.plist",
     ],
     facts: [
