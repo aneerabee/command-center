@@ -2761,7 +2761,7 @@ R.server = function () {
       const pc = prj ? _prjColor(prj) : "";
       const ownerLabel = s.owner_type === "bot" ? "runtime" : "مشروع";
       return (
-        `<button class="svc-item" onclick="openServiceDetail('${E(s.name)}')">` +
+        `<button class="svc-item" data-cc-name="${E(s.name)}" onclick="openServiceDetail('${E(s.name)}')">` +
         `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}"></span>` +
         `<span class="svc-em">${_ic(s.em, 18)}</span>` +
         `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
@@ -2825,7 +2825,7 @@ R.bots = function () {
       ],
     }) +
     (runtimeLead
-      ? `<div class="bot-runtime-hero" onclick="openBotDetail('${E(runtimeLead.name)}')">` +
+      ? `<div class="bot-runtime-hero" data-cc-name="${E(runtimeLead.name)}" onclick="openBotDetail('${E(runtimeLead.name)}')">` +
         `<div class="bot-runtime-mark" style="background:${runtimeLead.cl}">${_ic(runtimeLead.em, 34)}</div>` +
         `<div class="bot-runtime-copy">` +
         `<span class="bot-runtime-kicker">runtime الرئيسي</span>` +
@@ -2863,7 +2863,7 @@ R.bots = function () {
         const firstLine = b.summary || (b.desc || "").split("\n")[0] || "";
         const isActive = b.st === "a";
         return (
-          `<div class="bot-card-h glass" onclick="openBotDetail('${E(b.name)}')">` +
+          `<div class="bot-card-h glass" data-cc-name="${E(b.name)}" onclick="openBotDetail('${E(b.name)}')">` +
           `<div class="bot-h-icon" style="background:linear-gradient(135deg,${b.cl}22,${b.cl}08);border-left:4px solid ${b.cl}">` +
           `<span class="bot-emoji">${_ic(b.em, 36)}</span>` +
           `<span class="bot-pulse ${isActive ? "pulse-on" : "pulse-off"}"></span>` +
@@ -2974,11 +2974,11 @@ R.tools = function () {
     cliItems
       .map(
         (t) =>
-          `<button class="tool-cli-card" style="--tc:${t.cl}" onclick="openToolDetail('${E(t.name)}')"><strong>${E(t.ar || t.name)}</strong><p>${E(t.summary || "")}</p><span>${E((t.capabilities || []).slice(0, 3).join(" · "))}</span></button>`,
+          `<button class="tool-cli-card" data-cc-name="${E(t.name)}" style="--tc:${t.cl}" onclick="openToolDetail('${E(t.name)}')"><strong>${E(t.ar || t.name)}</strong><p>${E(t.summary || "")}</p><span>${E((t.capabilities || []).slice(0, 3).join(" · "))}</span></button>`,
       )
       .join("") +
     `</div>` +
-    `<div class="tool-hero glass" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">` +
+    `<div class="tool-hero glass" data-cc-name="${E(hero.name)}" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">` +
     `<div class="tool-hero-info"><h3 class="tool-hero-name">${E(hero.ar || hero.name)}</h3>` +
     `<p class="tool-hero-desc">${E(hero.summary || "بيئة العمل الأساسية الحالية")}</p></div>` +
     '<div class="tool-dials">' +
@@ -3016,15 +3016,31 @@ R.tools = function () {
           items
             .map((t) => {
               const em = emojiMap[t.name] || t.em || "🔧";
-              const usedIn = (t.used_in || []).slice(0, 2).join(" · ");
+              const usedInArr = (t.used_in || []).slice(0, 3);
               return (
-                `<div class="tool-card glass" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">` +
+                `<div class="tool-card glass" data-cc-name="${E(t.name)}" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">` +
+                `<div class="tool-card-head">` +
                 `<span style="font-size:1.5rem">${_ic(em, 24)}</span>` +
+                (t.st === "a"
+                  ? `<span class="cc-pulse-dot" title="نشط"></span>`
+                  : `<span class="cc-pulse-dot" style="background:#94a3b8" title="غير نشط"></span>`) +
+                `</div>` +
                 `<h4 class="tool-card-name">${E(t.ar || t.name)}</h4>` +
                 `<p class="tool-card-desc">${E(t.summary || (t.desc || "").split("\n")[0])}</p>` +
                 `<div class="tool-card-tags">${E(_toolCategoryLabel(t.category))}</div>` +
-                (usedIn
-                  ? `<div class="tool-card-usage">${E(usedIn)}</div>`
+                (usedInArr.length
+                  ? `<div class="tool-card-usage-row">` +
+                    `<span class="tool-card-usage-label">يُستخدم في:</span>` +
+                    usedInArr
+                      .map((projName) => {
+                        const isProj = PRJ.find((p) => p.name === projName);
+                        if (isProj) {
+                          return `<button class="tool-usage-chip" onclick="event.stopPropagation();openProjectDetail('${E(projName)}')" title="افتح ${E(projName)}">${_ic(isProj.em, 11)} ${E(isProj.ar || projName)}</button>`;
+                        }
+                        return `<span class="tool-usage-chip">${E(projName)}</span>`;
+                      })
+                      .join("") +
+                    `</div>`
                   : "") +
                 `</div>`
               );
@@ -3138,7 +3154,7 @@ R.cloud = function () {
           `<div class="cloud-cat-grid">` +
           group.items
             .map((c) => {
-              const clickAttr = `onclick="openCloudDetail('${E(c.nm)}')"`;
+              const clickAttr = `data-cc-name="${E(c.nm)}" onclick="openCloudDetail('${E(c.nm)}')"`;
               const cPrj = c.prj || "";
               const cpc = cPrj ? _entityColor(cPrj, "#0EA5E9") : "";
               const status = c.active === false ? "متوقف" : "نشط";
@@ -3159,7 +3175,18 @@ R.cloud = function () {
                 `</div>` +
                 `<span class="cloud-card-dt">${E(c.dt)}</span>` +
                 ((c.related_entities || c.used_in)?.length
-                  ? `<span class="cloud-card-usage">${E((c.related_entities || c.used_in).slice(0, 3).join(" · "))}</span>`
+                  ? `<div class="cloud-card-related">` +
+                    (c.related_entities || c.used_in)
+                      .slice(0, 3)
+                      .map((rel) => {
+                        const rp = PRJ.find((p) => p.name === rel);
+                        if (rp) {
+                          return `<button class="cloud-rel-chip" onclick="event.stopPropagation();openProjectDetail('${E(rel)}')" title="${E(rel)}">${_ic(rp.em, 10)} ${E(rp.ar || rel)}</button>`;
+                        }
+                        return `<span class="cloud-rel-chip">${E(rel)}</span>`;
+                      })
+                      .join("") +
+                    `</div>`
                   : "") +
                 `</div>` +
                 `</div>`
@@ -3224,7 +3251,7 @@ R.ideas = function () {
                 idea.next_step ? `الخطوة التالية: ${idea.next_step}` : "",
               ].filter(Boolean);
               return (
-                `<div class="sticky-note" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr] || "#999"};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">` +
+                `<div class="sticky-note" data-cc-name="${E(idea.name)}" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr] || "#999"};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">` +
                 `<span class="sticky-badge" style="background:${prColors[idea.pr] || "#999"}">${E(prLabels[idea.pr] || "")}</span>` +
                 `<span class="sticky-emoji">${_ic(idea.em, 42)}</span>` +
                 `<h4 class="sticky-title">${E(idea.name)}</h4>` +
@@ -3303,7 +3330,7 @@ R.archive = function () {
     const size = a.size || "";
     const count = a.count || "";
     return (
-      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" onclick="openArchiveDetail('${E(a.name)}')">` +
+      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" data-cc-name="${E(a.name)}" onclick="openArchiveDetail('${E(a.name)}')">` +
       `<div class="book-spine" style="background:${a.cl}"></div>` +
       `<div class="book-body">` +
       `<span class="book-emoji">${_ic(a.em, 32)}</span>` +

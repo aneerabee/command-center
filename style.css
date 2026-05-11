@@ -10073,3 +10073,76 @@ input, select, textarea, button {
 @media (max-width: 640px) {
   .prj-team-chip { width: 100%; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   SMART RELATIONS — روابط متبادلة في كل البطاقات
+   ════════════════════════════════════════════════════════════ */
+
+/* TOOLS card improvements */
+.tool-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+.tool-card-usage-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--brd);
+}
+.tool-card-usage-label {
+  font-size: 10px;
+  color: var(--t3);
+  font-weight: 600;
+}
+.tool-usage-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--motion-fast);
+}
+.tool-usage-chip:hover {
+  background: rgba(99, 102, 241, 0.15);
+  transform: translateY(-1px);
+}
+
+/* CLOUD card improvements */
+.cloud-card-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 6px;
+}
+.cloud-rel-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--t2);
+  border: 1px solid var(--brd);
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--motion-fast);
+}
+.cloud-rel-chip:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border-color: rgba(99, 102, 241, 0.2);
+}
