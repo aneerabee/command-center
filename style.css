@@ -10120,3 +10120,18 @@ button, input, select, textarea {
   color: #6366f1;
   border-color: rgba(99, 102, 241, 0.2);
 }
+
+/* ════════════════════════════════════════════════════════════
+   FIX — أقسام الرئيسية الذكية تأخذ عرض كامل في grid الأم
+   .hqx wrapper grid 12-column، أقسام cc-* و runtime-bar و exec
+   يجب أن تمتد عبر الـ12 عمود وإلا تنحشر كخلية واحدة
+   ════════════════════════════════════════════════════════════ */
+.hqx > .cc-greet,
+.hqx > .cc-brief,
+.hqx > .cc-pulse,
+.hqx > .cc-feed,
+.hqx > .cc-sug,
+.hqx > .cc-runtime-bar,
+.hqx > .exec-collapsible {
+  grid-column: 1 / -1;
+}
