@@ -1,14 +1,14 @@
 {
   "version": 2,
   "checker": "runtime-sync.js",
-  "generated_at": "2026-05-12T12:54:23.878Z",
+  "generated_at": "2026-05-12T18:54:41.120Z",
   "project": {
     "brix-travel-system": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:26.599Z",
+      "stale_at": "2026-05-26T18:54:44.212Z",
       "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
@@ -19,11 +19,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "easybooking": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:26.599Z",
+      "stale_at": "2026-05-26T18:54:44.215Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok"
@@ -32,11 +32,11 @@
       "last_change_detected": "2026-04-04T21:37:04.034Z"
     },
     "rihlaty-travel": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-26T12:54:26.599Z",
+      "stale_at": "2026-05-26T18:54:44.215Z",
       "summary": "لا يوجد تحقق آلي كافٍ لهذا المشروع بعد",
       "facts": [
         "project: static documentation only"
@@ -45,11 +45,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "meta-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:26.640Z",
+      "stale_at": "2026-05-26T18:54:44.248Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok",
@@ -59,11 +59,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "wapy-dev": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:26.830Z",
+      "stale_at": "2026-05-26T18:54:44.432Z",
       "summary": "مسار السيرفر موجود",
       "facts": [
         "server path: ok",
@@ -73,11 +73,11 @@
       "last_change_detected": "2026-04-04T21:37:04.034Z"
     },
     "command-center": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:27.300Z",
+      "stale_at": "2026-05-26T18:54:45.067Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok",
@@ -88,11 +88,11 @@
       "last_change_detected": "2026-05-12T03:48:42.408Z"
     },
     "whatsapp-crm": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:28.126Z",
+      "stale_at": "2026-05-26T18:54:45.948Z",
       "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
@@ -103,11 +103,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "money-manager": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:28.161Z",
+      "stale_at": "2026-05-26T18:54:45.990Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok",
@@ -117,11 +117,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "brix-travel-website": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "filesystem + git",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:28.179Z",
+      "stale_at": "2026-05-26T18:54:46.008Z",
       "summary": "المشروع موجود محليًا لكن Git remote غير مؤكد",
       "facts": [
         "local path: ok",
@@ -131,11 +131,11 @@
       "last_change_detected": "2026-04-06T13:46:05.283Z"
     },
     "chess-academy": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:28.538Z",
+      "stale_at": "2026-05-26T18:54:46.387Z",
       "summary": "رابط النشر متاح",
       "facts": [
         "deploy: HTTP 200"
@@ -144,11 +144,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "western-office": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:28.959Z",
+      "stale_at": "2026-05-26T18:54:46.810Z",
       "summary": "المسار المحلي موجود",
       "facts": [
         "local path: ok",
@@ -159,11 +159,11 @@
       "last_change_detected": "2026-05-12T03:48:42.408Z"
     },
     "mohammad-ledger": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:29.391Z",
+      "stale_at": "2026-05-26T18:54:47.221Z",
       "summary": "المسار المحلي موجود لكن remote غير مطابق",
       "facts": [
         "local path: ok",
@@ -176,11 +176,11 @@
   },
   "service": {
     "cc-runtime-publish": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.234Z",
       "summary": "تعذر تشغيل server snapshot",
       "facts": [
         "فشل checker لا يعني فشل الخدمة نفسها"
@@ -189,24 +189,24 @@
       "last_change_detected": "2026-05-12T12:54:23.878Z"
     },
     "wapy-app": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
-      "summary": "Up About a minute",
+      "stale_at": "2026-05-15T18:54:47.234Z",
+      "summary": "Up 3 hours",
       "facts": [
         "container: wapydev-app"
       ],
-      "source_hash": "2b6af4a8aad811db49b1b1b3af9e16ed32ccb238",
-      "last_change_detected": "2026-05-12T12:54:23.878Z"
+      "source_hash": "ca39611b410e7c6613e541f1ad18c9303eceaa01",
+      "last_change_detected": "2026-05-12T18:54:41.120Z"
     },
     "wapy-cron": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.234Z",
       "summary": "Up 7 weeks",
       "facts": [
         "container: wapydev-cron"
@@ -215,11 +215,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "wapy-db": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.234Z",
       "summary": "Up 7 weeks",
       "facts": [
         "container: wapydev-db"
@@ -228,11 +228,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "wapy-backup-cron": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.235Z",
       "summary": "cron موجود",
       "facts": [
         "pattern: /opt/wapy/scripts/backup.sh"
@@ -241,11 +241,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "wapy-cleanup-cron": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.235Z",
       "summary": "cron موجود",
       "facts": [
         "pattern: find /opt/wapy/.backup"
@@ -254,11 +254,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "tailscale-vpn": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "command",
       "stale": false,
-      "stale_at": "2026-05-15T12:54:29.409Z",
+      "stale_at": "2026-05-15T18:54:47.235Z",
       "summary": "tailscale CLI غير متاح في هذه الجلسة؛ تعذر تشغيل التحقق الآلي للـ VPN",
       "facts": [
         "الحالة ليست فشل شبكة مؤكدًا بل تعذر في بيئة الفحص المحلية"
@@ -269,11 +269,11 @@
   },
   "tool": {
     "codex-cli": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.622Z",
+      "stale_at": "2026-05-19T18:54:48.556Z",
       "summary": "ملفات Codex الأساسية موجودة",
       "facts": [
         "path: ok",
@@ -284,11 +284,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "claude-code": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.623Z",
+      "stale_at": "2026-05-19T18:54:48.559Z",
       "summary": "ملفات Claude الأساسية موجودة",
       "facts": [
         "root: ok",
@@ -300,11 +300,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "runtime-sync-system": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + launchd",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.649Z",
+      "stale_at": "2026-05-19T18:54:48.583Z",
       "summary": "ملفات النظام موجودة وLaunchAgent محمّل",
       "facts": [
         "config paths: 4/4",
@@ -314,11 +314,11 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "meta-mcp-tool": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "المسار موجود وهو مستودع Git",
       "facts": [
         "path: /Users/rabeeshaban/Developer/meta-mcp",
@@ -328,11 +328,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "github-tool": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "git",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد 4 remote محليًا على GitHub",
       "facts": [
         "repo: Meta MCP",
@@ -344,11 +344,11 @@
       "last_change_detected": "2026-05-12T03:48:42.408Z"
     },
     "tailscale-tool": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh via tailscale",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "Tailscale SSH reachable on vmi3061403",
       "facts": [
         "host: vmi3061403"
@@ -357,11 +357,11 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "notion-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__claude_ai_Notion__"
@@ -370,11 +370,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "perplexity-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__perplexity__"
@@ -383,11 +383,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "filesystem-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__filesystem__"
@@ -396,11 +396,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "memory-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.675Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__memory__"
@@ -409,11 +409,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "sequential-thinking-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__sequential-thinking__"
@@ -422,11 +422,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "firecrawl-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__firecrawl__"
@@ -435,11 +435,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "magic-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__magic__"
@@ -448,11 +448,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "supabase-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__supabase__"
@@ -461,22 +461,22 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "vercel-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "لا يوجد checker آلي مباشر لهذا النوع بعد",
       "facts": [],
       "source_hash": "af0100461763b8bdf8512f4f658a11b2ee5f4870",
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "railway-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "تم تأكيد صلاحية MCP في إعدادات Claude الحالية",
       "facts": [
         "permission pattern: mcp__railway__"
@@ -485,11 +485,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "testsprite-mcp": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-19T12:54:30.676Z",
+      "stale_at": "2026-05-19T18:54:48.600Z",
       "summary": "لا يوجد checker آلي مباشر لهذا النوع بعد",
       "facts": [],
       "source_hash": "af0100461763b8bdf8512f4f658a11b2ee5f4870",
@@ -498,11 +498,11 @@
   },
   "cloud": {
     "github": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "git",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:31.977Z",
+      "stale_at": "2026-05-26T18:54:50.353Z",
       "summary": "تم تأكيد 4 repo محليًا",
       "facts": [
         "repo: Meta MCP",
@@ -514,11 +514,11 @@
       "last_change_detected": "2026-05-12T03:48:42.408Z"
     },
     "supabase": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:32.442Z",
+      "stale_at": "2026-05-26T18:54:50.831Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://supabase.com/dashboard"
@@ -527,11 +527,11 @@
       "last_change_detected": "2026-04-04T20:52:39.303Z"
     },
     "vercel": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:32.754Z",
+      "stale_at": "2026-05-26T18:54:51.714Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://vercel.com"
@@ -540,11 +540,11 @@
       "last_change_detected": "2026-05-12T12:54:23.878Z"
     },
     "railway": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:33.335Z",
+      "stale_at": "2026-05-26T18:54:52.514Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://railway.app"
@@ -553,11 +553,11 @@
       "last_change_detected": "2026-04-04T20:47:25.962Z"
     },
     "heroku": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:33.611Z",
+      "stale_at": "2026-05-26T18:54:52.836Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://dashboard.heroku.com"
@@ -566,11 +566,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "meta-business": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:34.278Z",
+      "stale_at": "2026-05-26T18:54:53.472Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://business.facebook.com"
@@ -579,11 +579,11 @@
       "last_change_detected": "2026-04-04T20:47:25.962Z"
     },
     "airtable": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.614Z",
+      "stale_at": "2026-05-26T18:54:54.988Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://airtable.com"
@@ -592,11 +592,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "telegram": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + claude settings",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.614Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "قناة Telegram المحلية وصلاحية Claude مؤكدة",
       "facts": [
         "path: /Users/rabeeshaban/.claude/channels/telegram",
@@ -606,11 +606,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "contabo-vps": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.614Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "ssh reachable on vmi3061403",
       "facts": [
         "ssh: ok",
@@ -620,22 +620,22 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "hostinger": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-26T12:54:35.614Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "لا يوجد checker آلي مباشر لهذا العنصر بعد",
       "facts": [],
       "source_hash": "afc17eb77703f582b7c2850671c75c9c7cf38c67",
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "icloud-drive": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.615Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "iCloud Drive root موجود",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs"
@@ -644,11 +644,11 @@
       "last_change_detected": "2026-04-04T20:42:44.478Z"
     },
     "perplexity": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.615Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__perplexity__"
@@ -657,11 +657,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "firecrawl": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.615Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__firecrawl__"
@@ -670,11 +670,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "notion": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "claude settings permissions",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.615Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية",
       "facts": [
         "permission pattern: mcp__claude_ai_Notion__"
@@ -683,11 +683,11 @@
       "last_change_detected": "2026-04-04T23:39:21.333Z"
     },
     "tailscale": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "ssh via tailscale",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:35.615Z",
+      "stale_at": "2026-05-26T18:54:54.989Z",
       "summary": "Tailscale SSH reachable on vmi3061403",
       "facts": [
         "host: vmi3061403"
@@ -696,11 +696,11 @@
       "last_change_detected": "2026-04-04T23:33:25.556Z"
     },
     "trongrid": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:37.074Z",
+      "stale_at": "2026-05-26T18:54:56.620Z",
       "summary": "HTTP 200",
       "facts": [
         "url: https://trongrid.io"
@@ -709,11 +709,11 @@
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "coingecko": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "http",
       "stale": false,
-      "stale_at": "2026-05-26T12:54:37.658Z",
+      "stale_at": "2026-05-26T18:54:57.242Z",
       "summary": "HTTP 403",
       "facts": [
         "url: https://coingecko.com"
@@ -724,11 +724,11 @@
   },
   "bot": {
     "tron-address-bot": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:37.659Z",
+      "stale_at": "2026-05-19T18:54:57.243Z",
       "summary": "المسار المحلي للبوت موجود",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Projects/🤖 Bots/🕵️ tron-address-bot"
@@ -737,11 +737,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "bank-bot": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "warn",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:37.659Z",
+      "stale_at": "2026-05-19T18:54:57.243Z",
       "summary": "الكود المؤرشف موجود محليًا لكن التشغيل نفسه متوقف",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/bank-bot"
@@ -750,11 +750,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "claude-code-bot": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem + claude settings",
       "stale": false,
-      "stale_at": "2026-05-19T12:54:37.659Z",
+      "stale_at": "2026-05-19T18:54:57.243Z",
       "summary": "قناة Telegram وصلاحيتها موجودتان",
       "facts": [
         "path: /Users/rabeeshaban/.claude/channels/telegram",
@@ -764,22 +764,22 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "mohammad-ledger-bot": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-19T12:54:37.659Z",
+      "stale_at": "2026-05-19T18:54:57.243Z",
       "summary": "لا يوجد checker آلي مباشر لهذا البوت بعد",
       "facts": [],
       "source_hash": "f313cdd8831bd82f5ecd3e505d6378760a2e9779",
       "last_change_detected": "2026-05-11T21:44:27.420Z"
     },
     "brixprice-bot": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "manual",
       "checked_from": "manual",
       "stale": true,
-      "stale_at": "2026-05-19T12:54:37.659Z",
+      "stale_at": "2026-05-19T18:54:57.243Z",
       "summary": "لا يوجد checker آلي مباشر لهذا البوت بعد",
       "facts": [],
       "source_hash": "f313cdd8831bd82f5ecd3e505d6378760a2e9779",
@@ -788,11 +788,11 @@
   },
   "archive": {
     "exchanger": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.659Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/💱 Exchanger"
@@ -801,11 +801,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "etranex": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.659Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/📦 أرشيف-مشاريع/etranex"
@@ -814,11 +814,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "boyner-pipeline": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.660Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/boyner"
@@ -827,11 +827,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "brix-real-estate": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.660Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/Archive/brix-studio-export"
@@ -840,11 +840,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "smart-media-indexer": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.661Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/📦 أرشيف-مشاريع/Smart-Media-Indexer"
@@ -853,11 +853,11 @@
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "vault": {
-      "verified_at": "2026-05-12T12:54:23.878Z",
+      "verified_at": "2026-05-12T18:54:41.120Z",
       "verification_status": "ok",
       "checked_from": "filesystem",
       "stale": false,
-      "stale_at": "2026-07-11T12:54:37.661Z",
+      "stale_at": "2026-07-11T18:54:57.244Z",
       "summary": "المرجع موجود في مساره المحلي",
       "facts": [
         "path: /Users/rabeeshaban/Desktop/🔐 Vault.dmg"
