@@ -473,6 +473,24 @@ async function _loadRuntimeData() {
   } catch (_) {}
 }
 
+/* ──── HEALTH MONITOR — يقرأ health-status.json كل تحميل ──── */
+let HEALTH_STATE = null;
+async function _loadHealthData() {
+  try {
+    const response = await fetch(`health-status.json?v=${Date.now()}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) return;
+    HEALTH_STATE = await response.json();
+    // refresh home if visible
+    if (cur === "home" && document.getElementById("page-home")) {
+      const home = document.getElementById("page-home");
+      home.innerHTML = R.home();
+      requestAnimationFrame(_processIcons);
+    }
+  } catch (_) {}
+}
+
 function _refreshRuntimeBoundViews() {
   const parts = _hashParts();
   const page = parts[0];
@@ -1700,6 +1718,44 @@ R.home = function () {
       ? `<span class="cc-runtime-time" data-live-time="${E(RUNTIME_STATE.generated_at)}">${E(relTime(RUNTIME_STATE.generated_at))}</span>`
       : "") +
     `</div>` +
+    // ──── 🩺 Health Monitor — حالة السيرفر الحية ────
+    (typeof HEALTH_STATE !== "undefined" && HEALTH_STATE
+      ? (() => {
+          const h = HEALTH_STATE;
+          const okClass = h.ok ? "ok" : (h.alerts || []).some((a) => a.level === "critical") ? "critical" : "warn";
+          const m = h.metrics || {};
+          return (
+            `<div class="cc-health-bar cc-health-${okClass}">` +
+            `<div class="cc-health-head">` +
+            `<span class="cc-health-pulse"><span class="cc-pulse-dot"></span></span>` +
+            `<span class="cc-health-title">صحة السيرفر</span>` +
+            `<span class="cc-health-state">${h.ok ? "✓ كل شيء ممتاز" : (h.alerts || []).some((a) => a.level === "critical") ? "✗ تحذيرات حرجة" : "⚠ تحذيرات"}</span>` +
+            (h.checked_at
+              ? `<span class="cc-health-time" data-live-time="${E(h.checked_at)}">${E(relTime(h.checked_at))}</span>`
+              : "") +
+            `</div>` +
+            `<div class="cc-health-metrics">` +
+            `<div class="cc-health-metric"><strong>${m.disk_pct || 0}%</strong><span>القرص</span></div>` +
+            `<div class="cc-health-metric"><strong>${m.disk_free || "?"}</strong><span>متاح</span></div>` +
+            `<div class="cc-health-metric"><strong>${m.docker_running || 0}/3</strong><span>Wapy</span></div>` +
+            `<div class="cc-health-metric"><strong>${m.wapy_backup_age_h >= 0 ? m.wapy_backup_age_h + "h" : "?"}</strong><span>backup</span></div>` +
+            `<div class="cc-health-metric"><strong>${m.svc_failed || 0}</strong><span>فاشل</span></div>` +
+            `<div class="cc-health-metric"><strong>${m.load_1m || 0}</strong><span>load</span></div>` +
+            `</div>` +
+            ((h.alerts || []).length
+              ? `<div class="cc-health-alerts">` +
+                h.alerts
+                  .map(
+                    (a) =>
+                      `<div class="cc-health-alert cc-alert-${E(a.level)}">${a.level === "critical" ? "🔴" : "🟡"} ${E(a.msg)}</div>`,
+                  )
+                  .join("") +
+                `</div>`
+              : "") +
+            `</div>`
+          );
+        })()
+      : `<div class="cc-health-bar cc-health-loading"><span class="cc-pulse-dot"></span><span>جارٍ تحميل صحة السيرفر...</span></div>`) +
     // ════════════════════════════════════════════════════════════
     // EXECUTIVE BRIEFING v3 — لوحة قيادة عملية مدمجة
     // ════════════════════════════════════════════════════════════
@@ -3674,11 +3730,16 @@ function _quickLinksCard(item, cl) {
       .map(([k, v]) => {
         const ico = linkIcons[k] || "🔗";
         const d = desc[k] || "";
+        // Detect private GitHub repo
+        const isPrivateRepo =
+          typeof PRIVATE_REPOS !== "undefined" &&
+          typeof v === "string" &&
+          PRIVATE_REPOS.some((r) => v.includes(r));
         return (
-          `<a class="prj-quick-link" href="${E(v)}" target="_blank" rel="noopener">` +
+          `<a class="prj-quick-link${isPrivateRepo ? " is-private" : ""}" href="${E(v)}" target="_blank" rel="noopener" ${isPrivateRepo ? 'title="repo خاص — يحتاج تسجيل دخول"' : ""}>` +
           `<div class="pql-row">` +
           `<span class="pql-icon">${_ic(ico, 16)}</span>` +
-          `<span class="pql-name">${E(k)}</span>` +
+          `<span class="pql-name">${E(k)}${isPrivateRepo ? ' <span class="pql-private">🔒</span>' : ""}</span>` +
           `<span class="pql-arrow">↗</span>` +
           `</div>` +
           (d ? `<div class="pql-desc">${E(d)}</div>` : "") +
@@ -4612,6 +4673,9 @@ async function bootstrap() {
   _loadRuntimeData().then(() => {
     if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   });
+  _loadHealthData();
+  // إعادة فحص صحة كل 5 دقائق
+  setInterval(_loadHealthData, 5 * 60 * 1000);
 }
 
 bootstrap();

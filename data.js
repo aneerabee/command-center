@@ -1252,6 +1252,30 @@ const PRJ = [
 
 const SVC = [
   {
+    name: "Command Center Runtime Publish",
+    id: "cc-runtime-publish",
+    st: 1,
+    em: "⟳",
+    host: "MacBook Pro",
+    runtime: "launchd / Node.js",
+    service_type: "scheduled",
+    prj: "Command Center",
+    owner: "Command Center",
+    owner_type: "project",
+    path: "~/.local/bin/cc-runtime-sync.sh",
+    schedule: "كل 6 ساعات + عند تسجيل الدخول",
+    dt: "com.rabeeshaban.command-center-runtime-publish",
+    info: "يفحص المشاريع/الخدمات/الأدوات/السحابة ثم يدفع data.runtime.json إلى GitHub. النتيجة: لوحة القيادة التنفيذية وأرقام التغطية تتحدث تلقائياً.",
+    last_check: "2026-05-12",
+    config_paths: [
+      "~/.local/bin/cc-runtime-sync.sh",
+      "~/.local/share/command-center (working copy)",
+      "~/Library/LaunchAgents/com.rabeeshaban.command-center-runtime-publish.plist",
+      "~/Library/Logs/command-center-runtime-publish.log",
+    ],
+    why: "بدونه، البيانات في data.runtime.json تتقادم وأرقام التغطية تصبح كاذبة.",
+  },
+  {
     name: "Wapy App",
     id: "wapy-app",
     st: 1,

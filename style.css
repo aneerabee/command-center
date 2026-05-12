@@ -10135,3 +10135,126 @@ button, input, select, textarea {
 .hqx > .exec-collapsible {
   grid-column: 1 / -1;
 }
+
+/* ════════════════════════════════════════════════════════════
+   HEALTH MONITOR — صحة السيرفر الحية في الرئيسية
+   ════════════════════════════════════════════════════════════ */
+.cc-health-bar {
+  background: var(--surface);
+  border: 1px solid var(--brd);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.cc-health-bar::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 4px; height: 100%;
+  background: var(--health-cl, var(--st-fresh));
+}
+.cc-health-ok { --health-cl: var(--st-fresh); }
+.cc-health-warn { --health-cl: var(--st-stale); }
+.cc-health-critical { --health-cl: var(--st-critical); }
+.cc-health-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--t3);
+  --health-cl: #94a3b8;
+}
+
+.cc-health-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cc-health-pulse .cc-pulse-dot { background: var(--health-cl); }
+.cc-health-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--t1);
+}
+.cc-health-state {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--health-cl);
+  margin-right: auto;
+}
+.cc-health-time {
+  font-size: 11px;
+  color: var(--t3);
+  font-family: "Inter", sans-serif;
+}
+
+.cc-health-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--brd);
+}
+.cc-health-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.cc-health-metric strong {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--t1);
+  font-family: "Inter", sans-serif;
+}
+.cc-health-metric span {
+  font-size: 10px;
+  color: var(--t3);
+  margin-top: 2px;
+}
+
+.cc-health-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--brd);
+}
+.cc-health-alert {
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.cc-alert-critical {
+  background: color-mix(in srgb, var(--st-critical) 8%, var(--surface));
+  color: var(--st-critical);
+  border: 1px solid color-mix(in srgb, var(--st-critical) 22%, transparent);
+}
+.cc-alert-warn {
+  background: color-mix(in srgb, var(--st-stale) 8%, var(--surface));
+  color: var(--st-stale);
+  border: 1px solid color-mix(in srgb, var(--st-stale) 22%, transparent);
+}
+
+/* lock icon for private repos */
+.pql-private {
+  font-size: 11px;
+  margin-right: 4px;
+  opacity: 0.7;
+}
+.prj-quick-link.is-private .pql-name { color: var(--t2); }
+
+@media (max-width: 640px) {
+  .cc-health-metrics { grid-template-columns: repeat(3, 1fr); }
+  .cc-health-metric strong { font-size: 14px; }
+  .cc-health-state { width: 100%; margin-right: 0; }
+}
+
+/* fix grid-column for new home sections */
+.hqx > .cc-health-bar { grid-column: 1 / -1; }
