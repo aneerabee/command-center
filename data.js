@@ -1602,6 +1602,41 @@ const BOT = [
       "Telegram Bot API": "https://core.telegram.org/bots",
     },
   },
+  {
+    name: "BrixPrice Bot",
+    id: "brixprice-bot",
+    kind: "telegram-bot",
+    ar: "بوت أسعار بريكس",
+    st: "a",
+    em: "🏨",
+    cl: "#0088CC",
+    host: "Railway",
+    runtime: "Next.js 16 + TypeScript 5.9",
+    channel: "Telegram @BrixPrice_bot",
+    related_entities: ["BRIX Travel System", "Supabase", "Railway", "GitHub"],
+    related_projects: ["BRIX Travel System"],
+    summary: "بوت حقيقي شغّال يطابق نتائج الموقع 100٪، بدعوات بالهاتف وحماية متعدّدة الطبقات.",
+    desc: "بوت Telegram لأسعار فنادق BRIX — @BrixPrice_bot\n\n🎯 الفكرة:\nيعطي أي زميل أو وكيل سعر فندق محدّد أو كل فنادق مدينة بضغطة أزرار من الموبايل. نفس محرّك التسعير الذي يستخدمه الموقع — لا فرق ولا تأخير.\n\n📱 رحلة الاستخدام (6 خطوات بأزرار فقط):\n1. اختر النمط: فندق محدد أو مدينة كاملة\n2. اختر الفندق أو المدينة + المنطقة (اختياري)\n3. تاريخ الدخول من تقويم تفاعلي\n4. تاريخ الخروج\n5. عدد البالغين + الأطفال + أعمارهم + أعمار البالغين (اختياري لخصم كبار السن)\n6. نوع الوجبة (RO/BB/HB/AI/UAI)\n→ النتائج بميداليات + تفاصيل قابلة للطي + تحذير اقتراب الحجز المبكر\n\n🌍 لغتان كاملتان: EN + AR (تقويم، أسماء، أشهر، أرقام)\n\n🔐 نظام الدعوات الجديد:\nأي مستخدم نشط يفتح الإعدادات → إدارة المستخدمين → إضافة، يدخل رقم الهاتف + الاسم + الدور (admin/agent/viewer)\nالزميل يفتح البوت → زر شارك رقمي → Telegram يرسل الرقم → تفعيل تلقائي\nيمكن تعطيل أي مستخدم بضغطة. ممنوع تعطيل النفس.\nالدعوات تنتهي تلقائياً بعد 30 يوماً.\nحماية ضد سرقة الهوية: contact.user_id يجب يطابق chat_id\n\n🛡️ حماية متعدّدة الطبقات:\nrate limit 50 طلب/دقيقة على webhook + 30/دقيقة على البحث\ndedup قوي يفشل مغلَقاً عند خطأ DB\noptimistic lock على كل تعديل (hotelVersion)\nHTML escape شامل في الترجمة\nPII لا يُسجَّل في audit\nsnapshot قبل وبعد كل عملية حساسة\nتنظيف تلقائي للجداول (pg_cron):\nالجلسات > ساعتين كل 30 دقيقة\nتحديثات معالَجة > 3 أيام كل ساعة\nسجلات > 90 يوم يومياً\n\n💾 جداول Supabase:\ntelegram_users, telegram_invites, telegram_sessions, telegram_audit, telegram_processed_updates, telegram_recent_hotels\n\n✨ تجربة الاستخدام:\nشريط حفظ سفلي موحَّد بدل 8 أزرار متفرقة\nCancel = تراجع للشاشة السابقة دائماً\nزر منفصل ابدأ من الصفر مع تأكيد\nرسائل منبثقة على ضغطات الأزرار غير الصالحة (تاريخ خاطئ، إقامة طويلة)\nاسترجاع تلقائي من تضارب النسخ 409\nإعادة محاولة عند فشل العرض\nشارة تحذير حمراء على الغرف الناقصة المضاعفات\nربط Time Machine في 3 مواقع (للـadmin فقط)\nصفحة 404 مخصَّصة\nSkip-to-content للوحة المفاتيح\nfocus trap على نافذة تسجيل الدخول\nsafe-area-inset لـiOS\n\n📊 الأرقام:\n1952 اختبار يمر، صفر ثغرات حرجة\n12+ commit في يومين على main\n7 إصلاحات أمنية مغلقة\n250 ثم 740 صف مضاعفات لسوينو حُفِظت بنجاح بعد إصلاح bug الحفظ الصامت\nCache invalidation: 30 ثانية أقصى تأخير بين تعديل الموقع وظهوره في البوت\n\n🔄 سير البيانات:\nالمشغّل يدخل/يعدّل العقد من شاشة تعديل العقد ← Supabase ← invalidateContractCache ← محرّك التسعير ← /api/search ← يرد البوت بنفس النتائج التي تظهر في الموقع 100٪\n\n🚀 النشر:\nRailway production: brix-hotel-web-app-production.up.railway.app\nيُنشَر تلقائياً من GitHub main عبر CI",
+    tags: [
+      "Telegram",
+      "Next.js 16",
+      "TypeScript",
+      "Supabase",
+      "Railway",
+      "Phone Invites",
+      "EN+AR i18n",
+      "1952 tests",
+      "Production",
+      "Rate Limited",
+      "Snapshots",
+    ],
+    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app/src/lib/telegram",
+    links: {
+      Telegram: "https://t.me/BrixPrice_bot",
+      GitHub: "https://github.com/aneerabee/brix-travel-system",
+      Railway: "https://brix-hotel-web-app-production.up.railway.app",
+    },
+  },
 ];
 
 const TL = [
@@ -2290,22 +2325,6 @@ const ARC = [
 
 const IDEAS = [
   {
-    name: "بوت تلقرام لبريكس",
-    id: "brix-telegram-bot",
-    em: "🤖",
-    cl: "#0088CC",
-    st: "فكرة",
-    pr: 2,
-    horizon: "قريب",
-    owner_scope: "BRIX",
-    parent: "brix",
-    stage: "planned",
-    related_projects: ["BRIX Travel System"],
-    next_step: "تحديد MVP للإشعارات والحجوزات",
-    summary: "بوت عمليات لبريكس لإشعارات الحجوزات والإدارة السريعة.",
-    desc: "بوت تلقرام لإدارة الحجوزات والإشعارات\n\n🔔 إشعارات فورية:\nحجز جديد → إشعار للفريق\nإلغاء → تنبيه عاجل\nتقارير يومية تلقائية\n\n📊 إدارة العمليات:\nعرض الحجوزات الحالية\nتحديث حالة الحجز\nبحث عن عميل\n\n👥 متعدد المستخدمين: مدير + موظفين",
-  },
-  {
     name: "BRIX Website v2",
     id: "brix-website-v2",
     em: "🌐",
@@ -2338,5 +2357,17 @@ const BSTATS = {
     { v: "allowlist", l: "وصول" },
     { v: "3", l: "أدوات" },
     { v: "50MB", l: "مرفقات" },
+  ],
+  "BrixPrice Bot": [
+    { v: "1952", l: "اختبار" },
+    { v: "100%", l: "تطابق مع الموقع" },
+    { v: "6", l: "خطوات بحث" },
+    { v: "EN+AR", l: "لغات" },
+    { v: "30s", l: "أقصى تأخير cache" },
+  ],
+  "Mohammad Ledger Bot": [
+    { v: "Wizard", l: "إدخال" },
+    { v: "allowlist", l: "وصول" },
+    { v: "Supabase", l: "تخزين" },
   ],
 };
