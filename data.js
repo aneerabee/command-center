@@ -2255,22 +2255,6 @@ const ARC = [
     path: "/Users/rabeeshaban/Desktop/🔐 Vault.dmg",
     links: {},
   },
-  {
-    name: "Lobster",
-    id: "lobster",
-    ar: "مكتبة تشغيل الوكلاء",
-    kind: "active-runtime",
-    em: "🦞",
-    cl: "#F97316",
-    st: "p",
-    summary: "مكتبة Python كانت تُشغّل وكلاء OpenClaw — مؤرشفة بعد إزالة OpenClaw.",
-    next_step: "لا يحتاج تطوير — استُبدل بـClaude Code CLI",
-    related_projects: [],
-    desc: "ClawdBot Lobster\n\n📌 الحالة: مؤرشف (12 مايو 2026)\nكان يُستخدم سابقاً لتشغيل وكلاء OpenClaw على السيرفر.\nاستُبدل بـClaude Code CLI الذي يوفر نفس القدرات بشكل أفضل.",
-    tags: ["SDK", "Python", "Archived", "Replaced by Claude Code"],
-    path: "server:/home/argaz/.local/lobster",
-    links: {},
-  },
 ];
 
 const IDEAS = [
