@@ -1605,7 +1605,7 @@ R.home = function () {
               `<div class="cc-brief-title">${E(b.title)}</div>` +
               `<div class="cc-brief-detail">${E(b.detail)}</div>` +
               `</div>` +
-              `<button class="cc-brief-cta">${E(b.actionLabel)} ←</button>` +
+              `<button class="cc-brief-cta" onclick="event.stopPropagation();${b.action}">${E(b.actionLabel)} ←</button>` +
               `</div>`,
           )
           .join("") +
