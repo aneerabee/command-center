@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>تقرير الفحص الذكي · Command Center · 12 مايو 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e1a;
+    --surface: #111623;
+    --elevated: #1a2030;
+    --hover: #232a3d;
+    --t1: #e8eaf0;
+    --t2: #9ba3b4;
+    --t3: #6b7388;
+    --brd: rgba(255,255,255,0.06);
+    --brdH: rgba(255,255,255,0.14);
+    --critical: #ef4444;
+    --high: #f59e0b;
+    --medium: #0ea5e9;
+    --info: #6366f1;
+    --good: #10b981;
+    --shine: linear-gradient(135deg, rgba(255,255,255,0.05), transparent 60%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--t1);
+    line-height: 1.6;
+    padding: 24px 16px 80px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(99,102,241,0.08), transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(16,185,129,0.06), transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 40px 20px 32px;
+    margin-bottom: 28px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 60%, #ec4899 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--shine);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .hero .meta {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .hero .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px;
+    margin-top: 24px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero .stat {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 14px 12px;
+  }
+  .hero .stat strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .hero .stat span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 2px;
+    display: block;
+  }
+
+  /* TOC */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    border-radius: 14px;
+  }
+  .toc a {
+    padding: 8px 14px;
+    background: var(--elevated);
+    color: var(--t1);
+    text-decoration: none;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .toc a:hover {
+    background: var(--hover);
+    border-color: var(--brdH);
+    transform: translateY(-1px);
+  }
+
+  /* SECTIONS */
+  section {
+    margin-bottom: 32px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    border-radius: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  section::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px; height: 100%;
+    background: var(--accent, var(--info));
+  }
+  section.critical { --accent: var(--critical); }
+  section.high { --accent: var(--high); }
+  section.medium { --accent: var(--medium); }
+  section.info { --accent: var(--info); }
+  section.good { --accent: var(--good); }
+
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--brd);
+  }
+  .sec-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--accent, var(--info)) 16%, transparent);
+    color: var(--accent, var(--info));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .sec-titles { flex: 1; min-width: 0; }
+  .sec-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--t1);
+  }
+  .sec-sub {
+    font-size: 12.5px;
+    color: var(--t3);
+    margin-top: 2px;
+  }
+  .sec-badge {
+    background: color-mix(in srgb, var(--accent, var(--info)) 18%, transparent);
+    color: var(--accent, var(--info));
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--elevated);
+    border: 1px solid var(--brd);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    border-right: 4px solid var(--cl, var(--info));
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-pill {
+    background: color-mix(in srgb, var(--cl) 18%, transparent);
+    color: var(--cl);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .card-body { font-size: 13px; color: var(--t2); }
+  .card-detail {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--t2);
+    direction: ltr;
+    text-align: left;
+    overflow-x: auto;
+  }
+  .card-action {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--accent, var(--info));
+    color: #fff;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 12px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--brd);
+  }
+  th {
+    font-weight: 700;
+    color: var(--t2);
+    background: var(--elevated);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  td.mono { font-family: "JetBrains Mono", monospace; font-size: 11px; direction: ltr; text-align: left; }
+  .status-good { color: var(--good); font-weight: 700; }
+  .status-bad { color: var(--critical); font-weight: 700; }
+  .status-warn { color: var(--high); font-weight: 700; }
+
+  /* IDEAS GRID */
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .idea {
+    background: var(--elevated);
+    border: 1px solid var(--brd);
+    border-radius: 14px;
+    padding: 16px;
+    border-top: 3px solid var(--cl, var(--info));
+  }
+  .idea-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .idea-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--t1);
+  }
+  .idea-impact {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+  .idea-impact.high { background: rgba(16,185,129,0.15); color: var(--good); }
+  .idea-impact.med { background: rgba(245,158,11,0.15); color: var(--high); }
+  .idea-impact.low { background: rgba(107,115,136,0.15); color: var(--t3); }
+  .idea-desc {
+    font-size: 12px;
+    color: var(--t2);
+    margin-bottom: 10px;
+  }
+  .idea-effort {
+    font-size: 10.5px;
+    color: var(--t3);
+    border-top: 1px dashed var(--brd);
+    padding-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 16px 12px 60px; }
+    .hero { padding: 28px 16px; }
+    .hero h1 { font-size: 24px; }
+    .hero .stat strong { font-size: 20px; }
+    section { padding: 18px; }
+    .sec-title { font-size: 15px; }
+    table { font-size: 11.5px; }
+    th, td { padding: 8px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <h1>🎯 تقرير الفحص الذكي الشامل</h1>
+    <div class="meta">Command Center · الإثنين 12 مايو 2026 · فحص شامل</div>
+    <div class="stats">
+      <div class="stat"><strong>5</strong><span>مسائل مهمة</span></div>
+      <div class="stat"><strong>0</strong><span>أخطاء حرجة</span></div>
+      <div class="stat"><strong>9</strong><span>روابط فُحصت</span></div>
+      <div class="stat"><strong>~900MB</strong><span>قابلة للتحرير</span></div>
+      <div class="stat"><strong>8</strong><span>أفكار تطوير</span></div>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <a href="#argaz">🤖 Argaz / OpenClaw</a>
+    <a href="#server">🖥️ السيرفر</a>
+    <a href="#links">🔗 الروابط</a>
+    <a href="#data">📊 البيانات</a>
+    <a href="#ideas">💡 أفكار التطوير</a>
+  </nav>
+
+  <!-- ════════ ARGAZ ════════ -->
+  <section class="critical" id="argaz">
+    <div class="sec-head">
+      <div class="sec-icon">🤖</div>
+      <div class="sec-titles">
+        <div class="sec-title">Argaz / OpenClaw — تشخيص حاسم</div>
+        <div class="sec-sub">طلبت تقييم: هل هو نافع أم زائد؟ الجواب الصريح أدناه</div>
+      </div>
+      <div class="sec-badge">يُحذف</div>
+    </div>
+
+    <div class="card" style="--cl: var(--critical)">
+      <div class="card-title">⚠️ فاشل في حلقة إعادة تشغيل لا نهائية <span class="card-pill">SEVERE</span></div>
+      <div class="card-body">
+        السبب: OpenClaw v2026.3.13 يحتاج Node ≥ 22.16 — السيرفر فيه Node 20.20.
+        فشل عداد إعادة التشغيل: <strong>1133 مرة</strong>.
+      </div>
+      <div class="card-detail">openclaw requires Node >=22.16.0 · Detected: node 20.20.1 · status=1/FAILURE</div>
+    </div>
+
+    <div class="card" style="--cl: var(--high)">
+      <div class="card-title">🕒 آخر نشاط حقيقي قبل ~58 يوم</div>
+      <div class="card-body">
+        ملف <code>workspace/MEMORY.md</code> آخر تعديل: <strong>23 مارس 2026</strong>. ملفات الـ.learnings آخر تحديث 7 فبراير. الـbot ميت بصمت.
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--medium)">
+      <div class="card-title">💾 يأكل 902MB من السيرفر</div>
+      <div class="card-body">
+        <table>
+          <tr><td>browser-data</td><td class="mono">645MB</td></tr>
+          <tr><td>workspace</td><td class="mono">145MB</td></tr>
+          <tr><td>tools</td><td class="mono">50MB</td></tr>
+          <tr><td>browser</td><td class="mono">29MB</td></tr>
+          <tr><td>memory</td><td class="mono">18MB</td></tr>
+          <tr><td>agents</td><td class="mono">17MB</td></tr>
+          <tr><td colspan="2"><strong>الإجمالي: ~902MB قابلة للتحرير</strong></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--info)">
+      <div class="card-title">🔗 ما المرتبط بـArgaz في النظام</div>
+      <div class="card-body">
+        <table>
+          <tr><th>العنصر</th><th>النوع</th><th>الحالة الحقيقية</th></tr>
+          <tr><td>openclaw-gateway.service</td><td>systemd</td><td class="status-bad">فاشل بحلقة</td></tr>
+          <tr><td>chrome-headless.service</td><td>systemd</td><td class="status-warn">يعمل لـOpenClaw فقط</td></tr>
+          <tr><td>reminders-scheduler.service</td><td>systemd</td><td class="status-warn">يعمل لـArgaz فقط</td></tr>
+          <tr><td>gateway-watchdog.sh</td><td>cron · كل دقيقة</td><td class="status-warn">يحاول إنعاش الميت</td></tr>
+          <tr><td>backup-config.sh</td><td>cron · كل ساعة</td><td class="status-warn">يحفظ ملف غير مستخدم</td></tr>
+          <tr><td>@Argaz_clawbot</td><td>Telegram</td><td class="status-bad">ميت</td></tr>
+          <tr><td>data.js: BOT[Argaz Bot]</td><td>إدخال</td><td class="status-warn">يجب حذفه</td></tr>
+          <tr><td>data.js: SVC[Argaz Gateway]</td><td>إدخال مكرر</td><td class="status-bad">duplicate لـOpenClaw Gateway</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--good)">
+      <div class="card-title">✅ التوصية القاطعة: حذف كامل</div>
+      <div class="card-body">
+        <strong>لديك بدائل أفضل:</strong> Claude Code CLI + Telegram plugin (يعطيك نفس الفائدة بدون OpenClaw).
+        <br><br>
+        <strong>خطوات الحذف الآمنة:</strong>
+        <div class="card-detail"># 1. أوقف وعطّل الخدمات
+systemctl --user stop openclaw-gateway chrome-headless reminders-scheduler
+systemctl --user disable openclaw-gateway chrome-headless reminders-scheduler
+
+# 2. احذف cron entries
+crontab -l | grep -v gateway-watchdog | grep -v backup-config | crontab -
+
+# 3. نسخة احتياطية صغيرة (آمنة من الندم)
+tar czf ~/openclaw-backup-2026-05-12.tar.gz ~/.openclaw/workspace/MEMORY.md ~/.openclaw/workspace/USER.md ~/.openclaw/workspace/SOUL.md
+
+# 4. احذف المجلد (~900MB)
+rm -rf ~/.openclaw
+
+# 5. احذف من data.js: BOT[Argaz Bot] + SVC[Argaz Gateway, Chrome Headless, OpenClaw Gateway Service, Gateway Watchdog, Config Backup]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SERVER ════════ -->
+  <section class="high" id="server">
+    <div class="sec-head">
+      <div class="sec-icon">🖥️</div>
+      <div class="sec-titles">
+        <div class="sec-title">السيرفر — فحص واقعي شامل</div>
+        <div class="sec-sub">Contabo VPS · 49 يوم uptime · 77% مساحة مستخدمة</div>
+      </div>
+      <div class="sec-badge">3 مشاكل</div>
+    </div>
+
+    <div class="card" style="--cl: var(--high)">
+      <div class="card-title">📦 مساحة منخفضة: 77% (74GB / 96GB)</div>
+      <div class="card-body">
+        بعد حذف Argaz/OpenClaw → ينخفض لـ~75% (تحرير ~900MB)<br>
+        مع تنظيف Docker images القديمة → 73-74%<br>
+        إذا اقتربت من 90% ستفشل عمليات Wapy backup
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--critical)">
+      <div class="card-title">🔁 إدخال SVC مكرّر في data.js</div>
+      <div class="card-body">
+        <code>Argaz Gateway</code> (#4) و <code>OpenClaw Gateway Service</code> (#10) — نفس الخدمة. يجب توحيدها أو الأفضل: حذفها (سياسة Argaz).
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--good)">
+      <div class="card-title">✅ Wapy.dev يعمل بسلاسة</div>
+      <div class="card-body">
+        <table>
+          <tr><td>wapydev-app</td><td class="mono">Up 7 weeks</td><td>:3000 (Tailscale)</td></tr>
+          <tr><td>wapydev-db</td><td class="mono">Up 7 weeks</td><td>:5432 (localhost)</td></tr>
+          <tr><td>wapydev-cron</td><td class="mono">Up 7 weeks</td><td>—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--info)">
+      <div class="card-title">📋 ما يبقى نشطاً ومفيداً</div>
+      <div class="card-body">
+        <ul style="padding-right: 20px; margin-top: 6px">
+          <li>✓ Wapy app + db + cron (Docker)</li>
+          <li>✓ Wapy daily backup (3 صباحاً) + cleanup (4 صباحاً)</li>
+          <li>✓ Tailscale VPN (وصول آمن)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--medium)">
+      <div class="card-title">⚙️ خدمات يُنصح بإضافتها للقسم</div>
+      <div class="card-body">
+        السيرفر فيه عناصر غير موجودة في data.js: command-center-runtime-publish (يشتغل من ~/.local/share/command-center).
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ LINKS ════════ -->
+  <section class="info" id="links">
+    <div class="sec-head">
+      <div class="sec-icon">🔗</div>
+      <div class="sec-titles">
+        <div class="sec-title">فحص الروابط الحية</div>
+        <div class="sec-sub">9 روابط رئيسية فُحصت بـHTTP status codes</div>
+      </div>
+      <div class="sec-badge">9/9 ✓</div>
+    </div>
+
+    <table>
+      <tr><th>الرابط</th><th>الكود</th><th>الحالة</th></tr>
+      <tr><td>aneerabee.github.io/command-center/</td><td class="mono">200</td><td class="status-good">✓ يعمل</td></tr>
+      <tr><td>aneerabee.github.io/chess-academy/</td><td class="mono">200</td><td class="status-good">✓ يعمل</td></tr>
+      <tr><td>aneerabee.github.io/western-office/</td><td class="mono">200</td><td class="status-good">✓ يعمل</td></tr>
+      <tr><td>aneerabee.github.io/mohammad-ledger/</td><td class="mono">200</td><td class="status-good">✓ يعمل</td></tr>
+      <tr><td>brix-hotel-web-app-production.up.railway.app</td><td class="mono">307</td><td class="status-good">✓ يعمل (redirect)</td></tr>
+      <tr><td>easybooking-whatsapp-crm-production.up.railway.app</td><td class="mono">200</td><td class="status-good">✓ يعمل</td></tr>
+      <tr><td>github.com/aneerabee/command-center</td><td class="mono">200</td><td class="status-good">✓ عام</td></tr>
+      <tr><td>github.com/aneerabee/money-manager</td><td class="mono">404</td><td class="status-warn">🔒 خاص (موجود لكن للمالك)</td></tr>
+      <tr><td>github.com/aneerabee/brixtravel</td><td class="mono">404</td><td class="status-warn">🔒 خاص (موجود لكن للمالك)</td></tr>
+    </table>
+
+    <div class="card" style="--cl: var(--medium); margin-top: 16px">
+      <div class="card-title">💡 اقتراح تحسين عرض الروابط الخاصة</div>
+      <div class="card-body">
+        6 repos خاصة (money-manager, brix-travel-system, brixtravel, easybooking-whatsapp-crm, meta-mcp, brix-backups). يجب إضافة أيقونة 🔒 بجانبها لتوضيح أنها للمالك فقط.
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ DATA QUALITY ════════ -->
+  <section class="medium" id="data">
+    <div class="sec-head">
+      <div class="sec-icon">📊</div>
+      <div class="sec-titles">
+        <div class="sec-title">جودة البيانات</div>
+        <div class="sec-sub">فحص التكامل والاتساق</div>
+      </div>
+      <div class="sec-badge">3 ملاحظات</div>
+    </div>
+
+    <div class="card" style="--cl: var(--good)">
+      <div class="card-title">✅ تكامل المراجع مثالي</div>
+      <div class="card-body">
+        كل parent/department/project references صالحة. 257 click handler يصل لهدف صالح. 88+ بطاقة لديها data-cc-name.
+      </div>
+    </div>
+
+    <div class="card" style="--cl: var(--medium)">
+      <div class="card-title">📝 بيانات الموظفين أولية</div>
+      <div class="card-body">
+        5 موظفين لديهم: اسم + هاتف + قسم + لغة افتراضية. الباقي (full_name, email_work, telegram, hire_date, salary) فارغ.
+        <br><br>
+        <strong>الحل:</strong> أرسل رابط <code>survey.html</code> للموظفين عبر واتساب.
+      </div>
+      <a href="https://aneerabee.github.io/command-center/survey.html" class="card-action" target="_blank">📋 افتح الاستبيان</a>
+    </div>
+
+    <div class="card" style="--cl: var(--medium)">
+      <div class="card-title">💰 0 إيراد شهري مُسجَّل</div>
+      <div class="card-body">
+        كل المشاريع <code>monthly_revenue_usd: 0</code>. لو بدأت تسجيل الأرقام الفعلية، لوحة الـPulse على الرئيسية ستحيا.
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ IDEAS ════════ -->
+  <section class="info" id="ideas">
+    <div class="sec-head">
+      <div class="sec-icon">💡</div>
+      <div class="sec-titles">
+        <div class="sec-title">8 أفكار للتطوير الذكي</div>
+        <div class="sec-sub">مرتّبة حسب الأثر/الجهد</div>
+      </div>
+      <div class="sec-badge">قِيد المناقشة</div>
+    </div>
+
+    <div class="ideas-grid">
+
+      <div class="idea" style="--cl: var(--good)">
+        <div class="idea-head">
+          <div class="idea-name">🔒 شارة "خاص" للـrepos</div>
+          <div class="idea-impact high">أثر عالٍ · جهد منخفض</div>
+        </div>
+        <div class="idea-desc">إضافة 🔒 بجانب أي رابط GitHub لـrepo خاص، فيُعرف فوراً أنه ليس للعرض العام.</div>
+        <div class="idea-effort">⏱ 5 دقائق</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--good)">
+        <div class="idea-head">
+          <div class="idea-name">📱 Tailscale على الهاتف</div>
+          <div class="idea-impact high">أثر عالٍ · جهد منخفض</div>
+        </div>
+        <div class="idea-desc">يفتح Wapy + Western Office من أي مكان بأمان. حل لمشكلتك السابقة.</div>
+        <div class="idea-effort">⏱ 5 دقائق · مجاني</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--good)">
+        <div class="idea-head">
+          <div class="idea-name">💾 تنظيف السيرفر (~900MB)</div>
+          <div class="idea-impact high">أثر متوسط · جهد منخفض</div>
+        </div>
+        <div class="idea-desc">حذف Argaz/OpenClaw كامل + cron العالقة. السكربت جاهز في قسم Argaz أعلاه.</div>
+        <div class="idea-effort">⏱ 10 دقائق · يحرر 900MB</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--high)">
+        <div class="idea-head">
+          <div class="idea-name">🌐 نشر Wapy عبر Tailscale Funnel</div>
+          <div class="idea-impact med">أثر عالٍ · جهد متوسط</div>
+        </div>
+        <div class="idea-desc">لو تريد فتحه للعملاء عام، Funnel يعطيك https دومين بدون reverse proxy.</div>
+        <div class="idea-effort">⏱ 30 دقيقة</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--high)">
+        <div class="idea-head">
+          <div class="idea-name">📊 تتبع KPIs حقيقي</div>
+          <div class="idea-impact med">أثر عالٍ · جهد متوسط</div>
+        </div>
+        <div class="idea-desc">إضافة API endpoint بسيط في Wapy + EasyBooking لجلب MRR و عدد المستخدمين الحقيقي → اللوحة تتحدث تلقائياً.</div>
+        <div class="idea-effort">⏱ ساعة</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--medium)">
+        <div class="idea-head">
+          <div class="idea-name">⏰ تنبيهات لحالات حرجة</div>
+          <div class="idea-impact med">أثر متوسط · جهد متوسط</div>
+        </div>
+        <div class="idea-desc">إذا فشل Wapy backup أو امتلأ القرص → تليجرام push للهاتف.</div>
+        <div class="idea-effort">⏱ ساعة</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--medium)">
+        <div class="idea-head">
+          <div class="idea-name">🤖 Telegram bot من Claude Code</div>
+          <div class="idea-impact med">أثر متوسط · جهد منخفض</div>
+        </div>
+        <div class="idea-desc">بديل OpenClaw الحقيقي: Claude Code plugin للتحكم من تليجرام (موجود فعلاً في حسابك).</div>
+        <div class="idea-effort">⏱ مفعّل بالفعل!</div>
+      </div>
+
+      <div class="idea" style="--cl: var(--info)">
+        <div class="idea-head">
+          <div class="idea-name">🧠 Knowledge Graph للبيانات</div>
+          <div class="idea-impact med">أثر طويل المدى · جهد عالٍ</div>
+        </div>
+        <div class="idea-desc">رسم بياني تفاعلي يربط: مظلة → قسم → مشروع → موظف → أداة. مثل Notion's relations.</div>
+        <div class="idea-effort">⏱ يوم كامل</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div style="text-align:center; color:var(--t3); font-size:11px; padding:24px 0">
+    تقرير ذاتي مُولَّد · 12 مايو 2026 · Command Center
+  </div>
+
+</div>
+
+</body>
+</html>
