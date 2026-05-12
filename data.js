@@ -340,13 +340,13 @@ const PRJ = [
     monthly_revenue_usd: 0,
     users_count: 1,
     priority: "high",
-    next_milestone: "إصلاح سعات ريكسوس + إدخال 9 عقود فنادق متبقية",
-    summary: "محرك حجوزات BRIX الأساسي — Next.js 16 + Supabase + 1,873 اختباراً. منشور حياً على Railway مع بوت تلجرام مرتبط بمحرك التسعير.",
+    next_milestone: "إعادة إدخال مضاعفات سوينو ديلوكس + إدخال 9 عقود متبقية + مراقبة نسخ بريكس باك آبس اليومية",
+    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.1 + Supabase + Airtable + 348 اختباراً. منشور حياً على Vercel مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير.",
     local_path:
-      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
+      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
     server_path: null,
     repo_url: "https://github.com/aneerabee/brix-travel-system",
-    deploy_url: "https://brix-hotel-web-app-production.up.railway.app",
+    deploy_url: "https://hotel-web-app-ten.vercel.app",
     stack: [
       "Next.js 16",
       "TypeScript",
@@ -374,7 +374,7 @@ const PRJ = [
       "Supabase هو مصدر الحقيقة الوحيد (v15.0+)",
       "النسخ الاحتياطي اليومي إلى مستودع brix-backups كل ٠٢:٠٠ صباحاً",
     ],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16 + React 18 + TypeScript 5.9 + Tailwind 4\nSupabase (PostgreSQL) + Zod 4 + Vitest + Playwright\n\nالأرقام:\nألفان واثنا عشر اختبار يمر، صفر ثغرات حرجة\nعشر خطوات لإدخال عقد جديد\nستة خطوات في تدفّق البوت\nترجمة كاملة عربي وإنجليزي\n\nسير البيانات:\nالمستعمل يدخل العقد من شاشة إدخال العقود ← Supabase ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع\n\nالنشر: ريلواي حي وشغّال، آخر تحديث اليوم ٢٠٢٦-٠٥-١١، يطابق ١٠٠٪ ما يعرضه البوت.",
+    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.1 + React 18 + TypeScript 5.9 + Tailwind 4\nAirtable (مصدر الحقيقة) + Supabase (cache سريع) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n348 اختبار يمر، صفر ثغرات حرجة\nعشر خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Airtable (11 جدول) ← مزامنة يومية 3ص ← Supabase ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Vercel حي وشغّال، آخر تحديث ٢٠٢٦-٠٥-١٢، يطابق ١٠٠٪ ما يعرضه البوت.",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -383,24 +383,27 @@ const PRJ = [
       "Playwright",
       "TypeScript",
     ],
-    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
+    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
     links: {
       "النظام الحي":
-        "https://brix-hotel-web-app-production.up.railway.app",
+        "https://hotel-web-app-ten.vercel.app",
       "البحث عن أسعار":
-        "https://brix-hotel-web-app-production.up.railway.app/search",
+        "https://hotel-web-app-ten.vercel.app/search",
       "إدخال عقد جديد":
-        "https://brix-hotel-web-app-production.up.railway.app/contract-wizard",
+        "https://hotel-web-app-ten.vercel.app/contract-wizard",
       "قائمة العقود":
-        "https://brix-hotel-web-app-production.up.railway.app/contracts",
+        "https://hotel-web-app-ten.vercel.app/contracts",
+      "حالة المزامنة":
+        "https://hotel-web-app-ten.vercel.app/admin/sync-status",
       "بوت تلجرام":
         "https://t.me/BrixPrice_bot",
       "النسخ الاحتياطي اليومي":
         "https://github.com/aneerabee/brix-backups",
       "آخر تشغيل نسخ":
         "https://github.com/aneerabee/brix-travel-system/actions/workflows/daily-contract-backup.yml",
-      Railway: "https://railway.com/project/2af4cb7e-f4ef-4de0-b86c-b4957fac185f",
+      Vercel: "https://vercel.com/aneerabee/hotel-web-app-ten",
       GitHub: "https://github.com/aneerabee/brix-travel-system",
+      Airtable: "https://airtable.com/",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
     },
     links_desc: {
@@ -412,23 +415,27 @@ const PRJ = [
         "شاشة إدخال عقد فندق بعشر خطوات، يطلب تسجيل الدخول",
       "قائمة العقود":
         "كل العقود المحفوظة، للمراجعة والتعديل والحذف، يطلب تسجيل الدخول",
+      "حالة المزامنة":
+        "صفحة Admin لمراقبة آخر مزامنة من Airtable إلى Supabase — تخبرك إن كان البوت يعرض أسعار محدّثة",
       "بوت تلجرام":
-        "بوت بحث الأسعار للوكلاء، يعطي نفس النتيجة بالضبط التي يعطيها الويب. ست خطوات بالأزرار، عربي أو إنجليزي.",
+        "بوت بحث الأسعار للوكلاء عبر دعوة بالهاتف، يعطي نفس النتيجة بالضبط التي يعطيها الويب. ست خطوات بالأزرار، ثنائي اللغة عربي/إنجليزي، تقويم تفاعلي، 30+ تحديثاً في آخر أسبوعين.",
       "النسخ الاحتياطي اليومي":
         "مستودع خاص فيه نسخة كاملة من كل جداول العقود ليوم. تحقق منه أسبوعياً — يجب أن ترى مجلد ديلي بتاريخ كل يوم.",
       "آخر تشغيل نسخ":
         "صفحة سجل تشغيلات النسخ اليومي. اللون الأخضر يعني نجح، الأحمر يعني فشل — لو فشل افتحه واطّلع على السبب.",
-      Railway:
-        "لوحة النشر، اللوغات، المتغيرات، الفروع، إعادة التشغيل",
+      Vercel:
+        "لوحة النشر، اللوغات، المتغيرات، إعادة التشغيل (تم الانتقال من Railway)",
       GitHub:
-        "الكود المصدري — Next.js 16 و Supabase وبوت تلجرام وألفين اختبار يمر",
+        "الكود المصدري — Next.js 16.1 و Supabase وبوت تلجرام و348 اختبار يمر",
+      Airtable:
+        "مصدر الحقيقة الوحيد — 11 جدولاً يحوي كل بيانات العقود والفترات والأسعار",
       Supabase:
-        "قاعدة البيانات — جداول العقود والفترات والأسعار والخصومات ومضاعفات الإشغال",
+        "كاش سريع للقراءة — مزامن من Airtable يومياً 3ص + يدوياً عند الحاجة",
     },
     current_status: {
-      updated: "2026-05-11",
+      updated: "2026-05-12",
       where:
-        "النظام حي ومنشور على ريلواي ومرتبط بالكامل ببوت تلجرام. البوت يعيد نفس الأسعار من نفس الفنادق بنفس التواريخ التي يعيدها الويب، تحقق منها بعشرين سيناريو حجز معقد وعشرين حالة حافة. الترجمة كاملة عربي وإنجليزي، الأزرار ملوّنة بنظام موحّد، النتائج تظهر في صناديق قابلة للتوسيع للتفاصيل. ألفان واثنا عشر اختبار وحدوي يمر، صفر ثغرات حرجة. تم تفعيل ثلاث طبقات حماية لجدول مضاعفات الإشغال الذي ضاع قبلاً من فندق سوينو: الأولى هي آلة الزمن داخل الموقع التي تأخذ صورة قبل وبعد كل عملية حفظ، الثانية هي النسخ اليومي على غيت هب الذي يحفظ كل الجداول في مستودع منفصل اسمه بريكس باك آبس في الساعة الثانية صباحاً، الثالثة هي حماية برمجية ترفض أي طلب حفظ بقائمة فارغة إلا مع تأكيد صريح من المستعمل.",
+        "النظام حي ومنشور على Vercel (بعد الانتقال من Railway) ومرتبط بالكامل ببوت تلجرام @BrixPrice_bot. البوت يعيد نفس الأسعار من نفس الفنادق بنفس التواريخ التي يعيدها الويب. 30+ تحديثاً في آخر أسبوعين على البوت (دعوة بالهاتف، تقويم تفاعلي، عرض ميداليات للنتائج، ثنائي اللغة كامل، حماية ضد HTML injection وانتحال جهات الاتصال وتسرّب PII، تعافي من فشل جزئي، dedup للـwebhooks المعادة، Rate limit). 348 اختبار يمر، صفر ثغرات حرجة. ثلاث طبقات حماية لمضاعفات الإشغال: Time Machine داخل الموقع، نسخ يومي على GitHub (brix-backups في 02:00ص)، حماية برمجية ترفض حفظ قائمة فارغة. أحدث إصلاحات contract-edit: Atomic Save All، حماية sueno-pattern ضد wipe، per-tab session isolation.",
       next_step:
         "أولاً، تحقق دورياً من أن طبقات الحماية الثلاث ما زالت تعمل. ادخل مستودع بريكس باك آبس على غيت هب وتأكد أن نسخة اليوم موجودة في مجلد ديلي بتاريخ اليوم. لو ما وُجدت اذهب لتاب أكشنز في مستودع بريكس ترافل سيستم واطّلع على آخر تشغيل لـدايلي كونتراكت باك آب. ثانياً، تحقق من شاشة آلة الزمن في الموقع لكل فندق تعدّله، يجب أن ترى صورتين جديدتين بعد كل حفظ. ثالثاً، أعد إدخال مضاعفات إشغال فندق سوينو من شاشة تعديل العقود لأن الجدول حالياً صفر صفوف. رابعاً، أدخل بقية العقود التسعة من ملفات بي دي إف.",
       blockers: [
@@ -456,15 +463,81 @@ const PRJ = [
       use_guide:
         "للاستخدام اليومي ابحث من البوت أو من صفحة البحث في الموقع، الاثنان يعطيان نفس النتيجة. لإدخال عقد فندق جديد من شاشة إدخال العقود، سجّل الدخول برمز الإدارة وامرّ على الخطوات العشر. لتعديل عقد ادخل قائمة العقود واختر تعديل. للتحقق من الحماية افتح مستودع بريكس باك آبس على غيت هب وانظر تاريخ آخر مجلد ديلي، أو افتح شاشة آلة الزمن في الموقع وانظر عدد الصور لكل فندق. لاستعادة بيانات ضاعت ادخل آلة الزمن واختر صورة قبل الحادثة ثم اضغط استعادة.",
     },
+    bot_features: {
+      handle: "@BrixPrice_bot",
+      url: "https://t.me/BrixPrice_bot",
+      tagline: "بوت تسعير الفنادق للوكلاء — ست خطوات بالأزرار، ثنائي اللغة، نتائج فورية",
+      languages: ["عربي", "English"],
+      flow_steps: [
+        "اختر المدينة",
+        "اختر الفندق",
+        "اختر تاريخ الدخول (تقويم تفاعلي)",
+        "اختر تاريخ الخروج",
+        "اختر عدد الضيوف وأعمار الأطفال",
+        "النتيجة — أفضل الأسعار مع ميداليات + تفاصيل قابلة للتوسيع",
+      ],
+      access_model: "دعوة بالهاتف — المستخدم يبدأ بـ/start ويرسل رقمه، المدير يوافق من القائمة، النظام يربط الـtelegram_user بالرقم",
+      modules: [
+        { f: "api.ts",            d: "نقطة دخول البوت من webhook، توجيه للأوامر والكولباكات" },
+        { f: "auth.ts",           d: "تحقق من allowlist + invite عبر الهاتف" },
+        { f: "calendar.ts",       d: "تقويم تفاعلي مع تثبيت ماضي + i18n + خلفيات ملوّنة" },
+        { f: "i18n.ts",           d: "ثنائي اللغة EN/AR، قائمة Settings للتبديل" },
+        { f: "invites.ts",        d: "إدارة دعوات الهاتف عبر جدول telegram_invites" },
+        { f: "menus.ts",          d: "كل القوائم بنظام لون موحّد + dots التقدم" },
+        { f: "formatter.ts",      d: "بطاقات blockquote للنتائج + ميداليات للترتيب" },
+        { f: "sessions.ts",       d: "حفظ حالة المحادثة لكل مستخدم، منع تضارب tabs" },
+        { f: "user-admin.ts",     d: "إدارة المستخدمين من داخل البوت (قائمة بالكاملة)" },
+        { f: "hotel-resolver.ts", d: "تحويل اسم الفندق إلى UUID مع تحقق Zod" },
+      ],
+      security: [
+        "إغلاق HTML injection في كل المخرجات",
+        "حماية ضد انتحال جهات الاتصال (contact spoofing)",
+        "إصلاح race conditions في الجلسات",
+        "منع تسرّب PII في الأخطاء",
+        "Rate limit على كل callback",
+        "تحقق UUID على schema للـhotelId/cityId/areaId",
+      ],
+      ux_recent: [
+        "ميداليات + بطاقات blockquote للنتائج",
+        "تقويم بخلفيات ملوّنة في الخطوات الأولى",
+        "نظام لون موحّد للأزرار في كل التدفّق",
+        "بطاقة ملخّص + dots تقدم على كل خطوة",
+        "Repeat-search + shift-dates + quick-edit",
+        "Detail expandable لكل عرض سعر",
+        "Recent hotels + common ages auto-fill",
+        "Cancel semantics + retry للبحث",
+        "Cleanup jobs لجلسات قديمة",
+      ],
+      reliability: [
+        "Dedup للـwebhooks المعادة من Telegram",
+        "تعافي من partial-failure",
+        "معالجة stale callbacks + double-tap",
+        "Crash handling بدون فقدان جلسة",
+        "Pagination للقوائم الطويلة",
+        "Env validation عند البدء",
+      ],
+      parity: "نفس النتيجة تماماً التي يعرضها /search في الويب — مختبر بـ20+ سيناريو حافة",
+      tests: { total: 348, suites: 65 },
+      recent_commits_14d: 30,
+      stack: ["Node.js 22", "TypeScript 5.9", "node-telegram-bot-api", "Supabase Client", "Zod 4"],
+      milestones: [
+        { date: "2026-05-12", text: "infant/child age limits exposed في Info tab" },
+        { date: "2026-05-12", text: "Time Machine entry points + توحيد تنسيق النتائج + a11y skip link" },
+        { date: "2026-05-11", text: "contracts-dashboard يعرض حالة المضاعفات الفعلية" },
+        { date: "2026-05-11", text: "Atomic Save All + sueno-pattern protection ضد wipe" },
+        { date: "2026-05-10", text: "Phone-based invite + in-bot user management" },
+        { date: "2026-05-10", text: "Security audit: HTML injection + spoofing + PII closed" },
+      ],
+    },
     claude_session: {
       session_name: "[brix system]",
       terminal: "iTerm2",
-      cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
+      cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
       command:
-        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel/hotel-web-app && claude",
+        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel/brix-bot/hotel-web-app && claude",
       memory_file:
         "~/.claude/projects/-Users-rabeeshaban-Desktop-Projects----BRIX-Travel/memory/MEMORY.md",
-      note: "بعد فتح كلود اكتب رزيوم واختر الجلسة المسماة بريكس سيستم. آخر نقطة: إصلاحات شاملة تمّت محلياً برقم 9a1251a5 تنتظر إذن الدفع. ملف الذاكرة يحوي ثلاثة عشر ملفاً منظّماً يشمل القرارات التجارية المأخوذة في 5 مايو.",
+      note: "بعد فتح كلود اكتب رزيوم واختر الجلسة المسماة بريكس سيستم. آخر نقطة: 30+ تحديثاً للبوت (إعدادات، تقويم، أمان، ثنائي اللغة، Atomic Save). ملف الذاكرة يحوي القرارات التجارية المأخوذة في 5 مايو.",
     },
   },
   {

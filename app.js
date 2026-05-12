@@ -3752,6 +3752,133 @@ function _quickLinksCard(item, cl) {
   );
 }
 
+/* ── Bot Features Card — sub-section for pricing bot ── */
+function _botFeaturesCard(item) {
+  const bf = item && item.bot_features;
+  if (!bf) return "";
+  const cl = item.cl || "#0088CC";
+
+  const stepsHtml = (bf.flow_steps || [])
+    .map((s, i) => (
+      `<div class="bot-step">` +
+      `<span class="bot-step-num" style="background:${cl}">${i + 1}</span>` +
+      `<span class="bot-step-text">${E(s)}</span>` +
+      `</div>`
+    )).join("");
+
+  const langPills = (bf.languages || [])
+    .map((l) => `<span class="bot-lang-pill">${E(l)}</span>`).join("");
+
+  const renderList = (arr, icon, kind) => arr.map((x) => (
+    `<li class="bot-li bot-li--${kind}"><span class="bot-li-ico">${icon}</span><span>${E(x)}</span></li>`
+  )).join("");
+
+  const renderModules = (mods) => mods.map((m) => (
+    `<div class="bot-mod"><code class="bot-mod-file">${E(m.f)}</code><span class="bot-mod-desc">${E(m.d)}</span></div>`
+  )).join("");
+
+  const renderMilestones = (ms) => ms.map((m) => (
+    `<div class="bot-ms"><span class="bot-ms-date">${E(m.date)}</span><span class="bot-ms-text">${E(m.text)}</span></div>`
+  )).join("");
+
+  const tests = bf.tests || {};
+  const stats = [
+    bf.recent_commits_14d ? { v: String(bf.recent_commits_14d) + "+", l: "تحديث آخر أسبوعين" } : null,
+    tests.total ? { v: String(tests.total), l: "اختبار يمر" } : null,
+    bf.modules ? { v: String(bf.modules.length), l: "موديول" } : null,
+    bf.flow_steps ? { v: String(bf.flow_steps.length), l: "خطوة في التدفّق" } : null,
+  ].filter(Boolean);
+
+  return (
+    `<div class="bot-card" style="--bot-cl:${cl}">` +
+    // HEADER
+    `<div class="bot-head">` +
+    `<div class="bot-head-left">` +
+    `<div class="bot-icon">${_ic("🤖", 22)}</div>` +
+    `<div>` +
+    `<div class="bot-handle">` +
+    (bf.url
+      ? `<a href="${E(bf.url)}" target="_blank" rel="noopener">${E(bf.handle || "بوت تلجرام")}</a>`
+      : E(bf.handle || "بوت تلجرام")) +
+    `</div>` +
+    (bf.tagline ? `<div class="bot-tagline">${E(bf.tagline)}</div>` : "") +
+    `</div></div>` +
+    (langPills ? `<div class="bot-langs">${langPills}</div>` : "") +
+    `</div>` +
+    // STATS
+    (stats.length
+      ? `<div class="bot-stats">` +
+        stats.map((s) => (
+          `<div class="bot-stat"><strong>${E(s.v)}</strong><span>${E(s.l)}</span></div>`
+        )).join("") +
+        `</div>`
+      : "") +
+    // FLOW STEPS
+    (stepsHtml
+      ? `<div class="bot-section">` +
+        `<h4 class="bot-section-title">${_ic("🎯", 13)} تدفّق التسعير</h4>` +
+        `<div class="bot-steps">${stepsHtml}</div>` +
+        `</div>`
+      : "") +
+    // ACCESS
+    (bf.access_model
+      ? `<div class="bot-section bot-section--narrow">` +
+        `<h4 class="bot-section-title">${_ic("🔒", 13)} الوصول</h4>` +
+        `<p class="bot-prose">${E(bf.access_model)}</p>` +
+        `</div>`
+      : "") +
+    // PARITY
+    (bf.parity
+      ? `<div class="bot-section bot-section--narrow">` +
+        `<h4 class="bot-section-title">${_ic("🔗", 13)} التطابق مع الويب</h4>` +
+        `<p class="bot-prose">${E(bf.parity)}</p>` +
+        `</div>`
+      : "") +
+    // MODULES
+    (bf.modules && bf.modules.length
+      ? `<div class="bot-section">` +
+        `<h4 class="bot-section-title">${_ic("🧩", 13)} موديولات البوت</h4>` +
+        `<div class="bot-modules">${renderModules(bf.modules)}</div>` +
+        `</div>`
+      : "") +
+    // 3 COLUMNS: SECURITY / UX / RELIABILITY
+    `<div class="bot-triple">` +
+    (bf.security && bf.security.length
+      ? `<div class="bot-col bot-col--security">` +
+        `<h4 class="bot-section-title">${_ic("🛡️", 13)} الأمان</h4>` +
+        `<ul class="bot-list">${renderList(bf.security, "🛡️", "sec")}</ul>` +
+        `</div>`
+      : "") +
+    (bf.ux_recent && bf.ux_recent.length
+      ? `<div class="bot-col bot-col--ux">` +
+        `<h4 class="bot-section-title">${_ic("✨", 13)} تحسينات UX حديثة</h4>` +
+        `<ul class="bot-list">${renderList(bf.ux_recent, "✨", "ux")}</ul>` +
+        `</div>`
+      : "") +
+    (bf.reliability && bf.reliability.length
+      ? `<div class="bot-col bot-col--rel">` +
+        `<h4 class="bot-section-title">${_ic("⚡", 13)} الموثوقية</h4>` +
+        `<ul class="bot-list">${renderList(bf.reliability, "⚡", "rel")}</ul>` +
+        `</div>`
+      : "") +
+    `</div>` +
+    // MILESTONES
+    (bf.milestones && bf.milestones.length
+      ? `<div class="bot-section">` +
+        `<h4 class="bot-section-title">${_ic("📅", 13)} آخر معالم</h4>` +
+        `<div class="bot-milestones">${renderMilestones(bf.milestones)}</div>` +
+        `</div>`
+      : "") +
+    // STACK
+    (bf.stack && bf.stack.length
+      ? `<div class="bot-stack">` +
+        bf.stack.map((t) => `<span class="bot-stack-pill">${E(t)}</span>`).join("") +
+        `</div>`
+      : "") +
+    `</div>`
+  );
+}
+
 function _claudeSessionCard(item) {
   const cs = item && item.claude_session;
   if (!cs || !cs.command) return "";
@@ -3873,6 +4000,7 @@ function openProjectDetail(name) {
     `</div>` +
     _entityTrustBox(item, "project") +
     _currentStatusCard(item) +
+    _botFeaturesCard(item) +
     _claudeSessionCard(item) +
     `<div class="prj-detail-grid">` +
     sections
