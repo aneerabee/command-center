@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Command Center">
+  <defs>
+    <!-- Frame gradient (deep violet → electric blue) -->
+    <linearGradient id="cc-frame" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5B21B6"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <!-- Inner glow on nucleus -->
+    <radialGradient id="cc-nucleus" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="55%" stop-color="#F472B6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </radialGradient>
+    <!-- Pulse ring gradient -->
+    <radialGradient id="cc-pulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Soft halo behind nucleus -->
+    <radialGradient id="cc-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FCD34D" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#FCD34D" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cc-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="0.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rounded square frame (recognizable silhouette) -->
+  <rect width="64" height="64" rx="14" fill="url(#cc-frame)"/>
+
+  <!-- Tiny stars in the background (decorative) -->
+  <g fill="#FFFFFF">
+    <circle cx="10" cy="11" r="0.6" opacity="0.55"/>
+    <circle cx="55" cy="9"  r="0.5" opacity="0.45"/>
+    <circle cx="8"  cy="52" r="0.5" opacity="0.45"/>
+    <circle cx="56" cy="55" r="0.6" opacity="0.55"/>
+    <circle cx="48" cy="14" r="0.4" opacity="0.35"/>
+    <circle cx="14" cy="48" r="0.4" opacity="0.35"/>
+  </g>
+
+  <!-- Outer orbit (largest, slowest) -->
+  <ellipse cx="32" cy="32" rx="22" ry="22" fill="none" stroke="#FFFFFF" stroke-width="0.5" stroke-opacity="0.16" stroke-dasharray="1.5 2"/>
+  <!-- Middle orbit (rotated -22deg) -->
+  <ellipse cx="32" cy="32" rx="17" ry="11" fill="none" stroke="#FFFFFF" stroke-width="0.6" stroke-opacity="0.22" transform="rotate(-22 32 32)"/>
+  <!-- Inner orbit (rotated 30deg) -->
+  <ellipse cx="32" cy="32" rx="13" ry="8" fill="none" stroke="#FFFFFF" stroke-width="0.6" stroke-opacity="0.30" transform="rotate(30 32 32)"/>
+
+  <!-- Halo behind nucleus -->
+  <circle cx="32" cy="32" r="11" fill="url(#cc-halo)" opacity="0.75">
+    <animate attributeName="r" values="10;12;10" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;0.85;0.55" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Expanding pulse rings (radar-like) -->
+  <circle cx="32" cy="32" r="6" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0">
+    <animate attributeName="r" values="6;24;24" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;0;0" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="1.4;0.2;0.2" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="32" r="6" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0">
+    <animate attributeName="r" values="6;24;24" dur="3s" begin="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;0;0" dur="3s" begin="1s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="1.4;0.2;0.2" dur="3s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="32" r="6" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0">
+    <animate attributeName="r" values="6;24;24" dur="3s" begin="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.55;0;0" dur="3s" begin="2s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="1.4;0.2;0.2" dur="3s" begin="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Central nucleus (the commander) -->
+  <circle cx="32" cy="32" r="6" fill="url(#cc-nucleus)" filter="url(#cc-glow)">
+    <animate attributeName="r" values="5.5;6.5;5.5" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Satellite 1 — outer slow orbit (pink) -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="9s" repeatCount="indefinite"/>
+    <circle cx="54" cy="32" r="2" fill="#F472B6">
+      <animate attributeName="r" values="1.7;2.3;1.7" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="54" cy="32" r="3.5" fill="#F472B6" opacity="0.18"/>
+  </g>
+
+  <!-- Satellite 2 — middle orbit, opposite direction (cyan) -->
+  <g transform="rotate(-22 32 32)">
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="360 32 32" to="0 32 32" dur="6s" repeatCount="indefinite"/>
+      <circle cx="49" cy="32" r="1.7" fill="#22D3EE">
+        <animate attributeName="r" values="1.5;2;1.5" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="49" cy="32" r="3" fill="#22D3EE" opacity="0.18"/>
+    </g>
+  </g>
+
+  <!-- Satellite 3 — inner orbit (amber) -->
+  <g transform="rotate(30 32 32)">
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="4s" repeatCount="indefinite"/>
+      <circle cx="45" cy="32" r="1.5" fill="#FCD34D">
+        <animate attributeName="r" values="1.3;1.8;1.3" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="45" cy="32" r="2.5" fill="#FCD34D" opacity="0.22"/>
+    </g>
+  </g>
+
+  <!-- Tiny "command" indicator dot (top-right corner — green status light) -->
+  <circle cx="50" cy="14" r="2" fill="#22C55E">
+    <animate attributeName="opacity" values="1;0.4;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="50" cy="14" r="2" fill="none" stroke="#22C55E" stroke-width="0.8" opacity="0">
+    <animate attributeName="r" values="2;5;2" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+</svg>

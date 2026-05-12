@@ -1048,9 +1048,7 @@ function init() {
 
   if (sidebar) {
     sidebar.innerHTML =
-      '<div class="sidebar-brand"><span class="brand-icon">' +
-      _ic("⚡", 20) +
-      '</span><span class="brand-text">مركز التحكم</span></div>' +
+      '<div class="sidebar-brand"><span class="brand-icon"><img src="cc-favicon.svg" alt="" width="24" height="24" style="display:block"/></span><span class="brand-text">مركز التحكم</span></div>' +
       '<button class="search-trigger" onclick="openSearch()" aria-label="بحث">' +
       _ic("🔍", 16) +
       "<span>بحث</span></button>" +
@@ -1589,7 +1587,7 @@ R.home = function () {
     });
 
   return (
-    `<div class="hqx">` +
+    `<div class="hqx cc-aurora">` +
     // ──── SMART HEADER v2 — الترحيب + التاريخ + الحالة العامة ────
     `<section class="cc-greet" data-tone="${greet.tone}">` +
     `<div class="cc-greet-main">` +
@@ -2703,31 +2701,31 @@ function _sparkline(data, color) {
 }
 
 R.server = function () {
+  const _ringSvg = (pct, color, valHTML) => {
+    const safePct = Math.max(0, Math.min(100, Number(pct) || 0));
+    const offset = 251.327 - (251.327 * safePct) / 100;
+    return (
+      `<div class="cc-ring-gauge">` +
+      `<svg viewBox="0 0 88 88">` +
+      `<circle class="cc-rg-bg" cx="44" cy="44" r="40"/>` +
+      `<circle class="cc-rg-fg" cx="44" cy="44" r="40" stroke="${color}" style="stroke-dashoffset:${offset.toFixed(2)}"/>` +
+      `</svg>` +
+      `<div class="cc-rg-val">${valHTML || ""}</div>` +
+      `</div>`
+    );
+  };
+
+  const totalSvc = SVC.length;
+  const onSvc = SVC.filter((s) => s.st).length;
+  const dockerSvc = SVC.filter((s) => s.service_type === "container").length;
+  const cronSvc = SVC.filter((s) => s.service_type === "cron").length;
+  const userSvc = SVC.filter((s) => s.service_type === "user-service").length;
+
   const gauges = [
-    {
-      label: "خدمات عاملة",
-      val: String(SVC.filter((s) => s.st).length),
-      pct: Math.round((SVC.filter((s) => s.st).length / SVC.length) * 100),
-      cl: "#0EA5E9",
-    },
-    {
-      label: "حاويات Docker",
-      val: String(SVC.filter((s) => s.service_type === "container").length),
-      pct: 100,
-      cl: "#8B5CF6",
-    },
-    {
-      label: "مهام cron",
-      val: String(SVC.filter((s) => s.service_type === "cron").length),
-      pct: 100,
-      cl: "#10B981",
-    },
-    {
-      label: "خدمات user",
-      val: String(SVC.filter((s) => s.service_type === "user-service").length),
-      pct: 100,
-      cl: "#F59E0B",
-    },
+    { label: "خدمات عاملة", val: String(onSvc), pct: Math.round((onSvc / totalSvc) * 100), cl: "#0EA5E9", note: "running" },
+    { label: "حاويات Docker", val: String(dockerSvc), pct: Math.round((dockerSvc / totalSvc) * 100), cl: "#8B5CF6", note: "container" },
+    { label: "مهام cron", val: String(cronSvc), pct: Math.round((cronSvc / totalSvc) * 100), cl: "#10B981", note: "scheduled" },
+    { label: "خدمات user", val: String(userSvc), pct: Math.round((userSvc / totalSvc) * 100), cl: "#F59E0B", note: "systemd user" },
   ];
   const hostFacts = [
     { label: "المضيف", value: "Contabo VPS", note: "vmi3061403 · Ubuntu 24" },
@@ -2778,59 +2776,75 @@ R.server = function () {
       )
       .join("") +
     "</div>" +
-    '<div class="gauge-grid">' +
+    '<div class="gauge-grid cc-stagger">' +
     gauges
-      .map((g) => {
-        return (
-          `<div class="gauge-card">` +
-          `<div class="gauge-ring gauge-ring-flat"><span class="gauge-val" style="color:${g.cl}">${E(g.val)}</span></div>` +
-          `<span class="gauge-label">${E(g.label)}</span>` +
-          `<span class="gauge-note">${E(g.pct)}% من الجرد المعروف</span>` +
-          `</div>`
-        );
-      })
+      .map((g) => (
+        `<div class="gauge-card cc-lift">` +
+        _ringSvg(g.pct, g.cl,
+          `<span class="cc-rg-num cc-counter" style="color:${g.cl}" data-target="${g.val}">0</span>` +
+          `<span class="cc-rg-suf">${E(g.note)}</span>`
+        ) +
+        `<span class="gauge-label" style="margin-top:8px;font-weight:700">${E(g.label)}</span>` +
+        `<span class="gauge-note"><span class="cc-live-dot cc-live-dot--green" style="margin-inline-end:6px;vertical-align:middle"></span>${E(g.pct)}% من الجرد</span>` +
+        `</div>`
+      ))
       .join("") +
     "</div>" +
-    '<div class="svc-list">' +
-    SVC.map((s) => {
-      const prj = s.owner || s.prj || "";
-      const info = s.info || "";
-      const path = s.path || "";
-      const host = s.host || "";
-      const schedule = s.schedule || "";
-      const runtime = s.runtime || "";
-      const type = s.service_type || "";
-      const pc = prj ? _prjColor(prj) : "";
-      const ownerLabel = s.owner_type === "bot" ? "runtime" : "مشروع";
-      return (
-        `<button class="svc-item" data-cc-name="${E(s.name)}" onclick="openServiceDetail('${E(s.name)}')">` +
-        `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}"></span>` +
-        `<span class="svc-em">${_ic(s.em, 18)}</span>` +
-        `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
-        (prj
-          ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(ownerLabel)} · ${E(prj)}</span>`
-          : "") +
-        `<span class="svc-dt">${E(s.dt)}</span>` +
-        (type
-          ? `<span class="svc-desc">النوع: ${E(_serviceTypeLabel(type))}</span>`
-          : "") +
-        (runtime
-          ? `<span class="svc-desc">التشغيل: ${E(runtime)}</span>`
-          : "") +
-        (host ? `<span class="svc-desc">المضيف: ${E(host)}</span>` : "") +
-        (schedule
-          ? `<span class="svc-desc">الجدولة: ${E(schedule)}</span>`
-          : "") +
-        (info ? `<span class="svc-desc">${E(info)}</span>` : "") +
-        (path ? `<span class="svc-path">${E(path)}</span>` : "") +
-        `</div>` +
-        (s.port && s.port !== "—"
-          ? `<span class="svc-port">:${E(s.port)}</span>`
-          : "") +
-        `</button>`
-      );
-    }).join("") +
-    "</div>"
+    // ── Filter chips row ──
+    `<div class="cc-filter-row" id="cc-svc-filters" data-svc-filter="all">` +
+    `<button class="cc-mag-chip is-active" data-filter="all">${_ic("📊", 12)} الكل<span class="cc-filter-count">${totalSvc}</span></button>` +
+    `<button class="cc-mag-chip" data-filter="container">${_ic("🐳", 12)} Docker<span class="cc-filter-count">${dockerSvc}</span></button>` +
+    `<button class="cc-mag-chip" data-filter="cron">${_ic("⏰", 12)} cron<span class="cc-filter-count">${cronSvc}</span></button>` +
+    `<button class="cc-mag-chip" data-filter="user-service">${_ic("⚙️", 12)} systemd<span class="cc-filter-count">${userSvc}</span></button>` +
+    `<button class="cc-mag-chip" data-filter="database">${_ic("🗄️", 12)} DB<span class="cc-filter-count">${SVC.filter(s=>s.service_type==='database').length}</span></button>` +
+    `<button class="cc-mag-chip" data-filter="off">${_ic("⛔", 12)} متوقفة<span class="cc-filter-count">${SVC.filter(s=>!s.st).length}</span></button>` +
+    `</div>` +
+    // ── Grouped service list (by host then by runtime) ──
+    (() => {
+      const groups = new Map();
+      SVC.forEach((s) => {
+        const key = s.host || "غير محدد";
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(s);
+      });
+      return Array.from(groups.entries())
+        .map(([host, list]) => (
+          `<div class="cc-svc-group" data-host="${E(host)}">` +
+          `<div class="cc-svc-group-head">${_ic("🖥️", 12)} ${E(host)}<span class="cc-svc-group-count">${list.length}</span></div>` +
+          `<div class="svc-list cc-stagger">` +
+          list.map((s) => {
+            const prj = s.owner || s.prj || "";
+            const info = s.info || "";
+            const path = s.path || "";
+            const schedule = s.schedule || "";
+            const runtime = s.runtime || "";
+            const type = s.service_type || "";
+            const pc = prj ? _prjColor(prj) : "";
+            const ownerLabel = s.owner_type === "bot" ? "runtime" : "مشروع";
+            return (
+              `<button class="svc-item cc-lift" ` +
+              `data-cc-name="${E(s.name)}" ` +
+              `data-svc-type="${E(type || 'unknown')}" ` +
+              `data-svc-status="${s.st ? 'on' : 'off'}" ` +
+              `onclick="openServiceDetail('${E(s.name)}')">` +
+              `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}"></span>` +
+              `<span class="svc-em">${_ic(s.em, 18)}</span>` +
+              `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
+              (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(ownerLabel)} · ${E(prj)}</span>` : "") +
+              `<span class="svc-dt">${E(s.dt)}</span>` +
+              (type ? `<span class="svc-desc">النوع: ${E(_serviceTypeLabel(type))}</span>` : "") +
+              (runtime ? `<span class="svc-desc">التشغيل: ${E(runtime)}</span>` : "") +
+              (schedule ? `<span class="svc-desc">الجدولة: ${E(schedule)}</span>` : "") +
+              (info ? `<span class="svc-desc">${E(info)}</span>` : "") +
+              (path ? `<span class="svc-path">${E(path)}</span>` : "") +
+              `</div>` +
+              (s.port && s.port !== "—" ? `<span class="svc-port">:${E(s.port)}</span>` : "") +
+              `</button>`
+            );
+          }).join("") +
+          `</div></div>`
+        )).join("");
+    })()
   );
 };
 
@@ -4330,6 +4344,57 @@ function openToolDetail(name) {
     _processIcons();
   });
 }
+
+/* ── Server section: filter chips + counter animations ── */
+function _ccInitServerInteractions() {
+  // Counter count-up animation
+  document.querySelectorAll(".cc-counter[data-target]").forEach((el) => {
+    const target = parseInt(el.getAttribute("data-target"), 10) || 0;
+    if (target === 0) { el.textContent = "0"; return; }
+    const duration = 900;
+    const start = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const v = Math.round(ease(t) * target);
+      el.textContent = String(v);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+
+  // Filter chips
+  const filterRow = document.getElementById("cc-svc-filters");
+  if (!filterRow) return;
+  filterRow.addEventListener("click", (e) => {
+    const chip = e.target.closest(".cc-mag-chip");
+    if (!chip) return;
+    const filter = chip.getAttribute("data-filter") || "all";
+    filterRow.querySelectorAll(".cc-mag-chip").forEach((c) => c.classList.toggle("is-active", c === chip));
+    document.querySelectorAll(".svc-item").forEach((el) => {
+      const t = el.getAttribute("data-svc-type") || "";
+      const s = el.getAttribute("data-svc-status") || "";
+      let show = true;
+      if (filter === "all") show = true;
+      else if (filter === "off") show = s === "off";
+      else show = t === filter;
+      el.style.display = show ? "" : "none";
+    });
+    // Hide empty groups
+    document.querySelectorAll(".cc-svc-group").forEach((g) => {
+      const visible = Array.from(g.querySelectorAll(".svc-item")).some((el) => el.style.display !== "none");
+      g.style.display = visible ? "" : "none";
+    });
+  });
+}
+
+// Run after server section renders
+const _origRenderServer = R.server;
+R.server = function () {
+  const html = _origRenderServer.apply(this, arguments);
+  setTimeout(_ccInitServerInteractions, 80);
+  return html;
+};
 
 function openServiceDetail(name) {
   const item = SVC.find((s) => s.name === name);

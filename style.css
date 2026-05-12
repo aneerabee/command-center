@@ -10542,3 +10542,320 @@ button, input, select, textarea {
 
 /* fix grid-column for new home sections */
 .hqx > .cc-health-bar { grid-column: 1 / -1; }
+
+/* ═══════════════════════════════════════════════════════════
+   MOTION SYSTEM v2 — inspired by Linear, Vercel, Apple
+   ═══════════════════════════════════════════════════════════ */
+
+/* Spring easing tokens */
+:root {
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+}
+
+/* ── 1. Aurora background (Linear-style subtle gradient) ── */
+.cc-aurora {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.cc-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.08), transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(34, 211, 238, 0.06), transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(244, 114, 182, 0.05), transparent 50%);
+  z-index: -1;
+  animation: cc-aurora-shift 20s ease-in-out infinite;
+}
+@keyframes cc-aurora-shift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33%      { transform: translate(2%, -2%) rotate(2deg); }
+  66%      { transform: translate(-2%, 2%) rotate(-2deg); }
+}
+
+/* ── 2. Number count-up (sets via inline style) ── */
+.cc-counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ── 3. Live pulse dot (for running/healthy status) ── */
+.cc-live-dot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+.cc-live-dot::before,
+.cc-live-dot::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+.cc-live-dot::before {
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  z-index: 2;
+}
+.cc-live-dot::after {
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.45;
+  animation: cc-live-pulse 1.6s ease-out infinite;
+}
+@keyframes cc-live-pulse {
+  0%   { transform: scale(1); opacity: 0.45; }
+  80%  { transform: scale(2.6); opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.cc-live-dot--green { color: #22C55E; }
+.cc-live-dot--red   { color: #EF4444; }
+.cc-live-dot--blue  { color: #3B82F6; }
+.cc-live-dot--amber { color: #F59E0B; }
+
+/* ── 4. Card lift on hover (Vercel-style) ── */
+.cc-lift {
+  transition: transform 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out);
+  will-change: transform;
+}
+.cc-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.12),
+              0 4px 12px -2px rgba(15, 23, 42, 0.06);
+}
+.cc-lift:active { transform: translateY(-1px); transition-duration: 0.1s; }
+
+/* ── 5. Stagger children fade-in ── */
+.cc-stagger > * {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: cc-stagger-in 0.5s var(--ease-out) both;
+}
+.cc-stagger > *:nth-child(1)  { animation-delay: 0.04s; }
+.cc-stagger > *:nth-child(2)  { animation-delay: 0.08s; }
+.cc-stagger > *:nth-child(3)  { animation-delay: 0.12s; }
+.cc-stagger > *:nth-child(4)  { animation-delay: 0.16s; }
+.cc-stagger > *:nth-child(5)  { animation-delay: 0.20s; }
+.cc-stagger > *:nth-child(6)  { animation-delay: 0.24s; }
+.cc-stagger > *:nth-child(7)  { animation-delay: 0.28s; }
+.cc-stagger > *:nth-child(8)  { animation-delay: 0.32s; }
+.cc-stagger > *:nth-child(9)  { animation-delay: 0.36s; }
+.cc-stagger > *:nth-child(10) { animation-delay: 0.40s; }
+.cc-stagger > *:nth-child(n+11) { animation-delay: 0.44s; }
+@keyframes cc-stagger-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 6. Animated SVG ring gauge (fills from 0 → pct on render) ── */
+.cc-ring-gauge { width: 88px; height: 88px; position: relative; }
+.cc-ring-gauge svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.cc-ring-gauge .cc-rg-bg {
+  fill: none;
+  stroke: rgba(15, 23, 42, 0.06);
+  stroke-width: 6;
+}
+.cc-ring-gauge .cc-rg-fg {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 251.327; /* 2*PI*40 */
+  animation: cc-ring-fill 1.4s var(--ease-out) both;
+}
+@keyframes cc-ring-fill {
+  from { stroke-dashoffset: 251.327; }
+}
+.cc-ring-gauge .cc-rg-val {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+.cc-ring-gauge .cc-rg-num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--t1);
+}
+.cc-ring-gauge .cc-rg-suf {
+  font-size: 10px;
+  color: var(--t3);
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+/* ── 7. Magnetic chip (Apple website-style) ── */
+.cc-mag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, rgba(15, 23, 42, 0.08));
+  cursor: pointer;
+  transition: transform 0.18s var(--ease-spring),
+              background 0.18s ease,
+              box-shadow 0.18s ease;
+}
+.cc-mag-chip:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.10);
+}
+.cc-mag-chip:active { transform: scale(0.97); }
+.cc-mag-chip.is-active {
+  background: var(--t1);
+  color: var(--bg);
+  border-color: var(--t1);
+}
+
+/* ── 8. Status badge with subtle breath ── */
+.cc-breath { animation: cc-breath 2.8s ease-in-out infinite; }
+@keyframes cc-breath {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.65; }
+}
+
+/* ── 9. Scroll-driven reveal (uses :root scroll, gracefully degrades) ── */
+@supports (animation-timeline: view()) {
+  .cc-reveal {
+    animation: cc-reveal-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
+  @keyframes cc-reveal-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ── 10. Number flash on update ── */
+.cc-flash {
+  animation: cc-flash-pop 0.6s var(--ease-spring);
+}
+@keyframes cc-flash-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); color: #22C55E; }
+  100% { transform: scale(1); }
+}
+
+/* ── 11. Sweep shine (premium feel) ── */
+.cc-shine {
+  position: relative;
+  overflow: hidden;
+}
+.cc-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: cc-shine-sweep 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes cc-shine-sweep {
+  0%, 100% { transform: translateX(-100%); }
+  50%      { transform: translateX(100%); }
+}
+
+/* ── 12. Filter chip row ── */
+.cc-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+}
+.cc-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  margin-inline-start: 4px;
+}
+.cc-mag-chip.is-active .cc-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--bg);
+}
+
+/* ── 13. Sidebar service grouping ── */
+.cc-svc-group {
+  margin-bottom: 18px;
+  animation: cc-stagger-in 0.4s var(--ease-out) both;
+}
+.cc-svc-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--t3);
+}
+.cc-svc-group-head::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border, rgba(15, 23, 42, 0.08)), transparent);
+}
+.cc-svc-group-count {
+  background: rgba(15, 23, 42, 0.06);
+  color: var(--t2);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 14. Service card live status ── */
+.svc-item .svc-status.svc-on {
+  background: #22C55E;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  animation: cc-svc-pulse 2.2s ease-out infinite;
+}
+@keyframes cc-svc-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* ── 15. Reduce motion respect ── */
+@media (prefers-reduced-motion: reduce) {
+  .cc-aurora::before,
+  .cc-shine::after,
+  .cc-stagger > *,
+  .cc-live-dot::after,
+  .cc-breath,
+  .gauge-card::before,
+  .svc-item .svc-status.svc-on,
+  .cc-ring-gauge .cc-rg-fg {
+    animation: none !important;
+  }
+}

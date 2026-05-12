@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="f-frame" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5B21B6"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <radialGradient id="f-nuc" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#f-frame)"/>
+  <ellipse cx="32" cy="32" rx="20" ry="20" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".7"/>
+  <ellipse cx="32" cy="32" rx="15" ry="9" fill="none" stroke="#fff" stroke-opacity=".24" stroke-width=".7" transform="rotate(-22 32 32)"/>
+  <circle cx="32" cy="32" r="9" fill="#FCD34D" opacity=".25">
+    <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="32" r="6" fill="none" stroke="#fff" stroke-width="1" opacity="0">
+    <animate attributeName="r" values="6;22;22" dur="2.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".55;0;0" dur="2.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="32" r="6" fill="url(#f-nuc)">
+    <animate attributeName="r" values="5.5;6.5;5.5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <g><animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="6s" repeatCount="indefinite"/>
+    <circle cx="52" cy="32" r="2.4" fill="#F472B6"/></g>
+  <g transform="rotate(-22 32 32)"><g><animateTransform attributeName="transform" type="rotate" from="360 32 32" to="0 32 32" dur="4s" repeatCount="indefinite"/>
+    <circle cx="47" cy="32" r="1.8" fill="#22D3EE"/></g></g>
+  <circle cx="50" cy="14" r="2.2" fill="#22C55E">
+    <animate attributeName="opacity" values="1;.4;1" dur="1.4s" repeatCount="indefinite"/>
+  </circle>
+</svg>
