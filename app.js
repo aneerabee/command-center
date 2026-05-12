@@ -2271,7 +2271,6 @@ R.team = function () {
     `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
     `</div>` +
     `<a href="survey.html" target="_blank" class="survey-link" title="رابط استبيان لملء بيانات موظف جديد">📋 استبيان موظف</a>` +
-    `<a href="graph.html" target="_blank" class="survey-link" title="رسم بياني تفاعلي لكل العلاقات" style="background:rgba(139,92,246,0.1);color:#8b5cf6;border-color:rgba(139,92,246,0.2)">🧠 Knowledge Graph</a>` +
     `<button id="salary-toggle-btn" class="salary-toggle" onclick="teamToggleSalary()">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
     `</div>` +
     // ── المحتوى ──
