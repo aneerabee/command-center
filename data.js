@@ -471,7 +471,7 @@ const PRJ = [
     name: "EasyBooking",
     id: "easybooking",
     kind: "umbrella",
-    ar: "ذراع تسويق وحجز B2C",
+    ar: "إيزي بوكينغ",
     st: "a",
     em: "📢",
     cl: "#DC2626",
@@ -636,7 +636,7 @@ const PRJ = [
     name: "Wapy.dev",
     id: "wapy-dev",
     kind: "product",
-    ar: "منصة إدارة الاشتراكات",
+    ar: "Rabee Subs",
     st: "a",
     em: "💳",
     cl: "#0EA5E9",
@@ -1278,7 +1278,7 @@ const SVC = [
   },
   {
     name: "Wapy App",
-    ar: "تطبيق Wapy",
+    ar: "تطبيق Rabee Subs",
     id: "wapy-app",
     st: 1,
     em: "💳",
@@ -1296,7 +1296,7 @@ const SVC = [
   },
   {
     name: "Wapy Cron",
-    ar: "مهام Wapy المجدولة",
+    ar: "مهام Rabee Subs المجدولة",
     id: "wapy-cron",
     st: 1,
     em: "⏰",
@@ -1314,7 +1314,7 @@ const SVC = [
   },
   {
     name: "Wapy DB",
-    ar: "قاعدة بيانات Wapy",
+    ar: "قاعدة بيانات Rabee Subs",
     id: "wapy-db",
     st: 1,
     em: "🗄️",
@@ -1332,7 +1332,7 @@ const SVC = [
   },
   {
     name: "Wapy Backup",
-    ar: "نسخ احتياطي يومي لـWapy",
+    ar: "نسخة احتياطية يومية — Rabee Subs",
     id: "wapy-backup-cron",
     st: 1,
     em: "💾",
@@ -1350,7 +1350,7 @@ const SVC = [
   },
   {
     name: "Wapy Cleanup",
-    ar: "تنظيف نسخ Wapy القديمة",
+    ar: "تنظيف النسخ الأقدم من 30 يومًا",
     id: "wapy-cleanup-cron",
     st: 1,
     em: "🧹",
