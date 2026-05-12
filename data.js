@@ -471,7 +471,7 @@ const PRJ = [
     name: "EasyBooking",
     id: "easybooking",
     kind: "umbrella",
-    ar: "تسويق إيزي بوكينغ",
+    ar: "ذراع تسويق وحجز B2C",
     st: "a",
     em: "📢",
     cl: "#DC2626",
@@ -636,7 +636,7 @@ const PRJ = [
     name: "Wapy.dev",
     id: "wapy-dev",
     kind: "product",
-    ar: "متتبع الاشتراكات",
+    ar: "منصة إدارة الاشتراكات",
     st: "a",
     em: "💳",
     cl: "#0EA5E9",
@@ -752,7 +752,7 @@ const PRJ = [
     name: "WhatsApp CRM",
     id: "whatsapp-crm",
     kind: "service-app",
-    ar: "نظام إدارة العملاء",
+    ar: "إدارة عملاء واتساب",
     st: "a",
     em: "💬",
     cl: "#25D366",
@@ -1253,6 +1253,7 @@ const PRJ = [
 const SVC = [
   {
     name: "Command Center Runtime Publish",
+    ar: "فحص ونشر حالة اللوحة",
     id: "cc-runtime-publish",
     st: 1,
     em: "⟳",
@@ -1277,6 +1278,7 @@ const SVC = [
   },
   {
     name: "Wapy App",
+    ar: "تطبيق Wapy",
     id: "wapy-app",
     st: 1,
     em: "💳",
@@ -1294,6 +1296,7 @@ const SVC = [
   },
   {
     name: "Wapy Cron",
+    ar: "مهام Wapy المجدولة",
     id: "wapy-cron",
     st: 1,
     em: "⏰",
@@ -1311,6 +1314,7 @@ const SVC = [
   },
   {
     name: "Wapy DB",
+    ar: "قاعدة بيانات Wapy",
     id: "wapy-db",
     st: 1,
     em: "🗄️",
@@ -1328,6 +1332,7 @@ const SVC = [
   },
   {
     name: "Wapy Backup",
+    ar: "نسخ احتياطي يومي لـWapy",
     id: "wapy-backup-cron",
     st: 1,
     em: "💾",
@@ -1345,6 +1350,7 @@ const SVC = [
   },
   {
     name: "Wapy Cleanup",
+    ar: "تنظيف نسخ Wapy القديمة",
     id: "wapy-cleanup-cron",
     st: 1,
     em: "🧹",
@@ -1362,6 +1368,7 @@ const SVC = [
   },
   {
     name: "Tailscale VPN",
+    ar: "شبكة Tailscale الخاصة",
     id: "tailscale-vpn",
     st: 1,
     em: "🔒",
@@ -1386,7 +1393,7 @@ const AUTO = [
     host: "desktop",
     tasks: [
       {
-        name: "auto-backup.sh",
+        name: "نسخ المشاريع لـGitHub",
         freq: "يوميًا 14:00",
         on: true,
         what: "دفع meta-mcp + Money Manager + brixtravelwebsite إلى GitHub",
@@ -1404,7 +1411,7 @@ const AUTO = [
         kind: "automation",
       },
       {
-        name: "PM2 Resurrect",
+        name: "إحياء عمليات PM2 عند الإقلاع",
         freq: "عند الإقلاع",
         on: true,
         what: "إعادة تشغيل العمليات المحلية المحفوظة تلقائيًا",
@@ -1413,7 +1420,7 @@ const AUTO = [
         kind: "runtime",
       },
       {
-        name: "BRIX Invoice Server",
+        name: "خادم فواتير BRIX المحلي",
         freq: "دائم",
         on: true,
         what: "تشغيل خادم فواتير BRIX محليًا",
@@ -1429,7 +1436,7 @@ const AUTO = [
     host: "server",
     tasks: [
       {
-        name: "Wapy.dev DB Dump",
+        name: "نسخ احتياطي قاعدة Wapy",
         freq: "يوميًا 3 صباحًا",
         on: true,
         what: "تنفيذ backup لبيانات Wapy.dev",
@@ -1438,7 +1445,7 @@ const AUTO = [
         kind: "backup",
       },
       {
-        name: "Wapy.dev Cleanup",
+        name: "تنظيف نسخ Wapy القديمة",
         freq: "يوميًا 4 صباحًا",
         on: true,
         what: "تنظيف النسخ القديمة الأقدم من 30 يومًا",
