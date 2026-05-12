@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Knowledge Graph · Command Center</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238B5CF6'/%3E%3Ctext x='32' y='44' font-size='38' text-anchor='middle' fill='white'%3E🧠%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d18;
+    --panel: #0f1322;
+    --surface: #161b2c;
+    --elevated: #1d2440;
+    --t1: #e8eaf0;
+    --t2: #9ba3b4;
+    --t3: #6b7388;
+    --brd: rgba(255,255,255,0.08);
+    --brdH: rgba(255,255,255,0.18);
+
+    /* Node colors per type */
+    --c-umb: #8b5cf6;
+    --c-dept: #f59e0b;
+    --c-prj: #ec4899;
+    --c-team: #10b981;
+    --c-tool: #0ea5e9;
+    --c-cloud: #06b6d4;
+    --c-svc: #6366f1;
+    --c-bot: #d946ef;
+    --c-idea: #fbbf24;
+
+    /* Umbrella brand colors */
+    --u-etranex: #14b8a6;
+    --u-brix: #ef4444;
+    --u-saas: #10b981;
+    --u-infra: #8b5cf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--t1);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(139,92,246,0.15), transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(16,185,129,0.10), transparent 40%),
+      radial-gradient(circle at 100% 0%, rgba(239,68,68,0.08), transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  .gh-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(10,13,24,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--brd);
+    z-index: 10;
+    position: relative;
+  }
+  .gh-back {
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    color: var(--t1);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .gh-back:hover { background: var(--elevated); }
+
+  .gh-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-right: 4px;
+  }
+  .gh-stats {
+    display: flex;
+    gap: 6px;
+    margin-right: auto;
+    flex-wrap: wrap;
+  }
+  .gh-stat {
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--t2);
+  }
+  .gh-stat strong { color: var(--t1); font-family: "Inter", sans-serif; }
+
+  .gh-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .gh-btn {
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    color: var(--t1);
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gh-btn:hover { background: var(--elevated); }
+
+  /* FILTER BAR */
+  .gh-filters {
+    display: flex;
+    gap: 6px;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--brd);
+    overflow-x: auto;
+    background: rgba(15,19,34,0.6);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    position: relative;
+    flex-wrap: wrap;
+  }
+  .gh-search {
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    border-radius: 10px;
+    color: var(--t1);
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .gh-search:focus {
+    outline: none;
+    border-color: var(--c-umb);
+  }
+  .gh-chip {
+    padding: 7px 12px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--t2);
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .gh-chip:hover { background: var(--elevated); color: var(--t1); }
+  .gh-chip.active {
+    background: rgba(139,92,246,0.16);
+    border-color: var(--c-umb);
+    color: var(--c-umb);
+  }
+  .gh-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cl);
+  }
+
+  /* MAIN */
+  .gh-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* CANVAS */
+  .gh-canvas {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at center, rgba(139,92,246,0.04), transparent 60%);
+    user-select: none;
+  }
+  #graph-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+  #graph-svg:active { cursor: grabbing; }
+
+  .gh-empty-msg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t3);
+    font-size: 14px;
+  }
+
+  /* SIDE PANEL */
+  .gh-panel {
+    background: var(--panel);
+    border-right: 1px solid var(--brd);
+    overflow-y: auto;
+    padding: 18px;
+  }
+  .gh-panel-empty {
+    color: var(--t3);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .gh-panel-empty .em { font-size: 36px; display: block; margin-bottom: 10px; }
+
+  .gh-detail-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .gh-detail-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--cl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .gh-detail-titles { flex: 1; min-width: 0; }
+  .gh-detail-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .gh-detail-type {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cl);
+    background: color-mix(in srgb, var(--cl) 15%, transparent);
+    padding: 3px 9px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+  .gh-detail-summary {
+    font-size: 12.5px;
+    color: var(--t2);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: 10px;
+  }
+
+  .gh-relations {
+    margin-top: 14px;
+  }
+  .gh-rel-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .gh-rel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .gh-rel-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: all 0.15s;
+    border-right: 3px solid var(--cl);
+  }
+  .gh-rel-item:hover {
+    background: var(--elevated);
+    transform: translateX(-3px);
+  }
+  .gh-rel-name { flex: 1; font-weight: 600; color: var(--t1); }
+  .gh-rel-arrow { color: var(--t3); }
+
+  .gh-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--brd);
+  }
+  .gh-action {
+    flex: 1;
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--brd);
+    color: var(--t1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .gh-action:hover {
+    background: var(--elevated);
+    border-color: var(--brdH);
+  }
+  .gh-action-primary {
+    background: var(--c-umb);
+    border-color: var(--c-umb);
+    color: white;
+  }
+  .gh-action-primary:hover {
+    background: #7c3aed;
+    border-color: #7c3aed;
+  }
+
+  /* SVG NODE STYLES */
+  .node {
+    cursor: pointer;
+    transition: opacity 0.25s;
+  }
+  .node circle {
+    transition: r 0.2s, stroke-width 0.2s, filter 0.2s;
+  }
+  .node text {
+    pointer-events: none;
+    font-family: "IBM Plex Sans Arabic", sans-serif;
+    font-weight: 600;
+    fill: var(--t1);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .node.dim { opacity: 0.18; }
+  .node.highlight circle {
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px currentColor);
+  }
+  .node.selected circle {
+    stroke-width: 4;
+    filter: drop-shadow(0 0 18px currentColor);
+  }
+
+  .edge {
+    fill: none;
+    stroke: rgba(255,255,255,0.06);
+    stroke-width: 1;
+    transition: stroke 0.25s, stroke-width 0.25s, opacity 0.25s;
+    pointer-events: none;
+  }
+  .edge.highlight {
+    stroke: rgba(255,255,255,0.5);
+    stroke-width: 2;
+  }
+  .edge.dim { opacity: 0.04; }
+
+  .label-bg {
+    fill: rgba(15,19,34,0.85);
+    rx: 5;
+  }
+
+  /* MOBILE */
+  @media (max-width: 800px) {
+    .gh-main {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+    }
+    .gh-panel {
+      border-right: 0;
+      border-top: 1px solid var(--brd);
+      max-height: 50vh;
+    }
+    .gh-title { font-size: 15px; }
+    .gh-stats { display: none; }
+    .gh-filters { padding: 8px 12px; }
+    .gh-chip { padding: 6px 10px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="gh-header">
+  <a href="index.html" class="gh-back">← لوحة التحكم</a>
+  <span class="gh-title">🧠 Knowledge Graph</span>
+  <div class="gh-stats">
+    <span class="gh-stat"><strong id="stat-nodes">0</strong> عقد</span>
+    <span class="gh-stat"><strong id="stat-edges">0</strong> علاقة</span>
+    <span class="gh-stat"><strong id="stat-clusters">4</strong> مظلات</span>
+  </div>
+  <div class="gh-controls">
+    <button class="gh-btn" onclick="zoomIn()" title="تكبير">➕</button>
+    <button class="gh-btn" onclick="zoomOut()" title="تصغير">➖</button>
+    <button class="gh-btn" onclick="resetView()" title="إعادة الضبط">⌂</button>
+  </div>
+</header>
+
+<div class="gh-filters">
+  <input type="search" class="gh-search" id="search" placeholder="🔍 ابحث عن عقدة..." oninput="filterSearch(this.value)">
+  <button class="gh-chip active" data-filter="all" onclick="filterType(this, 'all')">كل الأنواع</button>
+  <button class="gh-chip" data-filter="umbrella" onclick="filterType(this, 'umbrella')"><span class="gh-chip-dot" style="--cl:#8b5cf6"></span>شركات</button>
+  <button class="gh-chip" data-filter="dept" onclick="filterType(this, 'dept')"><span class="gh-chip-dot" style="--cl:#f59e0b"></span>أقسام</button>
+  <button class="gh-chip" data-filter="project" onclick="filterType(this, 'project')"><span class="gh-chip-dot" style="--cl:#ec4899"></span>مشاريع</button>
+  <button class="gh-chip" data-filter="team" onclick="filterType(this, 'team')"><span class="gh-chip-dot" style="--cl:#10b981"></span>موظفون</button>
+  <button class="gh-chip" data-filter="tool" onclick="filterType(this, 'tool')"><span class="gh-chip-dot" style="--cl:#0ea5e9"></span>أدوات</button>
+  <button class="gh-chip" data-filter="cloud" onclick="filterType(this, 'cloud')"><span class="gh-chip-dot" style="--cl:#06b6d4"></span>سحابة</button>
+</div>
+
+<main class="gh-main">
+  <div class="gh-canvas">
+    <svg id="graph-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="gh-empty-msg" id="empty-msg" style="display:none">لا توجد عقد تطابق البحث</div>
+  </div>
+  <aside class="gh-panel" id="panel">
+    <div class="gh-panel-empty">
+      <span class="em">🧠</span>
+      اضغط أي عقدة لرؤية تفاصيلها وعلاقاتها<br><br>
+      مرّر الفأرة فوق عقدة → تُضيء كل المتصلة بها
+    </div>
+  </aside>
+</main>
+
+<script src="data.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   Knowledge Graph — vanilla SVG implementation
+   ═══════════════════════════════════════════════ */
+
+// ── Build node + edge model ──
+const nodes = [];
+const edges = [];
+const nodeById = {};
+
+function addNode(id, type, name, meta) {
+  const n = { id, type, name, ...meta, connections: [] };
+  nodes.push(n);
+  nodeById[id] = n;
+  return n;
+}
+function addEdge(from, to, kind = 'parent') {
+  if (!nodeById[from] || !nodeById[to]) return;
+  edges.push({ from, to, kind });
+  nodeById[from].connections.push(to);
+  nodeById[to].connections.push(from);
+}
+
+// 1. Umbrellas
+UMBRELLAS.forEach(u => addNode('u:' + u.id, 'umbrella', u.name, { em: u.em, cl: u.cl, ar: u.ar, summary: u.summary, raw: u }));
+// 2. Departments
+DEPARTMENTS.forEach(d => {
+  addNode('d:' + d.id, 'dept', d.name, { em: d.em, cl: d.cl, ar: d.ar, summary: d.summary, raw: d });
+  addEdge('u:' + d.parent, 'd:' + d.id, 'parent');
+});
+// 3. Projects
+PRJ.forEach(p => {
+  addNode('p:' + p.id, 'project', p.name, { em: p.em, cl: p.cl, ar: p.ar, summary: p.summary, raw: p });
+  if (p.parent) addEdge('u:' + p.parent, 'p:' + p.id, 'parent');
+  if (p.department) addEdge('d:' + p.department, 'p:' + p.id, 'parent');
+});
+// 4. Team
+TEAM.forEach(t => {
+  addNode('t:' + t.id, 'team', t.name, { em: '👤', cl: t.cl, role: t.role, raw: t });
+  if (t.department) addEdge('d:' + t.department, 't:' + t.id, 'member');
+  (t.assigned_projects || []).forEach(pid => addEdge('p:' + pid, 't:' + t.id, 'assigned'));
+});
+// 5. Tools
+TL.forEach(tl => {
+  const id = 'tl:' + (tl.id || tl.name.toLowerCase().replace(/\s+/g, '-'));
+  addNode(id, 'tool', tl.name, { em: tl.em, cl: tl.cl || '#0ea5e9', summary: tl.summary, raw: tl });
+  (tl.used_in || []).forEach(projName => {
+    const proj = PRJ.find(p => p.name === projName);
+    if (proj) addEdge(id, 'p:' + proj.id, 'used-in');
+  });
+});
+// 6. Cloud
+CLD.forEach(c => {
+  const id = 'cld:' + c.id;
+  addNode(id, 'cloud', c.nm, { em: c.em, cl: '#06b6d4', summary: c.dt, raw: c });
+  (c.related_entities || c.used_in || []).slice(0, 5).forEach(name => {
+    const proj = PRJ.find(p => p.name === name);
+    if (proj) addEdge(id, 'p:' + proj.id, 'powers');
+  });
+});
+// 7. Services
+SVC.forEach(s => {
+  const id = 's:' + s.id;
+  addNode(id, 'service', s.name, { em: s.em, cl: '#6366f1', summary: s.info, raw: s });
+  if (s.prj) {
+    const proj = PRJ.find(p => p.name === s.prj);
+    if (proj) addEdge(id, 'p:' + proj.id, 'serves');
+  }
+});
+
+// Update stats
+document.getElementById('stat-nodes').textContent = nodes.length;
+document.getElementById('stat-edges').textContent = edges.length;
+
+/* ═══════════════════════════════════════════════
+   LAYOUT — Quadrant per umbrella + radial within
+   ═══════════════════════════════════════════════ */
+
+const W = 1000, H = 700;
+const CX = W/2, CY = H/2;
+
+// 4 umbrella anchors
+const umbAnchors = {
+  'etranex':  { x: CX - 240, y: CY - 180, color: '#14b8a6' },
+  'brix':     { x: CX + 240, y: CY - 180, color: '#ef4444' },
+  'saas':     { x: CX - 240, y: CY + 180, color: '#10b981' },
+  'infra':    { x: CX + 240, y: CY + 180, color: '#8b5cf6' },
+};
+
+function findUmbrella(node) {
+  if (node.type === 'umbrella') return node.id.replace('u:','');
+  const raw = node.raw || {};
+  if (raw.parent) return raw.parent;
+  // For tools/cloud/services: find via connections
+  for (const cid of node.connections) {
+    const cn = nodeById[cid];
+    if (cn && cn.type === 'project' && cn.raw?.parent) return cn.raw.parent;
+  }
+  return 'infra'; // default
+}
+
+// Position nodes
+nodes.forEach(n => {
+  if (n.type === 'umbrella') {
+    const a = umbAnchors[n.id.replace('u:','')];
+    if (a) { n.x = a.x; n.y = a.y; n.r = 24; }
+  }
+});
+
+// Group children by umbrella, then position in concentric rings
+const groupedByUmb = {};
+nodes.forEach(n => {
+  if (n.type === 'umbrella') return;
+  const umbId = findUmbrella(n);
+  if (!groupedByUmb[umbId]) groupedByUmb[umbId] = { dept: [], project: [], team: [], tool: [], cloud: [], service: [] };
+  if (groupedByUmb[umbId][n.type]) groupedByUmb[umbId][n.type].push(n);
+});
+
+Object.entries(groupedByUmb).forEach(([umbId, groups]) => {
+  const anchor = umbAnchors[umbId];
+  if (!anchor) return;
+  const cx = anchor.x, cy = anchor.y;
+
+  // Place departments at 100px ring
+  const placeRing = (items, radius, sizeR) => {
+    if (!items.length) return;
+    const angleSpan = Math.PI; // half circle for each quadrant
+    const startAngle = (umbId === 'etranex' || umbId === 'brix') ? Math.PI/2 : -Math.PI/2;
+    items.forEach((n, i) => {
+      const a = startAngle + (angleSpan / Math.max(items.length, 1)) * i + (angleSpan / Math.max(items.length*2, 1));
+      const dx = (umbId === 'etranex' || umbId === 'saas') ? -1 : 1;
+      n.x = cx + dx * Math.cos(a) * radius;
+      n.y = cy + Math.sin(a) * radius * 0.6;
+      n.r = sizeR;
+    });
+  };
+
+  placeRing(groups.dept, 80, 14);
+  placeRing(groups.project, 130, 11);
+  placeRing(groups.team, 180, 9);
+  placeRing(groups.tool, 230, 7);
+  placeRing(groups.cloud, 250, 7);
+  placeRing(groups.service, 220, 7);
+});
+
+// Final default for any unpositioned node
+nodes.forEach(n => {
+  if (typeof n.x !== 'number') {
+    n.x = CX + (Math.random() - 0.5) * 200;
+    n.y = CY + (Math.random() - 0.5) * 200;
+    n.r = 6;
+  }
+});
+
+/* ═══════════════════════════════════════════════
+   RENDER SVG
+   ═══════════════════════════════════════════════ */
+const svg = document.getElementById('graph-svg');
+
+function render() {
+  // Clear
+  svg.innerHTML = '';
+
+  // Edges first
+  edges.forEach(e => {
+    const a = nodeById[e.from], b = nodeById[e.to];
+    if (!a || !b) return;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    // Curved bezier
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const cx = (a.x + b.x) / 2 + dy * 0.1;
+    const cy = (a.y + b.y) / 2 - dx * 0.1;
+    path.setAttribute('d', `M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}`);
+    path.setAttribute('class', 'edge');
+    path.dataset.from = e.from;
+    path.dataset.to = e.to;
+    svg.appendChild(path);
+  });
+
+  // Nodes
+  nodes.forEach(n => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'node');
+    g.setAttribute('transform', `translate(${n.x},${n.y})`);
+    g.dataset.id = n.id;
+    g.dataset.type = n.type;
+    g.style.color = n.cl || '#94a3b8';
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', n.r);
+    circle.setAttribute('fill', n.cl || '#94a3b8');
+    circle.setAttribute('stroke', n.cl || '#94a3b8');
+    circle.setAttribute('stroke-width', '0');
+    g.appendChild(circle);
+
+    // Label only for major nodes
+    if (n.type === 'umbrella' || n.type === 'dept' || (n.type === 'project' && n.r > 10)) {
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('y', n.r + 14);
+      text.setAttribute('font-size', n.type === 'umbrella' ? 12 : 10);
+      text.textContent = n.name.length > 18 ? n.name.slice(0, 16) + '…' : n.name;
+      g.appendChild(text);
+    }
+
+    g.addEventListener('mouseenter', () => highlightNode(n.id));
+    g.addEventListener('mouseleave', () => clearHighlight());
+    g.addEventListener('click', (e) => { e.stopPropagation(); selectNode(n.id); });
+    svg.appendChild(g);
+  });
+}
+
+function highlightNode(id) {
+  const node = nodeById[id];
+  if (!node) return;
+  const connectedSet = new Set([id, ...node.connections]);
+  svg.querySelectorAll('.node').forEach(g => {
+    if (connectedSet.has(g.dataset.id)) {
+      g.classList.add('highlight');
+      g.classList.remove('dim');
+    } else {
+      g.classList.add('dim');
+      g.classList.remove('highlight');
+    }
+  });
+  svg.querySelectorAll('.edge').forEach(e => {
+    if (e.dataset.from === id || e.dataset.to === id) {
+      e.classList.add('highlight');
+      e.classList.remove('dim');
+    } else {
+      e.classList.add('dim');
+      e.classList.remove('highlight');
+    }
+  });
+}
+function clearHighlight() {
+  svg.querySelectorAll('.node, .edge').forEach(el => {
+    el.classList.remove('dim','highlight');
+  });
+}
+
+let selectedId = null;
+function selectNode(id) {
+  selectedId = id;
+  svg.querySelectorAll('.node').forEach(g => g.classList.toggle('selected', g.dataset.id === id));
+  renderPanel(id);
+}
+
+function renderPanel(id) {
+  const node = nodeById[id];
+  if (!node) return;
+  const panel = document.getElementById('panel');
+  const typeLabels = { umbrella: '🏢 شركة', dept: '🏛️ قسم', project: '🚀 مشروع', team: '👤 موظف', tool: '🛠️ أداة', cloud: '☁️ سحابة', service: '⚙️ خدمة' };
+
+  // Categorize connections
+  const conns = node.connections.map(cid => nodeById[cid]).filter(Boolean);
+  const grouped = {};
+  conns.forEach(c => {
+    if (!grouped[c.type]) grouped[c.type] = [];
+    grouped[c.type].push(c);
+  });
+
+  let html = `
+    <div class="gh-detail-head">
+      <div class="gh-detail-icon" style="--cl:${node.cl || '#94a3b8'}">${node.em || '●'}</div>
+      <div class="gh-detail-titles">
+        <div class="gh-detail-name">${node.ar || node.name}</div>
+        <span class="gh-detail-type" style="--cl:${node.cl || '#94a3b8'}">${typeLabels[node.type] || node.type}</span>
+      </div>
+    </div>
+  `;
+
+  if (node.summary) {
+    html += `<div class="gh-detail-summary">${node.summary}</div>`;
+  }
+  if (node.role) {
+    html += `<div class="gh-detail-summary"><strong>الدور:</strong> ${node.role}</div>`;
+  }
+
+  html += `<div class="gh-relations">`;
+  Object.entries(grouped).forEach(([type, items]) => {
+    html += `<div class="gh-rel-title">${typeLabels[type] || type} (${items.length})</div>`;
+    html += `<div class="gh-rel-list">`;
+    items.forEach(c => {
+      html += `<div class="gh-rel-item" style="--cl:${c.cl || '#94a3b8'}" onclick="selectNode('${c.id}')">
+        <span style="font-size:14px">${c.em || '●'}</span>
+        <span class="gh-rel-name">${c.ar || c.name}</span>
+        <span class="gh-rel-arrow">←</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  // Action: open in main dashboard
+  const dashUrl = `index.html#${nodeToHashRoute(node)}`;
+  html += `<div class="gh-actions">
+    <a href="${dashUrl}" class="gh-action gh-action-primary">افتح في اللوحة ←</a>
+  </div>`;
+
+  panel.innerHTML = html;
+}
+
+function nodeToHashRoute(node) {
+  if (node.type === 'umbrella' || node.type === 'dept') return 'umbrellas';
+  if (node.type === 'project') return 'projects';
+  if (node.type === 'team') return 'team';
+  if (node.type === 'tool') return 'tools';
+  if (node.type === 'cloud') return 'cloud';
+  if (node.type === 'service') return 'server';
+  return 'home';
+}
+
+/* ── FILTERS ── */
+function filterType(btn, type) {
+  document.querySelectorAll('.gh-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+
+  const typeMap = { umbrella: 'umbrella', dept: 'dept', project: 'project', team: 'team', tool: 'tool', cloud: 'cloud' };
+  svg.querySelectorAll('.node').forEach(g => {
+    const visible = type === 'all' || g.dataset.type === typeMap[type];
+    g.style.display = visible ? '' : 'none';
+  });
+  svg.querySelectorAll('.edge').forEach(e => {
+    const a = nodeById[e.dataset.from], b = nodeById[e.dataset.to];
+    const visible = type === 'all' || (a?.type === typeMap[type] || b?.type === typeMap[type]);
+    e.style.display = visible ? '' : 'none';
+  });
+}
+
+function filterSearch(q) {
+  const term = q.trim().toLowerCase();
+  let anyVisible = false;
+  svg.querySelectorAll('.node').forEach(g => {
+    const id = g.dataset.id;
+    const node = nodeById[id];
+    const haystack = [node.name, node.ar, node.summary || '', node.role || ''].join(' ').toLowerCase();
+    const match = !term || haystack.includes(term);
+    g.style.display = match ? '' : 'none';
+    if (match) anyVisible = true;
+  });
+  document.getElementById('empty-msg').style.display = anyVisible ? 'none' : 'flex';
+}
+
+/* ── ZOOM + PAN ── */
+let viewBox = { x: 0, y: 0, w: W, h: H };
+function updateViewBox() {
+  svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+}
+function zoomIn() {
+  viewBox.w *= 0.8; viewBox.h *= 0.8;
+  viewBox.x = CX - viewBox.w/2; viewBox.y = CY - viewBox.h/2;
+  updateViewBox();
+}
+function zoomOut() {
+  viewBox.w *= 1.25; viewBox.h *= 1.25;
+  viewBox.x = CX - viewBox.w/2; viewBox.y = CY - viewBox.h/2;
+  updateViewBox();
+}
+function resetView() {
+  viewBox = { x: 0, y: 0, w: W, h: H };
+  updateViewBox();
+}
+
+// pan with drag
+let panning = false, panStart = null;
+svg.addEventListener('mousedown', e => {
+  if (e.target.tagName === 'svg') {
+    panning = true;
+    panStart = { x: e.clientX, y: e.clientY, vbx: viewBox.x, vby: viewBox.y };
+  }
+});
+svg.addEventListener('mousemove', e => {
+  if (!panning) return;
+  const rect = svg.getBoundingClientRect();
+  const sx = viewBox.w / rect.width;
+  viewBox.x = panStart.vbx - (e.clientX - panStart.x) * sx;
+  viewBox.y = panStart.vby - (e.clientY - panStart.y) * sx;
+  updateViewBox();
+});
+window.addEventListener('mouseup', () => { panning = false; });
+
+// wheel zoom
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 1.1 : 0.9;
+  viewBox.w *= factor; viewBox.h *= factor;
+  updateViewBox();
+}, { passive: false });
+
+// click empty area to clear selection
+svg.addEventListener('click', e => {
+  if (e.target.tagName === 'svg') {
+    selectedId = null;
+    svg.querySelectorAll('.node.selected').forEach(g => g.classList.remove('selected'));
+    document.getElementById('panel').innerHTML = `
+      <div class="gh-panel-empty">
+        <span class="em">🧠</span>
+        اضغط أي عقدة لرؤية تفاصيلها وعلاقاتها<br><br>
+        مرّر الفأرة فوق عقدة → تُضيء كل المتصلة بها
+      </div>`;
+  }
+});
+
+// Initial render
+render();
+</script>
+
+</body>
+</html>
