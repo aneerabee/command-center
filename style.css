@@ -9132,9 +9132,8 @@ a.emp-field-val:hover { color: #6366f1; }
 .cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
-/* استخدم اللون البراند للمشاريع بدل تعميم اللون */
-.prj-card[style*="--prj"] .prj-card-name { color: var(--t1); }
-.prj-card[style*="--prj"]:hover .prj-card-name { color: var(--prj); }
+/* اسم المشروع يأخذ لون البراند فقط عند hover */
+.prj-card:hover .prj-card-name { color: var(--prj, var(--t1)); }
 
 /* زر "تحديث الآن" للأداة */
 .cc-refresh-btn {
@@ -9189,8 +9188,15 @@ body {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
 }
-input, select, textarea, button {
-  font-size: 16px !important; /* يمنع iOS من zoom تلقائي عند focus */
+/* يمنع iOS من zoom تلقائي عند focus — فقط على الموبايل + فقط على inputs النصية */
+@media (max-width: 640px) {
+  input[type="text"], input[type="email"], input[type="tel"],
+  input[type="search"], input[type="number"], input[type="password"],
+  input[type="date"], input[type="url"], textarea, select {
+    font-size: 16px !important;
+  }
+}
+button, input, select, textarea {
   font-family: inherit;
 }
 @media (max-width: 640px) {
@@ -9249,26 +9255,11 @@ input, select, textarea, button {
   white-space: nowrap;
 }
 
-/* ── HEADER UNIFICATION لكل الأقسام (hqx + cc + umb + emp + team + prj) ── */
-.hqx-card,
+/* الانسجام البصري — فقط transition موحّد، لا نلمس backgrounds الأصلية */
 .cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug,
-.umb-card, .emp-card, .prj-card, .prj-hero,
-.team-dept, .umb-dept,
-.tool-card-tags, .bot-card,
-.cld-card, .arc-card, .ideas-card,
-.ideas-cell, .map-card, .map-pin-card,
-.svc-card, .auto-task {
-  background: var(--surface);
-  border: 1px solid var(--brd);
-  border-radius: 14px;
+.umb-card, .emp-card, .prj-card,
+.team-dept, .umb-dept {
   transition: border-color var(--motion-base), transform var(--motion-base), box-shadow var(--motion-base);
-}
-
-/* تنعيم جميع البطاقات عند الـhover */
-.hqx-card:hover,
-.umb-card:hover, .emp-card:hover, .prj-card:hover,
-.team-dept:hover, .umb-dept:hover {
-  border-color: var(--brdH);
 }
 
 /* ═══════════════════════════════════════════════
@@ -9415,30 +9406,13 @@ input, select, textarea, button {
 /* ═══════════════════════════════════════════════
    PROJECT VISUAL: شريط لون موحّد ومُحكم
    ═══════════════════════════════════════════════ */
-/* لون البراند يستخدم على شكل شريط جانبي خفيف، لا يطغى على البطاقة */
+/* prj-card-strip element موجود من JS — لا داعي لـ::after مكرر */
 .prj-card { position: relative; overflow: hidden; }
-.prj-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 3px;
-  background: var(--prj, currentColor);
-  border-radius: 0 14px 14px 0;
-  opacity: 0.85;
-}
-.prj-card:hover::after { width: 5px; opacity: 1; }
 
 /* استخدام cl_brand فقط للحدود والـaccents، لا للخلفيات */
 .umb-card-icon, .cc-pulse-em, .cc-feed-name { color: inherit; }
 
-/* تخفيف tags الملونة (كانت صاخبة) */
-.tag {
-  background: rgba(0, 0, 0, 0.04) !important;
-  color: var(--t2) !important;
-  border: 1px solid var(--brd);
-}
+/* تم إلغاء تخفيف tags الملونة — الألوان الأصلية مفيدة للتمييز */
 
 /* ════════════════════════════════════════════════════════════
    EXECUTIVE DASHBOARD v3 — لوحة قيادة عملية ومتميزة
