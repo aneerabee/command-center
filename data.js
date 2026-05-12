@@ -341,12 +341,12 @@ const PRJ = [
     users_count: 1,
     priority: "high",
     next_milestone: "إعادة إدخال مضاعفات سوينو ديلوكس + إدخال 9 عقود متبقية + مراقبة نسخ بريكس باك آبس اليومية",
-    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.1 + Supabase + Airtable + 348 اختباراً. منشور حياً على Vercel مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير.",
+    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.1 + Supabase + Airtable + 348 اختباراً. منشور حياً على Railway (verified 200) مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير.",
     local_path:
       "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
     server_path: null,
     repo_url: "https://github.com/aneerabee/brix-travel-system",
-    deploy_url: "https://hotel-web-app-ten.vercel.app",
+    deploy_url: "https://brix-hotel-web-app-production.up.railway.app",
     stack: [
       "Next.js 16",
       "TypeScript",
@@ -374,7 +374,7 @@ const PRJ = [
       "Supabase هو مصدر الحقيقة الوحيد (v15.0+)",
       "النسخ الاحتياطي اليومي إلى مستودع brix-backups كل ٠٢:٠٠ صباحاً",
     ],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.1 + React 18 + TypeScript 5.9 + Tailwind 4\nAirtable (مصدر الحقيقة) + Supabase (cache سريع) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n348 اختبار يمر، صفر ثغرات حرجة\nعشر خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Airtable (11 جدول) ← مزامنة يومية 3ص ← Supabase ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Vercel حي وشغّال، آخر تحديث ٢٠٢٦-٠٥-١٢، يطابق ١٠٠٪ ما يعرضه البوت.",
+    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.1 + React 18 + TypeScript 5.9 + Tailwind 4\nAirtable (مصدر الحقيقة) + Supabase (cache سريع) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n348 اختبار يمر، صفر ثغرات حرجة\nعشر خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Airtable (11 جدول) ← مزامنة يومية 3ص ← Supabase ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Railway حي وشغّال (verified 200)، آخر تحديث ٢٠٢٦-٠٥-١٢، يطابق ١٠٠٪ ما يعرضه البوت. الـREADME يذكر vercel.app كخطة مستقبلية لكن لم يحدث الانتقال — لا يوجد vercel.json ولا deployment فعلي عليه.",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -386,22 +386,20 @@ const PRJ = [
     path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
     links: {
       "النظام الحي":
-        "https://hotel-web-app-ten.vercel.app",
+        "https://brix-hotel-web-app-production.up.railway.app",
       "البحث عن أسعار":
-        "https://hotel-web-app-ten.vercel.app/search",
+        "https://brix-hotel-web-app-production.up.railway.app/search",
       "إدخال عقد جديد":
-        "https://hotel-web-app-ten.vercel.app/contract-wizard",
+        "https://brix-hotel-web-app-production.up.railway.app/contract-wizard",
       "قائمة العقود":
-        "https://hotel-web-app-ten.vercel.app/contracts",
-      "حالة المزامنة":
-        "https://hotel-web-app-ten.vercel.app/admin/sync-status",
+        "https://brix-hotel-web-app-production.up.railway.app/contracts",
       "بوت تلجرام":
         "https://t.me/BrixPrice_bot",
       "النسخ الاحتياطي اليومي":
         "https://github.com/aneerabee/brix-backups",
       "آخر تشغيل نسخ":
         "https://github.com/aneerabee/brix-travel-system/actions/workflows/daily-contract-backup.yml",
-      Vercel: "https://vercel.com/aneerabee/hotel-web-app-ten",
+      Railway: "https://railway.com/project/2af4cb7e-f4ef-4de0-b86c-b4957fac185f",
       GitHub: "https://github.com/aneerabee/brix-travel-system",
       Airtable: "https://airtable.com/",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
@@ -415,16 +413,14 @@ const PRJ = [
         "شاشة إدخال عقد فندق بعشر خطوات، يطلب تسجيل الدخول",
       "قائمة العقود":
         "كل العقود المحفوظة، للمراجعة والتعديل والحذف، يطلب تسجيل الدخول",
-      "حالة المزامنة":
-        "صفحة Admin لمراقبة آخر مزامنة من Airtable إلى Supabase — تخبرك إن كان البوت يعرض أسعار محدّثة",
       "بوت تلجرام":
         "بوت بحث الأسعار للوكلاء عبر دعوة بالهاتف، يعطي نفس النتيجة بالضبط التي يعطيها الويب. ست خطوات بالأزرار، ثنائي اللغة عربي/إنجليزي، تقويم تفاعلي، 30+ تحديثاً في آخر أسبوعين.",
       "النسخ الاحتياطي اليومي":
         "مستودع خاص فيه نسخة كاملة من كل جداول العقود ليوم. تحقق منه أسبوعياً — يجب أن ترى مجلد ديلي بتاريخ كل يوم.",
       "آخر تشغيل نسخ":
         "صفحة سجل تشغيلات النسخ اليومي. اللون الأخضر يعني نجح، الأحمر يعني فشل — لو فشل افتحه واطّلع على السبب.",
-      Vercel:
-        "لوحة النشر، اللوغات، المتغيرات، إعادة التشغيل (تم الانتقال من Railway)",
+      Railway:
+        "لوحة النشر الفعلية — اللوغات، المتغيرات، الفروع، إعادة التشغيل",
       GitHub:
         "الكود المصدري — Next.js 16.1 و Supabase وبوت تلجرام و348 اختبار يمر",
       Airtable:
@@ -435,7 +431,7 @@ const PRJ = [
     current_status: {
       updated: "2026-05-12",
       where:
-        "النظام حي ومنشور على Vercel (بعد الانتقال من Railway) ومرتبط بالكامل ببوت تلجرام @BrixPrice_bot. البوت يعيد نفس الأسعار من نفس الفنادق بنفس التواريخ التي يعيدها الويب. 30+ تحديثاً في آخر أسبوعين على البوت (دعوة بالهاتف، تقويم تفاعلي، عرض ميداليات للنتائج، ثنائي اللغة كامل، حماية ضد HTML injection وانتحال جهات الاتصال وتسرّب PII، تعافي من فشل جزئي، dedup للـwebhooks المعادة، Rate limit). 348 اختبار يمر، صفر ثغرات حرجة. ثلاث طبقات حماية لمضاعفات الإشغال: Time Machine داخل الموقع، نسخ يومي على GitHub (brix-backups في 02:00ص)، حماية برمجية ترفض حفظ قائمة فارغة. أحدث إصلاحات contract-edit: Atomic Save All، حماية sueno-pattern ضد wipe، per-tab session isolation.",
+        "النظام حي ومنشور على Railway (verified 200) ومرتبط بالكامل ببوت تلجرام @BrixPrice_bot. البوت يعيد نفس الأسعار من نفس الفنادق بنفس التواريخ التي يعيدها الويب. 30+ تحديثاً في آخر أسبوعين على البوت (دعوة بالهاتف، تقويم تفاعلي، عرض ميداليات للنتائج، ثنائي اللغة كامل، حماية ضد HTML injection وانتحال جهات الاتصال وتسرّب PII، تعافي من فشل جزئي، dedup للـwebhooks المعادة، Rate limit). 348 اختبار يمر، صفر ثغرات حرجة. ثلاث طبقات حماية لمضاعفات الإشغال: Time Machine داخل الموقع، نسخ يومي على GitHub (brix-backups في 02:00ص)، حماية برمجية ترفض حفظ قائمة فارغة. أحدث إصلاحات contract-edit: Atomic Save All، حماية sueno-pattern ضد wipe، per-tab session isolation. ملاحظة: الـREADME يذكر vercel.app كهدف لكن لم يحدث الانتقال — لا يوجد vercel.json في الـrepo والـURL يعطي 404.",
       next_step:
         "أولاً، تحقق دورياً من أن طبقات الحماية الثلاث ما زالت تعمل. ادخل مستودع بريكس باك آبس على غيت هب وتأكد أن نسخة اليوم موجودة في مجلد ديلي بتاريخ اليوم. لو ما وُجدت اذهب لتاب أكشنز في مستودع بريكس ترافل سيستم واطّلع على آخر تشغيل لـدايلي كونتراكت باك آب. ثانياً، تحقق من شاشة آلة الزمن في الموقع لكل فندق تعدّله، يجب أن ترى صورتين جديدتين بعد كل حفظ. ثالثاً، أعد إدخال مضاعفات إشغال فندق سوينو من شاشة تعديل العقود لأن الجدول حالياً صفر صفوف. رابعاً، أدخل بقية العقود التسعة من ملفات بي دي إف.",
       blockers: [
