@@ -1374,7 +1374,7 @@ R.home = function () {
     {
       t: "بوتات وأمن",
       n: BOT.length + activeRefs.length,
-      d: "Argaz وTelegram bots والمراجع الأمنية الحساسة.",
+      d: "Telegram bots والمراجع الأمنية الحساسة.",
       c: "#E11D48",
     },
     {
@@ -2480,20 +2480,6 @@ R.map = function () {
       action: `openToolDetail('${E(t.name)}')`,
     })),
     {
-      name: "Argaz Bot",
-      n: "بوت أرقاز",
-      e: "🧠",
-      l: "server",
-      p: "server:/home/argaz/.openclaw/",
-      g: "",
-      gp: 0,
-      s: "نشط",
-      c: "#6C3AED",
-      t: "Runtime متعدد الوكلاء على Contabo",
-      kind: "runtime وكلاء",
-      action: `openBotDetail('Argaz Bot')`,
-    },
-    {
       name: "Tron Address Bot",
       n: "بوت عناوين ترون",
       e: "🕵️",
@@ -2623,7 +2609,7 @@ R.auto = function () {
     '<div class="auto-stat-box"><span class="auto-stat-val">24/7</span><span class="auto-stat-label">متاح</span></div>' +
     "</div>" +
     allGroups.map((g) => renderGroup(g)).join("") +
-    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic("💡", 12)} المصدر الآن من data.js: محلي + cron + systemd + OpenClaw + hooks</div>`
+    `<div style="margin-top:1.5rem;padding:.75rem 1rem;border-radius:8px;background:var(--elevated);font-size:.75rem;color:var(--t3)">${_ic("💡", 12)} المصدر الآن من data.js: محلي + cron + systemd + hooks</div>`
   );
 };
 
@@ -2637,7 +2623,6 @@ function _prjColor(name) {
     Contabo: "#0EA5E9",
     "BRIX Travel": "#6C3AED",
     "Wapy.dev": "#10B981",
-    "Argaz Bot": "#6C3AED",
     EasyBooking: "#2563EB",
     "Meta MCP": "#2563EB",
     "WhatsApp CRM": "#25D366",
@@ -2696,7 +2681,7 @@ R.server = function () {
     },
     {
       label: "البيئات المتصلة",
-      value: "Wapy · Wedding · Argaz",
+      value: "Wapy · BRIX · Western Office",
       note: "الخدمات والمهام الفعلية",
     },
     {
