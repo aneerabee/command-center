@@ -4052,116 +4052,65 @@ function openProjectDetail(name) {
   const tags = item.tags || [];
   const links = item.links || {};
   const stLabel = item.st === "a" ? "نشط" : item.st === "p" ? "متوقف" : "أرشيف";
-  const stCls =
-    item.st === "a"
-      ? "status-active"
-      : item.st === "p"
-        ? "status-paused"
-        : "status-archive";
-  const factRows = [
-    { l: "النوع", v: _projectKindLabel(item.kind) || item.kind || "—" },
-    { l: "الحالة", v: stLabel },
-    { l: "التقدم", v: item.pct != null ? `${item.pct}%` : "—" },
-    { l: "الأنظمة الفرعية", v: String(item.subsystems?.length || 0) },
-    { l: "التقنيات", v: String(item.stack?.length || tags.length || 0) },
-    { l: "الروابط", v: String(Object.keys(links).length) },
+  const isLive = item.st === "a";
+
+  const facts = [
+    { label: "النوع", value: _projectKindLabel(item.kind) || item.kind || "—" },
+    { label: "التقدم", value: item.pct != null ? `${item.pct}%` : "—" },
+    { label: "الأنظمة", value: String(item.subsystems?.length || 0) },
+    { label: "التقنيات", value: String(item.stack?.length || tags.length || 0) },
+    { label: "الخدمات", value: String(item.related_services?.length || 0) },
+    { label: "الروابط", value: String(Object.keys(links).length) },
   ];
 
-  document.querySelectorAll(".page").forEach((p) => (p.style.display = "none"));
-
-  const el = document.createElement("section");
-  el.id = "detail-view";
-  el.className = "prj-detail prj-detail--project";
-  el.innerHTML =
-    `<button class="prj-detail-back" onclick="closeDetail()">← رجوع للمشاريع</button>` +
-    `<div class="prj-detail-banner" style="background:linear-gradient(135deg,${cl},${cl}88)">` +
-    `<span style="font-size:60px">${_ic(item.em, 60)}</span>` +
-    `<h1 style="font-size:28px;font-weight:800;margin-top:10px">${E(item.ar || item.name)}</h1>` +
-    `<span class="${stCls}" style="margin-top:8px">${E(stLabel)}</span>` +
-    `</div>` +
-    `<div class="prj-detail-summary" style="margin-top:14px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,${cl}10,${cl}05);border:1px solid ${cl}20;color:var(--t1)">` +
-    `<div style="font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px">${_ic("🧭", 14)} الملخص التنفيذي</div>` +
-    `<div style="font-size:13px;line-height:1.8;color:var(--t2)">${E(item.summary || headline || "")}</div>` +
-    `</div>` +
-    `<div class="prj-fact-strip">` +
-    factRows
-      .map(
-        (f) =>
-          `<div class="prj-fact"><span class="prj-fact-label">${E(f.l)}</span><strong class="prj-fact-val">${E(f.v)}</strong></div>`,
-      )
-      .join("") +
-    `</div>` +
+  const overview =
     _entityTrustBox(item, "project") +
     _currentStatusCard(item) +
     _botFeaturesCard(item) +
     _claudeSessionCard(item) +
-    `<div class="prj-detail-grid">` +
-    sections
-      .map((s) => {
-        const title = s.title || "";
-        const firstChar = title ? [...title][0] : "";
-        const sectionTints = {
-          "📐": "blue",
-          "🔧": "purple",
-          "📊": "green",
-          "🔄": "amber",
-          "🚀": "cyan",
-          "💾": "cyan",
-          "📱": "purple",
-          "📦": "green",
-          "📸": "purple",
-          "🎯": "amber",
-          "💹": "green",
-          "⚙️": "purple",
-          "🔐": "rose",
-          "🛡️": "rose",
-          "🤖": "purple",
-          "👥": "blue",
-          "🛠️": "purple",
-          "📈": "green",
-          "🌍": "blue",
-          "🔗": "cyan",
-          "📍": "amber",
-          "⏰": "amber",
-          "💰": "green",
-          "🌐": "blue",
-          "🔔": "amber",
-          "📂": "amber",
-          "🎨": "purple",
-          "📌": "amber",
-          "🎮": "purple",
-          "💱": "green",
-          "🧠": "purple",
-          "👤": "blue",
-          "📡": "cyan",
-          "🐳": "cyan",
-        };
-        const tint = sectionTints[firstChar] || "";
-        const tintClass = tint ? " prj-info-card--" + tint : "";
-        return (
-          `<div class="prj-info-card${tintClass}">` +
-          (title ? `<h3 class="prj-info-title">${E(title)}</h3>` : "") +
-          s.rows
-            .map((r) => `<div class="prj-info-row">${E(r)}</div>`)
-            .join("") +
-          `</div>`
-        );
-      })
-      .join("") +
+    (item.stack?.length
+      ? `<div class="cx-group-heading">التقنيات</div>` +
+        `<div class="cx-chips">${item.stack.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
+      : "") +
     (!item.stack?.length && tags.length
-      ? `<div class="prj-info-card"><h3 class="prj-info-title">${_ic("🏷️", 14)} الوسوم</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${tags.map((t) => `<span class="tag" style="background:${cl}12;color:${cl};padding:4px 12px;font-size:10px">${E(t)}</span>`).join("")}</div></div>`
-      : "") +
-    (!item.local_path && !item.server_path && item.path
-      ? `<div class="prj-info-card"><h3 class="prj-info-title">${_ic("📁", 14)} المسار</h3><code style="font-size:12px;color:var(--t2);direction:ltr;display:block;word-break:break-all">${E(item.path)}</code></div>`
-      : "") +
-    _quickLinksCard(item, cl) +
-    `</div>`;
-  document.getElementById("app").appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  window.scrollTo(0, 0);
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+      ? `<div class="cx-group-heading">الوسوم</div>` +
+        `<div class="cx-chips">${tags.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
+      : "");
+
+  const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📭");
+
+  const relatedRows = [];
+  if (item.parent_project) relatedRows.push(item.parent_project);
+  if (item.related_services?.length) relatedRows.push(...item.related_services);
+  if (item.related_tools?.length) relatedRows.push(...item.related_tools);
+  if (item.related_cloud?.length) relatedRows.push(...item.related_cloud);
+  const related = relatedRows.length
+    ? `<div class="cx-group-heading">الكيانات المرتبطة (${relatedRows.length})</div>` + _cxChips(relatedRows)
+    : "";
+
+  const linksHTML =
+    _cxLinks(links) +
+    (item.local_path ? `<div class="cx-group-heading">المسار المحلي</div>${_cxPath(item.local_path)}` : "") +
+    (item.server_path ? `<div class="cx-group-heading">مسار السيرفر</div>${_cxPath(item.server_path)}` : "") +
+    (!item.local_path && !item.server_path && item.path ? _cxPath(item.path) : "");
+
+  _codexShell({
+    item, kind: "project", cl,
+    kicker: `مشروع · ${_projectKindLabel(item.kind) || ""}`.trim(),
+    title: item.ar || item.name,
+    subtitle: (item.ar && item.ar !== item.name) ? item.name : "",
+    summary: item.summary || headline || "",
+    facts,
+    pills: [
+      { label: stLabel, kind: isLive ? "live" : "status" },
+      item.pct != null ? { label: `${item.pct}%` } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: sections.length || null },
+      related: { html: related, count: relatedRows.length || null },
+      links: { html: linksHTML, count: Object.keys(links).length || null },
+    },
   });
 }
 
@@ -4176,163 +4125,51 @@ function openBotDetail(name) {
   const isActive = item.st === "a";
   const tags = item.tags || [];
   const kindLabel = _botKindLabel(item.kind);
-  const meta = [
-    item.kind ? `النوع: ${kindLabel}` : "",
-    item.host ? `المضيف: ${item.host}` : "",
-    item.runtime ? `التشغيل: ${item.runtime}` : "",
-    item.channel ? `القناة: ${item.channel}` : "",
-    item.related_entities?.length
-      ? `يرتبط بـ: ${item.related_entities.join(" · ")}`
-      : "",
-  ].filter(Boolean);
-  const related = _relChips(item.related_entities || []);
 
-  if (item.kind !== "agent-runtime") {
-    const el = document.createElement("div");
-    el.id = "detail-view";
-    el.className = "detail-split detail-split--bot";
-    el.innerHTML =
-      `<div class="dsp-overlay" onclick="closeDetail()"></div>` +
-      `<div class="dsp-panel">` +
-      `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">` +
-      `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-      `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em, 48)}</span>` +
-      `<h2 style="font-size:18px;font-weight:700">${E(item.ar || item.name)}</h2>` +
-      `<p style="font-size:12px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(kindLabel)}</p>` +
-      `</div>` +
-      `<div class="dsp-content">` +
-      (item.summary || headline
-        ? `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.8">${E(item.summary || headline)}</p>`
-        : "") +
-      (meta.length
-        ? `<div class="detail-meta-box">${meta.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-        : "") +
-      _entityTrustBox(item, "bot") +
-      (related
-        ? `<div style="margin:16px 0"><div class="detail-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div></div>`
-        : "") +
-      (stats.length
-        ? `<div class="entity-stats">${stats.map((s) => `<div class="entity-stat"><span class="entity-stat-val" style="color:${cl}">${E(s.v)}</span><span class="entity-stat-label">${E(s.l)}</span></div>`).join("")}</div>`
-        : "") +
-      _sectionsHTML(sections) +
-      (item.path ? _pathHTML(item.path) : "") +
-      _linksHTML(item.links, cl) +
-      `</div>` +
-      `</div>`;
-    document.body.appendChild(el);
-    _setHashSilently(cur + "/" + encodeURIComponent(name));
-    requestAnimationFrame(() => {
-      el.classList.add("open");
-      _processIcons();
-    });
-    return;
-  }
+  const facts = [
+    { label: "الحالة", value: isActive ? "نشط" : "متوقف" },
+    item.host ? { label: "المضيف", value: item.host } : null,
+    item.runtime ? { label: "التشغيل", value: item.runtime } : null,
+    item.channel ? { label: "القناة", value: item.channel } : null,
+    ...stats.slice(0, 2).map((s) => ({ label: s.l, value: s.v })),
+  ].filter(Boolean).slice(0, 6);
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-terminal";
-  el.innerHTML =
-    `<div class="dt-overlay" onclick="closeDetail()"></div>` +
-    `<div class="dt-panel">` +
-    `<div class="dt-titlebar">` +
-    `<div class="dt-dots"><span style="background:#FF5F57"></span><span style="background:#FFBD2E"></span><span style="background:#28C840"></span></div>` +
-    `<span class="dt-titlebar-text">${E(item.ar || item.name)} — ${isActive ? "نشط" : "متوقف"}</span>` +
-    `<button class="dt-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `</div>` +
-    `<div class="dt-body">` +
-    `<div class="dt-prompt">الملف التشغيلي</div>` +
-    `<div class="dt-output">` +
-    `<div class="dt-line"><span class="dt-key">الاسم</span> ${E(item.ar || item.name)} ${_ic(item.em, 16)}</div>` +
-    `<div class="dt-line"><span class="dt-key">الحالة</span> <span style="color:${isActive ? "#28C840" : "#FF5F57"}">${isActive ? "■ نشط" : "□ متوقف"}</span></div>` +
-    (item.summary || headline
-      ? `<div class="dt-line"><span class="dt-key">الوصف</span> ${E(item.summary || headline)}</div>`
-      : "") +
-    meta.map((m) => `<div class="dt-line">${E(m)}</div>`).join("") +
-    `</div>` +
+  const overview =
     _entityTrustBox(item, "bot") +
-    (related
-      ? `<div class="detail-meta-box dt-meta-box"><div class="detail-meta-line">الكيانات المرتبطة</div><div class="meta-chip-row">${related}</div></div>`
-      : "") +
+    _botFeaturesCard(item) +
     (stats.length
-      ? `<div class="dt-prompt">المقاييس</div><div class="dt-stats">${stats.map((s) => `<div class="dt-stat"><span class="dt-stat-val" style="color:${cl}">${E(s.v)}</span><span class="dt-stat-label">${E(s.l)}</span></div>`).join("")}</div>`
+      ? `<div class="cx-group-heading">المقاييس</div>` +
+        `<div class="cx-facts">${stats.map((s) => `<div class="cx-fact"><span class="cx-fact-label">${E(s.l)}</span><strong class="cx-fact-val">${E(s.v)}</strong></div>`).join("")}</div>`
       : "") +
-    (function () {
-      const catMap = {
-        "🔧": "tech",
-        "📊": "stats",
-        "🔐": "security",
-        "🛡️": "security",
-        "⏰": "schedule",
-        "🤖": "tech",
-        "👥": "tech",
-        "🛠️": "tech",
-        "🔗": "links",
-        "🚀": "deploy",
-        "💾": "deploy",
-        "📱": "tech",
-        "📸": "tech",
-        "🧠": "tech",
-        "💹": "stats",
-        "📈": "stats",
-        "🔔": "schedule",
-      };
-      const catLabels = {
-        tech: "البنية والقدرات",
-        stats: "المؤشرات",
-        security: "الأمان",
-        schedule: "الجدولة",
-        links: "الروابط",
-        deploy: "النشر والتشغيل",
-      };
-      const catColors = {
-        tech: "#79c0ff",
-        stats: "#7ee787",
-        security: "#f97583",
-        schedule: "#d2a8ff",
-        links: "#79c0ff",
-        deploy: "#56d4dd",
-      };
-      const grouped = {};
-      sections.forEach((s) => {
-        const firstChar = s.title ? [...s.title][0] : "";
-        const cat = catMap[firstChar] || "tech";
-        if (!grouped[cat]) grouped[cat] = [];
-        grouped[cat].push(s);
-      });
-      return Object.keys(grouped)
-        .map(
-          (cat) =>
-            `<div class="dt-prompt" style="color:${catColors[cat] || "#7ee787"}">${catLabels[cat] || "تفاصيل"}</div>` +
-            `<div class="dt-output">` +
-            grouped[cat]
-              .map(
-                (s) =>
-                  (s.title
-                    ? `<div class="dt-section-title">${E(s.title)}</div>`
-                    : "") +
-                  s.rows
-                    .map((r) => `<div class="dt-line">${E(r)}</div>`)
-                    .join(""),
-              )
-              .join("") +
-            `</div>`,
-        )
-        .join("");
-    })() +
     (tags.length
-      ? `<div class="dt-prompt">الوسوم</div><div class="dt-tags">${tags.map((t) => `<span class="dt-tag">${E(t)}</span>`).join("")}</div>`
-      : "") +
-    (item.path
-      ? `<div class="dt-prompt">المسار</div><div class="dt-line" style="direction:ltr">${E(item.path)}</div>`
-      : "") +
-    _linksHTML(item.links, cl) +
-    `</div>` +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+      ? `<div class="cx-group-heading">الوسوم</div>` +
+        `<div class="cx-chips">${tags.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
+      : "");
+
+  const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📭");
+
+  const related = _cxChips(item.related_entities || []);
+
+  const linksHTML = _cxLinks(item.links) + (item.path ? _cxPath(item.path) : "");
+
+  _codexShell({
+    item, kind: "bot", cl,
+    kicker: `بوت · ${kindLabel}`,
+    title: item.ar || item.name,
+    subtitle: (item.ar && item.ar !== item.name) ? item.name : "",
+    summary: item.summary || headline || "",
+    facts,
+    pills: [
+      { label: isActive ? "نشط" : "متوقف", kind: isActive ? "live" : "status" },
+      item.host ? { label: item.host } : null,
+      item.channel ? { label: item.channel } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: sections.length || null },
+      related: { html: related, count: (item.related_entities || []).length || null },
+      links: { html: linksHTML, count: Object.keys(item.links || {}).length || null },
+    },
   });
 }
 
@@ -4351,14 +4188,8 @@ function openToolDetail(name) {
     "infra-access": "وصول بنية",
     mcp: "MCP",
   };
-  const metaRows = [
-    item.type ? `النوع: ${item.type}` : "",
-    item.category
-      ? `الفئة: ${categoryMap[item.category] || item.category}`
-      : "",
-  ].filter(Boolean);
-  const rels = _relChips(item.used_in || []);
-  const pathRows = [item.path].filter(Boolean);
+  const catLabel = item.category ? (categoryMap[item.category] || item.category) : "";
+  const usedIn = item.used_in || [];
   const factRows = item.facts || [];
   const customRows = item.customizations || [];
   const configPaths = item.config_paths || [];
@@ -4366,61 +4197,57 @@ function openToolDetail(name) {
   const capabilityRows = item.capabilities || [];
   const editRows = item.edit_points || [];
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-split detail-split--tool";
-  el.innerHTML =
-    `<div class="dsp-overlay" onclick="closeDetail()"></div>` +
-    `<div class="dsp-panel">` +
-    `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">` +
-    `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em, 48)}</span>` +
-    `<h2 style="font-size:18px;font-weight:700">${E(item.ar || item.name)}</h2>` +
-    (tags.length
-      ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:14px;justify-content:center">${tags.map((t) => `<span style="font-size:8px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join("")}</div>`
-      : "") +
-    `</div>` +
-    `<div class="dsp-content">` +
-    (item.summary || headline
-      ? `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.summary || headline)}</p>`
-      : "") +
-    (metaRows.length
-      ? `<div class="detail-meta-box detail-meta-box--intro">${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (rels
-      ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">يُستخدم هنا</div><div class="meta-chip-row">${rels}</div></div></div>`
-      : "") +
+  const facts = [
+    item.type ? { label: "النوع", value: item.type } : null,
+    catLabel ? { label: "الفئة", value: catLabel } : null,
+    { label: "الاستخدام", value: String(usedIn.length) },
+    { label: "القدرات", value: String(capabilityRows.length) },
+    { label: "تخصيصات", value: String(customRows.length) },
+    { label: "روابط", value: String(Object.keys(item.links || {}).length) },
+  ].filter(Boolean).slice(0, 6);
+
+  const overview =
     _entityTrustBox(item, "tool") +
-    `<div class="tool-detail-grid">` +
-    (factRows.length
-      ? `<div class="detail-meta-box detail-meta-box--strong"><div class="detail-meta-title">الإعداد الحالي</div>${factRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (capabilityRows.length
-      ? `<div class="detail-meta-box"><div class="detail-meta-title">قدرات متصلة</div>${capabilityRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (customRows.length
-      ? `<div class="detail-meta-box"><div class="detail-meta-title">ما أُضيف أو خُصص</div>${customRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (structureRows.length
-      ? `<div class="detail-meta-box"><div class="detail-meta-title">البنية الداخلية</div>${structureRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (editRows.length
-      ? `<div class="detail-meta-box"><div class="detail-meta-title">إذا أردت تعديلها</div>${editRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
+    (factRows.length ? _cxSection("الإعداد الحالي", factRows) : "") +
+    (capabilityRows.length ? _cxSection("قدرات متصلة", capabilityRows, "info") : "") +
+    (tags.length
+      ? `<div class="cx-group-heading">الوسوم</div>` +
+        `<div class="cx-chips">${tags.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
+      : "");
+
+  const details =
+    (customRows.length ? _cxSection("ما أُضيف أو خُصص", customRows, "accent") : "") +
+    (structureRows.length ? _cxSection("البنية الداخلية", structureRows) : "") +
+    (editRows.length ? _cxSection("إذا أردت تعديلها", editRows, "warn") : "") +
     (configPaths.length
-      ? `<div class="detail-meta-box detail-meta-box--wide"><div class="detail-meta-title">ملفات الإعداد</div>${configPaths.map((r) => `<div class="detail-meta-line detail-meta-path">${E(r)}</div>`).join("")}</div>`
+      ? `<div class="cx-group-heading">ملفات الإعداد</div>` +
+        configPaths.map((p) => _cxPath(p)).join("")
       : "") +
-    `</div>` +
-    _sectionsHTML(sections) +
-    (pathRows.length ? _pathHTML(pathRows[0]) : "") +
-    _linksHTML(item.links, cl) +
-    `</div>` +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+    _cxSectionsFromParsed(sections) ||
+    _cxEmpty("لا توجد تفاصيل إضافية", "📭");
+
+  const related = _cxChips(usedIn);
+
+  const linksHTML = _cxLinks(item.links) + (item.path ? _cxPath(item.path) : "");
+
+  _codexShell({
+    item, kind: "tool", cl,
+    kicker: `أداة · ${catLabel || ""}`.trim(),
+    title: item.ar || item.name,
+    subtitle: (item.ar && item.ar !== item.name) ? item.name : "",
+    summary: item.summary || headline || "",
+    facts,
+    pills: [
+      catLabel ? { label: catLabel, kind: "status" } : null,
+      item.type ? { label: item.type } : null,
+      usedIn.length ? { label: `يُستخدم في ${usedIn.length}` } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: null },
+      related: { html: related, count: usedIn.length || null },
+      links: { html: linksHTML, count: Object.keys(item.links || {}).length || null },
+    },
   });
 }
 
@@ -4481,59 +4308,50 @@ function openServiceDetail(name) {
   closeDetail();
   const owner = item.owner || item.prj || "";
   const cl = _prjColor(owner || item.name) || "#0EA5E9";
-  const rels = _relChips(owner ? [owner] : []);
-  const metaRows = [
-    item.service_type ? `النوع: ${_serviceTypeLabel(item.service_type)}` : "",
-    item.st ? "حالة الكتالوج: نشط" : "حالة الكتالوج: متوقف",
-  ].filter(Boolean);
-  const bodyRows = [item.info ? item.info : ""].filter(Boolean);
-  const runtimeRows = [
-    item.dt ? item.dt : "",
+  const typeLabel = item.service_type ? _serviceTypeLabel(item.service_type) : "";
+  const isActive = !!item.st;
+
+  const facts = [
+    typeLabel ? { label: "النوع", value: typeLabel } : null,
+    item.runtime ? { label: "التشغيل", value: item.runtime } : null,
+    item.schedule ? { label: "الجدولة", value: item.schedule } : null,
+    (item.port && item.port !== "—") ? { label: "المنفذ", value: String(item.port) } : null,
+    owner ? { label: item.owner_type === "bot" ? "المالك" : "يتبع", value: owner } : null,
+    { label: "الحالة", value: isActive ? "نشط" : "متوقف" },
+  ].filter(Boolean).slice(0, 6);
+
+  const overview =
+    _entityTrustBox(item, "service") +
+    (item.info ? _cxSection("ما هذا", [item.info], "info") : "") +
+    (item.dt ? _cxSection("التشغيل", [item.dt], "accent") : "");
+
+  const details = _cxSection("معلومات تشغيلية", [
     item.runtime ? `التشغيل: ${item.runtime}` : "",
     item.schedule ? `الجدولة: ${item.schedule}` : "",
     item.port && item.port !== "—" ? `المنفذ: ${item.port}` : "",
-  ].filter(Boolean);
-  const accessRows = [
-    item.path ? `المسار: ${item.path}` : "",
-    owner
-      ? `${item.owner_type === "bot" ? "المالك runtime" : "يتبع"}: ${owner}`
-      : "",
-  ].filter(Boolean);
+  ].filter(Boolean)) || _cxEmpty("لا توجد تفاصيل تشغيلية إضافية", "⚙️");
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-split detail-split--service";
-  el.innerHTML =
-    `<div class="dsp-overlay" onclick="closeDetail()"></div>` +
-    `<div class="dsp-panel">` +
-    `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">` +
-    `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em, 48)}</span>` +
-    `<h2 style="font-size:18px;font-weight:700">${E(item.name)}</h2>` +
-    `<p style="font-size:11px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(_serviceTypeLabel(item.service_type))}</p>` +
-    `</div>` +
-    `<div class="dsp-content">` +
-    (metaRows.length
-      ? `<div class="detail-meta-box detail-meta-box--intro">${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (rels
-      ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-line">${item.owner_type === "bot" ? "الكيان المالك" : "المشروع المالك"}</div><div class="meta-chip-row">${rels}</div></div></div>`
-      : "") +
-    _entityTrustBox(item, "service") +
-    `<div class="prj-detail-grid">` +
-    `<div class="prj-info-card prj-info-card--cyan"><h3 class="prj-info-title">🧭 ما هذا</h3>${bodyRows.map((r) => `<div class="prj-info-row">${E(r)}</div>`).join("")}</div>` +
-    (runtimeRows.length
-      ? `<div class="prj-info-card prj-info-card--purple"><h3 class="prj-info-title">⚙️ التشغيل</h3>${runtimeRows.map((r) => `<div class="prj-info-row">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    `<div class="prj-info-card prj-info-card--blue"><h3 class="prj-info-title">📍 الوصول</h3>${accessRows.map((r) => `<div class="prj-info-row">${E(r)}</div>`).join("")}</div>` +
-    `</div>` +
-    `</div>` +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+  const related = owner ? _cxChips([owner]) : "";
+
+  const linksHTML = (item.path ? _cxPath(item.path) : "") + _cxLinks(item.links);
+
+  _codexShell({
+    item, kind: "service", cl,
+    kicker: `خدمة · ${typeLabel || ""}`.trim(),
+    title: item.name,
+    summary: item.info || item.dt || "",
+    facts,
+    pills: [
+      { label: isActive ? "نشط" : "متوقف", kind: isActive ? "live" : "status" },
+      typeLabel ? { label: typeLabel } : null,
+      owner ? { label: owner } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: null },
+      related: { html: related, count: owner ? 1 : null },
+      links: { html: linksHTML, count: Object.keys(item.links || {}).length || null },
+    },
   });
 }
 
@@ -4542,45 +4360,53 @@ function openCloudDetail(name) {
   if (!item) return;
   closeDetail();
   const cl = _entityColor(item.prj || item.nm, "#0EA5E9");
-  const rels = _relChips(item.related_entities || item.used_in || []);
-  const metaRows = [
-    item.category ? `الدور: ${_cloudCategoryLabel(item.category)}` : "",
-    item.prj ? `يرتبط أساسًا بـ: ${item.prj}` : "",
-    item.active === false ? "حالة الكتالوج: متوقف" : "حالة الكتالوج: نشط",
-    item.lk ? `الرابط: ${item.lk}` : "",
+  const catLabel = item.category ? _cloudCategoryLabel(item.category) : "";
+  const isActive = item.active !== false;
+  const usedIn = item.related_entities || item.used_in || [];
+  const itemForShell = { ...item, name: item.nm };
+
+  const facts = [
+    catLabel ? { label: "الدور", value: catLabel } : null,
+    item.prj ? { label: "المشروع", value: item.prj } : null,
+    { label: "الحالة", value: isActive ? "نشط" : "متوقف" },
+    { label: "يُستخدم في", value: String(usedIn.length) },
   ].filter(Boolean);
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-split detail-split--cloud";
-  el.innerHTML =
-    `<div class="dsp-overlay" onclick="closeDetail()"></div>` +
-    `<div class="dsp-panel">` +
-    `<div class="dsp-sidebar" style="background:linear-gradient(180deg,${cl},${cl}cc)">` +
-    `<button class="dsp-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `<span style="font-size:48px;display:block;margin-bottom:14px">${_ic(item.em, 48)}</span>` +
-    `<h2 style="font-size:18px;font-weight:700">${E(item.nm)}</h2>` +
-    `<p style="font-size:11px;line-height:1.8;opacity:.88;margin:10px 0 0">${E(_cloudCategoryLabel(item.category))}</p>` +
-    `</div>` +
-    `<div class="dsp-content">` +
-    `<p style="font-size:13px;color:var(--t2);margin-bottom:16px;padding:14px;background:var(--elevated);border-radius:10px;border-right:3px solid ${cl};line-height:1.7">${E(item.dt)}</p>` +
-    (metaRows.length
-      ? `<div class="detail-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
-    (rels
-      ? `<div style="margin-bottom:16px"><div class="detail-meta-box"><div class="detail-meta-title">تظهر في هذه المشاريع</div><div class="meta-chip-row">${rels}</div></div></div>`
-      : "") +
+  const overview =
     _entityTrustBox(item, "cloud") +
-    (item.lk
-      ? `<div style="margin-top:8px">${_linksHTML({ "افتح المنصة": item.lk }, cl)}</div>`
-      : "") +
-    `</div>` +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+    (item.dt ? _cxSection("الوصف", [item.dt], "info") : "");
+
+  const details = _cxSection("التفاصيل", [
+    catLabel ? `الدور: ${catLabel}` : "",
+    item.prj ? `يرتبط أساسًا بـ: ${item.prj}` : "",
+    item.lk ? `المنصة: ${item.lk}` : "",
+  ].filter(Boolean)) || _cxEmpty("لا توجد تفاصيل إضافية", "☁️");
+
+  const related = _cxChips(usedIn);
+
+  const linksHTML = item.lk
+    ? `<a class="cx-link" href="${E(item.lk)}" target="_blank" rel="noopener">` +
+      `<div class="cx-link-l"><span class="cx-link-label">افتح المنصة</span><span class="cx-link-url">${E(item.lk)}</span></div>` +
+      `<span class="cx-link-arrow">↗</span></a>`
+    : "";
+
+  _codexShell({
+    item: itemForShell, kind: "cloud", cl,
+    kicker: `خدمة سحابية · ${catLabel || ""}`.trim(),
+    title: item.nm,
+    summary: item.dt || "",
+    facts,
+    pills: [
+      { label: isActive ? "نشط" : "متوقف", kind: isActive ? "live" : "status" },
+      catLabel ? { label: catLabel } : null,
+      item.prj ? { label: item.prj } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: null },
+      related: { html: related, count: usedIn.length || null },
+      links: { html: linksHTML, count: item.lk ? 1 : null },
+    },
   });
 }
 
@@ -4726,43 +4552,43 @@ function openIdeaDetail(name) {
   const prLabels = { 1: "عاجل", 2: "قريب", 3: "يوماً ما" };
   const prColors = { 1: "#EF4444", 2: "#F59E0B", 3: "#6366F1" };
   const cl = prColors[item.pr] || "#6366F1";
-  const rels = _relChips(item.related_projects || []);
-  const metaRows = [
-    item.owner_scope ? `النطاق: ${item.owner_scope}` : "",
-    item.horizon ? `الأفق: ${item.horizon}` : "",
-    item.next_step ? `الخطوة التالية: ${item.next_step}` : "",
-  ].filter(Boolean);
+  const relProj = item.related_projects || [];
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-idea detail-idea--idea";
-  el.innerHTML =
-    `<div class="di-overlay" onclick="closeDetail()"></div>` +
-    `<div class="di-card" style="border-top:4px solid ${cl}">` +
-    `<button class="di-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `<div class="di-header">` +
-    `<span style="font-size:42px">${_ic(item.em, 42)}</span>` +
-    `<span class="di-priority" style="background:${cl}">${E(prLabels[item.pr] || "")}</span>` +
-    `</div>` +
-    `<h2 style="font-size:18px;font-weight:700;margin-bottom:8px">${E(item.name)}</h2>` +
-    (item.summary || headline
-      ? `<p style="font-size:12px;color:var(--t2);margin-bottom:14px">${E(item.summary || headline)}</p>`
-      : "") +
-    (metaRows.length
-      ? `<div class="detail-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
+  const facts = [
+    { label: "الأولوية", value: prLabels[item.pr] || "—" },
+    item.owner_scope ? { label: "النطاق", value: item.owner_scope } : null,
+    item.horizon ? { label: "الأفق", value: item.horizon } : null,
+    { label: "مرتبطة بـ", value: String(relProj.length) },
+    item.next_step ? { label: "الخطوة التالية", value: item.next_step } : null,
+  ].filter(Boolean).slice(0, 6);
+
+  const overview =
     _entityTrustBox(item, "idea") +
-    _ideaBlueprintCard(item) +
-    _sectionsHTML(sections) +
-    (rels
-      ? `<div style="margin-top:16px"><div class="detail-meta-box"><div class="detail-meta-title">يتكامل مع</div><div class="meta-chip-row">${rels}</div></div></div>`
-      : "") +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
-  requestAnimationFrame(() => {
-    el.classList.add("open");
-    _processIcons();
+    _ideaBlueprintCard(item);
+
+  const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "💡");
+
+  const related = _cxChips(relProj);
+
+  const linksHTML = _cxLinks(item.links);
+
+  _codexShell({
+    item, kind: "idea", cl,
+    kicker: `فكرة · ${prLabels[item.pr] || ""}`.trim(),
+    title: item.name,
+    summary: item.summary || headline || "",
+    facts,
+    pills: [
+      { label: prLabels[item.pr] || "فكرة", kind: "status" },
+      item.horizon ? { label: item.horizon } : null,
+      item.owner_scope ? { label: item.owner_scope } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: sections.length || null },
+      related: { html: related, count: relProj.length || null },
+      links: { html: linksHTML, count: Object.keys(item.links || {}).length || null },
+    },
   });
 }
 
@@ -4774,66 +4600,262 @@ function openArchiveDetail(name) {
   const { headline, sections } = _parseDesc(item);
   const cl = item.cl || "#F59E0B";
   const stamp = _archiveStamp(item);
-  const metaRows = [
-    `التصنيف: ${_archiveKindLabel(item)}`,
-    item.next_step ? `الخطوة التالية: ${item.next_step}` : "",
-  ].filter(Boolean);
-  const rels = _relChips(item.related_projects || []);
+  const kindLabel = _archiveKindLabel(item);
+  const isActive = item.st === "a";
+  const relProj = item.related_projects || [];
+  const tags = item.tags || [];
 
-  const el = document.createElement("div");
-  el.id = "detail-view";
-  el.className = "detail-archive detail-archive--archive";
-  el.innerHTML =
-    `<div class="da-overlay" onclick="closeDetail()"></div>` +
-    `<div class="da-paper">` +
-    `<button class="da-close" onclick="closeDetail()" aria-label="إغلاق">&times;</button>` +
-    `<div class="da-stamp ${item.st === "a" ? "da-stamp-active" : ""}">${E(stamp)}</div>` +
-    `<div class="da-header">` +
-    `<span style="font-size:44px">${_ic(item.em, 44)}</span>` +
-    `<h2 style="font-size:18px;font-weight:700;color:var(--t1)">${E(item.ar || item.name)}</h2>` +
-    `</div>` +
-    (item.summary || headline
-      ? `<p style="font-size:12px;color:var(--t2);border-bottom:1px dashed #D4C99E;padding-bottom:12px;margin-bottom:12px">${E(item.summary || headline)}</p>`
-      : "") +
-    (metaRows.length
-      ? `<div class="detail-meta-box archive-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
-      : "") +
+  const facts = [
+    { label: "التصنيف", value: kindLabel },
+    { label: "الحالة", value: isActive ? "نشط" : "أرشيف" },
+    { label: "مرتبط بـ", value: String(relProj.length) },
+    { label: "وسوم", value: String(tags.length) },
+    item.next_step ? { label: "الخطوة التالية", value: item.next_step } : null,
+  ].filter(Boolean).slice(0, 6);
+
+  const overview =
     _entityTrustBox(item, "archive") +
-    _sectionsHTML(sections) +
-    (rels
-      ? `<div style="margin-top:16px"><div class="detail-meta-box archive-meta-box"><div class="detail-meta-title">يرتبط بـ</div><div class="meta-chip-row">${rels}</div></div></div>`
-      : "") +
-    _tagsHTML(item.tags, cl) +
-    _pathHTML(item.path) +
-    _linksHTML(item.links, cl) +
-    `</div>`;
-  document.body.appendChild(el);
-  _setHashSilently(cur + "/" + encodeURIComponent(name));
+    (tags.length
+      ? `<div class="cx-group-heading">الوسوم</div>` +
+        `<div class="cx-chips">${tags.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
+      : "");
+
+  const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📚");
+
+  const related = _cxChips(relProj);
+
+  const linksHTML = (item.path ? _cxPath(item.path) : "") + _cxLinks(item.links);
+
+  _codexShell({
+    item, kind: "archive", cl,
+    kicker: `أرشيف · ${stamp || kindLabel}`.trim(),
+    title: item.ar || item.name,
+    subtitle: (item.ar && item.ar !== item.name) ? item.name : "",
+    summary: item.summary || headline || "",
+    facts,
+    pills: [
+      { label: stamp || (isActive ? "نشط" : "أرشيف"), kind: isActive ? "live" : "status" },
+      kindLabel ? { label: kindLabel } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+      details: { html: details, count: sections.length || null },
+      related: { html: related, count: relProj.length || null },
+      links: { html: linksHTML, count: Object.keys(item.links || {}).length || null },
+    },
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CODEX PANEL — unified popup chrome
+   Replaces .di-* / .dsp-* / .dt-* / .da-* / .prj-detail with one
+   dark side-drawer system. All open* functions route through this.
+   ═══════════════════════════════════════════════════════════════ */
+function _codexShell(opts) {
+  const item = opts.item || {};
+  const cl = opts.cl || "#7C3AED";
+  const kind = opts.kind || "entity";
+  const title = E(opts.title || item.ar || item.name || item.nm || "");
+  const subtitle = opts.subtitle ? E(opts.subtitle) : "";
+  const kicker = opts.kicker ? E(opts.kicker) : "";
+  const emoji = item.em || opts.em || "📦";
+  const pills = (opts.pills || []).filter(Boolean);
+  const summary = opts.summary || "";
+  const facts = opts.facts || [];
+  const tabs = opts.tabs || {};
+  const footer = opts.footer || "";
+
+  const tabKeys = ["overview", "details", "related", "links"];
+  const tabLabels = {
+    overview: "نظرة",
+    details: "تفاصيل",
+    related: "مرتبط",
+    links: "روابط",
+  };
+
+  const present = tabKeys.filter((k) => {
+    const v = tabs[k];
+    if (typeof v === "string") return v.trim().length > 0;
+    if (v && typeof v === "object") return (v.html || "").trim().length > 0;
+    return false;
+  });
+
+  const tabBar = present
+    .map((k, i) => {
+      const v = tabs[k];
+      const count = (v && typeof v === "object" && v.count != null) ? v.count : null;
+      return `<button class="cx-tab${i === 0 ? " is-active" : ""}" data-cx-tab="${k}">${tabLabels[k]}${count != null ? `<span class="cx-tab-count">${count}</span>` : ""}</button>`;
+    })
+    .join("");
+
+  const panes = present
+    .map((k, i) => {
+      const v = tabs[k];
+      const html = typeof v === "string" ? v : (v.html || "");
+      return `<div class="cx-pane${i === 0 ? " is-active" : ""}" data-cx-pane="${k}">${html}</div>`;
+    })
+    .join("");
+
+  const pillsHTML = pills
+    .map((p) => {
+      const klass = p.kind === "status" ? "cx-pill cx-pill--status"
+        : p.kind === "live" ? "cx-pill cx-pill--status cx-pill--live"
+        : "cx-pill";
+      return `<span class="${klass}">${E(p.label)}</span>`;
+    })
+    .join("");
+
+  const factsHTML = facts.length
+    ? `<div class="cx-facts">${facts.map((f) => (
+        `<div class="cx-fact"><span class="cx-fact-label">${E(f.label)}</span><strong class="cx-fact-val${(String(f.value).length > 8 ? " cx-fact-val--small" : "")}">${E(f.value)}</strong></div>`
+      )).join("")}</div>`
+    : "";
+
+  const summaryHTML = summary
+    ? `<div class="cx-summary">${E(summary)}</div>`
+    : "";
+
+  // First tab gets summary + facts auto-prepended (only for "overview")
+  const firstPane = present[0];
+  const augmentedPanes = panes.replace(
+    `<div class="cx-pane is-active" data-cx-pane="${firstPane}">`,
+    `<div class="cx-pane is-active" data-cx-pane="${firstPane}">${summaryHTML}${factsHTML}`
+  );
+
+  const root = document.createElement("div");
+  root.id = "detail-view";
+  root.className = "cx-root";
+  root.style.setProperty("--cx-cl", cl);
+  root.innerHTML =
+    `<div class="cx-scrim" data-cx-close></div>` +
+    `<aside class="cx-panel" role="dialog" aria-modal="true" aria-labelledby="cx-title">` +
+      `<header class="cx-cover">` +
+        `<button class="cx-close" data-cx-close aria-label="إغلاق">×</button>` +
+        `<div class="cx-cover-row">` +
+          `<div class="cx-emoji">${_ic(emoji, 44)}</div>` +
+          `<div class="cx-titles">` +
+            (kicker ? `<div class="cx-kicker">${kicker}</div>` : "") +
+            `<h2 class="cx-title" id="cx-title">${title}</h2>` +
+            (subtitle ? `<div class="cx-subtitle">${subtitle}</div>` : "") +
+          `</div>` +
+        `</div>` +
+        (pillsHTML ? `<div class="cx-pill-row">${pillsHTML}</div>` : "") +
+      `</header>` +
+      (present.length > 1
+        ? `<nav class="cx-tabs" role="tablist">${tabBar}</nav>`
+        : "") +
+      `<div class="cx-body">${augmentedPanes}</div>` +
+      (footer ? `<footer class="cx-footer">${footer}</footer>` : "") +
+    `</aside>`;
+
+  // Restore any pages hidden by previous detail view
+  document.querySelectorAll(".page").forEach((p) => {
+    if (p.style.display === "none") p.style.display = "";
+  });
+  document.body.appendChild(root);
+
+  // Wire close
+  root.querySelectorAll("[data-cx-close]").forEach((el) =>
+    el.addEventListener("click", () => closeDetail()),
+  );
+
+  // Wire tabs
+  root.querySelectorAll("[data-cx-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const k = btn.getAttribute("data-cx-tab");
+      root.querySelectorAll(".cx-tab").forEach((t) => t.classList.toggle("is-active", t === btn));
+      root.querySelectorAll(".cx-pane").forEach((p) =>
+        p.classList.toggle("is-active", p.getAttribute("data-cx-pane") === k),
+      );
+    });
+  });
+
+  // ESC to close
+  const esc = (e) => { if (e.key === "Escape") closeDetail(); };
+  document.addEventListener("keydown", esc, { once: true });
+
+  if (item.name || item.nm) {
+    _setHashSilently(cur + "/" + encodeURIComponent(item.name || item.nm));
+  }
+  document.documentElement.classList.add("cx-locked");
   requestAnimationFrame(() => {
-    el.classList.add("open");
+    root.classList.add("is-open");
     _processIcons();
   });
+}
+
+/* Helper builders for codex panes */
+function _cxSection(title, rows, accent) {
+  if (!rows || !rows.length) return "";
+  const cls = accent ? `cx-section cx-section--${accent}` : "cx-section";
+  return (
+    `<div class="${cls}">` +
+    (title ? `<div class="cx-section-title">${E(title)}</div>` : "") +
+    rows.map((r) => `<div class="cx-section-row">${E(r)}</div>`).join("") +
+    `</div>`
+  );
+}
+function _cxSectionsFromParsed(sections) {
+  if (!sections || !sections.length) return "";
+  const tintMap = {
+    "📐": "info", "🔧": "", "📊": "accent", "🔄": "warn", "🚀": "info",
+    "💾": "info", "📱": "", "📦": "accent", "🔐": "rose", "🛡️": "rose",
+    "🤖": "", "👥": "info", "🛠️": "", "📈": "accent", "🌍": "info",
+    "🔗": "info", "📍": "warn", "⏰": "warn", "💰": "accent", "🌐": "info",
+  };
+  return sections.map((s) => {
+    const first = s.title ? [...s.title][0] : "";
+    return _cxSection(s.title, s.rows, tintMap[first] || "");
+  }).join("");
+}
+function _cxChips(names) {
+  if (!names || !names.length) return "";
+  return `<div class="cx-chips">${names.map((n) => (
+    `<button class="cx-chip" onclick="openDetailSmart('${E(n)}')">${E(n)}</button>`
+  )).join("")}</div>`;
+}
+function _cxLinks(links) {
+  if (!links) return "";
+  const entries = Object.entries(links).filter(([, v]) => v);
+  if (!entries.length) return "";
+  return entries.map(([k, v]) => (
+    `<a class="cx-link" href="${E(v)}" target="_blank" rel="noopener">` +
+    `<div class="cx-link-l"><span class="cx-link-label">${E(k)}</span><span class="cx-link-url">${E(v)}</span></div>` +
+    `<span class="cx-link-arrow">↗</span>` +
+    `</a>`
+  )).join("");
+}
+function _cxPath(path) {
+  if (!path) return "";
+  return `<div class="cx-pathblock">${E(path)}</div>`;
+}
+function _cxEmpty(msg, icon) {
+  return `<div class="cx-empty"><span class="cx-empty-icon">${icon || "·"}</span>${E(msg || "لا توجد تفاصيل بعد")}</div>`;
 }
 
 /* ── إغلاق أي عرض تفصيلي ── */
 function closeDetail(instant) {
   const d = document.getElementById("detail-view");
-  if (!d) return;
+  if (!d) {
+    document.documentElement.classList.remove("cx-locked");
+    return;
+  }
   // Restore ALL hidden pages (project detail hides all)
   document.querySelectorAll(".page").forEach((p) => {
     if (p.style.display === "none") p.style.display = "";
   });
+  document.documentElement.classList.remove("cx-locked");
   if (instant) {
     d.remove();
     return;
   }
   d.classList.remove("open");
+  d.classList.remove("is-open");
   d.addEventListener("transitionend", () => d.remove(), { once: true });
   setTimeout(() => {
     if (document.getElementById("detail-view")) d.remove();
-  }, 500);
+  }, 600);
   if (location.hash.includes("/")) _setHashSilently(cur);
-  window.scrollTo(0, 0);
 }
 
 /* ── فتح ذكي حسب نوع العنصر (للتنقل بالهاش) ── */
