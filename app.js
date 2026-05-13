@@ -2848,7 +2848,94 @@ R.server = function () {
   );
 };
 
-/* ── BOTS ── */
+/* ── Modern Section Hero — replacement for boring _sectionHero ── */
+function _modernHero({ tone, color, kicker, title, desc, bigNum, bigLabel, pills }) {
+  const cl = color || "#7C3AED";
+  return (
+    `<section class="mod-hero" style="--mh-cl:${cl}">` +
+    `<div class="mod-hero-grid">` +
+    (bigNum != null
+      ? `<div class="mod-hero-num"><strong>${E(bigNum)}</strong><span>${E(bigLabel || "")}</span></div>`
+      : "") +
+    `<div class="mod-hero-body">` +
+    (kicker ? `<div class="mod-hero-kicker">${E(kicker)}</div>` : "") +
+    `<h1 class="mod-hero-title">${E(title)}</h1>` +
+    (desc ? `<p class="mod-hero-desc">${E(desc)}</p>` : "") +
+    (pills && pills.length
+      ? `<div class="mod-hero-pills">` +
+        pills.map((p) => (
+          `<span class="mod-hero-pill">` +
+          (p.dot !== false ? `<span class="dot" style="background:${p.color || cl}"></span>` : "") +
+          `<strong>${E(p.v)}</strong> ${E(p.l)}` +
+          `</span>`
+        )).join("") +
+        `</div>`
+      : "") +
+    `</div>` +
+    `</div>` +
+    `</section>`
+  );
+}
+
+/* ── Modern Toolbar (filter chips + search) ── */
+function _modernToolbar({ filters, searchPlaceholder, id }) {
+  return (
+    `<div class="mod-toolbar" id="${E(id)}">` +
+    (searchPlaceholder
+      ? `<div class="mod-search"><span class="mod-search-ico">🔍</span>` +
+        `<input type="search" placeholder="${E(searchPlaceholder)}" data-mod-search/></div>`
+      : "") +
+    `<div class="mod-chips">` +
+    (filters || []).map((f) => (
+      `<button class="mod-chip${f.active ? " is-active" : ""}" data-mod-filter="${E(f.value)}">` +
+      (f.icon ? `${_ic(f.icon, 12)} ` : "") +
+      E(f.label) +
+      (f.count != null ? `<span class="mod-chip-count">${E(f.count)}</span>` : "") +
+      `</button>`
+    )).join("") +
+    `</div>` +
+    `</div>`
+  );
+}
+
+/* ── Wire up modern toolbar interactions for any section ── */
+function _modernToolbarWire(toolbarId, cardSelector, getMatchKey) {
+  setTimeout(() => {
+    const tb = document.getElementById(toolbarId);
+    if (!tb) return;
+    const search = tb.querySelector('[data-mod-search]');
+    let activeFilter = (tb.querySelector('.mod-chip.is-active') || {}).getAttribute?.('data-mod-filter') || 'all';
+    let searchTerm = '';
+    const apply = () => {
+      const cards = document.querySelectorAll(cardSelector);
+      let visibleCount = 0;
+      cards.forEach((el) => {
+        const matchKey = getMatchKey(el);
+        const text = (el.textContent || '').toLowerCase();
+        const matchesFilter = activeFilter === 'all' || matchKey.includes(activeFilter);
+        const matchesSearch = !searchTerm || text.includes(searchTerm.toLowerCase());
+        const visible = matchesFilter && matchesSearch;
+        el.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
+      });
+      // Show empty state
+      const empty = document.querySelector(`[data-empty-for="${toolbarId}"]`);
+      if (empty) empty.style.display = visibleCount === 0 ? '' : 'none';
+    };
+    tb.addEventListener('click', (e) => {
+      const chip = e.target.closest('.mod-chip');
+      if (!chip) return;
+      tb.querySelectorAll('.mod-chip').forEach((c) => c.classList.toggle('is-active', c === chip));
+      activeFilter = chip.getAttribute('data-mod-filter') || 'all';
+      apply();
+    });
+    if (search) {
+      search.addEventListener('input', (e) => { searchTerm = e.target.value; apply(); });
+    }
+  }, 100);
+}
+
+/* ── BOTS — full modern redesign ── */
 R.bots = function () {
   const kindMap = {
     "telegram-bot": "بوت Telegram",
@@ -2856,105 +2943,97 @@ R.bots = function () {
     "assistant-channel": "قناة مساعد",
     "financial-app": "تطبيق/API",
   };
-  const runtimeLead = BOT.find((b) => b.kind === "agent-runtime") || null;
-  const restBots = runtimeLead
-    ? BOT.filter((b) => b.name !== runtimeLead.name)
-    : BOT;
+  const total = BOT.length;
+  const active = BOT.filter((b) => b.st === "a" || b.st === 1).length;
+  const tg = BOT.filter((b) => b.kind === "telegram-bot").length;
+  const cloud = BOT.filter((b) => b.host && (b.host.includes("Contabo") || b.host.includes("Railway") || b.host.includes("Cloudflare"))).length;
+  const runtimeLead = BOT.find((b) => b.kind === "agent-runtime") || BOT.find((b) => b.st === "a") || null;
+  const restBots = runtimeLead ? BOT.filter((b) => b.name !== runtimeLead.name) : BOT;
   const leadStats = runtimeLead ? BSTATS[runtimeLead.name] || [] : [];
+
+  const renderCard = (b, opts = {}) => {
+    const stats = BSTATS[b.name] || [];
+    const tags = (b.tags || []).slice(0, 3);
+    const firstLine = b.summary || (b.desc || "").split("\n")[0] || "";
+    const isActive = b.st === "a" || b.st === 1;
+    const handle = b.links?.Telegram?.replace("https://t.me/", "@") || "";
+    const sizeClass = opts.size || "b-3";
+    const featuredClass = opts.featured ? " is-featured" : "";
+    const matchAttrs = `data-bot-kind="${E(b.kind || '')}" data-bot-status="${isActive ? 'on' : 'off'}" data-bot-host="${E((b.host || '').toLowerCase())}"`;
+    return (
+      `<div class="mod-card mod-bot-card ${sizeClass}${featuredClass}" style="--card-cl:${b.cl || '#7C3AED'}" ${matchAttrs} data-cc-name="${E(b.name)}" onclick="openBotDetail('${E(b.name)}')">` +
+      `<div class="mod-card-head">` +
+      `<div class="mod-card-icon">${_ic(b.em, opts.featured ? 28 : 22)}</div>` +
+      `<span class="mod-card-status ${isActive ? 'is-on' : 'is-off'}"><span class="dot"></span>${isActive ? 'نشط' : 'متوقف'}</span>` +
+      `</div>` +
+      `<h3 class="mod-card-title">${E(b.ar || b.name)}</h3>` +
+      (handle ? `<div class="mod-card-handle">${E(handle)}</div>` : "") +
+      (firstLine ? `<p class="mod-card-desc">${E(firstLine)}</p>` : "") +
+      (opts.featured && stats.length
+        ? `<div class="mod-card-stats">` +
+          stats.slice(0, 4).map((s) => (
+            `<div class="mod-card-stat"><strong>${E(s.v)}</strong><span>${E(s.l)}</span></div>`
+          )).join("") +
+          `</div>`
+        : "") +
+      (tags.length || b.host
+        ? `<div class="mod-card-meta">` +
+          (b.kind ? `<span class="mod-card-tag">${E(kindMap[b.kind] || b.kind)}</span>` : "") +
+          (b.host ? `<span class="mod-card-tag">📍 ${E(b.host)}</span>` : "") +
+          tags.map((t) => `<span class="mod-card-tag">${E(t)}</span>`).join("") +
+          `</div>`
+        : "") +
+      `</div>`
+    );
+  };
+
   return (
-    _sectionHero({
-      tone: "bots",
-      kicker: "Agents + channels",
-      title: "البوتات والـ runtimes",
-      desc: "هذا القسم يفرق بين runtime حي متعدد الوكلاء، وبوتات Telegram عند الطلب، وقنوات المساعدة المرتبطة ببيئات التطوير.",
-      stats: [
-        { v: BOT.length, l: "إجمالي العناصر" },
-        {
-          v: BOT.filter((b) => b.kind === "agent-runtime").length,
-          l: "runtimes",
-        },
-        {
-          v: BOT.filter((b) => b.kind === "telegram-bot").length,
-          l: "Telegram bots",
-        },
-        { v: BOT.filter((b) => b.st === "a").length, l: "نشطة" },
+    _modernHero({
+      color: "#0088CC",
+      kicker: "Agents · Channels · Runtimes",
+      title: "البوتات والوكلاء",
+      desc: "كل بوت له هوية، حالة حيّة، نوع تشغيل، ومضيف موثّق. اضغط أي كارت للتفاصيل الكاملة.",
+      bigNum: total,
+      bigLabel: "بوت",
+      pills: [
+        { v: active, l: "نشط", color: "#22C55E" },
+        { v: tg, l: "Telegram", color: "#0088CC" },
+        { v: cloud, l: "سحابي", color: "#8B5CF6" },
+        { v: total - active, l: "متوقف", color: "#94A3B8" },
       ],
     }) +
-    (runtimeLead
-      ? `<div class="bot-runtime-hero" data-cc-name="${E(runtimeLead.name)}" onclick="openBotDetail('${E(runtimeLead.name)}')">` +
-        `<div class="bot-runtime-mark" style="background:${runtimeLead.cl}">${_ic(runtimeLead.em, 34)}</div>` +
-        `<div class="bot-runtime-copy">` +
-        `<span class="bot-runtime-kicker">runtime الرئيسي</span>` +
-        `<h3>${E(runtimeLead.ar || runtimeLead.name)}</h3>` +
-        `<p>${E(runtimeLead.summary || (runtimeLead.desc || "").split("\n")[0])}</p>` +
-        `<div class="bot-runtime-meta">` +
-        `<span>${E(_botKindLabel(runtimeLead.kind))}</span>` +
-        (runtimeLead.host ? `<span>${E(runtimeLead.host)}</span>` : "") +
-        (runtimeLead.runtime ? `<span>${E(runtimeLead.runtime)}</span>` : "") +
-        (runtimeLead.related_project
-          ? `<span>${E(runtimeLead.related_project)}</span>`
-          : "") +
-        `</div>` +
-        `</div>` +
-        (leadStats.length
-          ? `<div class="bot-runtime-stats">` +
-            leadStats
-              .map(
-                (s) =>
-                  `<div class="bot-runtime-stat"><strong>${E(s.v)}</strong><span>${E(s.l)}</span></div>`,
-              )
-              .join("") +
-            `</div>`
-          : "") +
-        `</div>`
-      : "") +
-    (restBots.length
-      ? `<div class="bot-subhead"><strong>القنوات والبوتات التابعة</strong><span>العناصر المرتبطة بالوصول والمساعدات والأتمتة</span></div>`
-      : "") +
-    '<div class="bot-list">' +
-    restBots
-      .map((b) => {
-        const stats = BSTATS[b.name] || [];
-        const tags = (b.tags || []).slice(0, 4);
-        const firstLine = b.summary || (b.desc || "").split("\n")[0] || "";
-        const isActive = b.st === "a";
-        return (
-          `<div class="bot-card-h glass" data-cc-name="${E(b.name)}" onclick="openBotDetail('${E(b.name)}')">` +
-          `<div class="bot-h-icon" style="background:linear-gradient(135deg,${b.cl}22,${b.cl}08);border-left:4px solid ${b.cl}">` +
-          `<span class="bot-emoji">${_ic(b.em, 36)}</span>` +
-          `<span class="bot-pulse ${isActive ? "pulse-on" : "pulse-off"}"></span>` +
-          `</div>` +
-          `<div class="bot-h-body">` +
-          `<div class="bot-h-top">` +
-          `<h3 class="bot-name">${E(b.ar || b.name)}</h3>` +
-          (isActive
-            ? `<span class="bot-h-status bot-h-active"><span class="led led-on" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> نشط</span>`
-            : `<span class="bot-h-status bot-h-paused"><span class="led led-off" style="width:6px;height:6px;display:inline-block;margin-left:4px"></span> متوقف</span>`) +
-          `</div>` +
-          `<p class="bot-h-desc">${E(firstLine)}</p>` +
-          `<div class="bot-tags">` +
-          (b.kind
-            ? `<span class="tag" style="background:${b.cl}12;color:${b.cl}">${E(kindMap[b.kind] || b.kind)}</span>`
-            : "") +
-          (b.host ? `<span class="tag">المضيف: ${E(b.host)}</span>` : "") +
-          `</div>` +
-          (stats.length
-            ? `<div class="bot-h-stats-grid">${stats
-                .map(
-                  (s) =>
-                    `<div class="bot-h-stat-chip"><span class="bot-h-stat-val" style="color:${b.cl}">${E(s.v)}</span><span class="bot-h-stat-label">${E(s.l)}</span></div>`,
-                )
-                .join("")}</div>`
-            : "") +
-          `<div class="bot-tags">${tags.map((t) => `<span class="tag">${E(t)}</span>`).join("")}</div>` +
-          `</div>` +
-          `</div>`
-        );
-      })
-      .join("") +
-    "</div>"
+    _modernToolbar({
+      id: "bots-toolbar",
+      searchPlaceholder: "ابحث عن بوت بالاسم، النوع، أو المضيف...",
+      filters: [
+        { value: "all", label: "الكل", count: total, active: true },
+        { value: "on", label: "نشط", count: active, icon: "⚡" },
+        { value: "telegram-bot", label: "Telegram", count: tg, icon: "✈️" },
+        { value: "contabo", label: "Contabo", count: BOT.filter(b => (b.host||'').includes("Contabo")).length, icon: "🖥️" },
+        { value: "railway", label: "Railway", count: BOT.filter(b => (b.host||'').includes("Railway")).length, icon: "🚂" },
+      ],
+    }) +
+    `<div class="mod-bento">` +
+    (runtimeLead ? renderCard(runtimeLead, { size: "b-6", featured: true }) : "") +
+    restBots.map((b) => renderCard(b, { size: "b-3" })).join("") +
+    `<div class="mod-empty" data-empty-for="bots-toolbar" style="display:none">` +
+    `<div class="mod-empty-icon">🔍</div>` +
+    `<div>لا يوجد بوت يطابق الفلتر الحالي</div>` +
+    `</div>` +
+    `</div>`
   );
 };
+
+/* Wire bots toolbar after render */
+const _origRBots = R.bots;
+R.bots = function () {
+  const html = _origRBots.apply(this, arguments);
+  _modernToolbarWire("bots-toolbar", ".mod-bot-card", (el) =>
+    `${el.getAttribute("data-bot-kind")} ${el.getAttribute("data-bot-status")} ${el.getAttribute("data-bot-host")}`
+  );
+  return html;
+};
+
 
 /* ── TOOLS ── */
 R.tools = function () {
