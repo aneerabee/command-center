@@ -1216,10 +1216,10 @@ const PRJ = [
     priority: "med",
     next_milestone: "تحويل من عميل واحد لمنتج SaaS صغير (3 مستخدمين)",
     summary:
-      "دفتر مالي تشغيلي — React 19 + Supabase + Telegram Bot. متعدد المستخدمين (3 حالياً)، واجهة موبايل أولاً، 17 اختبار يمر.",
+      "دفتر مالي تشغيلي — React 19 + Supabase + Telegram Bot. متعدد المستخدمين (3 حالياً)، واجهة موبايل أولاً، والبوت يعمل سحابيًا على Contabo.",
     local_path:
       "/Users/rabeeshaban/Documents/New project/western-office/src/mohammadLedger",
-    server_path: null,
+    server_path: "server:/home/argaz/apps/mohammad-ledger-bot",
     repo_url: "https://github.com/aneerabee/mohammad-ledger",
     deploy_url: "https://aneerabee.github.io/mohammad-ledger/",
     stack: [
@@ -1242,17 +1242,18 @@ const PRJ = [
       "telegram-bot-foundation",
       "idempotent-telegram-posting",
     ],
-    related_services: [],
+    related_services: ["Mohammad Ledger Bot Service"],
     related_tools: ["Claude Code"],
-    related_cloud: ["GitHub", "Supabase", "Telegram"],
+    related_cloud: ["GitHub", "Supabase", "Telegram", "Contabo VPS"],
     ops: [
       "⚠️ مهمة فصل عاجلة: الكود حالياً داخل western-office/src/mohammadLedger — يجب نقله لمستودع/مجلد منفصل تماماً (Western Office فيه بيانات حساسة)",
       "GitHub repo منفصل بالفعل: aneerabee/mohammad-ledger (لكن المصدر المحلي مدموج)",
       "الواجهة منشورة على GitHub Pages كرابط مستقل لمحمد",
       "مصدر البيانات الحالي: صف واحد في Supabase ml_state مع mirror محلي ونسخ محلية تلقائية",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
-      "Telegram Bot في مرحلة الأساس: خدمة مشتركة + repository آمن + منع تكرار التأكيد",
-      "اختبارات المرحلة الأولى: 17 اختبارًا تمر، وبناء Vite ناجح",
+      "Telegram Bot يعمل على Contabo كخدمة systemd user ويستخدم نفس ledgerCore وSupabase",
+      "البوت المحلي على MacBook متوقف لتجنب ازدواجية polling وتضارب الرسائل",
+      "آخر تحقق: الخدمة active على vmi3061403، المسارات موجودة، وقراءة Supabase نجحت",
     ],
     separation_status: "pending-physical-separation",
     separation_note: "Mohammad Ledger كود يعيش حالياً داخل western-office/src/mohammadLedger. يجب فصله لمجلد ومستودع منفصلين تماماً قبل أي تطوير جديد. Western Office يحتوي بيانات حسابات حساسة لا يجوز ربطها بأي شيء آخر.",
@@ -1282,20 +1283,12 @@ const PRJ = [
       Telegram: "مرجع Telegram Bot API المستخدم لبناء تجربة الإدخال والمراجعة",
     },
     current_status: {
-      updated: "2026-05-09",
+      updated: "2026-05-13",
       where:
-        "الواجهة الحية منشورة ومثبتة على رابط مستقل. منطق الدفتر والأرصدة والحركات يعمل عبر ledgerCore وSupabase. بدأت مرحلة Telegram Bot بأساس تقني مشترك: repository آمن، service للبوت، wizard للحركة، ومنع تكرار التأكيد.",
+        "الواجهة الحية منشورة على GitHub Pages. البوت يعمل سحابيًا على Contabo VPS داخل /home/argaz/apps/mohammad-ledger-bot كخدمة systemd user، ويقرأ/يحفظ من نفس Supabase الذي تستخدمه الواجهة.",
       next_step:
-        "ضبط TELEGRAM_BOT_TOKEN وMOHAMMAD_TELEGRAM_USER_ID وSUPABASE_SERVICE_ROLE_KEY في بيئة سيرفر آمنة، ثم اختبار أول حركة من Telegram وظهورها في الموقع.",
+        "إضافة checker آلي للبوت داخل runtime-sync حتى تتحقق اللوحة دوريًا من systemd وقراءة Supabase واللوجات بدون تدخل يدوي.",
       blockers: [
-        {
-          text: "لم يتم ضبط توكن Telegram والـ user id المسموح بعد",
-          priority: "high",
-        },
-        {
-          text: "يجب اختيار مكان تشغيل دائم للبوت: Railway أو VPS أو Render",
-          priority: "high",
-        },
         {
           text: "الحفظ الحالي ما زال في صف ml_state واحد؛ مناسب للمرحلة الأولى لكن يحتاج مراقبة عند تشغيل الموقع والبوت معًا",
           priority: "med",
@@ -1306,7 +1299,7 @@ const PRJ = [
         },
       ],
       use_guide:
-        "للاستخدام اليومي: افتح رابط التطبيق لمراجعة الأرصدة والسجل. للتطوير: افتح المشروع المحلي وشغّل اختبارات ledger قبل أي تعديل. للبوت: لا تشغّل إلا بمتغيرات بيئة آمنة، ولا تضع service role في الواجهة أو GitHub Pages.",
+        "للاستخدام اليومي: افتح رابط التطبيق أو استخدم البوت من Telegram. للتطوير: عدّل محليًا في western-office ثم شغّل الاختبارات والبناء قبل نشر نسخة جديدة إلى Contabo. للتشغيل: الخدمة على السيرفر باسم mohammad-ledger-bot.service، والسرّيات محفوظة في .env.production بصلاحية 600.",
     },
     claude_session: {
       session_name: "[mohammad ledger telegram bot]",
@@ -1314,12 +1307,39 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Documents/New project/western-office",
       command:
         "cd /Users/rabeeshaban/Documents/New\\ project/western-office && claude",
-      note: "آخر نقطة: المرحلة الأولى للبوت أُنشئت محليًا — shared ledger state + server repository + telegram movement wizard + idempotency، مع 17 اختبارًا ناجحًا وبناء Vite ناجح.",
+      note: "آخر نقطة: البوت نُقل إلى Contabo ويعمل كخدمة systemd user مع نفس ledgerCore وSupabase. المحلي على MacBook متوقف لتجنب ازدواجية التشغيل.",
     },
   },
 ];
 
 const SVC = [
+  {
+    name: "Mohammad Ledger Bot Service",
+    ar: "خدمة بوت دفتر محمد",
+    id: "mohammad-ledger-bot",
+    st: 1,
+    em: "📒",
+    host: "Contabo VPS",
+    runtime: "Node.js 20.20.1 / systemd user",
+    service_type: "telegram-bot",
+    prj: "Mohammad Ledger",
+    owner: "Mohammad Ledger",
+    owner_type: "project",
+    path: "server:/home/argaz/apps/mohammad-ledger-bot",
+    port: "Telegram polling",
+    schedule: "دائم (active منذ 2026-05-13 21:05 CEST)",
+    dt: "mohammad-ledger-bot.service · vmi3061403 · PID 67196 · 52MB",
+    info: "verified live 2026-05-13 22:00: active (running)، PID 67196، Memory 52.6M (peak 71.8M)، 23 tasks، اللوغ يسجّل callbacks فعلياً، .env.production بصلاحية 600. ExecStart: npm run bot:mohammad → node server/telegram/bot.js.",
+    last_check: "2026-05-13 22:00 CEST",
+    config_paths: [
+      "server:/home/argaz/apps/mohammad-ledger-bot",
+      "server:/home/argaz/apps/mohammad-ledger-bot/.env.production",
+      "server:/home/argaz/.config/systemd/user/mohammad-ledger-bot.service",
+      "server:/home/argaz/logs/mohammad-ledger-bot.log",
+      "server:/home/argaz/logs/mohammad-ledger-bot.error.log",
+    ],
+    why: "هذه الخدمة تجعل البوت يعمل من السحابة 24/7 بدل الاعتماد على MacBook، وتمنع فقد الرسائل عند إغلاق الجهاز المحلي.",
+  },
   {
     name: "Command Center Runtime Publish",
     ar: "فحص ونشر حالة اللوحة",
@@ -1640,21 +1660,25 @@ const BOT = [
     id: "mohammad-ledger-bot",
     kind: "telegram-bot",
     ar: "بوت دفتر محمد",
-    st: "p",
+    st: "a",
     em: "📒",
     cl: "#16A34A",
-    host: "غير محدد بعد",
-    last_check: "2026-05-12",
-    last_run: "2026-05-09",
-    check_method: "manual",
-    uptime_status: "in-development",
-    check_note: "البنية الأساسية جاهزة (idempotency + repo) — قيد التطوير",
-    runtime: "Node.js",
+    host: "Contabo VPS",
+    last_check: "2026-05-13 22:00 CEST",
+    last_run: "2026-05-13 21:05 CEST",
+    check_method: "ssh + systemd live status + log tail + ps + perms",
+    uptime_status: "cloud-running",
+    check_note: "verified live: systemctl --user → active (running) منذ 21:05:08 CEST، PID 67196، Memory 52.6M (peak 71.8M)، 23 tasks، اللوغ يسجّل callbacks فعلياً، .env.production بصلاحية 600.",
+    runtime: "Node.js 20.20.1 / systemd user",
+    memory_mb: 52,
+    started_at: "2026-05-13T21:05:08+02:00",
+    pid: 67196,
+    exec_start: "/usr/bin/npm run bot:mohammad → node server/telegram/bot.js",
     channel: "Telegram",
-    related_entities: ["Mohammad Ledger", "Supabase", "GitHub"],
+    related_entities: ["Mohammad Ledger", "Supabase", "GitHub", "Contabo VPS"],
     summary:
-      "بوت Telegram لإدخال حركات دفتر محمد ومراجعة الحسابات والسجل من الهاتف، مبني فوق نفس منطق ledgerCore.",
-    desc: "بوت دفتر محمد — مرحلة الأساس\n\n🎯 الهدف:\nجعل محمد يدخل الحركات ويراجع الأرصدة والسجل من Telegram بدون فتح الكمبيوتر.\n\n✅ المنجز:\nهيكل بوت Node.js\nحماية allowlist عبر Telegram user id\nجلسات إدخال مؤقتة\nWizard للحركة: نوع → مبلغ → عملة/سعر → مصدر → وجهة → ملاحظة → مراجعة → تأكيد\nمعاينة التأثير قبل الحفظ\nالحفظ عبر نفس ledgerCore المستخدم في الموقع\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase\n\n⏳ التالي:\nتشغيل بتوكن حقيقي في بيئة آمنة\nاختبار أول حركة من Telegram وظهورها في الموقع\nإضافة الحسابات والبحث والسجل والمراجعة الكاملة\nاختيار استضافة دائمة للبوت\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY في السيرفر فقط\nالبوت مغلق على user id محدد\nلا حفظ بدون تأكيد نهائي\nلا استخدام لحسابات مخفية أو ملخصات",
+      "بوت Telegram حي على Contabo لإدخال حركات دفتر محمد ومراجعة الحسابات والسجل من الهاتف، مبني فوق نفس منطق ledgerCore في الويب.",
+    desc: "بوت دفتر محمد — تشغيل سحابي على Contabo\n\n🎯 الهدف:\nجعل محمد يدخل الحركات ويراجع الأرصدة والسجل من Telegram بدون فتح الكمبيوتر، مع نفس منطق الويب ونفس مصدر البيانات.\n\n✅ المنجز:\nتشغيل دائم على Contabo VPS عبر systemd user\nحماية allowlist عبر Telegram user id\nجلسات إدخال مؤقتة\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nمعاينة التأثير قبل الحفظ\nالحفظ عبر نفس ledgerCore المستخدم في الموقع\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase\nتنظيف الدردشة عبر تعديل رسائل الخطوات وحذف إدخالات النص حيث يمكن\nالبوت المحلي على MacBook متوقف لمنع ازدواجية polling\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/mohammad-ledger-bot\nالخدمة: mohammad-ledger-bot.service\nاللوجات: /home/argaz/logs/mohammad-ledger-bot.log و error.log\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_ANON_KEY محفوظة في .env.production على السيرفر فقط\n.env.production بصلاحية 600\nالبوت مغلق على user id محدد\nلا حفظ بدون تأكيد نهائي\nلا استخدام لحسابات مخفية أو ملخصات",
     tags: [
       "Telegram",
       "Node.js",
@@ -1664,11 +1688,31 @@ const BOT = [
       "Allowlist",
       "Arabic UX",
     ],
-    path: "/Users/rabeeshaban/Documents/New project/western-office/server/telegram/bot.js",
+    path: "server:/home/argaz/apps/mohammad-ledger-bot/server/telegram/bot.js",
+    local_path: "/Users/rabeeshaban/Documents/New project/western-office/server/telegram/bot.js",
+    service_path:
+      "server:/home/argaz/.config/systemd/user/mohammad-ledger-bot.service",
+    config_paths: [
+      "server:/home/argaz/apps/mohammad-ledger-bot/.env.production",
+      "server:/home/argaz/.config/systemd/user/mohammad-ledger-bot.service",
+      "server:/home/argaz/logs/mohammad-ledger-bot.log",
+      "server:/home/argaz/logs/mohammad-ledger-bot.error.log",
+    ],
     related_projects: ["Mohammad Ledger"],
     links: {
+      Telegram: "https://t.me/SystemAzol_bot",
       GitHub: "https://github.com/aneerabee/mohammad-ledger",
       "Telegram Bot API": "https://core.telegram.org/bots",
+      Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
+    },
+    current_status: {
+      updated: "2026-05-13",
+      where:
+        "يعمل الآن على Contabo VPS كخدمة systemd user باسم mohammad-ledger-bot.service. آخر فحص أكد active، وجود المسارات، وجود اللوجات، ونجاح قراءة بيانات الدفتر من Supabase.",
+      next_step:
+        "إضافة checker دوري داخل Command Center runtime-sync لقراءة systemd واللوجات وسجل Supabase بشكل تلقائي.",
+      use_guide:
+        "للفحص: ssh إلى Contabo ثم systemctl --user status mohammad-ledger-bot.service. لإعادة التشغيل: systemctl --user restart mohammad-ledger-bot.service. لا تشغل نسخة MacBook بالتوازي.",
     },
   },
   {
@@ -2181,20 +2225,20 @@ const CLD = [
     em: "✈️",
     category: "communication",
     dt: "قنوات وبوتات نشطة",
-    related_entities: ["Claude Code Bot", "Tron Address Bot"],
-    used_in: ["Claude Code Bot", "Tron Address Bot"],
+    related_entities: ["Claude Code Bot", "Tron Address Bot", "Mohammad Ledger Bot"],
+    used_in: ["Claude Code Bot", "Tron Address Bot", "Mohammad Ledger Bot"],
   },
   {
     nm: "Contabo VPS",
     id: "contabo-vps",
     active: true,
-    active_note: "نشط: 49 يوم uptime، يستضيف Wapy",
+    active_note: "نشط: يستضيف Wapy.dev وبوت دفتر محمد",
     em: "🖥️",
     category: "infrastructure",
     dt: "62.171.128.44 · Ubuntu 24",
-    prj: "Wapy.dev",
-    related_entities: ["Wapy.dev"],
-    used_in: ["Wapy.dev"],
+    prj: "Wapy.dev + Mohammad Ledger",
+    related_entities: ["Wapy.dev", "Mohammad Ledger Bot"],
+    used_in: ["Wapy.dev", "Mohammad Ledger Bot"],
   },
   {
     nm: "Hostinger",
@@ -2394,6 +2438,178 @@ const ARC = [
 
 const IDEAS = [
   {
+    name: "🌐 إمبراطورية أونلاين — كل شيء تحت rabee.dev",
+    id: "rabee-online-empire",
+    em: "🚀",
+    cl: "#7C3AED",
+    st: "فكرة قوية",
+    pr: 1,
+    horizon: "أسبوع واحد",
+    owner_scope: "أنا",
+    parent: "infra",
+    stage: "ready-to-execute",
+    related_projects: [
+      "Wapy.dev",
+      "Money Manager",
+      "Mohammad Ledger Bot",
+      "Command Center",
+      "Chess Academy",
+      "Western Office",
+      "Mohammad Ledger",
+      "BRIX Travel System",
+      "WhatsApp CRM",
+    ],
+    related_entities: ["Cloudflare", "Contabo VPS", "Railway", "GitHub", "Supabase"],
+    next_step: "اشترِ rabee.dev → Cloudflare DNS → ابدأ بـtunnel لـWapy",
+    summary:
+      "9 مشاريع تحت نطاق واحد rabee.dev بـ$6 شهرياً — بدون لمس أي شيء يعمل. حل المشاكل الـ3 الفعلية فقط: نشر Money Manager، إخراج Wapy للعالم، ضمّ Mohammad Bot للسحابة.",
+
+    /* ── مكوّنات الفكرة المنظّمة كأقسام بصرية ── */
+    blueprint: {
+      vision:
+        "إمبراطورية ربيع الرقمية تحت سقف واحد: rabee.dev. كل مشروع له subdomain احترافي. كل API محمي. كل static سريع كالبرق. والتكلفة لا تكاد تُذكر.",
+
+      principle:
+        "لا نُصلح ما ليس مكسوراً. نُبقي Supabase + Railway + Contabo شغّالين كما هم. نضيف Cloudflare كطبقة موحّدة في الواجهة. نحلّ فقط الـ3 ثغرات الحقيقية.",
+
+      tools_minimum: [
+        { name: "Cloudflare", role: "DNS + CDN + SSL + Tunnel + Workers + Pages", cost: "$0" },
+        { name: "Contabo VPS", role: "المنزل (موجود، شغّال 50 يوم)", cost: "$0 إضافي" },
+        { name: "Railway", role: "للمشاريع الجديدة (Money Manager) + الموجودين (BRIX, CRM)", cost: "~$5/شهر" },
+        { name: "GitHub", role: "مصدر الكود + Actions للـCI", cost: "$0" },
+      ],
+
+      kept_as_is: [
+        "Supabase — DB + Auth لكل المشاريع (شغّال، مجاني)",
+        "Railway — BRIX + WhatsApp CRM (شغّالين، لا migration)",
+        "Contabo — Wapy + Mohammad Ledger Bot (شغّالين)",
+        "GitHub Pages — 4 static sites (شغّالة، مجانية)",
+        "Tailscale — للوصول الإداري الخاص (محتفظ به)",
+      ],
+
+      what_changes: [
+        {
+          problem: "Wapy خاص (Tailscale only) — لا يصله أحد بدون VPN",
+          fix: "Cloudflare Tunnel → subs.rabee.dev (10 دقائق، مجاني)",
+          impact: "Wapy يصبح public بدون فتح أي port على VPS — أمان أعلى من الحالي",
+        },
+        {
+          problem: "Money Manager غير منشور أصلاً",
+          fix: "Railway → money.rabee.dev (30 دقيقة، $5/شهر)",
+          impact: "FastAPI + Postgres مدارة، نفس pattern الـBRIX",
+        },
+        {
+          problem: "Mohammad Ledger Bot يحتاج macbook مفتوح",
+          fix: "✅ تمّ — البوت الآن على Contabo systemd service (verified live)",
+          impact: "يعمل 24/7 بـ52MB RAM، Memory peak 71.8M، active منذ 21:05 CEST",
+        },
+        {
+          problem: "9 مشاريع بـURLs مبعثرة (railway.app + github.io + IP)",
+          fix: "نطاق rabee.dev + subdomains احترافية ($15/سنة)",
+          impact: "براند موحّد + روابط سهلة الحفظ + status page موحّدة",
+        },
+      ],
+
+      subdomain_map: [
+        { sub: "cc.rabee.dev",         to: "Command Center",       host: "Cloudflare Pages (migrate from GitHub)" },
+        { sub: "chess.rabee.dev",      to: "Chess Academy",        host: "Cloudflare Pages" },
+        { sub: "office.rabee.dev",     to: "Western Office",       host: "Cloudflare Pages" },
+        { sub: "ledger.rabee.dev",     to: "Mohammad Ledger",      host: "Cloudflare Pages" },
+        { sub: "subs.rabee.dev",       to: "Rabee Subs (Wapy)",    host: "Contabo + CF Tunnel" },
+        { sub: "brix.rabee.dev",       to: "BRIX Travel System",   host: "Railway (no change)" },
+        { sub: "crm.rabee.dev",        to: "WhatsApp CRM",         host: "Railway (no change)" },
+        { sub: "money.rabee.dev",      to: "Money Manager (NEW)",  host: "Railway" },
+        { sub: "ledger-bot.rabee.dev", to: "Mohammad Ledger Bot",  host: "Contabo + CF Tunnel" },
+        { sub: "status.rabee.dev",     to: "Status Page موحّدة",    host: "BetterStack/Instatus (free)" },
+      ],
+
+      cost_monthly: {
+        cloudflare: 0,
+        contabo: 0,        // existing
+        railway: 5,        // money manager (BRIX/CRM already paid)
+        domain: 1.25,      // $15/year ÷ 12
+        github: 0,
+        supabase: 0,
+        total: 6.25,
+        currency: "USD/شهر",
+        note: "البديل (Coolify migration كامل) كان سيوفّر $5 لكن يحتاج 15+ ساعة عمل ومخاطر كسر شيء يعمل. هذا الحل: 3 ساعات، صفر مخاطرة.",
+      },
+
+      phases: [
+        {
+          n: 1,
+          title: "البنية الأساسية (30 دقيقة)",
+          steps: [
+            "اشترِ rabee.dev من Namecheap/Porkbun ($15/سنة)",
+            "سجّل في Cloudflare → أضف النطاق",
+            "نقل الـDNS من registrar إلى Cloudflare (تلقائي)",
+          ],
+        },
+        {
+          n: 2,
+          title: "إخراج Wapy للعالم (20 دقيقة)",
+          steps: [
+            "ssh لـContabo، ثبّت cloudflared",
+            "أنشئ tunnel من Cloudflare dashboard",
+            "ربط subs.rabee.dev → 100.116.69.101:3000",
+            "اختبار: افتح https://subs.rabee.dev من أي مكان",
+          ],
+        },
+        {
+          n: 3,
+          title: "نشر Money Manager (45 دقيقة)",
+          steps: [
+            "Railway → New Project → Connect GitHub → اختر money-manager",
+            "اضبط متغيرات البيئة (Supabase keys)",
+            "Deploy تلقائي",
+            "ربط Custom Domain → money.rabee.dev",
+          ],
+        },
+        {
+          n: 4,
+          title: "تعميم rabee.dev على الباقي (1 ساعة)",
+          steps: [
+            "BRIX Railway → Add custom domain → brix.rabee.dev",
+            "WhatsApp CRM Railway → crm.rabee.dev",
+            "GitHub Pages × 4 → نقل DNS إلى Cloudflare Pages (free)",
+            "Mohammad Ledger Bot → ledger-bot.rabee.dev (Cloudflare Tunnel)",
+          ],
+        },
+        {
+          n: 5,
+          title: "ذروة الاحترافية (30 دقيقة)",
+          steps: [
+            "BetterStack: status.rabee.dev — يراقب كل subdomain تلقائياً",
+            "Cloudflare Analytics: تفعيل لكل subdomain",
+            "تنبيهات Telegram إلى @SystemAzol_bot عند فشل أي مشروع",
+          ],
+        },
+      ],
+
+      why_powerful: [
+        "🎯 يحلّ 100% من المشاكل الفعلية بدون لمس ما يعمل",
+        "💰 توفير ~$120-240/سنة مقارنة بالخطط المعقدة",
+        "⚡ كل static أسرع 3× عبر Cloudflare CDN (285 موقع عالمي)",
+        "🔒 صفر منافذ مفتوحة على Contabo (Tunnel encrypted)",
+        "🛡️ Cloudflare WAF + DDoS protection مجاني لكل subdomain",
+        "📊 إحصائيات موحّدة لكل مشاريعك من لوحة Cloudflare واحدة",
+        "🌍 نطاق احترافي يجعل العملاء يثقون أكثر",
+        "♾️ قابل للتوسع — أي مشروع جديد = subdomain جديد بدقائق",
+      ],
+
+      excluded: {
+        bot: "Tron Address Bot",
+        why: "محافظ كريبتو AES-256 — يبقى محلياً مشفّراً كما طُلب صراحة، لا يُنشر أبداً",
+      },
+
+      total_time: "~3 ساعات للتنفيذ الكامل",
+      total_cost: "$6.25/شهر + $15 مرة واحدة (domain سنوي)",
+      risk_level: "صفر — لا migration لشيء يعمل، فقط إضافة طبقة Cloudflare في الواجهة",
+    },
+
+    desc: "إمبراطورية ربيع الرقمية تحت سقف واحد: rabee.dev\n\n🎯 الفلسفة:\nلا نلمس ما يعمل (Supabase + Railway + Contabo + GitHub). نضيف Cloudflare كطبقة موحّدة في الواجهة. نحلّ فقط الـ3 ثغرات الحقيقية: Wapy خاص → public، Money Manager غير منشور، Bot كان محلياً (✅ تمّ).\n\n💎 4 أدوات فقط:\nCloudflare (مجاني) + Contabo (موجود) + Railway (للجدد) + GitHub (موجود)\n\n💰 التكلفة الكاملة:\n$6.25/شهر + $15 مرة سنوياً\n\n🌐 خريطة الـsubdomains:\ncc / chess / office / ledger → Cloudflare Pages\nsubs / ledger-bot → Contabo via Cloudflare Tunnel\nbrix / crm / money → Railway\nstatus → BetterStack\n\n⏱️ 3 ساعات للتنفيذ الكامل\n\n🛡️ Tron Address Bot يبقى محلياً مشفّراً كما طُلب — لا يُنشر أبداً\n\nانظر حقل blueprint للتفاصيل الكاملة المنظّمة.",
+  },
+  {
     name: "BRIX Website v2",
     id: "brix-website-v2",
     em: "🌐",
@@ -2435,8 +2651,9 @@ const BSTATS = {
     { v: "30s", l: "أقصى تأخير cache" },
   ],
   "Mohammad Ledger Bot": [
-    { v: "Wizard", l: "إدخال" },
+    { v: "Contabo", l: "تشغيل" },
+    { v: "systemd", l: "خدمة" },
     { v: "allowlist", l: "وصول" },
-    { v: "Supabase", l: "تخزين" },
+    { v: "Supabase", l: "مصدر البيانات" },
   ],
 };

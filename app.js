@@ -4506,6 +4506,139 @@ function openCloudDetail(name) {
 }
 
 /* ── 4. IDEA EXPAND — بطاقة تتوسع من المركز ── */
+/* ── Blueprint card for rich ideas (with item.blueprint) ── */
+function _ideaBlueprintCard(item) {
+  const bp = item && item.blueprint;
+  if (!bp) return "";
+  const cl = item.cl || "#7C3AED";
+
+  const vision = bp.vision
+    ? `<div class="bp-block bp-vision" style="--bp-cl:${cl}">` +
+      `<div class="bp-eyebrow">${_ic("🎯", 12)} الرؤية</div>` +
+      `<p class="bp-prose-lg">${E(bp.vision)}</p>` +
+      `</div>`
+    : "";
+
+  const principle = bp.principle
+    ? `<div class="bp-block bp-principle">` +
+      `<div class="bp-eyebrow">${_ic("🧭", 12)} المبدأ</div>` +
+      `<p class="bp-prose">${E(bp.principle)}</p>` +
+      `</div>`
+    : "";
+
+  const tools = bp.tools_minimum && bp.tools_minimum.length
+    ? `<div class="bp-block">` +
+      `<div class="bp-eyebrow">${_ic("🛠️", 12)} الأدوات (${bp.tools_minimum.length} فقط)</div>` +
+      `<div class="bp-tools-grid">` +
+      bp.tools_minimum.map((t) => (
+        `<div class="bp-tool"><strong>${E(t.name)}</strong><span>${E(t.role)}</span><em>${E(t.cost)}</em></div>`
+      )).join("") +
+      `</div></div>`
+    : "";
+
+  const kept = bp.kept_as_is && bp.kept_as_is.length
+    ? `<div class="bp-block">` +
+      `<div class="bp-eyebrow">${_ic("✅", 12)} نُبقيه كما هو (لا migration)</div>` +
+      `<ul class="bp-list bp-list--ok">` +
+      bp.kept_as_is.map((k) => `<li>${E(k)}</li>`).join("") +
+      `</ul></div>`
+    : "";
+
+  const changes = bp.what_changes && bp.what_changes.length
+    ? `<div class="bp-block">` +
+      `<div class="bp-eyebrow">${_ic("⚡", 12)} ما الذي يتغيّر فعلاً (${bp.what_changes.length})</div>` +
+      `<div class="bp-changes">` +
+      bp.what_changes.map((c) => (
+        `<div class="bp-change">` +
+        `<div class="bp-change-row bp-change-problem"><span class="bp-tag bp-tag-red">المشكلة</span>${E(c.problem)}</div>` +
+        `<div class="bp-change-row bp-change-fix"><span class="bp-tag bp-tag-blue">الحل</span>${E(c.fix)}</div>` +
+        `<div class="bp-change-row bp-change-impact"><span class="bp-tag bp-tag-green">الأثر</span>${E(c.impact)}</div>` +
+        `</div>`
+      )).join("") +
+      `</div></div>`
+    : "";
+
+  const subdomains = bp.subdomain_map && bp.subdomain_map.length
+    ? `<div class="bp-block">` +
+      `<div class="bp-eyebrow">${_ic("🌐", 12)} خريطة الـsubdomains (${bp.subdomain_map.length})</div>` +
+      `<div class="bp-sub-table">` +
+      bp.subdomain_map.map((s) => (
+        `<div class="bp-sub-row">` +
+        `<code class="bp-sub-code">${E(s.sub)}</code>` +
+        `<span class="bp-sub-arrow">→</span>` +
+        `<strong class="bp-sub-name">${E(s.to)}</strong>` +
+        `<span class="bp-sub-host">${E(s.host)}</span>` +
+        `</div>`
+      )).join("") +
+      `</div></div>`
+    : "";
+
+  const cost = bp.cost_monthly
+    ? `<div class="bp-block bp-cost-block">` +
+      `<div class="bp-eyebrow">${_ic("💰", 12)} التكلفة الشهرية</div>` +
+      `<div class="bp-cost-grid">` +
+      Object.entries(bp.cost_monthly).filter(([k]) => !["total", "currency", "note"].includes(k)).map(([k, v]) => (
+        `<div class="bp-cost-cell"><span>${E(k)}</span><strong>$${v}</strong></div>`
+      )).join("") +
+      `<div class="bp-cost-cell bp-cost-total"><span>الإجمالي</span><strong>$${bp.cost_monthly.total}</strong></div>` +
+      `</div>` +
+      (bp.cost_monthly.note ? `<p class="bp-cost-note">${E(bp.cost_monthly.note)}</p>` : "") +
+      `</div>`
+    : "";
+
+  const phases = bp.phases && bp.phases.length
+    ? `<div class="bp-block">` +
+      `<div class="bp-eyebrow">${_ic("🚀", 12)} المراحل (${bp.phases.length})</div>` +
+      `<div class="bp-phases">` +
+      bp.phases.map((p) => (
+        `<div class="bp-phase">` +
+        `<div class="bp-phase-head"><span class="bp-phase-num" style="background:${cl}">${p.n}</span><strong>${E(p.title)}</strong></div>` +
+        `<ol class="bp-phase-steps">${(p.steps || []).map((s) => `<li>${E(s)}</li>`).join("")}</ol>` +
+        `</div>`
+      )).join("") +
+      `</div></div>`
+    : "";
+
+  const power = bp.why_powerful && bp.why_powerful.length
+    ? `<div class="bp-block bp-power">` +
+      `<div class="bp-eyebrow">${_ic("💎", 12)} لماذا هذه الفكرة قوية</div>` +
+      `<ul class="bp-list bp-list--power">` +
+      bp.why_powerful.map((p) => `<li>${E(p)}</li>`).join("") +
+      `</ul></div>`
+    : "";
+
+  const excluded = bp.excluded
+    ? `<div class="bp-block bp-excluded">` +
+      `<div class="bp-eyebrow">${_ic("⛔", 12)} مستثنى من الخطة</div>` +
+      `<div class="bp-excluded-content"><strong>${E(bp.excluded.bot)}</strong><p>${E(bp.excluded.why)}</p></div>` +
+      `</div>`
+    : "";
+
+  const stats = (bp.total_time || bp.total_cost || bp.risk_level)
+    ? `<div class="bp-stats-strip">` +
+      (bp.total_time ? `<div class="bp-stat"><span>⏱</span><strong>${E(bp.total_time)}</strong><em>وقت التنفيذ</em></div>` : "") +
+      (bp.total_cost ? `<div class="bp-stat"><span>💵</span><strong>${E(bp.total_cost)}</strong><em>التكلفة</em></div>` : "") +
+      (bp.risk_level ? `<div class="bp-stat"><span>🛡️</span><strong>${E(bp.risk_level)}</strong><em>المخاطرة</em></div>` : "") +
+      `</div>`
+    : "";
+
+  return (
+    `<div class="bp-card" style="--bp-cl:${cl}">` +
+    stats +
+    vision +
+    principle +
+    tools +
+    kept +
+    changes +
+    subdomains +
+    cost +
+    phases +
+    power +
+    excluded +
+    `</div>`
+  );
+}
+
 function openIdeaDetail(name) {
   const item = IDEAS.find((i) => i.name === name);
   if (!item) return;
@@ -4540,6 +4673,7 @@ function openIdeaDetail(name) {
       ? `<div class="detail-meta-box detail-meta-box--intro"><div class="detail-meta-title">تعريف سريع</div>${metaRows.map((r) => `<div class="detail-meta-line">${E(r)}</div>`).join("")}</div>`
       : "") +
     _entityTrustBox(item, "idea") +
+    _ideaBlueprintCard(item) +
     _sectionsHTML(sections) +
     (rels
       ? `<div style="margin-top:16px"><div class="detail-meta-box"><div class="detail-meta-title">يتكامل مع</div><div class="meta-chip-row">${rels}</div></div></div>`
