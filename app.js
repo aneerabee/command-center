@@ -3037,156 +3037,86 @@ R.bots = function () {
 
 /* ── TOOLS ── */
 R.tools = function () {
-  const hero = TL[0];
-  const emojiMap = {
-    "Codex CLI": "🧭",
-    "Claude Code": "⚡",
-    "Meta MCP": "📢",
-    GitHub: "🐙",
-    Tailscale: "🔒",
-    Notion: "📝",
-    Perplexity: "🔍",
-    Filesystem: "📁",
-    Memory: "🧠",
-    "Sequential Thinking": "💡",
-    Firecrawl: "🕷️",
-    Magic: "🎨",
-    Supabase: "⚡",
-    Vercel: "▲",
-    Railway: "🚂",
-    TestSprite: "🔧",
-  };
   const cliItems = TL.filter((t) => t.category === "developer-env");
   const byCategory = (c) => TL.filter((t) => t.category === c).length;
-  const dials = [
-    { v: String(byCategory("mcp")), l: "MCP", cl: "var(--purple)" },
-    { v: String(byCategory("platform")), l: "منصات", cl: "var(--blue)" },
-    { v: String(byCategory("internal-tool")), l: "داخلية", cl: "var(--green)" },
-    {
-      v: String(TL.filter((t) => t.st === "a").length),
-      l: "نشطة",
-      cl: "var(--amber)",
-    },
-  ];
-  const dialCirc = 2 * Math.PI * 24;
-  const dialMaxes = [
-    Math.max(1, TL.length),
-    Math.max(1, TL.length),
-    Math.max(1, TL.length),
-    Math.max(1, TL.length),
-  ];
-  const groups = [
-    "developer-env",
-    "internal-tool",
-    "platform",
-    "infra-access",
-    "mcp",
-  ];
-  const categoryCards = groups
-    .map((cat) => ({
-      cat,
-      label: _toolCategoryLabel(cat),
-      count: TL.filter((t) => t.category === cat).length,
-      active: TL.filter((t) => t.category === cat && t.st === "a").length,
-    }))
-    .filter((x) => x.count);
+  const activeCount = TL.filter((t) => t.st === "a").length;
+  const featured = cliItems[0] || TL[0];
+
+  const filters = [
+    { key: "all", label: "الكل", count: TL.length, active: true },
+    { key: "developer-env", label: "AI CLI", count: byCategory("developer-env") },
+    { key: "mcp", label: "MCP", count: byCategory("mcp") },
+    { key: "platform", label: "منصات", count: byCategory("platform") },
+    { key: "internal-tool", label: "داخلية", count: byCategory("internal-tool") },
+    { key: "infra-access", label: "بنية", count: byCategory("infra-access") },
+  ].filter((f) => f.count > 0);
+
+  const card = (t, sizeClass) => {
+    const usedInArr = (t.used_in || []).slice(0, 3);
+    const isLive = t.st === "a";
+    return (
+      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(t.category)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${E(t.name)}')">` +
+      `<div class="mod-card-head">` +
+      `<div class="mod-card-em">${_ic(t.em || "🔧", 22)}</div>` +
+      `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
+      `</div>` +
+      `<div class="mod-card-title">${E(t.ar || t.name)}</div>` +
+      `<div class="mod-card-desc">${E(t.summary || (t.desc || "").split("\n")[0] || "")}</div>` +
+      `<div class="mod-card-meta">` +
+      `<span class="mod-card-meta-pill">${E(_toolCategoryLabel(t.category))}</span>` +
+      (usedInArr.length ? `<span class="mod-card-meta-pill">${usedInArr.length} مشروع</span>` : "") +
+      `</div>` +
+      `</div>`
+    );
+  };
+
+  const featuredCard = featured
+    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(featured.category)}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${E(featured.name)}')">` +
+      `<div class="mod-card-head">` +
+      `<div class="mod-card-em mod-card-em--lg">${_ic(featured.em || "🛠️", 36)}</div>` +
+      `<div class="mod-card-status is-live">⭐ بيئة العمل الأساسية</div>` +
+      `</div>` +
+      `<div class="mod-card-title mod-card-title--lg">${E(featured.ar || featured.name)}</div>` +
+      `<div class="mod-card-desc">${E(featured.summary || "")}</div>` +
+      ((featured.capabilities || []).length
+        ? `<div class="mod-card-bullets">${(featured.capabilities || []).slice(0, 4).map((c) => `<div class="mod-card-bullet"><span>•</span>${E(c)}</div>`).join("")}</div>`
+        : "") +
+      `</div>`
+    : "";
+
+  const otherTools = TL.filter((t) => t.name !== (featured && featured.name));
 
   return (
-    _sectionHero({
-      tone: "tools",
-      kicker: "AI CLI + MCP + workbench",
-      title: "أدوات التطوير وبيئات AI CLI",
-      desc: "جرد أدوات العمل نفسه: البيئات التي نستخدمها، الخوادم المتصلة، وأين يتم تعديل إعداد كل أداة أو نظام مساعد.",
-      stats: [
+    _modernHero({
+      color: "#0EA5E9",
+      kicker: "أدوات التطوير · AI CLI · MCP · منصات",
+      title: "ورشة العمل الكاملة",
+      desc: "جرد كامل لأدوات العمل: البيئات، الخوادم المتصلة، المنصات السحابية، وأين يتم تعديل إعداد كل أداة.",
+      bigNum: TL.length,
+      bigLabel: "إجمالي الأدوات",
+      pills: [
         { v: cliItems.length, l: "AI CLI" },
         { v: byCategory("mcp"), l: "MCP" },
-        { v: byCategory("internal-tool"), l: "أدوات داخلية" },
-        { v: TL.length, l: "إجمالي الأدوات" },
+        { v: byCategory("platform"), l: "منصات" },
+        { v: activeCount, l: "نشطة" },
       ],
     }) +
-    `<div class="tool-note">هذه الصفحة توثق أدوات العمل نفسها، وخصوصًا بيئات AI CLI: أين يوجد إعداد كل أداة، ما التخصيصات المضافة، وما المشاريع التي تُستخدم فيها.</div>` +
-    `<div class="tool-cli-grid">` +
-    cliItems
-      .map(
-        (t) =>
-          `<button class="tool-cli-card" data-cc-name="${E(t.name)}" style="--tc:${t.cl}" onclick="openToolDetail('${E(t.name)}')"><strong>${E(t.ar || t.name)}</strong><p>${E(t.summary || "")}</p><span>${E((t.capabilities || []).slice(0, 3).join(" · "))}</span></button>`,
-      )
-      .join("") +
-    `</div>` +
-    `<div class="tool-hero glass" data-cc-name="${E(hero.name)}" style="border-left:4px solid ${hero.cl}" onclick="openToolDetail('${E(hero.name)}')">` +
-    `<div class="tool-hero-info"><h3 class="tool-hero-name">${E(hero.ar || hero.name)}</h3>` +
-    `<p class="tool-hero-desc">${E(hero.summary || "بيئة العمل الأساسية الحالية")}</p></div>` +
-    '<div class="tool-dials">' +
-    dials
-      .map((d, i) => {
-        const pct = parseInt(d.v) / dialMaxes[i];
-        const dash = pct * dialCirc;
-        return (
-          `<div class="dial">` +
-          `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="24" class="dial-bg"/>` +
-          `<circle cx="30" cy="30" r="24" class="dial-fg" style="stroke:${d.cl};stroke-dasharray:${dash.toFixed(1)} ${dialCirc.toFixed(1)}"/>` +
-          `</svg><span class="dial-val">${E(d.v)}</span><span class="dial-label">${E(d.l)}</span></div>`
-        );
-      })
-      .join("") +
-    "</div>" +
-    "</div>" +
-    `<div class="tool-category-strip">` +
-    categoryCards
-      .map(
-        (c) =>
-          `<div class="tool-category-card"><strong>${c.count}</strong><span>${E(c.label)}</span><small>${c.active}/${c.count} نشط</small></div>`,
-      )
-      .join("") +
-    `</div>` +
-    groups
-      .map((cat) => {
-        const items = TL.filter((t) => t.category === cat);
-        if (!items.length) return "";
-        const activeCount = items.filter((t) => t.st === "a").length;
-        return (
-          `<div class="tool-section">` +
-          `<div class="tool-section-head"><div><h3>${E(_toolCategoryLabel(cat))}</h3><p>${activeCount}/${items.length} نشط · ${E(_toolCategoryLabel(cat))}</p></div><span>${items.length}</span></div>` +
-          `<div class="tool-grid">` +
-          items
-            .map((t) => {
-              const em = emojiMap[t.name] || t.em || "🔧";
-              const usedInArr = (t.used_in || []).slice(0, 3);
-              return (
-                `<div class="tool-card glass" data-cc-name="${E(t.name)}" style="border-top:3px solid ${t.cl}" onclick="openToolDetail('${E(t.name)}')">` +
-                `<div class="tool-card-head">` +
-                `<span style="font-size:1.5rem">${_ic(em, 24)}</span>` +
-                (t.st === "a"
-                  ? `<span class="cc-pulse-dot" title="نشط"></span>`
-                  : `<span class="cc-pulse-dot" style="background:#94a3b8" title="غير نشط"></span>`) +
-                `</div>` +
-                `<h4 class="tool-card-name">${E(t.ar || t.name)}</h4>` +
-                `<p class="tool-card-desc">${E(t.summary || (t.desc || "").split("\n")[0])}</p>` +
-                `<div class="tool-card-tags">${E(_toolCategoryLabel(t.category))}</div>` +
-                (usedInArr.length
-                  ? `<div class="tool-card-usage-row">` +
-                    `<span class="tool-card-usage-label">يُستخدم في:</span>` +
-                    usedInArr
-                      .map((projName) => {
-                        const isProj = PRJ.find((p) => p.name === projName);
-                        if (isProj) {
-                          return `<button class="tool-usage-chip" onclick="event.stopPropagation();openProjectDetail('${E(projName)}')" title="افتح ${E(projName)}">${_ic(isProj.em, 11)} ${E(isProj.ar || projName)}</button>`;
-                        }
-                        return `<span class="tool-usage-chip">${E(projName)}</span>`;
-                      })
-                      .join("") +
-                    `</div>`
-                  : "") +
-                `</div>`
-              );
-            })
-            .join("") +
-          "</div>" +
-          `</div>`
-        );
-      })
-      .join("")
+    _modernToolbar({
+      filters,
+      searchPlaceholder: "ابحث في الأدوات...",
+      id: "mod-tb-tools",
+    }) +
+    `<div class="mod-bento">` +
+    featuredCard +
+    otherTools.map((t) => card(t, "b-3")).join("") +
+    `</div>`
   );
+};
+const _origRTools = R.tools;
+R.tools = function () {
+  const html = _origRTools.apply(this, arguments);
+  setTimeout(() => _modernToolbarWire("mod-tb-tools", ".mod-card", (el) => el.getAttribute("data-mod-cat") || ""), 80);
+  return html;
 };
 
 /* ── CLOUD ── */
@@ -3253,171 +3183,148 @@ R.cloud = function () {
     },
   ];
 
+  const filterGroups = [
+    { key: "all", label: "الكل", count: CLD.length, active: true },
+    { key: "platform-grp", label: "منصات", count: CLD.filter((c) => ["platform", "database-platform", "data-platform"].includes(c.category)).length, match: (c) => ["platform", "database-platform", "data-platform"].includes(c.category) },
+    { key: "deploy-grp", label: "نشر", count: CLD.filter((c) => ["deployment", "infrastructure"].includes(c.category)).length, match: (c) => ["deployment", "infrastructure"].includes(c.category) },
+    { key: "mcp-grp", label: "MCP", count: mcpLinkedCount, match: (c) => c.category === "mcp-linked" },
+    { key: "net-grp", label: "شبكة", count: CLD.filter((c) => ["network", "communication", "external-api"].includes(c.category)).length, match: (c) => ["network", "communication", "external-api"].includes(c.category) },
+    { key: "data-grp", label: "بيانات", count: CLD.filter((c) => ["storage", "marketing-platform"].includes(c.category)).length, match: (c) => ["storage", "marketing-platform"].includes(c.category) },
+    { key: "off", label: "متوقف", count: CLD.filter((c) => c.active === false).length, match: (c) => c.active === false },
+  ].filter((f) => f.count > 0);
+
+  const card = (c) => {
+    const cPrj = c.prj || "";
+    const cpc = cPrj ? _entityColor(cPrj, "#0EA5E9") : "#0EA5E9";
+    const isLive = c.active !== false;
+    const usedArr = (c.related_entities || c.used_in || []).slice(0, 3);
+    let groupKey = "";
+    filterGroups.forEach((g) => { if (g.match && g.match(c)) groupKey += " " + g.key; });
+    return (
+      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${groupKey.trim()}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${E(c.nm)}')">` +
+      `<div class="mod-card-head">` +
+      `<div class="mod-card-em">${_ic(c.em, 22)}</div>` +
+      `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
+      `</div>` +
+      `<div class="mod-card-title">${E(c.nm)}</div>` +
+      `<div class="mod-card-desc">${E(c.dt)}</div>` +
+      `<div class="mod-card-meta">` +
+      `<span class="mod-card-meta-pill">${E(categoryLabels[c.category] || c.category)}</span>` +
+      (cPrj ? `<span class="mod-card-meta-pill">${E(cPrj)}</span>` : "") +
+      (usedArr.length ? `<span class="mod-card-meta-pill">يخدم ${usedArr.length}</span>` : "") +
+      `</div>` +
+      `</div>`
+    );
+  };
+
   return (
-    _sectionHero({
-      tone: "cloud",
-      kicker: "Platforms + APIs + network",
-      title: "السطح السحابي والخدمات الخارجية",
+    _modernHero({
+      color: "#06B6D4",
+      kicker: "السحابة · المنصات · الشبكات · MCP",
+      title: "السطح السحابي الكامل",
       desc: "بدل خلط كل المنصات معًا، يعرض هذا القسم دور كل خدمة: منصة، نشر، API، شبكة، تخزين، أو طبقة متصلة عبر MCP.",
-      stats: [
-        { v: CLD.length, l: "إجمالي العناصر" },
-        { v: activeCount, l: "نشط في الكتالوج" },
-        { v: groups.length, l: "فئات تشغيل" },
-        { v: mcpLinkedCount, l: "مرتبط عبر MCP" },
+      bigNum: CLD.length,
+      bigLabel: "خدمة سحابية",
+      pills: [
+        { v: activeCount, l: "نشط" },
+        { v: deploymentCount, l: "نشر" },
+        { v: mcpLinkedCount, l: "MCP" },
+        { v: groups.length, l: "فئات" },
       ],
     }) +
-    `<div class="cloud-overview">` +
-    `<div class="cloud-overview-stat"><strong>${activeCount}</strong><span>نشط حاليًا</span></div>` +
-    `<div class="cloud-overview-stat"><strong>${deploymentCount}</strong><span>نشر واستضافة</span></div>` +
-    `<div class="cloud-overview-stat"><strong>${mcpLinkedCount}</strong><span>مرتبط عبر MCP</span></div>` +
-    `<div class="cloud-overview-stat"><strong>${groups.length}</strong><span>فئات تشغيل</span></div>` +
-    `</div>` +
-    `<div class="cloud-surface">` +
-    surfaceCards
-      .map(
-        (card) =>
-          `<div class="cloud-surface-card"><strong>${card.count}</strong><span>${E(card.label)}</span><p>${E(card.desc)}</p></div>`,
-      )
-      .join("") +
-    `</div>` +
-    `<div class="cloud-note">هذه الصفحة لا تخلط بين المنصة نفسها وبين نوع دورها. ستجد الفرق بين منصة، نشر، API، شبكة، وتخزين بشكل صريح داخل كل بطاقة.</div>` +
-    groups
-      .map((group) => {
-        return (
-          `<div class="cloud-category">` +
-          `<div class="cloud-cat-head"><h3 class="cloud-cat-title">${E(categoryLabels[group.cat] || group.cat)}</h3><span>${group.items.length}</span></div>` +
-          `<div class="cloud-cat-grid">` +
-          group.items
-            .map((c) => {
-              const clickAttr = `data-cc-name="${E(c.nm)}" onclick="openCloudDetail('${E(c.nm)}')"`;
-              const cPrj = c.prj || "";
-              const cpc = cPrj ? _entityColor(cPrj, "#0EA5E9") : "";
-              const status = c.active === false ? "متوقف" : "نشط";
-              const usedCount = (c.used_in || []).length;
-              return (
-                `<div class="cloud-card clickable ${c.active === false ? "cloud-card-off" : ""}" ${clickAttr}>` +
-                `<span class="cloud-card-icon">${_ic(c.em, 22)}</span>` +
-                `<div class="cloud-card-info">` +
-                `<div class="cloud-card-top"><span class="cloud-card-name">${E(c.nm)}</span><span class="cloud-card-status ${c.active === false ? "cloud-card-status-off" : "cloud-card-status-on"}">${E(status)}</span></div>` +
-                `<div class="cloud-card-tags">` +
-                `<span class="cloud-prj-tag">${E(categoryLabels[c.category] || c.category)}</span>` +
-                (cPrj
-                  ? `<span class="cloud-prj-tag" style="background:${cpc}15;color:${cpc}">${E(cPrj)}</span>`
-                  : "") +
-                (usedCount
-                  ? `<span class="cloud-prj-tag">يخدم ${usedCount}</span>`
-                  : "") +
-                `</div>` +
-                `<span class="cloud-card-dt">${E(c.dt)}</span>` +
-                ((c.related_entities || c.used_in)?.length
-                  ? `<div class="cloud-card-related">` +
-                    (c.related_entities || c.used_in)
-                      .slice(0, 3)
-                      .map((rel) => {
-                        const rp = PRJ.find((p) => p.name === rel);
-                        if (rp) {
-                          return `<button class="cloud-rel-chip" onclick="event.stopPropagation();openProjectDetail('${E(rel)}')" title="${E(rel)}">${_ic(rp.em, 10)} ${E(rp.ar || rel)}</button>`;
-                        }
-                        return `<span class="cloud-rel-chip">${E(rel)}</span>`;
-                      })
-                      .join("") +
-                    `</div>`
-                  : "") +
-                `</div>` +
-                `</div>`
-              );
-            })
-            .join("") +
-          `</div></div>`
-        );
-      })
-      .join("")
+    _modernToolbar({
+      filters: filterGroups,
+      searchPlaceholder: "ابحث في الخدمات السحابية...",
+      id: "mod-tb-cloud",
+    }) +
+    `<div class="mod-bento">` +
+    CLD.map(card).join("") +
+    `</div>`
   );
+};
+const _origRCloud = R.cloud;
+R.cloud = function () {
+  const html = _origRCloud.apply(this, arguments);
+  setTimeout(() => _modernToolbarWire("mod-tb-cloud", ".mod-card", (el) => el.getAttribute("data-mod-cat") || ""), 80);
+  return html;
 };
 
 /* ── IDEAS ── */
 R.ideas = function () {
   const prLabels = { 1: "عاجل", 2: "قريب", 3: "يوماً ما" };
   const prColors = { 1: "#EF4444", 2: "#F59E0B", 3: "#6366F1" };
-  const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 2.5];
-  const lanes = [1, 2, 3].map((pr) => ({
-    pr,
-    label: prLabels[pr],
-    items: IDEAS.filter((i) => i.pr === pr),
-  }));
+  const c1 = IDEAS.filter((i) => i.pr === 1).length;
+  const c2 = IDEAS.filter((i) => i.pr === 2).length;
+  const c3 = IDEAS.filter((i) => i.pr === 3).length;
+  const blueprintCount = IDEAS.filter((i) => i.blueprint).length;
+
+  const filters = [
+    { key: "all", label: "الكل", count: IDEAS.length, active: true },
+    { key: "pr1", label: "عاجل", count: c1 },
+    { key: "pr2", label: "قريب", count: c2 },
+    { key: "pr3", label: "يوماً ما", count: c3 },
+    { key: "bp", label: "Blueprint", count: blueprintCount },
+  ].filter((f) => f.count > 0);
+
+  const card = (idea, sizeClass) => {
+    const cl = prColors[idea.pr] || "#6366F1";
+    const rels = (idea.related_projects || []).slice(0, 3);
+    const hasBp = !!idea.blueprint;
+    const cats = `pr${idea.pr}${hasBp ? " bp" : ""}`;
+    return (
+      `<div class="mod-card ${sizeClass}${hasBp ? " mod-card--featured" : ""}" data-cc-name="${E(idea.name)}" data-mod-cat="${cats}" data-mod-name="${E(idea.name.toLowerCase())}" style="--card-cl:${cl}" onclick="openIdeaDetail('${E(idea.name)}')">` +
+      `<div class="mod-card-head">` +
+      `<div class="mod-card-em">${_ic(idea.em || "💡", 22)}</div>` +
+      `<div class="mod-card-status${idea.pr === 1 ? " is-live" : ""}">${E(prLabels[idea.pr] || "")}</div>` +
+      `</div>` +
+      `<div class="mod-card-title${hasBp ? " mod-card-title--lg" : ""}">${E(idea.name)}</div>` +
+      `<div class="mod-card-desc">${E(idea.summary || (idea.desc || "").split("\n")[0] || "")}</div>` +
+      `<div class="mod-card-meta">` +
+      (idea.owner_scope ? `<span class="mod-card-meta-pill">${E(idea.owner_scope)}</span>` : "") +
+      (idea.horizon ? `<span class="mod-card-meta-pill">${E(idea.horizon)}</span>` : "") +
+      (rels.length ? `<span class="mod-card-meta-pill">يربط ${rels.length}</span>` : "") +
+      (hasBp ? `<span class="mod-card-meta-pill" style="background:rgba(139,92,246,.15);color:#A78BFA">📐 Blueprint</span>` : "") +
+      `</div>` +
+      `</div>`
+    );
+  };
+
+  // Order: blueprint ideas first (featured b-6), then by priority
+  const ordered = [
+    ...IDEAS.filter((i) => i.blueprint),
+    ...IDEAS.filter((i) => !i.blueprint).sort((a, b) => (a.pr || 9) - (b.pr || 9)),
+  ];
 
   return (
-    _sectionHero({
-      tone: "ideas",
-      kicker: "Strategy board",
+    _modernHero({
+      color: "#8B5CF6",
+      kicker: "Strategy board · أفكار · Blueprints",
       title: "الأفكار وخارطة الطريق",
-      desc: "الأفكار هنا ليست زينة. كل بطاقة يجب أن توضّح الأولوية، النطاق، الخطوة التالية، وما المشاريع التي ستتأثر بها إن نُفذت.",
-      stats: [
-        { v: IDEAS.length, l: "إجمالي الأفكار" },
-        { v: IDEAS.filter((i) => i.pr === 1).length, l: "عاجل" },
-        { v: IDEAS.filter((i) => i.pr === 2).length, l: "قريب" },
-        { v: IDEAS.filter((i) => i.pr === 3).length, l: "يوماً ما" },
+      desc: "الأفكار هنا ليست زينة. كل بطاقة توضّح الأولوية، النطاق، الخطوة التالية، والمشاريع المتأثرة.",
+      bigNum: IDEAS.length,
+      bigLabel: "فكرة قيد الدراسة",
+      pills: [
+        { v: c1, l: "عاجل" },
+        { v: c2, l: "قريب" },
+        { v: c3, l: "يوماً ما" },
+        { v: blueprintCount, l: "Blueprint" },
       ],
     }) +
-    '<div class="idea-filters">' +
-    `<button class="filter-btn active" data-priority="all" onclick="filterIdeas('all')">الكل</button>` +
-    `<button class="filter-btn" data-priority="1" onclick="filterIdeas(1)"><span class="pr-dot" style="background:#EF4444"></span> عاجل</button>` +
-    `<button class="filter-btn" data-priority="2" onclick="filterIdeas(2)"><span class="pr-dot" style="background:#F59E0B"></span> قريب</button>` +
-    `<button class="filter-btn" data-priority="3" onclick="filterIdeas(3)"><span class="pr-dot" style="background:#6366F1"></span> يوماً ما</button>` +
-    "</div>" +
-    '<div class="ideas-board" id="ideas-grid">' +
-    lanes
-      .map(
-        (lane, laneIndex) =>
-          `<section class="idea-lane" data-pr="${lane.pr}">` +
-          `<div class="idea-lane-head"><strong>${E(lane.label)}</strong><span>${lane.items.length}</span></div>` +
-          `<div class="ideas-grid">` +
-          lane.items
-            .map((idea, i) => {
-              const rot = rotations[i % rotations.length];
-              const rels = _relChips((idea.related_projects || []).slice(0, 3));
-              const bullets = (idea.desc || "")
-                .split("\n")
-                .filter((l) => /^[🎯🔧📊🔔📈💹🌍🔄🔗]/.test(l.trim()))
-                .slice(0, 5);
-              const allLines = [
-                idea.summary ? `الملخص: ${idea.summary}` : "",
-                idea.owner_scope ? `النطاق: ${idea.owner_scope}` : "",
-                idea.next_step ? `الخطوة التالية: ${idea.next_step}` : "",
-              ].filter(Boolean);
-              return (
-                `<div class="sticky-note" data-cc-name="${E(idea.name)}" data-pr="${idea.pr}" style="border-right:4px solid ${prColors[idea.pr] || "#999"};transform:rotate(${rot}deg)" onclick="openIdeaDetail('${E(idea.name)}')">` +
-                `<span class="sticky-badge" style="background:${prColors[idea.pr] || "#999"}">${E(prLabels[idea.pr] || "")}</span>` +
-                `<span class="sticky-emoji">${_ic(idea.em, 42)}</span>` +
-                `<h4 class="sticky-title">${E(idea.name)}</h4>` +
-                `<p class="sticky-desc">${E(idea.summary || (idea.desc || "").split("\n")[0])}</p>` +
-                (allLines.length
-                  ? `<div class="idea-details">${allLines.map((l) => `<div class="idea-detail-line">${_icText(l.trim())}</div>`).join("")}</div>`
-                  : "") +
-                (bullets.length
-                  ? `<div class="idea-bullets">${bullets.map((b) => `<div class="idea-bullet">${_icText(b.trim())}</div>`).join("")}</div>`
-                  : "") +
-                (rels
-                  ? `<div class="idea-rels"><span class="idea-rels-label">يتكامل مع</span>${rels}</div>`
-                  : "") +
-                `</div>`
-              );
-            })
-            .join("") +
-          (laneIndex === 2
-            ? `<div class="sticky-note sticky-placeholder" data-pr="3" style="border-right:4px dashed var(--brd);transform:rotate(0deg);cursor:default;opacity:.6">` +
-              `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px">` +
-              `<span style="font-size:32px;opacity:.3">+</span>` +
-              `<span style="font-size:12px;color:var(--t3)">فكرة جديدة</span>` +
-              `</div>` +
-              `</div>`
-            : "") +
-          `</div>` +
-          `</section>`,
-      )
-      .join("") +
-    "</div>"
+    _modernToolbar({
+      filters,
+      searchPlaceholder: "ابحث في الأفكار...",
+      id: "mod-tb-ideas",
+    }) +
+    `<div class="mod-bento">` +
+    ordered.map((i, idx) => card(i, i.blueprint ? "b-6" : "b-3")).join("") +
+    `</div>`
   );
+};
+const _origRIdeas = R.ideas;
+R.ideas = function () {
+  const html = _origRIdeas.apply(this, arguments);
+  setTimeout(() => _modernToolbarWire("mod-tb-ideas", ".mod-card", (el) => el.getAttribute("data-mod-cat") || ""), 80);
+  return html;
 };
 
 /* ── ARCHIVE ── */

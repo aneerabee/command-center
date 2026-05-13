@@ -11569,6 +11569,106 @@ button, input, select, textarea {
   font-weight: 600;
 }
 
+/* Card emoji tile (replaces mod-card-icon, used by mod-bot/tools/cloud/ideas) */
+.mod-card-em {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card-cl) 12%, transparent);
+  font-size: 22px;
+  flex-shrink: 0;
+  color: var(--card-cl);
+}
+.mod-card-em--lg {
+  width: 64px; height: 64px;
+  border-radius: 16px;
+  font-size: 32px;
+}
+
+/* Live status pill (variant of mod-card-status) */
+.mod-card-status {
+  background: color-mix(in srgb, var(--t3) 10%, transparent);
+  color: var(--t3);
+}
+.mod-card-status.is-live {
+  background: color-mix(in srgb, #22C55E 14%, transparent);
+  color: #15803D;
+  position: relative;
+  padding-inline-start: 18px;
+}
+.mod-card-status.is-live::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 8px #22C55E;
+  animation: cc-svc-pulse 2.2s ease-out infinite;
+}
+
+/* Larger title variant (for featured b-6 cards) */
+.mod-card-title--lg {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+/* Pill-style meta tag */
+.mod-card-meta-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card-cl) 10%, transparent);
+  color: color-mix(in srgb, var(--card-cl) 78%, var(--t1));
+  border: 1px solid color-mix(in srgb, var(--card-cl) 18%, transparent);
+}
+
+/* Bullet list inside featured cards */
+.mod-card-bullets {
+  margin-top: 14px;
+  display: grid;
+  gap: 6px;
+}
+.mod-card-bullet {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--t2);
+  line-height: 1.5;
+  align-items: flex-start;
+}
+.mod-card-bullet > span {
+  color: var(--card-cl);
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* Featured card variant (for b-6 lead cards) */
+.mod-card--featured {
+  padding: 24px 26px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card-cl) 4%, var(--surface, #fff)), var(--surface, #fff));
+}
+.mod-card--featured::before { height: 5px; }
+.mod-card--featured .mod-card-desc {
+  -webkit-line-clamp: unset;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+/* Bento safety: stack on small screens */
+@media (max-width: 720px) {
+  .mod-bento { grid-template-columns: repeat(2, 1fr); }
+  .mod-bento .b-3, .mod-bento .b-4, .mod-bento .b-6 { grid-column: span 2; }
+  .mod-bento .b-2 { grid-column: span 1; }
+}
+
 /* Empty state when filter has no results */
 .mod-empty {
   grid-column: 1 / -1;
