@@ -1,0 +1,30 @@
+# Caddy reverse proxy with automatic Let's Encrypt for brixtravel.com
+# Cloudflare must be set to SSL Mode: Full (strict) after this comes up.
+
+www.brixtravel.com, brixtravel.com {
+	encode zstd gzip
+
+	# Redirect apex to www
+	@apex host brixtravel.com
+	redir @apex https://www.brixtravel.com{uri} permanent
+
+	reverse_proxy wordpress:80 {
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-For {remote_host}
+		header_up Host {host}
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 50mb
+			roll_keep 5
+		}
+	}
+}
