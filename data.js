@@ -1054,9 +1054,9 @@ const PRJ = [
       Cloudflare: "https://dash.cloudflare.com",
     },
     current_status: {
-      updated: "2026-05-14",
+      updated: "2026-05-15",
       where:
-        "حي على Contabo (62.171.128.44) عبر Caddy 2 + Let's Encrypt. تم استبدال WordPress بـ static HTML من repo aneerabee/brixtravel بعد فقد قاعدة البيانات الأصلية على Hostinger. 71 MB إجمالي، RAM 15 MB، CPU 0%. النسخ الاحتياطي اليومي مجدول 03:30 ويُحتفظ بـ 14 يوم. Cloudflare DNS مُحدّث (DNS only مؤقتاً حتى التحقق البصري) مع حذف سجل AAAA القديم لـ Hostinger.",
+        "حي على Contabo (62.171.128.44) عبر Caddy 2 file_server + Let's Encrypt. ملفات الموقع static من repo aneerabee/brixtravel، 71 MB إجمالي، 39 ملف. استهلاك حاوية Caddy: RAM ~14 MB، CPU 0%. النسخ الاحتياطي اليومي مجدول 03:30 (آخر backup: 2026-05-15 = 69 MB)، يُحتفظ بـ 14 يوم. Cloudflare DNS مُحدّث (DNS only مؤقتاً حتى التحقق البصري) مع حذف سجل AAAA القديم.",
       next_step:
         "(1) تأكيد بصري من المالك أن الموقع يطلع كما هو متوقع. (2) في Cloudflare DNS: تحويل ☁️ DNS only → 🟠 Proxied للسجلين A brixtravel.com وCNAME www. (3) في Cloudflare SSL/TLS → Overview: تغيير من Flexible إلى Full (strict). (4) تنظيف فرع claude/restart-brixtravel-server-5ju7a في repo command-center بعد المراجعة.",
       blockers: [],
@@ -2565,11 +2565,11 @@ const CLD = [
     nm: "Hostinger",
     id: "hostinger",
     active: true,
-    active_note: "نشط جزئياً: استضافة الموقع منتهية (انتقل brixtravel.com إلى Contabo)، لكن النطاق + البريد @brixtravel.com (MX) ما زالا على Hostinger",
+    active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و MX records تشير لـ mx1/mx2.hostinger.com. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
     em: "🌍",
-    category: "deployment",
-    dt: "استضافة موقع BRIX Travel Website",
-    prj: "BRIX Travel Website",
+    category: "domain-and-email",
+    dt: "Domain Registrar (brixtravel.com حتى 2028-10-14) + MX records للبريد @brixtravel.com",
+    prj: "BRIX Travel Website (نطاق + بريد فقط)",
     used_in: ["BRIX Travel Website"],
   },
   {
