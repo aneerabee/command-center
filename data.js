@@ -134,7 +134,7 @@ const UMBRELLAS = [
     cl_dark: "#6D28D9",
     cl_light: "#C4B5FD",
     summary: "أدوات شخصية تخدمك في إدارة وتشغيل كل شركاتك ومشاريعك.",
-    desc: "البنية التحتية الشخصية:\n\n🛠️ Command Center — لوحة التحكم\n🧠 Meta MCP — محرك تشغيل ادوات AI من الترمينال\n💰 Money Manager — المركز المالي الموحد لكل شركاتك واستثماراتك",
+    desc: "البنية التحتية الشخصية:\n\n🛠️ Command Center — لوحة التحكم\n🧠 Meta MCP — محرك تشغيل ادوات AI من الترمينال\n💰 Money Manager — المركز المالي الموحد لكل شركاتك واستثماراتك\n✦ LIBYA — دفتر الشراكة بين ربيع وأحمد (صرافة عملات في ليبيا)",
   },
 ];
 
@@ -1343,9 +1343,9 @@ const PRJ = [
     cl: "#4A8856",
     cl_brand: "#4A8856",
     brand_note: "Espresso & Sage v2 — هوية بصرية حصرية بألوان أجرأ",
-    pct: 18,
-    parent: "libya",
-    parent_role: "core",
+    pct: 90,
+    parent: "infra",
+    parent_role: "personal-finance",
     revenue_model: "internal",
     monthly_revenue_usd: 0,
     users_count: 2,
