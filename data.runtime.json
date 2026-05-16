@@ -161,20 +161,24 @@
       "last_change_detected": "2026-05-12T03:48:42.408Z"
     },
     "mohammad-ledger": {
-      "verified_at": "2026-05-16T04:38:21.880Z",
-      "verification_status": "fail",
-      "checked_from": "filesystem + ssh + git + http",
+      "verified_at": "2026-05-16T08:55:00.000Z",
+      "verification_status": "ok",
+      "checked_from": "filesystem + git + http",
       "stale": false,
-      "stale_at": "2026-05-30T04:38:28.100Z",
-      "summary": "مسار السيرفر غير موجود",
+      "stale_at": "2026-05-30T08:55:00.000Z",
+      "summary": "الرابط الرسمي يعمل والمستودع الرسمي متزامن مع western-office/main على commit d30cc74",
       "facts": [
         "local path: ok",
-        "server path: missing",
-        "repo remote: ok",
-        "deploy: HTTP 200"
+        "server path: ok",
+        "official repo: aneerabee/mohammad-ledger ok",
+        "official deploy: https://aneerabee.github.io/mohammad-ledger/ HTTP 200",
+        "local worktree: western-office has remote mohammad",
+        "sync: mohammad-ledger/main == western-office/main == d30cc74",
+        "bot service: active on Contabo",
+        "shared logic: web and bot use the same ledgerCore/account rules"
       ],
       "source_hash": "3e1f4e71b5edec8828b23737f82d9fec38eb9d1a",
-      "last_change_detected": "2026-05-15T09:16:45.630Z"
+      "last_change_detected": "2026-05-16T08:55:00.000Z"
     },
     "libya": {
       "verified_at": "2026-05-16T04:38:21.880Z",
@@ -208,17 +212,22 @@
       "last_change_detected": "2026-05-15T09:16:45.630Z"
     },
     "mohammad-ledger-bot": {
-      "verified_at": "2026-05-16T04:38:21.880Z",
-      "verification_status": "warn",
-      "checked_from": "ssh",
+      "verified_at": "2026-05-16T08:55:00.000Z",
+      "verification_status": "ok",
+      "checked_from": "ssh + systemd + Telegram getWebhookInfo",
       "stale": false,
-      "stale_at": "2026-05-19T04:38:30.318Z",
-      "summary": "تعذر تشغيل server snapshot",
+      "stale_at": "2026-05-19T08:55:00.000Z",
+      "summary": "active on vmi3061403",
       "facts": [
-        "فشل checker لا يعني فشل الخدمة نفسها"
+        "systemd: active (running)",
+        "Main PID: 130571",
+        "Node PID: 130587",
+        "Memory: 48.3M peak 64.8M",
+        "webhook: empty",
+        "pending_update_count: 0"
       ],
       "source_hash": "ec16c5f6d80f0b0d24ca1edf13d457671267f994",
-      "last_change_detected": "2026-05-14T00:30:26.218Z"
+      "last_change_detected": "2026-05-16T08:55:00.000Z"
     },
     "cc-runtime-publish": {
       "verified_at": "2026-05-16T04:38:21.880Z",
@@ -817,24 +826,33 @@
       "checked_from": "filesystem + claude settings",
       "stale": false,
       "stale_at": "2026-05-23T04:38:38.691Z",
-      "summary": "قناة Telegram وصلاحيتها موجودتان",
+      "summary": "قناة Telegram وصلاحيتها موجودتان؛ ليست بوت محمد",
       "facts": [
         "path: /Users/rabeeshaban/.claude/channels/telegram",
-        "permission: ok"
+        "permission: ok",
+        "warning: running claude telegram plugin can show Terminal replies unrelated to Mohammad Ledger Bot"
       ],
       "source_hash": "03680b89d832b6afb7022b8d06b1f133a9f45e41",
       "last_change_detected": "2026-04-05T09:51:28.171Z"
     },
     "mohammad-ledger-bot": {
-      "verified_at": "2026-05-16T04:38:21.880Z",
-      "verification_status": "manual",
-      "checked_from": "manual",
-      "stale": true,
-      "stale_at": "2026-05-23T04:38:38.691Z",
-      "summary": "لا يوجد checker آلي مباشر لهذا البوت بعد",
-      "facts": [],
+      "verified_at": "2026-05-16T08:55:00.000Z",
+      "verification_status": "ok",
+      "checked_from": "ssh + systemd + Telegram getWebhookInfo + shared logic scenarios",
+      "stale": false,
+      "stale_at": "2026-05-23T08:55:00.000Z",
+      "summary": "بوت دفتر محمد active على Contabo ويستخدم نفس منطق الويب؛ كود الويب الرسمي متزامن على d30cc74",
+      "facts": [
+        "host: vmi3061403",
+        "service: mohammad-ledger-bot.service active",
+        "Node PID: 130587",
+        "webhook: empty",
+        "pending_update_count: 0",
+        "shared logic: account labels and transfer compatibility match web",
+        "official repo sync: mohammad-ledger/main d30cc74"
+      ],
       "source_hash": "f313cdd8831bd82f5ecd3e505d6378760a2e9779",
-      "last_change_detected": "2026-05-11T21:44:27.420Z"
+      "last_change_detected": "2026-05-16T08:55:00.000Z"
     },
     "brixprice-bot": {
       "verified_at": "2026-05-16T04:38:21.880Z",
