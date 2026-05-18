@@ -344,7 +344,7 @@ const PRJ = [
     next_milestone: "إصلاح ٢٢ قيمة سعة غرف خاطئة في ريكسوس + إدخال ٨ عقود فندقية متبقية + إعادة تفعيل النشر التلقائي GitHub→Railway + مراقبة نسخ بريكس باك آبس اليومية",
     summary: "محرك حجوزات BRIX الأساسي — Next.js 16.2 + Supabase + 2,088 اختباراً موزّعة على 71 ملف. منشور حياً على Railway (verified 200) مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير. أحدث الميزات: حاجز اليوم/الغد، تحذيرات release_days كبطاقة حمراء بدل الرفض، توقيت إسطنبول، تصميم بطاقات v15.8 يضع سعر الليلة كأبرز رقم.",
     local_path:
-      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
+      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
     server_path: null,
     repo_url: "https://github.com/aneerabee/brix-travel-system",
     deploy_url: "https://brix-hotel-web-app-production.up.railway.app",
@@ -384,7 +384,7 @@ const PRJ = [
       "Playwright",
       "TypeScript",
     ],
-    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
+    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
     links: {
       "النظام الحي":
         "https://brix-hotel-web-app-production.up.railway.app",
@@ -536,9 +536,9 @@ const PRJ = [
     claude_session: {
       session_name: "[brix system]",
       terminal: "iTerm2",
-      cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app",
+      cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
       command:
-        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel/brix-bot/hotel-web-app && claude",
+        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel && claude",
       memory_file:
         "~/.claude/projects/-Users-rabeeshaban-Desktop-Projects----BRIX-Travel/memory/MEMORY.md",
       note: "بعد فتح كلود اكتب رزيوم واختر الجلسة المسماة بريكس سيستم. آخر نقطة (2026-05-15): تصميم بطاقات v15.8 + booking-window + release_days كتحذير أحمر + توقيت إسطنبول. 114 commit في آخر أسبوعَين. ملف الذاكرة يحوي القرارات التجارية والمعمارية المتراكمة.",
