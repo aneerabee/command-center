@@ -2520,6 +2520,8 @@ const TL = [
 const CLD = [
   {
     nm: "GitHub",
+    name: "GitHub",
+    ar: "جيت هاب",
     id: "github",
     active: true,
     active_note: "نشط: 8 repos، runtime sync ينشر يومياً",
@@ -2553,6 +2555,8 @@ const CLD = [
   },
   {
     nm: "Supabase",
+    name: "Supabase",
+    ar: "سوبابيس",
     id: "supabase",
     active: true,
     active_note: "نشط: قاعدة BRIX + Money Manager + Mohammad Ledger + LIBYA (قيد الإعداد)",
@@ -2566,6 +2570,8 @@ const CLD = [
   },
   {
     nm: "Vercel",
+    name: "Vercel",
+    ar: "فيرسل",
     id: "vercel",
     active: false,
     active_note: "غير مستخدم حالياً — Railway هو سيرفر النشر",
@@ -2578,6 +2584,8 @@ const CLD = [
   },
   {
     nm: "Railway",
+    name: "Railway",
+    ar: "ريلواي",
     id: "railway",
     active: true,
     active_note: "نشط: BRIX Travel System + WhatsApp CRM منشورين",
@@ -2590,6 +2598,8 @@ const CLD = [
   },
   {
     nm: "Heroku",
+    name: "Heroku",
+    ar: "هيروكو",
     id: "heroku",
     active: false,
     active_note: "غير مستخدم — تركناه لـRailway",
@@ -2603,6 +2613,8 @@ const CLD = [
   },
   {
     nm: "Meta Business",
+    name: "Meta Business",
+    ar: "ميتا بيزنس",
     id: "meta-business",
     active: true,
     active_note: "نشط: حملات Sueno Belek قيد التشغيل",
@@ -2627,6 +2639,8 @@ const CLD = [
   },
   {
     nm: "Telegram",
+    name: "Telegram",
+    ar: "تليجرام",
     id: "telegram",
     active: true,
     active_note: "نشط: Bot API لكل البوتات",
@@ -2638,6 +2652,8 @@ const CLD = [
   },
   {
     nm: "Contabo VPS",
+    name: "Contabo VPS",
+    ar: "كونتابو فيرتشوال",
     id: "contabo-vps",
     active: true,
     active_note: "نشط: يستضيف Wapy.dev + بوت دفتر محمد + موقع Brixtravel (حي عبر Caddy + Let's Encrypt)",
@@ -2651,6 +2667,8 @@ const CLD = [
   },
   {
     nm: "Hostinger",
+    name: "Hostinger",
+    ar: "هوستنجر",
     id: "hostinger",
     active: true,
     active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و MX records تشير لـ mx1/mx2.hostinger.com. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
@@ -2674,6 +2692,8 @@ const CLD = [
   },
   {
     nm: "Perplexity",
+    name: "Perplexity",
+    ar: "بربلكسيتي",
     id: "perplexity",
     active: true,
     active_note: "نشط: استخدام دوري للبحث",
@@ -2698,6 +2718,8 @@ const CLD = [
   },
   {
     nm: "Notion",
+    name: "Notion",
+    ar: "نوشن",
     id: "notion",
     active: true,
     active_note: "نشط: ملاحظات وخطط",
@@ -2710,6 +2732,8 @@ const CLD = [
   },
   {
     nm: "Tailscale",
+    name: "Tailscale",
+    ar: "تيلسكيل",
     id: "tailscale",
     active: true,
     active_note: "نشط: VPN خاص (100.116.69.101) — وصول لـContabo و4 منظومات تعمل عليه",

@@ -10,7 +10,21 @@ const E = (s) =>
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+/* EJ — escapes a string for safe injection inside a JS string literal that
+ * sits inside an HTML attribute (e.g. onclick="foo('${EJ(name)}')").
+ * Must NOT use HTML entities — browsers HTML-decode the attribute BEFORE
+ * passing to the JS parser, so &#39; becomes ' which breaks the literal. */
+const EJ = (s) =>
+  String(s ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/</g, "\\u003C")
+    .replace(/>/g, "\\u003E")
+    .replace(/\r?\n/g, "\\n");
 
 /* ══════════════════════════════════════════════
    DESIGN SYSTEM — Smart Helpers
@@ -470,7 +484,9 @@ async function _loadRuntimeData() {
         archive: payload.archive || {},
       };
     }
-  } catch (_) {}
+  } catch (err) {
+    console.warn("[CC] runtime fetch failed:", err.message);
+  }
 }
 
 /* ──── HEALTH MONITOR — يقرأ health-status.json كل تحميل ──── */
@@ -488,7 +504,9 @@ async function _loadHealthData() {
       home.innerHTML = R.home();
       requestAnimationFrame(_processIcons);
     }
-  } catch (_) {}
+  } catch (err) {
+    console.warn("[CC] health fetch failed:", err.message);
+  }
 }
 
 function _refreshRuntimeBoundViews() {
@@ -1362,7 +1380,7 @@ R.home = function () {
       t: t.ar || t.name,
       d: t.summary || "",
       f: (t.facts || []).slice(0, 2).join(" · "),
-      a: `openToolDetail('${E(t.name)}')`,
+      a: `openToolDetail('${EJ(t.name)}')`,
     }),
   );
   const layerCards = [
@@ -1406,21 +1424,21 @@ R.home = function () {
       n: p.ar,
       d: p.summary || "",
       c: p.cl,
-      a: `openProjectDetail('${E(p.name)}')`,
+      a: `openProjectDetail('${EJ(p.name)}')`,
     })),
     ...BOT.filter((b) => b.st !== "a").map((b) => ({
       t: "بوت غير نشط",
       n: b.ar,
       d: b.summary || "",
       c: b.cl,
-      a: `openBotDetail('${E(b.name)}')`,
+      a: `openBotDetail('${EJ(b.name)}')`,
     })),
     ...urgentIdeas.map((i) => ({
       t: `فكرة ${i.horizon}`,
       n: i.name,
       d: i.next_step || i.summary || "",
       c: i.cl,
-      a: `openIdeaDetail('${E(i.name)}')`,
+      a: `openIdeaDetail('${EJ(i.name)}')`,
     })),
   ].slice(0, 6);
   const quickLinks = [
@@ -1494,7 +1512,7 @@ R.home = function () {
       icon: b.priority === "high" ? "🔴" : "🟡",
       title: p.ar || p.name,
       detail: b.text.slice(0, 80) + (b.text.length > 80 ? "…" : ""),
-      action: `openProjectDetail('${E(p.name)}')`,
+      action: `openProjectDetail('${EJ(p.name)}')`,
       actionLabel: "افتح المشروع",
       tone: b.priority === "high" ? "#ef4444" : "#f59e0b",
     });
@@ -1670,7 +1688,7 @@ R.home = function () {
         const u = UMBRELLAS.find((x) => x.id === p.parent);
         const updatedISO = p.current_status.updated;
         return (
-          `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${E(p.name)}')">` +
+          `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${EJ(p.name)}')">` +
           `<div class="cc-feed-dot" style="background:${p.cl}"></div>` +
           `<div class="cc-feed-body">` +
           `<div class="cc-feed-top">` +
@@ -1819,7 +1837,7 @@ R.home = function () {
           ? Math.floor((Date.now() - new Date(p.current_status.updated).getTime()) / 86400000)
           : null;
         return (
-          `<button class="exec-prog-row" onclick="openProjectDetail('${E(p.name)}')" style="--c:${p.cl}">` +
+          `<button class="exec-prog-row" onclick="openProjectDetail('${EJ(p.name)}')" style="--c:${p.cl}">` +
           `<span class="exec-prog-icon">${_ic(p.em, 16)}</span>` +
           `<span class="exec-prog-name">${E(p.ar || p.name)}</span>` +
           `<span class="exec-prog-bar"><i style="width:${p.pct}%"></i></span>` +
@@ -1932,7 +1950,7 @@ R.projects = function () {
         { v: PRJ.filter((p) => p.deploy_url).length, l: "عناصر لها نشر" },
       ],
     }) +
-    `<div class="prj-hero" onclick="openProjectDetail('${E(hero.name)}')">` +
+    `<div class="prj-hero" onclick="openProjectDetail('${EJ(hero.name)}')">` +
     `<div class="prj-hero-accent" style="background:linear-gradient(135deg,${hero.cl},${hero.cl}aa)"></div>` +
     `<div class="prj-hero-content">` +
     `<div class="prj-hero-top">` +
@@ -2002,7 +2020,7 @@ R.projects = function () {
                     ? `<span class="prj-card-stale-badge" title="لم يُحدّث منذ ${ageDays} يوم">⏰ متأخر</span>`
                     : "";
                 return (
-                  `<div class="prj-card" data-cc-name="${E(p.name)}" onclick="openProjectDetail('${E(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
+                  `<div class="prj-card" data-cc-name="${E(p.name)}" onclick="openProjectDetail('${EJ(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
                   badge +
                   `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
                   `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
@@ -2149,7 +2167,7 @@ R.team = function () {
       `<button class="emp-copy" id="${id}" onclick="teamCopy('${E(text)}','${id}')" title="${E(title)}">📋</button>`;
 
     return (
-      `<div class="emp-card" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}">` +
+      `<div class="emp-card emp-card-clickable" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}" role="button" tabindex="0" aria-haspopup="dialog" onclick="openTeamDetail('${EJ(m.full_name || m.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTeamDetail('${EJ(m.full_name || m.name)}')}">` +
       // ── HEADER: Identity ──
       `<div class="emp-header">` +
       `<div class="emp-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
@@ -2224,7 +2242,7 @@ R.team = function () {
           projs
             .map(
               (p) =>
-                `<a class="emp-proj-tag" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
+                `<a class="emp-proj-tag" onclick="openProjectDetail('${EJ(p.name)}')" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
             )
             .join("") +
           `</span></div>`
@@ -2335,7 +2353,7 @@ R.umbrellas = function () {
 
   // مكوّن: بطاقة مشروع مصغّرة داخل قسم
   const renderProjectRow = (p) =>
-    `<div class="umb-project" onclick="openProjectDetail('${E(p.name)}')" style="--pc:${p.cl}">` +
+    `<div class="umb-project" onclick="openProjectDetail('${EJ(p.name)}')" style="--pc:${p.cl}">` +
     `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
     `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
     (p.parent_role
@@ -2517,7 +2535,7 @@ R.map = function () {
         c: p.cl,
         t: hint,
         kind: _projectKindLabel(p.kind),
-        action: `openProjectDetail('${E(p.name)}')`,
+        action: `openProjectDetail('${EJ(p.name)}')`,
       };
     }),
     ...TL.filter((t) => t.category === "developer-env").map((t) => ({
@@ -2532,7 +2550,7 @@ R.map = function () {
       c: t.cl || "#0EA5E9",
       t: (t.config_paths || []).slice(0, 2).join(" · ") || t.summary || "",
       kind: "AI CLI",
-      action: `openToolDetail('${E(t.name)}')`,
+      action: `openToolDetail('${EJ(t.name)}')`,
     })),
     {
       name: "Tron Address Bot",
@@ -2617,21 +2635,26 @@ R.auto = function () {
     `<div class="auto-group-header"><span class="auto-group-title">${E(g.group)}</span><span class="auto-group-loc">${E(g.loc)}</span></div>` +
     g.tasks
       .map(
-        (t) =>
-          `<div class="auto-task" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}"><span class="led ${t.on ? "led-on" : "led-off"}"></span>` +
-          `<span class="auto-task-name">${E(t.name)}</span>` +
-          `<span class="auto-task-dt">${E(t.freq)}</span>` +
-          (t.prj || [])
-            .map((p) => {
-              const pc = _prjColor(p) || "#888";
-              return `<span class="auto-prj-tag" style="background:${pc}15;color:${pc};border:1px solid ${pc}25">${E(p)}</span>`;
-            })
-            .join("") +
-          `<span class="auto-task-desc">${E(t.what)}</span>` +
-          (t.path
-            ? `<span class="auto-task-desc" style="font-family:var(--mono);font-size:10px;color:var(--t3)">${E(t.path)}</span>`
-            : "") +
-          `</div>`,
+        (t) => {
+          const taskKey = g.host + "::" + t.name;
+          return (
+            `<button type="button" class="auto-task auto-task-clickable" data-auto-key="${E(taskKey)}" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}" aria-haspopup="dialog" onclick="openAutoDetail('${EJ(taskKey)}')">` +
+            `<span class="led ${t.on ? "led-on" : "led-off"}"></span>` +
+            `<span class="auto-task-name">${E(t.name)}</span>` +
+            `<span class="auto-task-dt">${E(t.freq)}</span>` +
+            (t.prj || [])
+              .map((p) => {
+                const pc = _prjColor(p) || "#888";
+                return `<span class="auto-prj-tag" style="background:${pc}15;color:${pc};border:1px solid ${pc}25">${E(p)}</span>`;
+              })
+              .join("") +
+            `<span class="auto-task-desc">${E(t.what)}</span>` +
+            (t.path
+              ? `<span class="auto-task-desc" style="font-family:var(--mono);font-size:10px;color:var(--t3)">${E(t.path)}</span>`
+              : "") +
+            `</button>`
+          );
+        },
       )
       .join("") +
     "</div>";
@@ -2826,7 +2849,7 @@ R.server = function () {
               `data-cc-name="${E(s.name)}" ` +
               `data-svc-type="${E(type || 'unknown')}" ` +
               `data-svc-status="${s.st ? 'on' : 'off'}" ` +
-              `onclick="openServiceDetail('${E(s.name)}')">` +
+              `onclick="openServiceDetail('${EJ(s.name)}')">` +
               `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}"></span>` +
               `<span class="svc-em">${_ic(s.em, 18)}</span>` +
               `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
@@ -2961,7 +2984,7 @@ R.bots = function () {
     const featuredClass = opts.featured ? " is-featured" : "";
     const matchAttrs = `data-bot-kind="${E(b.kind || '')}" data-bot-status="${isActive ? 'on' : 'off'}" data-bot-host="${E((b.host || '').toLowerCase())}"`;
     return (
-      `<div class="mod-card mod-bot-card ${sizeClass}${featuredClass}" style="--card-cl:${b.cl || '#7C3AED'}" ${matchAttrs} data-cc-name="${E(b.name)}" onclick="openBotDetail('${E(b.name)}')">` +
+      `<div class="mod-card mod-bot-card ${sizeClass}${featuredClass}" style="--card-cl:${b.cl || '#7C3AED'}" ${matchAttrs} data-cc-name="${E(b.name)}" onclick="openBotDetail('${EJ(b.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-icon">${_ic(b.em, opts.featured ? 28 : 22)}</div>` +
       `<span class="mod-card-status ${isActive ? 'is-on' : 'is-off'}"><span class="dot"></span>${isActive ? 'نشط' : 'متوقف'}</span>` +
@@ -3055,7 +3078,7 @@ R.tools = function () {
     const usedInArr = (t.used_in || []).slice(0, 3);
     const isLive = t.st === "a";
     return (
-      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(t.category)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${E(t.name)}')">` +
+      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(t.category)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(t.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(t.em || "🔧", 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3071,7 +3094,7 @@ R.tools = function () {
   };
 
   const featuredCard = featured
-    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(featured.category)}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${E(featured.name)}')">` +
+    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(featured.category)}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(featured.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em mod-card-em--lg">${_ic(featured.em || "🛠️", 36)}</div>` +
       `<div class="mod-card-status is-live">⭐ بيئة العمل الأساسية</div>` +
@@ -3201,7 +3224,7 @@ R.cloud = function () {
     let groupKey = "";
     filterGroups.forEach((g) => { if (g.match && g.match(c)) groupKey += " " + g.key; });
     return (
-      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${groupKey.trim()}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${E(c.nm)}')">` +
+      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${groupKey.trim()}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${EJ(c.nm)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(c.em, 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3272,7 +3295,7 @@ R.ideas = function () {
     const hasBp = !!idea.blueprint;
     const cats = `pr${idea.pr}${hasBp ? " bp" : ""}`;
     return (
-      `<div class="mod-card ${sizeClass}${hasBp ? " mod-card--featured" : ""}" data-cc-name="${E(idea.name)}" data-mod-cat="${cats}" data-mod-name="${E(idea.name.toLowerCase())}" style="--card-cl:${cl}" onclick="openIdeaDetail('${E(idea.name)}')">` +
+      `<div class="mod-card ${sizeClass}${hasBp ? " mod-card--featured" : ""}" data-cc-name="${E(idea.name)}" data-mod-cat="${cats}" data-mod-name="${E(idea.name.toLowerCase())}" style="--card-cl:${cl}" onclick="openIdeaDetail('${EJ(idea.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(idea.em || "💡", 22)}</div>` +
       `<div class="mod-card-status${idea.pr === 1 ? " is-live" : ""}">${E(prLabels[idea.pr] || "")}</div>` +
@@ -3372,7 +3395,7 @@ R.archive = function () {
     const size = a.size || "";
     const count = a.count || "";
     return (
-      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" data-cc-name="${E(a.name)}" onclick="openArchiveDetail('${E(a.name)}')">` +
+      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" data-cc-name="${E(a.name)}" onclick="openArchiveDetail('${EJ(a.name)}')">` +
       `<div class="book-spine" style="background:${a.cl}"></div>` +
       `<div class="book-body">` +
       `<span class="book-emoji">${_ic(a.em, 32)}</span>` +
@@ -4553,6 +4576,101 @@ function openArchiveDetail(name) {
   });
 }
 
+/* ── 8. AUTOMATION TASK — مهمة مجدولة ── */
+function openAutoDetail(taskKey) {
+  if (!taskKey || typeof AUTO === "undefined") return;
+  let group = null, task = null;
+  for (const g of AUTO) {
+    const found = (g.tasks || []).find((t) => (g.host + "::" + t.name) === taskKey);
+    if (found) { group = g; task = found; break; }
+  }
+  if (!task) return;
+  closeDetail(true);
+  const cl = task.on ? "#10B981" : "#94a3b8";
+  const stateLabel = task.on ? "نشطة" : "معطّلة";
+  const linkedProjects = (task.prj || []).map((p) => {
+    const pc = _prjColor(p) || "#888";
+    return `<button class="cx-chip" onclick="openProjectDetail('${EJ(p)}')" style="background:${pc}22;border-color:${pc}50">${E(p)}</button>`;
+  }).join("");
+
+  const facts = [
+    { label: "التكرار", value: task.freq || "—" },
+    { label: "النوع", value: task.kind || "—" },
+    { label: "المضيف", value: group.group || "—" },
+    { label: "المُشغِّل", value: group.loc || "—" },
+  ];
+
+  const overview =
+    (task.what ? `<div class="cx-group-heading">الوصف</div><div class="cx-section-block"><p>${E(task.what)}</p></div>` : "") +
+    (linkedProjects ? `<div class="cx-group-heading">المشاريع المرتبطة</div><div class="cx-chips">${linkedProjects}</div>` : "") +
+    (task.path ? `<div class="cx-group-heading">المسار</div>${_cxPath(task.path)}` : "");
+
+  _codexShell({
+    item: { name: task.name, ar: task.name, em: task.on ? "🟢" : "⚪" },
+    kind: "automation",
+    cl,
+    kicker: `أتمتة · ${E(group.group)}`,
+    title: task.name,
+    subtitle: group.loc,
+    summary: task.what || "",
+    facts,
+    pills: [
+      { label: stateLabel, kind: task.on ? "live" : "status" },
+      task.kind ? { label: task.kind } : null,
+    ].filter(Boolean),
+    tabs: {
+      overview: { html: overview, count: null },
+    },
+  });
+}
+
+/* ── 9. TEAM MEMBER — موظف ── */
+function openTeamDetail(name) {
+  if (typeof TEAM === "undefined") return;
+  const m = TEAM.find((x) => x.name === name || x.full_name === name);
+  if (!m) return;
+  closeDetail(true);
+  const cl = m.cl || "#6366F1";
+  const projects = (m.assigned_projects || []).map((pid) => {
+    const p = PRJ.find((x) => x.id === pid);
+    if (!p) return null;
+    return `<button class="cx-chip" onclick="openProjectDetail('${EJ(p.name)}')">${_ic(p.em, 12)} ${E(p.ar || p.name)}</button>`;
+  }).filter(Boolean).join("");
+
+  const facts = [
+    { label: "الدور", value: m.role || "—" },
+    { label: "القسم", value: m.department || "—" },
+    { label: "مشاريع", value: String((m.assigned_projects || []).length) },
+    m.hire_date ? { label: "تاريخ الانضمام", value: m.hire_date } : null,
+  ].filter(Boolean);
+
+  const contactLines = [];
+  if (m.email_work) contactLines.push(`<div><strong>إيميل:</strong> <a href="mailto:${E(m.email_work)}">${E(m.email_work)}</a></div>`);
+  if (m.phone) contactLines.push(`<div><strong>هاتف:</strong> ${E(m.phone)}</div>`);
+
+  const overview =
+    (m.bio ? `<div class="cx-group-heading">نبذة</div><div class="cx-section-block"><p>${E(m.bio)}</p></div>` : "") +
+    (contactLines.length ? `<div class="cx-group-heading">تواصل</div><div class="cx-section-block">${contactLines.join("")}</div>` : "") +
+    (projects ? `<div class="cx-group-heading">مشاريع مسؤول عنها</div><div class="cx-chips">${projects}</div>` : "");
+
+  _codexShell({
+    item: { name: m.name, ar: m.full_name || m.name, em: "👤" },
+    kind: "team",
+    cl,
+    kicker: `الفريق · ${E(m.department || "—")}`,
+    title: m.full_name || m.name,
+    subtitle: m.role || "",
+    summary: m.bio || "",
+    facts,
+    pills: [
+      { label: m.role || "موظف", kind: "status" },
+    ],
+    tabs: {
+      overview: { html: overview, count: null },
+    },
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════════
    CODEX PANEL — unified popup chrome
    Replaces .di-* / .dsp-* / .dt-* / .da-* / .prj-detail with one
@@ -4686,10 +4804,41 @@ function _codexShell(opts) {
     _setHashSilently(cur + "/" + encodeURIComponent(item.name || item.nm));
   }
   document.documentElement.classList.add("cx-locked");
+
+  // A11y: remember the trigger element so we restore focus on close
+  root._cxLastFocus = document.activeElement;
+  // Make the rest of the page non-interactive while drawer is open
+  document.querySelectorAll("body > *:not(#detail-view):not(script):not(style)").forEach((el) => {
+    if (el.id !== "detail-view") {
+      el.setAttribute("aria-hidden", "true");
+      if ("inert" in HTMLElement.prototype) el.inert = true;
+    }
+  });
+
   requestAnimationFrame(() => {
     root.classList.add("is-open");
     _processIcons();
+    // Move focus into the drawer for screen readers + keyboard users
+    const firstFocusable = root.querySelector(".cx-close, [data-cx-tab], a, button");
+    if (firstFocusable) firstFocusable.focus();
   });
+
+  // Focus trap — keep Tab inside the drawer
+  root._cxTrap = (e) => {
+    if (e.key !== "Tab") return;
+    const focusables = root.querySelectorAll(
+      'button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  };
+  document.addEventListener("keydown", root._cxTrap);
 }
 
 /* Helper builders for codex panes */
@@ -4719,7 +4868,7 @@ function _cxSectionsFromParsed(sections) {
 function _cxChips(names) {
   if (!names || !names.length) return "";
   return `<div class="cx-chips">${names.map((n) => (
-    `<button class="cx-chip" onclick="openDetailSmart('${E(n)}')">${E(n)}</button>`
+    `<button class="cx-chip" onclick="openDetailSmart('${EJ(n)}')">${E(n)}</button>`
   )).join("")}</div>`;
 }
 function _cxLinks(links) {
@@ -4753,6 +4902,18 @@ function closeDetail(instant) {
     if (p.style.display === "none") p.style.display = "";
   });
   document.documentElement.classList.remove("cx-locked");
+
+  // A11y: remove inert/aria-hidden + restore focus
+  document.querySelectorAll('body > [aria-hidden="true"]').forEach((el) => {
+    el.removeAttribute("aria-hidden");
+    if ("inert" in HTMLElement.prototype) el.inert = false;
+  });
+  if (d._cxTrap) document.removeEventListener("keydown", d._cxTrap);
+  const lastFocus = d._cxLastFocus;
+  if (lastFocus && typeof lastFocus.focus === "function") {
+    setTimeout(() => lastFocus.focus(), 0);
+  }
+
   if (instant) {
     d.remove();
     return;

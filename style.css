@@ -9,8 +9,9 @@
   --elevated: #f2efe8;
   --hover: #ece8de;
   --t1: #1f252f;
-  --t2: #586171;
-  --t3: #8b938f;
+  --t2: #4a5567; /* was #586171 → bumped 1 step for AA on cream */
+  --t3: #6b7280; /* was #8b938f (2.87) → 4.6 contrast on cream */
+  --t4: #9aa3af; /* new soft tier for icons + decoration only */
   --brd: rgba(32, 37, 44, 0.08);
   --brdH: rgba(32, 37, 44, 0.14);
   --blue: #3b82f6;
@@ -12988,3 +12989,117 @@ button.cx-chip:hover {
   font-size: 13px;
 }
 .cx-empty .cx-empty-em { font-size: 36px; display: block; margin-bottom: 8px; opacity: .7; }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * W1 — A11Y & MOBILE & CONTRAST FIXES — 2026-05-20
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* Skip link — hidden until focused */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  z-index: 10000;
+  padding: 10px 18px;
+  background: var(--purple);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  transition: top .15s;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 12px;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Focus ring that works on both light page and dark drawer */
+.cx-panel *:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--cx-cl, var(--purple));
+  border-radius: 6px;
+}
+*:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 2px;
+}
+
+/* Pulse card on home — separate accent color from bg so text reads */
+.cc-pulse-card {
+  background: linear-gradient(180deg, #fff, color-mix(in srgb, var(--umb, var(--purple)) 4%, #fff)) !important;
+  border: 1px solid color-mix(in srgb, var(--umb, var(--purple)) 25%, var(--brd)) !important;
+  color: var(--t1) !important;
+}
+.cc-pulse-card .cc-pulse-name { color: var(--t1) !important; font-weight: 800; }
+.cc-pulse-card .cc-pulse-stat strong { color: var(--umb, var(--purple)) !important; }
+.cc-pulse-card .cc-pulse-stat span { color: var(--t2) !important; }
+
+/* Touch target floor for bottom-bar */
+.bar-item { min-height: 48px; }
+
+/* Bottom-bar text legibility — bar-label was 8px (too small) */
+.bar-label { font-size: 10px !important; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * W2 + W5 — Team theme, auto-task button affordance, polish
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* Team drawer theme — neutral indigo */
+.cx-root[data-cx-kind="team"] {
+  --cx-bg: #0E1018;
+  --cx-elev: #181C28;
+  --cx-elev2: #1F2433;
+  --cx-cl: #818CF8;
+}
+.cx-root[data-cx-kind="team"] .cx-cover {
+  background:
+    radial-gradient(120% 100% at 100% 0%, rgba(129,140,248,0.28), transparent 55%),
+    linear-gradient(180deg, #181C28, #0E1018);
+}
+.cx-root[data-cx-kind="team"] .cx-emoji {
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4338CA, #1E1B4B);
+}
+
+/* Automation task button affordance */
+.auto-task-clickable {
+  cursor: pointer;
+  text-align: inherit;
+  width: 100%;
+  font: inherit;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.auto-task-clickable:hover {
+  background: color-mix(in srgb, var(--purple) 5%, var(--surface));
+  border-color: color-mix(in srgb, var(--purple) 22%, var(--brd));
+  transform: translateX(-2px);
+}
+.auto-task-clickable:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: -2px;
+}
+
+/* Employee card click affordance */
+.emp-card-clickable { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.emp-card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--mc, var(--purple)) 50%, transparent);
+}
+.emp-card-clickable:focus-visible {
+  outline: 2px solid var(--mc, var(--purple));
+  outline-offset: 2px;
+}
+
+/* Floor: prevent <11px text anywhere (a11y) */
+.cx-fact-label,
+.bar-label,
+.prj-hero-progress-text,
+.prj-stat-label {
+  font-size: max(11px, 0.7rem) !important;
+}

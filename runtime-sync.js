@@ -417,13 +417,13 @@ function normalizeGitHubRemote(url) {
     .replace(/\/+$/, '');
 }
 
-function checkTools(tools, projects, previous) {
+function checkTools(tools, projects, previous, tailscale) {
   const records = {};
   const settingsText = safeExec(`cat ${JSON.stringify(path.join(os.homedir(), '.claude', 'settings.json'))}`);
   const claudeSettings = readClaudeSettings();
   const codexConfig = safeExec(`cat ${JSON.stringify(path.join(os.homedir(), '.codex', 'config.toml'))}`);
   const githubConfirmed = confirmedGitHubProjects(projects);
-  const tailscale = tailscaleReachable();
+  if (tailscale === undefined) tailscale = tailscaleReachable();
   const mcpPermissionMap = {
     'notion-mcp':'mcp__claude_ai_Notion__',
     'perplexity-mcp':'mcp__perplexity__',
@@ -546,13 +546,13 @@ function checkTools(tools, projects, previous) {
   return records;
 }
 
-function checkCloud(cloudItems, previous, serverSnapshot) {
+function checkCloud(cloudItems, previous, serverSnapshot, tailscale, projects) {
   const records = {};
-  const tailscale = tailscaleReachable();
+  if (tailscale === undefined) tailscale = tailscaleReachable();
   const iCloudRoot = path.join(os.homedir(), 'Library', 'Mobile Documents', 'com~apple~CloudDocs');
   const telegramChannel = path.join(os.homedir(), '.claude', 'channels', 'telegram');
   const claudeSettings = readClaudeSettings();
-  const githubConfirmed = confirmedGitHubProjects(loadData().PRJ);
+  const githubConfirmed = confirmedGitHubProjects(projects || loadData().PRJ);
   const networkCheckIds = new Set(['github','supabase','vercel','railway','meta-business','airtable','hostinger','trongrid','coingecko','heroku']);
   const linkedCloudPermissionMap = {
     notion:'mcp__claude_ai_Notion__',
@@ -603,7 +603,7 @@ function checkCloud(cloudItems, previous, serverSnapshot) {
       };
     } else if (cloud.lk && networkCheckIds.has(cloud.id)) {
       const reach = headReachable(cloud.lk);
-      let status = cloud.active === false ? 'warn' : 'warn';
+      let status = 'warn';
       let summary = reach.error || 'probe غير حاسم';
       if (reach.ok) {
         status = cloud.active === false ? 'warn' : 'ok';
@@ -803,10 +803,12 @@ function main() {
   const previous = readPreviousRuntime();
   const serverSnapshot = buildServerSnapshot();
   const serverPathSnapshot = buildServerPathSnapshot(PRJ);
+  // Hoist the heavy tailscale probe out of per-section checkers (was called 2x).
+  const tailscale = tailscaleReachable();
   const project = checkProjects(PRJ, previous, serverPathSnapshot);
   const service = checkServices(SVC, previous, serverSnapshot);
-  const tool = checkTools(TL, PRJ, previous);
-  const cloud = checkCloud(CLD, previous, serverSnapshot);
+  const tool = checkTools(TL, PRJ, previous, tailscale);
+  const cloud = checkCloud(CLD, previous, serverSnapshot, tailscale, PRJ);
   const bot = checkBots(BOT, previous, serverSnapshot);
   const archive = checkArchive(ARC, previous);
   const automation = checkAutomations(AUTO, previous, serverSnapshot);
