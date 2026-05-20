@@ -1741,6 +1741,7 @@ const AUTO = [
     host: "desktop",
     tasks: [
       {
+        id: "desktop-github",
         name: "نسخ المشاريع لـGitHub",
         freq: "يوميًا 14:00",
         on: true,
@@ -1750,6 +1751,7 @@ const AUTO = [
         kind: "backup",
       },
       {
+        id: "desktop-command-center-runtime-publish",
         name: "Command Center Runtime Publish",
         freq: "كل 6 ساعات",
         on: true,
@@ -1759,6 +1761,7 @@ const AUTO = [
         kind: "automation",
       },
       {
+        id: "desktop-pm2",
         name: "إحياء عمليات PM2 عند الإقلاع",
         freq: "عند الإقلاع",
         on: true,
@@ -1768,6 +1771,7 @@ const AUTO = [
         kind: "runtime",
       },
       {
+        id: "desktop-brix",
         name: "خادم فواتير BRIX المحلي",
         freq: "دائم",
         on: true,
@@ -1784,6 +1788,7 @@ const AUTO = [
     host: "server",
     tasks: [
       {
+        id: "server-wapy",
         name: "نسخ احتياطي قاعدة Wapy",
         freq: "يوميًا 3 صباحًا",
         on: true,
@@ -1793,6 +1798,7 @@ const AUTO = [
         kind: "backup",
       },
       {
+        id: "server-wapy",
         name: "تنظيف نسخ Wapy القديمة",
         freq: "يوميًا 4 صباحًا",
         on: true,
@@ -1802,6 +1808,7 @@ const AUTO = [
         kind: "cleanup",
       },
       {
+        id: "server-libya-web-next-js",
         name: "LIBYA Web (Next.js)",
         freq: "دائم (systemd user)",
         on: true,
@@ -1811,6 +1818,7 @@ const AUTO = [
         kind: "app",
       },
       {
+        id: "server-libya-bot-telegram",
         name: "LIBYA Bot (Telegram)",
         freq: "—",
         on: false,
@@ -1820,6 +1828,7 @@ const AUTO = [
         kind: "bot",
       },
       {
+        id: "server-libya",
         name: "نسخ احتياطي LIBYA يوميًا",
         freq: "—",
         on: false,
@@ -1836,6 +1845,7 @@ const AUTO = [
     host: "desktop",
     tasks: [
       {
+        id: "desktop-pretooluse",
         name: "PreToolUse",
         freq: "3 hooks",
         on: true,
@@ -1845,6 +1855,7 @@ const AUTO = [
         kind: "hook",
       },
       {
+        id: "desktop-posttooluse",
         name: "PostToolUse",
         freq: "2 hooks",
         on: true,
@@ -1854,6 +1865,7 @@ const AUTO = [
         kind: "hook",
       },
       {
+        id: "desktop-stop",
         name: "Stop",
         freq: "1 hook",
         on: true,
@@ -1870,6 +1882,7 @@ const AUTO = [
     host: "github",
     tasks: [
       {
+        id: "desktop-ci-build-test-auto-deploy",
         name: "CI Build + Test + Auto-Deploy",
         freq: "كل push على main",
         on: true,
@@ -1879,6 +1892,7 @@ const AUTO = [
         kind: "deploy",
       },
       {
+        id: "desktop-daily-contract-backup",
         name: "Daily Contract Backup",
         freq: "يوميًا 03:00 UTC",
         on: true,
@@ -1888,6 +1902,7 @@ const AUTO = [
         kind: "backup",
       },
       {
+        id: "desktop-telegram-notifier-on-claude-pr",
         name: "Telegram Notifier on Claude PR",
         freq: "عند PR من فرع claude/*",
         on: true,

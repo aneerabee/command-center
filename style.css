@@ -572,7 +572,7 @@ svg.lucide {
   border-radius: var(--r);
   cursor: pointer;
   color: var(--t3);
-  font-size: 8px;
+  font-size: 11px;
   min-width: 44px;
   transition: all 0.15s;
 }
@@ -639,7 +639,7 @@ svg.lucide {
   border-radius: var(--r);
   cursor: pointer;
   color: var(--t3);
-  font-size: 9px;
+  font-size: 11px;
   transition: all 0.15s;
 }
 .more-item:active {
@@ -1094,7 +1094,7 @@ svg.lucide {
 }
 .hqx-score-core span {
   margin-top: 6px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #7c756c;
   text-align: center;
@@ -1201,7 +1201,7 @@ svg.lucide {
   display: inline-flex;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
 }
 .hqx-state--ok {
@@ -1242,7 +1242,7 @@ svg.lucide {
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 8px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #877e73;
 }
@@ -1293,7 +1293,7 @@ svg.lucide {
   border: 1px solid rgba(255, 255, 255, 0.86);
 }
 .hqx-focus-kind {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--focus);
   background: rgba(255, 255, 255, 0.82);
@@ -1447,7 +1447,7 @@ svg.lucide {
 .hqx-runtime-chip small {
   display: block;
   margin-top: 6px;
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1.6;
   color: #7c7369;
 }
@@ -1511,7 +1511,7 @@ svg.lucide {
   border-radius: 999px;
   background: color-mix(in srgb, var(--attention) 10%, #fff);
   color: var(--attention);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
 }
 .hqx-attention-item strong {
@@ -1572,7 +1572,7 @@ svg.lucide {
 .hqx-cli-item span {
   display: block;
   margin-top: 8px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #7a6cbb;
 }
@@ -1842,7 +1842,7 @@ svg.lucide {
   line-height: 1.1;
 }
 .hb-c-label {
-  font-size: 9px;
+  font-size: 11px;
   color: #9b9590;
   display: block;
   margin-top: 3px;
@@ -1989,7 +1989,7 @@ svg.lucide {
   transition: width 1s var(--ease);
 }
 .hb-auto-num {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   font-family: var(--mono);
   color: #e8a838;
@@ -2026,7 +2026,7 @@ svg.lucide {
   align-items: center;
 }
 .hb-feed-date {
-  font-size: 8px;
+  font-size: 11px;
   color: #b0aaa3;
 }
 .hb-feed-txt {
@@ -2190,7 +2190,7 @@ svg.lucide {
   text-shadow: 0 0 20px color-mix(in srgb, var(--nc) 30%, transparent);
 }
 .mc-nl {
-  font-size: 8px;
+  font-size: 11px;
   color: #64748b;
   display: block;
   margin-top: 2px;
@@ -2343,7 +2343,7 @@ svg.lucide {
   flex: 1;
 }
 .mc-srv-uptime {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #34d399;
   background: rgba(52, 211, 153, 0.1);
@@ -2374,7 +2374,7 @@ svg.lucide {
   transition: height 1s var(--ease);
 }
 .mc-gauge-label {
-  font-size: 8px;
+  font-size: 11px;
   color: #64748b;
 }
 .mc-bots-section {
@@ -2466,7 +2466,7 @@ svg.lucide {
   gap: 4px;
 }
 .mc-w-info span {
-  font-size: 9px;
+  font-size: 11px;
   color: #64748b;
 }
 .mc-feed {
@@ -2496,7 +2496,7 @@ svg.lucide {
   flex: 1;
 }
 .mc-feed-date {
-  font-size: 8px;
+  font-size: 11px;
   color: #475569;
   white-space: nowrap;
 }
@@ -2506,7 +2506,7 @@ svg.lucide {
   gap: 6px;
 }
 .mc-lnk {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   color: #94a3b8;
   padding: 6px 8px;
@@ -2622,7 +2622,7 @@ svg.lucide {
   line-height: 1.2;
 }
 .cc-ml {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--t3);
   display: block;
   margin-top: 1px;
@@ -2732,7 +2732,7 @@ svg.lucide {
   color: var(--t1);
 }
 .cc-sys-sub {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   margin-top: 4px;
   display: block;
@@ -2756,7 +2756,7 @@ svg.lucide {
   margin-bottom: 6px;
 }
 .cc-badge {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: var(--rf);
@@ -2840,7 +2840,7 @@ svg.lucide {
   gap: 4px;
 }
 .cc-cd-text span {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
 }
 .cc-feed-section {
@@ -2870,7 +2870,7 @@ svg.lucide {
   flex: 1;
 }
 .cc-feed-date {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--t3);
   white-space: nowrap;
 }
@@ -2880,7 +2880,7 @@ svg.lucide {
   gap: 6px;
 }
 .cc-qlink {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--t2);
   padding: 5px 10px;
@@ -3108,7 +3108,7 @@ svg.lucide {
   margin-bottom: 20px;
 }
 .prj-hero-badge {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 20px;
@@ -3147,7 +3147,7 @@ svg.lucide {
   display: block;
 }
 .prj-stat-label {
-  font-size: 8px;
+  font-size: 11px;
   opacity: 0.7;
   display: block;
   margin-top: 2px;
@@ -3281,7 +3281,7 @@ svg.lucide {
   margin-top: 10px;
 }
 .prj-card-links a {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--purple);
   text-decoration: none;
   font-weight: 600;
@@ -3293,7 +3293,7 @@ svg.lucide {
   background: rgba(139, 92, 246, 0.12);
 }
 .tag {
-  font-size: 8px;
+  font-size: 11px;
   padding: 2px 8px;
   border-radius: var(--rf);
   background: rgba(0, 0, 0, 0.05);
@@ -3437,7 +3437,7 @@ svg.lucide {
   gap: 5px;
 }
 .map-item-chip {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   padding: 4px 9px;
   border-radius: 999px;
@@ -3484,7 +3484,7 @@ svg.lucide {
   border-color: #d8d0ee;
 }
 .map-item-badge {
-  font-size: 9px;
+  font-size: 11px;
   padding: 3px 10px;
   border-radius: var(--rf);
   font-weight: 600;
@@ -3551,7 +3551,7 @@ svg.lucide {
   display: block;
 }
 .auto-stat-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -3947,7 +3947,7 @@ svg.lucide {
   display: block;
 }
 .bot-stat-label {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--t3);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -4052,7 +4052,7 @@ svg.lucide {
 .bot-runtime-stat span {
   display: block;
   margin-top: 4px;
-  font-size: 9px;
+  font-size: 11px;
   color: #6d655b;
 }
 .bot-subhead {
@@ -4138,7 +4138,7 @@ svg.lucide {
 .tool-category-card small {
   display: block;
   margin-top: 6px;
-  font-size: 9px;
+  font-size: 11px;
   color: #736a84;
 }
 .dial {
@@ -4170,7 +4170,7 @@ svg.lucide {
   position: relative;
 }
 .dial-label {
-  font-size: 8px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
   letter-spacing: 1px;
   display: block;
@@ -4227,7 +4227,7 @@ svg.lucide {
   line-height: 1.7;
 }
 .tool-card-tags {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t2);
   margin-top: 8px;
 }
@@ -4373,7 +4373,7 @@ svg.lucide {
   position: absolute;
   top: 14px;
   left: 14px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
   border-radius: var(--rf);
@@ -4516,7 +4516,7 @@ svg.lucide {
   text-overflow: ellipsis;
 }
 .cloud-card-status {
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 999px;
@@ -4637,7 +4637,7 @@ svg.lucide {
   color: var(--t2);
 }
 .book-desc {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   margin-top: 4px;
   line-height: 1.5;
@@ -4647,7 +4647,7 @@ svg.lucide {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-12deg);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   color: rgba(239, 68, 68, 0.15);
   border: 2px solid rgba(239, 68, 68, 0.1);
@@ -4995,7 +4995,7 @@ svg.lucide {
 .gauge-note {
   display: block;
   margin-top: 6px;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
 }
 
@@ -5395,7 +5395,7 @@ svg.lucide {
   gap: 8px;
 }
 .bot-h-bar-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   min-width: 50px;
   text-align: left;
@@ -5475,7 +5475,7 @@ svg.lucide {
   color: var(--t3);
 }
 .idea-rels-label {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   margin-left: 4px;
 }
@@ -5486,7 +5486,7 @@ svg.lucide {
   padding: 2px 8px;
   background: var(--elevated);
   border-radius: 12px;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t2);
 }
 .meta-chip-row {
@@ -5591,7 +5591,7 @@ svg.lucide {
 }
 .trust-item span {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   color: #8a8176;
   margin-bottom: 6px;
@@ -5653,7 +5653,7 @@ svg.lucide {
   border-radius: 999px;
   background: #f6f1e8;
   border: 1px solid #ece2d4;
-  font-size: 9px;
+  font-size: 11px;
   color: #6b6357;
   font-weight: 700;
 }
@@ -6536,7 +6536,7 @@ svg.lucide {
   }
   .more-item {
     padding: 8px 4px;
-    font-size: 8px;
+    font-size: 11px;
   }
 
   /* Cards no overflow */
@@ -6613,7 +6613,7 @@ svg.lucide {
     padding: 12px 10px;
   }
   .search-result-kind {
-    font-size: 9px;
+    font-size: 11px;
   }
   .prj-hero-content {
     padding: 20px 14px;
@@ -6688,7 +6688,7 @@ svg.lucide {
 
 /* ══════ AUTO — Project Tags ══════ */
 .auto-prj-tag {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: var(--rf);
@@ -6712,7 +6712,7 @@ svg.lucide {
 
 /* ══════ SERVER — Enhanced SVC items ══════ */
 .svc-prj {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   padding: 1px 8px;
   border-radius: var(--rf);
@@ -6758,7 +6758,7 @@ svg.lucide {
   font-family: var(--mono);
 }
 .bot-h-stat-label {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--t3);
   margin-top: 1px;
 }
@@ -7933,7 +7933,7 @@ svg.lucide {
   .bot-stats { grid-template-columns: repeat(2, 1fr); }
   .bot-triple { grid-template-columns: 1fr; }
   .bot-modules { grid-template-columns: 1fr; }
-  .bot-ms-date { min-width: 70px; font-size: 9px; }
+  .bot-ms-date { min-width: 70px; font-size: 11px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -11017,7 +11017,7 @@ button, input, select, textarea {
 }
 .bp-tag {
   flex-shrink: 0;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -11370,7 +11370,7 @@ button, input, select, textarea {
   padding: 0 5px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--t1) 12%, transparent);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -11564,7 +11564,7 @@ button, input, select, textarea {
 }
 .mod-card-stat span {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--t3);
   margin-top: 2px;
   font-weight: 600;
@@ -12551,7 +12551,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 }
 .cx-fact-label {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -12675,7 +12675,7 @@ button.cx-chip:hover {
   box-shadow: inset 0 -2px 0 var(--cx-cl);
 }
 .cx-tab-count {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   padding: 1px 6px;
   background: color-mix(in srgb, var(--cx-cl) 22%, transparent);

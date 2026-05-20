@@ -1224,7 +1224,7 @@ function _sectionHero({
     `<div class="sec-hero sec-hero--${tone}">` +
     `<div class="sec-hero-copy">` +
     (kicker ? `<span class="sec-hero-kicker">${E(kicker)}</span>` : "") +
-    `<h2 class="sec-hero-title">${E(title)}</h2>` +
+    `<h1 class="sec-hero-title">${E(title)}</h1>` +
     (desc ? `<p class="sec-hero-desc">${E(desc)}</p>` : "") +
     `</div>` +
     (stats.length
@@ -2164,7 +2164,7 @@ R.team = function () {
         : `<div class="emp-field empty"><span class="emp-field-label">${E(label)}</span><span class="emp-field-val">—</span></div>`;
 
     const copyBtn = (text, id, title) =>
-      `<button class="emp-copy" id="${id}" onclick="teamCopy('${E(text)}','${id}')" title="${E(title)}">📋</button>`;
+      `<button class="emp-copy" id="${E(id)}" onclick="event.stopPropagation();teamCopy('${EJ(text)}','${EJ(id)}')" title="${E(title)}" aria-label="${E(title)}">📋</button>`;
 
     return (
       `<div class="emp-card emp-card-clickable" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}" role="button" tabindex="0" aria-haspopup="dialog" onclick="openTeamDetail('${EJ(m.full_name || m.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTeamDetail('${EJ(m.full_name || m.name)}')}">` +
@@ -5069,7 +5069,7 @@ function _renderSearchResults(query) {
   resultsEl.innerHTML = rows
     .map(
       (r) =>
-        `<button class="search-result" onclick="selectSearchResult('${E(r.id)}')">` +
+        `<button class="search-result" onclick="selectSearchResult('${EJ(r.id)}')">` +
         `<span class="search-result-kind">${E(_searchKindLabel(r.kind))}</span>` +
         `<div class="search-result-body">` +
         `<strong class="search-result-title">${E(r.title)}</strong>` +
