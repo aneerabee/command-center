@@ -12377,14 +12377,142 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 }
 .cx-panel .tag:not(:empty)::before { content: ""; }
 
-/* [A2] Force ALL text inside the drawer to use the dark-theme tokens */
-.cx-panel,
-.cx-panel * {
-  color: inherit;
-}
+/* [A2] Base drawer color = light text. Specific light-theme cards below
+ * get explicit overrides — DO NOT use universal `color: inherit` because
+ * that breaks cards whose background is also light-themed. */
 .cx-panel { color: var(--cx-t1); }
 .cx-panel a { color: color-mix(in srgb, var(--cx-cl) 70%, #fff); }
 .cx-panel a:hover { color: var(--cx-cl); }
+
+/* [A2.1] prj-status-card (current status block) — re-skin for dark drawer.
+ * Override the white-surface fallback that made it unreadable. */
+.cx-panel .prj-status-card {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--st-cl, var(--cx-cl)) 16%, var(--cx-elev)) 0%, var(--cx-elev) 70%) !important;
+  border: 1px solid color-mix(in srgb, var(--st-cl, var(--cx-cl)) 35%, var(--cx-line)) !important;
+  color: var(--cx-t1) !important;
+  margin: 0 16px 14px !important;
+  box-shadow: 0 6px 24px -12px color-mix(in srgb, var(--st-cl, var(--cx-cl)) 60%, transparent);
+}
+.cx-panel .prj-status-head {
+  border-bottom: 1px dashed color-mix(in srgb, var(--st-cl, var(--cx-cl)) 30%, var(--cx-line)) !important;
+}
+.cx-panel .prj-status-updated { color: var(--cx-t3) !important; }
+.cx-panel .prj-status-text { color: var(--cx-t1) !important; }
+.cx-panel .prj-status-label {
+  color: color-mix(in srgb, var(--st-cl, var(--cx-cl)) 80%, #fff) !important;
+}
+.cx-panel .prj-status-next .prj-status-text {
+  background: color-mix(in srgb, var(--st-cl, var(--cx-cl)) 18%, var(--cx-elev2)) !important;
+  border-right-color: var(--st-cl, var(--cx-cl)) !important;
+  color: var(--cx-t1) !important;
+}
+.cx-panel .prj-status-use .prj-status-text {
+  background: color-mix(in srgb, var(--st-cl, var(--cx-cl)) 12%, var(--cx-elev2)) !important;
+}
+.cx-panel .prj-blocker {
+  background: var(--cx-elev2) !important;
+  border-color: var(--cx-line) !important;
+  color: var(--cx-t1) !important;
+}
+.cx-panel .prj-blocker--high {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.40) !important;
+}
+.cx-panel .prj-blocker--med,
+.cx-panel .prj-blocker--medium {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(245, 158, 11, 0.40) !important;
+}
+.cx-panel .prj-blocker--low {
+  background: rgba(14, 165, 233, 0.14) !important;
+  border-color: rgba(14, 165, 233, 0.40) !important;
+}
+.cx-panel .prj-blocker-text { color: var(--cx-t1) !important; }
+.cx-panel .prj-blocker-pri { color: #fff; }
+
+/* [A2.2] Context chips (umbrella / department) */
+.cx-panel .prj-ctx-chip {
+  background: color-mix(in srgb, var(--c, var(--cx-cl)) 16%, var(--cx-elev)) !important;
+  border: 1px solid color-mix(in srgb, var(--c, var(--cx-cl)) 35%, var(--cx-line)) !important;
+  color: var(--cx-t1) !important;
+}
+.cx-panel .prj-ctx-chip:hover {
+  background: color-mix(in srgb, var(--c, var(--cx-cl)) 28%, var(--cx-elev)) !important;
+}
+
+/* [A2.3] Team list inside status card */
+.cx-panel .prj-team-chip {
+  background: var(--cx-elev2) !important;
+  border: 1px solid var(--cx-line) !important;
+  color: var(--cx-t1) !important;
+}
+.cx-panel .prj-team-chip:hover {
+  background: color-mix(in srgb, var(--c, var(--cx-cl)) 12%, var(--cx-elev2)) !important;
+  border-color: color-mix(in srgb, var(--c, var(--cx-cl)) 35%, var(--cx-line)) !important;
+}
+.cx-panel .prj-team-name { color: var(--cx-t1) !important; }
+.cx-panel .prj-team-role { color: var(--cx-t3) !important; }
+
+/* [A2.4] trust-box, bot-card, and any future white-bg card inside drawer */
+.cx-panel .trust-box,
+.cx-panel .bot-card,
+.cx-panel .claude-session,
+.cx-panel .da-card,
+.cx-panel .dsp-card,
+.cx-panel .di-card {
+  background: var(--cx-elev) !important;
+  border: 1px solid var(--cx-line) !important;
+  color: var(--cx-t1) !important;
+  margin: 0 16px 14px !important;
+  padding: 14px 16px !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+/* Text descendants — only force where we know the parent is dark.
+ * Use a guarded selector that doesn't kill colored chips/pills. */
+.cx-panel .trust-box, .cx-panel .trust-box strong, .cx-panel .trust-box span,
+.cx-panel .trust-box p, .cx-panel .trust-box div,
+.cx-panel .bot-card, .cx-panel .bot-card p, .cx-panel .bot-card div,
+.cx-panel .bot-card span:not(.bot-step-num):not(.bot-lang-pill):not(.bot-li-ico) {
+  color: var(--cx-t1) !important;
+}
+.cx-panel .bot-card strong,
+.cx-panel .trust-box strong { color: color-mix(in srgb, var(--cx-cl) 70%, #fff) !important; }
+.cx-panel .bot-card code,
+.cx-panel code.bot-mod-file {
+  background: #060810 !important;
+  color: #93c5fd !important;
+  padding: 2px 6px !important;
+  border-radius: 4px;
+  font-family: var(--mono, ui-monospace);
+  font-size: 11.5px;
+}
+
+/* [A2.5] Safety net — any descendant whose computed background is white/near-white
+ * inside the drawer should not stay that way. We can't do that purely in CSS,
+ * but we can blanket-darken known offenders by class prefix. */
+.cx-panel [class*="-card"]:not(.cx-card):not(.cx-status-card):not(.bot-step-num) {
+  background-color: transparent;
+}
+.cx-panel [class*="-card"][class*="card"] {
+  /* keep our explicit cards above; below is just a soft floor for unknown wrappers */
+}
+.cx-panel hr {
+  border: 0;
+  border-top: 1px solid var(--cx-line);
+  margin: 12px 16px;
+}
+
+/* [A2.6] Generic dark-skin override for any wrapper using --surface as bg */
+.cx-panel .surface,
+.cx-panel [style*="background:#fff"],
+.cx-panel [style*="background: #fff"],
+.cx-panel [style*="background:#ffffff"],
+.cx-panel [style*="background: white"] {
+  background: var(--cx-elev) !important;
+  color: var(--cx-t1) !important;
+}
 
 /* [A3] Component baseline restyle for clarity */
 .cx-summary {
