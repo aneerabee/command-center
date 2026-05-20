@@ -4632,6 +4632,7 @@ function _codexShell(opts) {
   const root = document.createElement("div");
   root.id = "detail-view";
   root.className = "cx-root";
+  root.setAttribute("data-cx-kind", kind);
   root.style.setProperty("--cx-cl", cl);
   root.innerHTML =
     `<div class="cx-scrim" data-cx-close></div>` +
