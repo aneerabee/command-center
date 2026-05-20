@@ -1945,7 +1945,7 @@ R.projects = function () {
     `</div>` +
     `<div class="prj-hero-stats">${heroStats.map((s) => `<div class="prj-hero-stat"><span class="prj-stat-val">${s.v}</span><span class="prj-stat-label">${s.l}</span></div>`).join("")}</div>` +
     `<div class="prj-hero-footer">` +
-    `<div style="display:flex;flex-wrap:wrap;gap:4px">${heroTags.map((t) => `<span class="tag" style="background:rgba(255,255,255,.15);color:#fff">${E(t)}</span>`).join("")}</div>` +
+    `<div style="display:flex;flex-wrap:wrap;gap:4px">${heroTags.map((t) => `<span class="tag" style="background:rgba(0,0,0,.28);color:#fff;font-weight:700">${E(t)}</span>`).join("")}</div>` +
     `<div style="display:flex;gap:6px">${heroLinks.map(([k, v]) => `<a href="${E(v)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="prj-hero-link">${E(k)}</a>`).join("")}</div>` +
     `</div>` +
     `<div class="prj-hero-progress"><div class="prj-hero-progress-bar" style="width:${hero.pct || 0}%"></div></div>` +

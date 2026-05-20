@@ -20,7 +20,7 @@ function loadData() {
   const code = fs.readFileSync(DATA_FILE, 'utf8');
   const context = {};
   vm.createContext(context);
-  vm.runInContext(`${code}\nresult = { PRJ, SVC, TL, CLD, BOT, ARC, IDEAS, DATA_TRUST_MODEL };`, context);
+  vm.runInContext(`${code}\nresult = { PRJ, SVC, TL, CLD, BOT, ARC, IDEAS, AUTO, DATA_TRUST_MODEL };`, context);
   return context.result;
 }
 
@@ -723,6 +723,69 @@ function checkArchive(archives, previous) {
   return records;
 }
 
+function checkAutomations(autoGroups, previous, serverSnapshot) {
+  const records = {};
+  for (const group of autoGroups || []) {
+    for (const task of group.tasks || []) {
+      const id = `${group.host}::${task.name}`;
+      const previousRecord = previous?.automation?.[id];
+      let patch;
+      if (!task.on) {
+        patch = {
+          verification_status: 'warn',
+          checked_from: 'manual',
+          summary: task.what?.startsWith('⚠') ? task.what.split('—')[0].trim() : 'مهمة معطّلة عمدًا',
+          facts: [`on: false`, `freq: ${task.freq || '—'}`]
+        };
+      } else if (group.host === 'desktop') {
+        if ((task.path || '').includes('LaunchAgents/') && (task.path || '').endsWith('.plist')) {
+          const local = expandHome(task.path);
+          const exists = fs.existsSync(local);
+          patch = {
+            verification_status: exists ? 'ok' : 'warn',
+            checked_from: 'filesystem',
+            summary: exists ? 'ملف launchd plist موجود محليًا' : 'ملف launchd plist غير موجود',
+            facts: [`path: ${local}`, `freq: ${task.freq}`]
+          };
+        } else {
+          patch = {
+            verification_status: 'manual',
+            checked_from: 'manual',
+            summary: 'مهمة محلية تحتاج تحقق يدوي',
+            facts: [`path: ${task.path}`, `freq: ${task.freq}`]
+          };
+        }
+      } else if (group.host === 'server') {
+        if ((task.path || '').startsWith('server:')) {
+          const pathCheck = serverPathExists(task.path);
+          patch = {
+            verification_status: pathCheck.ok ? 'ok' : 'warn',
+            checked_from: 'ssh',
+            summary: pathCheck.ok ? 'المسار موجود على السيرفر' : 'المسار غير مؤكد على السيرفر',
+            facts: [...pathCheck.facts, `freq: ${task.freq}`]
+          };
+        } else {
+          patch = {
+            verification_status: 'manual',
+            checked_from: 'manual',
+            summary: 'مهمة سيرفر تحتاج تحقق يدوي',
+            facts: [`path: ${task.path}`, `freq: ${task.freq}`]
+          };
+        }
+      } else {
+        patch = {
+          verification_status: 'manual',
+          checked_from: 'manual',
+          summary: 'مهمة بدون host محدد',
+          facts: [`group: ${group.group}`]
+        };
+      }
+      records[id] = buildRecord('automation', id, previousRecord, patch, '7d');
+    }
+  }
+  return records;
+}
+
 function coverageFor(records) {
   const values = Object.values(records);
   return {
@@ -736,7 +799,7 @@ function coverageFor(records) {
 }
 
 function main() {
-  const {PRJ, SVC, TL, CLD, BOT, ARC} = loadData();
+  const {PRJ, SVC, TL, CLD, BOT, ARC, AUTO} = loadData();
   const previous = readPreviousRuntime();
   const serverSnapshot = buildServerSnapshot();
   const serverPathSnapshot = buildServerPathSnapshot(PRJ);
@@ -746,6 +809,7 @@ function main() {
   const cloud = checkCloud(CLD, previous, serverSnapshot);
   const bot = checkBots(BOT, previous, serverSnapshot);
   const archive = checkArchive(ARC, previous);
+  const automation = checkAutomations(AUTO, previous, serverSnapshot);
 
   const payload = {
     version: 2,
@@ -757,13 +821,15 @@ function main() {
     cloud,
     bot,
     archive,
+    automation,
     coverage: {
       project: coverageFor(project),
       service: coverageFor(service),
       tool: coverageFor(tool),
       cloud: coverageFor(cloud),
       bot: coverageFor(bot),
-      archive: coverageFor(archive)
+      archive: coverageFor(archive),
+      automation: coverageFor(automation)
     }
   };
 

@@ -12266,3 +12266,99 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
   .cx-cover { padding-top: 30px; }
   .cx-facts { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * ACCESSIBILITY OVERRIDES — 2026-05-20
+ * Fixes 5 critical contrast issues + 6 medium ones.
+ * Append-only: every rule scoped narrowly to a known weak selector.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* [C1+C2] prj-hero — tags + stats had white on white-12%/15% overlay.
+ * Bump overlay to 28% and add a dark inner shadow for legibility on any color. */
+.prj-hero-stat {
+  background: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+.prj-stat-label { opacity: 0.92 !important; }
+.prj-hero .tag,
+.prj-hero-footer .tag {
+  background: rgba(0, 0, 0, 0.28) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.prj-hero-link {
+  background: rgba(0, 0, 0, 0.28) !important;
+  font-weight: 700 !important;
+}
+.prj-hero-link:hover { background: rgba(0, 0, 0, 0.42) !important; }
+.prj-hero-desc { opacity: 0.95 !important; }
+
+/* [C3] auto-header — terminal-text was rgba(255,255,255,0.95) but in some
+ * states it renders on white. Force the dark gradient strongly + bump text. */
+.auto-header {
+  background: linear-gradient(135deg, #064e3b, #0d7a5f) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(6, 78, 59, 0.25);
+}
+.auto-header .terminal-text { color: #fff !important; }
+.auto-header .terminal-prompt { color: #6ee7b7 !important; text-shadow: 0 0 6px rgba(110, 231, 183, 0.5); }
+
+/* [C4] server-header — IP/sub text was 0.6 opacity ~ illegible at 11px. */
+.server-header { background: linear-gradient(135deg, #0c4a6e, #0284c7) !important; }
+.server-ip { color: rgba(255, 255, 255, 0.92) !important; font-weight: 600; }
+.server-title { color: #fff !important; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+
+/* [C5] mod-card-meta-pill — was 10% bg + 78% text, contrast 1.09-1.85.
+ * Move to 22% bg + ink text. Falls back when --card-cl is light. */
+.mod-card-meta-pill {
+  background: color-mix(in srgb, var(--card-cl) 22%, #fff) !important;
+  color: color-mix(in srgb, var(--card-cl) 55%, #1f252f) !important;
+  border-color: color-mix(in srgb, var(--card-cl) 35%, transparent) !important;
+  font-weight: 800 !important;
+}
+
+/* [M6] generic .tag default — when used outside hero context, ensure floor contrast */
+.tag {
+  font-weight: 700;
+  color: #1f252f;
+}
+
+/* [M7] contact rows in team page — bump weight */
+.team-card a[href^="tel:"], .team-card a[href^="https://wa.me"] {
+  color: #1f252f !important;
+  font-weight: 600 !important;
+}
+
+/* [M8] archive small text — was 9px; bump to readable */
+.arc-card small, .archive-card small {
+  font-size: 12px !important;
+  color: #4a5158 !important;
+}
+
+/* [M9] umbrella project name overflow */
+.umb-project-name {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+}
+
+/* [M11] home aurora overflow */
+.cc-aurora, .hqx.cc-aurora {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* [L14] archive badge — was on faint tint, dial up */
+.archive-card .arc-badge, .arc-card .arc-badge {
+  background: #fef3c7 !important;
+  color: #78350f !important;
+  font-weight: 700;
+}
+
+/* [L15] bot empty state — bigger + darker */
+.bot-empty, .bots-empty, .empty-state {
+  color: #1f252f !important;
+  font-size: 15px !important;
+}
