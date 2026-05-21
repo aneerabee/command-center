@@ -1303,6 +1303,11 @@ function init() {
   }
 }
 
+/* Pages whose rendered content depends on async-loaded runtime state.
+ * Initial init() render happens before data.runtime.json arrives, so
+ * these must be re-rendered on navigation once runtime is available. */
+const _RUNTIME_BOUND_PAGES = new Set(["home", "tools", "cloud"]);
+
 function _activatePage(id, syncHash) {
   if (!_validPages.has(id)) return;
   cur = id;
@@ -1312,6 +1317,11 @@ function _activatePage(id, syncHash) {
     .forEach((el) => el.classList.remove("active"));
   const target = document.getElementById("page-" + id);
   if (target) {
+    // Re-render runtime-bound pages so health filters / widgets reflect
+    // the latest runtime state (loaded async after the first paint).
+    if (_RUNTIME_BOUND_PAGES.has(id) && RUNTIME_STATE.generated_at && R[id]) {
+      target.innerHTML = R[id]();
+    }
     target.classList.add("active");
     target.scrollTop = 0;
   }
