@@ -1798,7 +1798,7 @@ const AUTO = [
         kind: "backup",
       },
       {
-        id: "server-wapy",
+        id: "server-wapy-cleanup",
         name: "تنظيف نسخ Wapy القديمة",
         freq: "يوميًا 4 صباحًا",
         on: true,

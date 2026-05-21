@@ -13359,3 +13359,47 @@ button.cx-chip:hover {
   border-color: rgba(100,116,139,0.55);
   color: #334155;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * REVIEW FIXES — 2026-05-21 — post-implementation strict review
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* [R1] tool drawer theme was missing --cx-cl → inherited purple.
+ * Set sky-blue to match its blue identity. */
+.cx-root[data-cx-kind="tool"] { --cx-cl: #38BDF8; }
+
+/* [R2] Staleness widget badge — .cc-section-badge is hardcoded red;
+ * the widget is amber/grey themed, so scope an amber badge to it. */
+.cc-stale .cc-section-badge {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #b45309 !important;
+}
+/* [R3] section badge used physical margin — fix for RTL */
+.cc-section-badge { margin-inline-start: auto; margin-right: 0; }
+
+/* [R4] Health cluster height — match the 34px search-trigger neighbour */
+.cc-health-cluster { min-height: 34px; }
+
+/* [R5] Health "ok" pill contrast was ~3.9:1 — darken the green text */
+.cc-health-ok { color: #065F46; }
+
+/* [R6] rt-stale active chip — weak distinction; deepen */
+.mod-chip[data-mod-filter="rt-stale"].is-active {
+  background: rgba(100, 116, 139, 0.26);
+  border-color: rgba(100, 116, 139, 0.7);
+  color: #1e293b;
+  font-weight: 800;
+}
+
+/* [R7] Staleness card grid — 220px left wide gaps; tighten to 200 */
+.cc-stale-list { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+/* [R8] Respect reduced-motion for drawer ambient + pulse animations */
+@media (prefers-reduced-motion: reduce) {
+  .cx-cover::before,
+  .cc-pulse-dot,
+  .cx-pill--live::before { animation: none !important; }
+}
+
+/* [R9] Ideas ghost card — match real card height in mixed rows */
+.mod-card-ghost { align-self: stretch; }

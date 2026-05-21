@@ -641,8 +641,8 @@ function _refreshRuntimeBoundViews() {
     return;
   }
   // Re-render pages whose content depends on runtime state.
-  const runtimeBoundPages = ["home", "tools", "cloud"];
-  if (!runtimeBoundPages.includes(cur)) return;
+  // _RUNTIME_BOUND_PAGES is the single source of truth (defined near _activatePage).
+  if (!_RUNTIME_BOUND_PAGES.has(cur)) return;
   const pageEl = document.getElementById("page-" + cur);
   if (!pageEl || !R[cur]) return;
   pageEl.innerHTML = R[cur]();
@@ -4800,7 +4800,7 @@ function openAutoDetail(taskKey) {
     item: { name: task.name, ar: task.name, em: task.on ? "🟢" : "⚪" },
     kind: "automation",
     cl,
-    kicker: `أتمتة · ${E(group.group)}`,
+    kicker: `أتمتة · ${group.group}`,
     title: task.name,
     subtitle: group.loc,
     summary: task.what || "",
@@ -4848,7 +4848,7 @@ function openTeamDetail(name) {
     item: { name: m.name, ar: m.full_name || m.name, em: "👤" },
     kind: "team",
     cl,
-    kicker: `الفريق · ${E(m.department || "—")}`,
+    kicker: `الفريق · ${m.department || "—"}`,
     title: m.full_name || m.name,
     subtitle: m.role || "",
     summary: m.bio || "",
@@ -5071,9 +5071,9 @@ function _cxRelGraph(central, relatedNames) {
   if (!uniq.length) {
     return `<div class="cx-relgraph-empty">${_ic("🔗", 22)}<span>لا توجد كيانات مرتبطة موثّقة لهذا العنصر بعد</span></div>`;
   }
-  const shown = uniq.slice(0, 9);
+  const shown = uniq.slice(0, 8);
   const extra = uniq.length - shown.length;
-  const CX = 160, CY = 160, R = 116;
+  const CX = 160, CY = 160, R = 100;
   const n = shown.length;
   const nodes = shown.map((name, i) => {
     // start at top (-90deg), distribute evenly
@@ -5095,6 +5095,7 @@ function _cxRelGraph(central, relatedNames) {
       `<g class="cx-rg-node" onclick="openDetailSmart('${EJ(nd.name)}')" tabindex="0" ` +
       `role="button" aria-label="${E(nd.name)}" ` +
       `onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailSmart('${EJ(nd.name)}')}">` +
+      `<title>${E(nd.name)}</title>` +
       `<circle cx="${nd.x.toFixed(1)}" cy="${nd.y.toFixed(1)}" r="20" fill="${nd.cl}" fill-opacity="0.18" stroke="${nd.cl}" stroke-width="1.5"/>` +
       `<text x="${nd.x.toFixed(1)}" y="${(nd.y + 5).toFixed(1)}" text-anchor="middle" font-size="16">${E(nd.em)}</text>` +
       `<text x="${nd.x.toFixed(1)}" y="${(nd.y + 36).toFixed(1)}" text-anchor="middle" class="cx-rg-label">${E(short)}</text>` +
