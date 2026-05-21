@@ -462,7 +462,124 @@ let RUNTIME_STATE = {
   cloud: {},
   bot: {},
   archive: {},
+  automation: {},
 };
+
+/* Aggregate runtime coverage across all entity kinds → {ok,warn,fail,manual,total} */
+function _runtimeAggregate() {
+  const cov = RUNTIME_STATE.coverage || {};
+  const sum = { ok: 0, warn: 0, fail: 0, manual: 0, total: 0 };
+  Object.values(cov).forEach((v) => {
+    if (!v || typeof v !== "object") return;
+    ["ok", "warn", "fail", "manual", "total"].forEach((k) => {
+      sum[k] += Number(v[k]) || 0;
+    });
+  });
+  return sum;
+}
+
+/* Health cluster HTML — compact pills for the top bar */
+function _healthClusterHTML() {
+  const a = _runtimeAggregate();
+  if (!a.total) {
+    return `<div class="cc-health-cluster cc-health-empty" title="بيانات التحقق غير محمّلة بعد">` +
+      `<span class="cc-health-pill cc-health-idle">··· تحقّق</span></div>`;
+  }
+  const synced = RUNTIME_STATE.generated_at;
+  const parts = [];
+  parts.push(`<span class="cc-health-pill cc-health-ok" title="مؤكَّد">✓ ${a.ok}</span>`);
+  if (a.warn) parts.push(`<span class="cc-health-pill cc-health-warn" title="يحتاج انتباهًا">⚠ ${a.warn}</span>`);
+  if (a.fail) parts.push(`<span class="cc-health-pill cc-health-fail" title="فشل">✗ ${a.fail}</span>`);
+  if (a.manual) parts.push(`<span class="cc-health-pill cc-health-manual" title="تحقّق يدوي">◐ ${a.manual}</span>`);
+  const syncHTML = synced
+    ? `<span class="cc-health-sync" data-live-time="${E(synced)}" title="آخر مزامنة تلقائية">${E(relTime(synced))}</span>`
+    : "";
+  return `<button class="cc-health-cluster" onclick="go('home')" aria-label="ملخّص صحة الأنظمة — افتح الرئيسية">` +
+    parts.join("") + syncHTML + `</button>`;
+}
+
+/* Re-render the health cluster in place (after runtime loads) */
+function _refreshHealthCluster() {
+  const host = document.getElementById("cc-health-slot");
+  if (host) {
+    host.innerHTML = _healthClusterHTML();
+    requestAnimationFrame(_processIcons);
+  }
+}
+
+/* Map a runtime (kind,id) back to its data.js entity + a click handler.
+ * Returns {name, em, cl, openCall} or null. */
+function _runtimeEntityRef(kind, id) {
+  if (kind === "project") {
+    const p = (typeof PRJ !== "undefined" ? PRJ : []).find((x) => x.id === id);
+    if (p) return { name: p.ar || p.name, em: p.em, cl: p.cl, open: `openProjectDetail('${EJ(p.name)}')` };
+  } else if (kind === "service") {
+    const s = (typeof SVC !== "undefined" ? SVC : []).find((x) => x.id === id);
+    if (s) return { name: s.ar || s.name, em: s.em, cl: "#06B6D4", open: `openServiceDetail('${EJ(s.name)}')` };
+  } else if (kind === "tool") {
+    const t = (typeof TL !== "undefined" ? TL : []).find((x) => x.id === id);
+    if (t) return { name: t.ar || t.name, em: t.em, cl: t.cl, open: `openToolDetail('${EJ(t.name)}')` };
+  } else if (kind === "cloud") {
+    const c = (typeof CLD !== "undefined" ? CLD : []).find((x) => x.id === id);
+    if (c) return { name: c.ar || c.nm || c.name, em: c.em, cl: c.cl, open: `openCloudDetail('${EJ(c.nm || c.name)}')` };
+  } else if (kind === "bot") {
+    const b = (typeof BOT !== "undefined" ? BOT : []).find((x) => x.id === id);
+    if (b) return { name: b.ar || b.name, em: b.em, cl: b.cl, open: `openBotDetail('${EJ(b.name)}')` };
+  } else if (kind === "archive") {
+    const a = (typeof ARC !== "undefined" ? ARC : []).find((x) => x.id === id);
+    if (a) return { name: a.ar || a.name, em: a.em, cl: a.cl, open: `openArchiveDetail('${EJ(a.name)}')` };
+  } else if (kind === "automation") {
+    return { name: id.split("::").pop(), em: "⚙️", cl: "#22D3EE", open: `openAutoDetail('${EJ(id)}')` };
+  }
+  return null;
+}
+
+/* Staleness widget — surfaces runtime entities flagged stale===true,
+ * sorted oldest-verified first. Hidden entirely when nothing is stale. */
+function _stalenessWidget() {
+  const kinds = ["project", "service", "tool", "cloud", "bot", "archive", "automation"];
+  const stale = [];
+  kinds.forEach((kind) => {
+    const bucket = RUNTIME_STATE[kind] || {};
+    Object.entries(bucket).forEach(([id, rec]) => {
+      if (rec && rec.stale === true) {
+        stale.push({ kind, id, verified: rec.verified_at || rec.stale_at || null, summary: rec.summary || "" });
+      }
+    });
+  });
+  if (!stale.length) return "";
+  stale.sort((a, b) => new Date(a.verified || 0) - new Date(b.verified || 0));
+  const rows = stale.slice(0, 8).map((s) => {
+    const ref = _runtimeEntityRef(s.kind, s.id);
+    const name = ref ? ref.name : s.id;
+    const cl = ref ? ref.cl : "#94a3b8";
+    const open = ref ? ref.open : "";
+    const kindLabel = {
+      project: "مشروع", service: "خدمة", tool: "أداة", cloud: "سحابة",
+      bot: "بوت", archive: "أرشيف", automation: "أتمتة",
+    }[s.kind] || s.kind;
+    return (
+      `<button class="cc-stale-item cc-clickable" onclick="${open}" style="--sc:${cl}">` +
+      `<span class="cc-stale-dot"></span>` +
+      `<span class="cc-stale-name">${E(name)}</span>` +
+      `<span class="cc-stale-kind">${E(kindLabel)}</span>` +
+      (s.verified
+        ? `<span class="cc-stale-age" data-live-time="${E(s.verified)}">${E(relTime(s.verified))}</span>`
+        : "") +
+      `</button>`
+    );
+  }).join("");
+  return (
+    `<section class="cc-stale">` +
+    `<h2 class="cc-section-title">` +
+    `<span class="cc-section-em">🕓</span>` +
+    `يحتاج إعادة تحقّق` +
+    `<span class="cc-section-badge">${stale.length}</span>` +
+    `</h2>` +
+    `<div class="cc-stale-list">${rows}</div>` +
+    `</section>`
+  );
+}
 
 async function _loadRuntimeData() {
   try {
@@ -482,6 +599,7 @@ async function _loadRuntimeData() {
         cloud: payload.cloud || {},
         bot: payload.bot || {},
         archive: payload.archive || {},
+        automation: payload.automation || {},
       };
     }
   } catch (err) {
@@ -522,12 +640,29 @@ function _refreshRuntimeBoundViews() {
     openDetailSmart(itemName, page);
     return;
   }
-  if (cur !== "home") return;
-  const home = document.getElementById("page-home");
-  if (!home) return;
-  home.innerHTML = R.home();
+  // Re-render pages whose content depends on runtime state.
+  const runtimeBoundPages = ["home", "tools", "cloud"];
+  if (!runtimeBoundPages.includes(cur)) return;
+  const pageEl = document.getElementById("page-" + cur);
+  if (!pageEl || !R[cur]) return;
+  pageEl.innerHTML = R[cur]();
   _updateCountdown();
   requestAnimationFrame(_processIcons);
+}
+
+/* Runtime status tokens for an entity — used by dense-page filters.
+ * Returns a space-joined string like "rt-warn rt-stale" (may be empty). */
+function _rtStatusTokens(kind, id) {
+  const rec = (RUNTIME_STATE[kind] || {})[id];
+  if (!rec) return "";
+  const t = [];
+  const s = rec.verification_status;
+  if (s === "ok") t.push("rt-ok");
+  else if (s === "warn") t.push("rt-warn");
+  else if (s === "fail") t.push("rt-warn", "rt-fail");
+  else if (s === "manual") t.push("rt-manual");
+  if (rec.stale === true) t.push("rt-stale");
+  return t.join(" ");
 }
 
 function _entityLookup(name) {
@@ -1070,6 +1205,7 @@ function init() {
       '<button class="search-trigger" onclick="openSearch()" aria-label="بحث">' +
       _ic("🔍", 16) +
       "<span>بحث</span></button>" +
+      `<div id="cc-health-slot">${_healthClusterHTML()}</div>` +
       '<nav class="sidebar-nav">' +
       PG.map(
         (p) =>
@@ -1676,6 +1812,8 @@ R.home = function () {
       .join("") +
     `</div>` +
     `</section>` +
+    // ──── STALENESS — كيانات تحتاج إعادة تحقّق ────
+    _stalenessWidget() +
     // ──── ACTIVITY FEED — آخر التحديثات بوقت حي ────
     `<section class="cc-feed">` +
     `<h2 class="cc-section-title">` +
@@ -2910,7 +3048,8 @@ function _modernToolbar({ filters, searchPlaceholder, id }) {
       : "") +
     `<div class="mod-chips">` +
     (filters || []).map((f) => (
-      `<button class="mod-chip${f.active ? " is-active" : ""}" data-mod-filter="${E(f.value)}">` +
+      // Accept both {value} and {key} — historically inconsistent across pages.
+      `<button class="mod-chip${f.active ? " is-active" : ""}" data-mod-filter="${E(f.value ?? f.key ?? "all")}">` +
       (f.icon ? `${_ic(f.icon, 12)} ` : "") +
       E(f.label) +
       (f.count != null ? `<span class="mod-chip-count">${E(f.count)}</span>` : "") +
@@ -3065,6 +3204,9 @@ R.tools = function () {
   const activeCount = TL.filter((t) => t.st === "a").length;
   const featured = cliItems[0] || TL[0];
 
+  const _tlTok = (t) => _rtStatusTokens("tool", t.id);
+  const staleCount = TL.filter((t) => _tlTok(t).includes("rt-stale")).length;
+  const warnCount = TL.filter((t) => _tlTok(t).includes("rt-warn")).length;
   const filters = [
     { key: "all", label: "الكل", count: TL.length, active: true },
     { key: "developer-env", label: "AI CLI", count: byCategory("developer-env") },
@@ -3072,13 +3214,16 @@ R.tools = function () {
     { key: "platform", label: "منصات", count: byCategory("platform") },
     { key: "internal-tool", label: "داخلية", count: byCategory("internal-tool") },
     { key: "infra-access", label: "بنية", count: byCategory("infra-access") },
+    { key: "rt-warn", label: "يحتاج انتباه", count: warnCount },
+    { key: "rt-stale", label: "متقادم", count: staleCount },
   ].filter((f) => f.count > 0);
 
   const card = (t, sizeClass) => {
     const usedInArr = (t.used_in || []).slice(0, 3);
     const isLive = t.st === "a";
+    const cat = `${t.category || ""} ${_tlTok(t)}`.trim();
     return (
-      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(t.category)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(t.name)}')">` +
+      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(cat)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(t.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(t.em || "🔧", 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3094,7 +3239,7 @@ R.tools = function () {
   };
 
   const featuredCard = featured
-    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(featured.category)}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(featured.name)}')">` +
+    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(`${featured.category || ""} ${_tlTok(featured)}`.trim())}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(featured.name)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em mod-card-em--lg">${_ic(featured.em || "🛠️", 36)}</div>` +
       `<div class="mod-card-status is-live">⭐ بيئة العمل الأساسية</div>` +
@@ -3206,6 +3351,9 @@ R.cloud = function () {
     },
   ];
 
+  const _cldTok = (c) => _rtStatusTokens("cloud", c.id);
+  const cldStale = CLD.filter((c) => _cldTok(c).includes("rt-stale")).length;
+  const cldWarn = CLD.filter((c) => _cldTok(c).includes("rt-warn")).length;
   const filterGroups = [
     { key: "all", label: "الكل", count: CLD.length, active: true },
     { key: "platform-grp", label: "منصات", count: CLD.filter((c) => ["platform", "database-platform", "data-platform"].includes(c.category)).length, match: (c) => ["platform", "database-platform", "data-platform"].includes(c.category) },
@@ -3214,6 +3362,8 @@ R.cloud = function () {
     { key: "net-grp", label: "شبكة", count: CLD.filter((c) => ["network", "communication", "external-api"].includes(c.category)).length, match: (c) => ["network", "communication", "external-api"].includes(c.category) },
     { key: "data-grp", label: "بيانات", count: CLD.filter((c) => ["storage", "marketing-platform"].includes(c.category)).length, match: (c) => ["storage", "marketing-platform"].includes(c.category) },
     { key: "off", label: "متوقف", count: CLD.filter((c) => c.active === false).length, match: (c) => c.active === false },
+    { key: "rt-warn", label: "يحتاج انتباه", count: cldWarn, match: (c) => _cldTok(c).includes("rt-warn") },
+    { key: "rt-stale", label: "متقادم", count: cldStale, match: (c) => _cldTok(c).includes("rt-stale") },
   ].filter((f) => f.count > 0);
 
   const card = (c) => {
@@ -3224,7 +3374,7 @@ R.cloud = function () {
     let groupKey = "";
     filterGroups.forEach((g) => { if (g.match && g.match(c)) groupKey += " " + g.key; });
     return (
-      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${groupKey.trim()}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${EJ(c.nm)}')">` +
+      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${E(groupKey.trim())}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${EJ(c.nm)}')">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(c.em, 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3340,6 +3490,14 @@ R.ideas = function () {
     }) +
     `<div class="mod-bento">` +
     ordered.map((i, idx) => card(i, i.blueprint ? "b-6" : "b-3")).join("") +
+    // Ghost CTA card — invites capturing the next idea (data is manual in data.js)
+    `<div class="mod-card mod-card-ghost b-3" role="note" aria-label="مساحة لفكرة جديدة">` +
+    `<div class="mod-ghost-inner">` +
+    `<div class="mod-ghost-em">${_ic("✨", 26)}</div>` +
+    `<div class="mod-ghost-title">فكرتك القادمة تبدأ هنا</div>` +
+    `<div class="mod-ghost-sub">سجّل الأفكار الجديدة في <code>data.js</code> ضمن مصفوفة <code>IDEAS</code> لتظهر هنا تلقائيًا</div>` +
+    `</div>` +
+    `</div>` +
     `</div>`
   );
 };
@@ -3438,9 +3596,15 @@ R.archive = function () {
     `</div>` +
     `<div class="archive-section">` +
     `<div class="archive-section-head"><h3>المؤرشف فعليًا</h3><span>${archived.length}</span></div>` +
-    `<div class="archive-shelf">` +
-    archived.map((a) => renderCard(a, false)).join("") +
-    `</div>` +
+    (archived.length
+      ? `<div class="archive-shelf">` +
+        archived.map((a) => renderCard(a, false)).join("") +
+        `</div>`
+      : `<div class="cc-page-empty">` +
+        `<span class="cc-page-empty-em">${_ic("📦", 30)}</span>` +
+        `<div class="cc-page-empty-title">لا عناصر مؤرشفة بعد</div>` +
+        `<div class="cc-page-empty-sub">حين يُنقل مشروع أو أداة إلى الأرشيف، تظهر هنا مع سبب الأرشفة وتاريخها.</div>` +
+        `</div>`) +
     `</div>` +
     (activeRefs.length
       ? `<div class="archive-section archive-active-block">` +
@@ -4014,9 +4178,11 @@ function openProjectDetail(name) {
   if (item.related_services?.length) relatedRows.push(...item.related_services);
   if (item.related_tools?.length) relatedRows.push(...item.related_tools);
   if (item.related_cloud?.length) relatedRows.push(...item.related_cloud);
-  const related = relatedRows.length
-    ? `<div class="cx-group-heading">الكيانات المرتبطة (${relatedRows.length})</div>` + _cxChips(relatedRows)
-    : "";
+  if (item.related_entities?.length) relatedRows.push(...item.related_entities);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.name, em: item.em, cl },
+    relatedRows,
+  );
 
   const linksHTML =
     _cxLinks(links) +
@@ -4078,7 +4244,10 @@ function openBotDetail(name) {
 
   const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📭");
 
-  const related = _cxChips(item.related_entities || []);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.name, em: item.em, cl },
+    item.related_entities || [],
+  );
 
   const linksHTML = _cxLinks(item.links) + (item.path ? _cxPath(item.path) : "");
 
@@ -4156,7 +4325,10 @@ function openToolDetail(name) {
     _cxSectionsFromParsed(sections) ||
     _cxEmpty("لا توجد تفاصيل إضافية", "📭");
 
-  const related = _cxChips(usedIn);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.name, em: item.em, cl },
+    usedIn,
+  );
 
   const linksHTML = _cxLinks(item.links) + (item.path ? _cxPath(item.path) : "");
 
@@ -4312,7 +4484,10 @@ function openCloudDetail(name) {
     item.lk ? `المنصة: ${item.lk}` : "",
   ].filter(Boolean)) || _cxEmpty("لا توجد تفاصيل إضافية", "☁️");
 
-  const related = _cxChips(usedIn);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.nm || item.name, em: item.em, cl },
+    usedIn,
+  );
 
   const linksHTML = item.lk
     ? `<a class="cx-link" href="${E(item.lk)}" target="_blank" rel="noopener">` +
@@ -4498,7 +4673,10 @@ function openIdeaDetail(name) {
 
   const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "💡");
 
-  const related = _cxChips(relProj);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.name, em: item.em, cl },
+    relProj,
+  );
 
   const linksHTML = _cxLinks(item.links);
 
@@ -4552,7 +4730,10 @@ function openArchiveDetail(name) {
 
   const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📚");
 
-  const related = _cxChips(relProj);
+  const related = _cxRelatedTab(
+    { name: item.ar || item.name, em: item.em, cl },
+    relProj,
+  );
 
   const linksHTML = (item.path ? _cxPath(item.path) : "") + _cxLinks(item.links);
 
@@ -4871,6 +5052,70 @@ function _cxChips(names) {
     `<button class="cx-chip" onclick="openDetailSmart('${EJ(n)}')">${E(n)}</button>`
   )).join("")}</div>`;
 }
+
+/* _cxRelGraph — radial relationship map for the drawer "related" tab.
+ * central: {name, em, cl}. related: array of entity-name strings.
+ * Renders an SVG hub-and-spoke; falls back to a message when empty. */
+function _cxRelGraph(central, relatedNames) {
+  const uniq = [...new Set((relatedNames || []).filter(Boolean))];
+  if (!uniq.length) {
+    return `<div class="cx-relgraph-empty">${_ic("🔗", 22)}<span>لا توجد كيانات مرتبطة موثّقة لهذا العنصر بعد</span></div>`;
+  }
+  const shown = uniq.slice(0, 9);
+  const extra = uniq.length - shown.length;
+  const CX = 160, CY = 160, R = 116;
+  const n = shown.length;
+  const nodes = shown.map((name, i) => {
+    // start at top (-90deg), distribute evenly
+    const ang = (-90 + (360 / n) * i) * (Math.PI / 180);
+    const x = CX + R * Math.cos(ang);
+    const y = CY + R * Math.sin(ang);
+    const ent = _entityLookup(name);
+    const cl = (ent && ent.cl) || _prjColor(name) || "#94a3b8";
+    const em = (ent && ent.em) || "•";
+    return { name, x, y, cl, em };
+  });
+  const lines = nodes.map((nd) => (
+    `<line x1="${CX}" y1="${CY}" x2="${nd.x.toFixed(1)}" y2="${nd.y.toFixed(1)}" ` +
+    `stroke="${nd.cl}" stroke-width="1.5" stroke-opacity="0.45" />`
+  )).join("");
+  const nodeEls = nodes.map((nd) => {
+    const short = nd.name.length > 14 ? nd.name.slice(0, 13) + "…" : nd.name;
+    return (
+      `<g class="cx-rg-node" onclick="openDetailSmart('${EJ(nd.name)}')" tabindex="0" ` +
+      `role="button" aria-label="${E(nd.name)}" ` +
+      `onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetailSmart('${EJ(nd.name)}')}">` +
+      `<circle cx="${nd.x.toFixed(1)}" cy="${nd.y.toFixed(1)}" r="20" fill="${nd.cl}" fill-opacity="0.18" stroke="${nd.cl}" stroke-width="1.5"/>` +
+      `<text x="${nd.x.toFixed(1)}" y="${(nd.y + 5).toFixed(1)}" text-anchor="middle" font-size="16">${E(nd.em)}</text>` +
+      `<text x="${nd.x.toFixed(1)}" y="${(nd.y + 36).toFixed(1)}" text-anchor="middle" class="cx-rg-label">${E(short)}</text>` +
+      `</g>`
+    );
+  }).join("");
+  const centralCl = central.cl || "var(--cx-cl)";
+  return (
+    `<div class="cx-relgraph">` +
+    `<svg viewBox="0 0 320 320" class="cx-relgraph-svg" role="img" aria-label="خريطة العلاقات">` +
+    lines +
+    `<circle cx="${CX}" cy="${CY}" r="34" fill="${centralCl}" fill-opacity="0.22" stroke="${centralCl}" stroke-width="2"/>` +
+    `<text x="${CX}" y="${CY + 9}" text-anchor="middle" font-size="26">${E(central.em || "📦")}</text>` +
+    nodeEls +
+    `</svg>` +
+    (extra > 0 ? `<div class="cx-relgraph-more">+${extra} كيانًا آخر</div>` : "") +
+    `</div>`
+  );
+}
+
+/* Build the full related-tab content: graph + flat chips list.
+ * Returns "" when there are no relations so the tab stays hidden. */
+function _cxRelatedTab(central, relatedNames) {
+  const uniq = [...new Set((relatedNames || []).filter(Boolean))];
+  if (!uniq.length) return "";
+  return (
+    _cxRelGraph(central, uniq) +
+    `<div class="cx-group-heading">كل الكيانات المرتبطة (${uniq.length})</div>` +
+    _cxChips(uniq)
+  );
+}
 function _cxLinks(links) {
   if (!links) return "";
   const entries = Object.entries(links).filter(([, v]) => v);
@@ -5169,6 +5414,7 @@ async function bootstrap() {
   init();
   _startLiveTicks();
   _loadRuntimeData().then(() => {
+    _refreshHealthCluster();
     if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   });
   _loadHealthData();
