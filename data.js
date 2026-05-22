@@ -1368,7 +1368,7 @@ const PRJ = [
     next_milestone: "تفعيل المصادقة (Magic Link + allowlist) + ربط الدومين libya.rabee.dev بـCloudflare Tunnel + بناء بوت تلقرام مُتزامن مع server actions",
     summary:
       "دفتر مالي للشراكة بين ربيع وأحمد — حيّ على Contabo. Next.js 15 + Supabase REST. CRUD كامل (إنشاء/تعديل/حذف) لكل الكيانات، صفقات ذكية بمؤشرات حية، ودجت رصيد شريك، ويزرد إغلاق ٣ أنواع صفقات، مزامنة تلقائية لحالة الصفقة بعد كل تعديل.",
-    local_path: "/Users/rabeeshaban/Documents/New project/libya/app",
+    local_path: "/Users/rabeeshaban/Developer/libya/app",
     server_path: "/home/argaz/apps/libya",
     repo_url: "https://github.com/aneerabee/libya",
     deploy_url: "http://62.171.128.44:3001",
@@ -1423,12 +1423,12 @@ const PRJ = [
       "Financial Ledger",
       "Espresso & Sage",
     ],
-    path: "/Users/rabeeshaban/Documents/New project/libya/app",
+    path: "/Users/rabeeshaban/Developer/libya/app",
     links: {
-      "نموذج اليوم (HTML)": "file:///Users/rabeeshaban/Documents/New%20project/libya/mockups/v2-app-01-today.html",
-      "نموذج إغلاق صفقة": "file:///Users/rabeeshaban/Documents/New%20project/libya/mockups/app-02-close-deal.html",
-      "نموذج صفحة شخص": "file:///Users/rabeeshaban/Documents/New%20project/libya/mockups/app-03-person.html",
-      "فهرس النماذج": "file:///Users/rabeeshaban/Documents/New%20project/libya/mockups/app-index.html",
+      "نموذج اليوم (HTML)": "file:///Users/rabeeshaban/Developer/libya/mockups/v2-app-01-today.html",
+      "نموذج إغلاق صفقة": "file:///Users/rabeeshaban/Developer/libya/mockups/app-02-close-deal.html",
+      "نموذج صفحة شخص": "file:///Users/rabeeshaban/Developer/libya/mockups/app-03-person.html",
+      "فهرس النماذج": "file:///Users/rabeeshaban/Developer/libya/mockups/app-index.html",
       GitHub: "https://github.com/aneerabee/libya",
     },
     links_desc: {
@@ -1436,12 +1436,12 @@ const PRJ = [
       "نموذج إغلاق صفقة": "شاشة الإغلاق بالحساب الذكي على معاملة عمتي عايشة كمثال — لكن البناء الفعلي سيكون يدويًا بمرونة كاملة",
       "نموذج صفحة شخص": "صفحة عمتي عايشة الكاملة — أرصدة، صفقات، خط زمني، صلات عائلية",
       "فهرس النماذج": "صفحة فهرس تعرض الثلاثة جنبًا إلى جنب",
-      GitHub: "مستودع المشروع (سيُنشأ عند رفع أول commit)",
+      GitHub: "المستودع الخاص على جيت‑هَب — المصدر الأساسي للمشروع",
     },
     current_status: {
-      updated: "2026-05-15",
+      updated: "2026-05-22",
       where:
-        "حيّ على Contabo VPS عبر http://62.171.128.44:3001 (systemd user service: libya-web). Supabase REST API كقاعدة (libya schema + public views). كل المراحل 1-3 مكتملة وأكثر: CRUD كامل لكل الكيانات، صفحة صفقات ذكية بمؤشرات حية ومراحل، ودجت رصيد شريك مع ملاحظة سلفة منفصلة، ويزرد إغلاق يدعم 3 أنواع صفقات (عائلة + خارج + شخصية لشريك)، مزامنة تلقائية لـreceived_usd وstatus بعد كل تعديل/حذف، حماية من السحب على المكشوف، تصميم متجاوب للهاتف. middleware معطّل مؤقتًا (استخدام مفتوح).",
+        "حيّ على Contabo VPS عبر http://62.171.128.44:3001 (systemd user service: libya-web). Supabase REST API كقاعدة (libya schema + public views). كل المراحل 1-3 مكتملة وأكثر: CRUD كامل لكل الكيانات، صفحة صفقات ذكية بمؤشرات حية ومراحل، ودجت رصيد شريك مع ملاحظة سلفة منفصلة، ويزرد إغلاق يدعم 3 أنواع صفقات (عائلة + خارج + شخصية لشريك)، مزامنة تلقائية لـreceived_usd وstatus بعد كل تعديل/حذف، حماية من السحب على المكشوف، تصميم متجاوب للهاتف. middleware معطّل مؤقتًا (استخدام مفتوح). [تحديث 2026-05-22] دُمج منطق صفقات العائلة بالكامل مع نظام البيع والتغطية (١٢ إصلاحًا)، وطُبّق تعديل قاعدة البيانات 0014، والبناء يمرّ نظيفًا. المشروع الآن على جيت‑هَب كمستودع خاص — وجيت‑هَب هو المصدر الأساسي للمشروع. ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود لإيقاف أرشفة ملفات الاعتماديات.",
       next_step:
         "تفعيل المصادقة (Magic Link + ALLOWED_EMAILS allowlist) بإعادة تفعيل middleware. ثم ربط دومين libya.rabee.dev عبر Cloudflare Tunnel أو Caddy + Let's Encrypt. ثم إعادة كتابة بوت تلقرام ليستخدم نفس server actions/validators (البوت الحالي معطّل لأنه كان يتجاوز كل قواعد التحقق).",
       blockers: [
@@ -1455,7 +1455,7 @@ const PRJ = [
         },
       ],
       use_guide:
-        "محليًا: cd /Users/rabeeshaban/Documents/New\\ project/libya/app && pnpm install && cp .env.example .env.local && املأ NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY ثم pnpm dev → http://localhost:3000.\n\nللنشر على Contabo: rsync الكود (--exclude node_modules .next/cache .env.production next.config.ts) ثم على الخادم: cd ~/apps/libya && npm install --omit=dev && systemctl --user restart libya-web. .env.production مطلوب على الخادم بصلاحية 600 (يحتوي SUPABASE_URL + ANON_KEY + SUPABASE_DB_PASSWORD + PORT=3001).\n\nتعديل المخطط: حاليًا الجداول موجودة في libya schema مع views في public. تعديلات schema تُطبَّق مباشرة عبر Supabase SQL editor.",
+        "محليًا: cd /Users/rabeeshaban/Developer/libya/app && pnpm install && cp .env.example .env.local && املأ NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY ثم pnpm dev → http://localhost:3000.\n\nللنشر على Contabo: rsync الكود (--exclude node_modules .next/cache .env.production next.config.ts) ثم على الخادم: cd ~/apps/libya && npm install --omit=dev && systemctl --user restart libya-web. .env.production مطلوب على الخادم بصلاحية 600 (يحتوي SUPABASE_URL + ANON_KEY + SUPABASE_DB_PASSWORD + PORT=3001).\n\nتعديل المخطط: حاليًا الجداول موجودة في libya schema مع views في public. تعديلات schema تُطبَّق مباشرة عبر Supabase SQL editor.",
     },
     bot_features: {
       summary: "منظومة Next.js + Drizzle + Supabase تتعامل مع 5 جداول و14 نوع حركة، تحسب كل الأرصدة بـSQL على الطاير، وتعرضها بهوية بصرية مخصصة.",
@@ -1536,10 +1536,10 @@ const PRJ = [
     claude_session: {
       session_name: "[libya]",
       terminal: "Codex / Core Shell",
-      cwd: "/Users/rabeeshaban/Documents/New project/libya/app",
+      cwd: "/Users/rabeeshaban/Developer/libya/app",
       command:
-        "cd /Users/rabeeshaban/Documents/New\\ project/libya/app && claude",
-      note: "آخر نقطة (2026-05-15): النظام حيّ على Contabo. المراحل 1-3 مكتملة + ميزات إضافية: CRUD كامل، فلترة سياقية، مزامنة تلقائية، ودجت شريك، صفحة صفقات ذكية، إصلاح صفحة الناس بحساب أرصدة سليم. التالي: تفعيل المصادقة + ربط الدومين + إعادة بناء البوت.",
+        "cd /Users/rabeeshaban/Developer/libya/app && claude",
+      note: "آخر نقطة (2026-05-22): النظام حيّ على Contabo. المراحل 1-3 مكتملة، ودُمج منطق صفقات العائلة بالكامل مع نظام البيع/التغطية (١٢ إصلاحًا + تعديل قاعدة بيانات 0014) والبناء يمرّ نظيفًا. المشروع رُفع إلى جيت‑هَب كمستودع خاص (المصدر الأساسي) ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود. التالي: تفعيل المصادقة + ربط الدومين + إعادة بناء البوت.",
     },
   },
 ];
@@ -2107,7 +2107,7 @@ const BOT = [
     related_entities: ["LIBYA", "Supabase", "Contabo VPS"],
     summary:
       "⛔ بوت معطّل — كان مخطّطًا لإدخال الحركات السريع لكن الكود الحالي يتجاوز كل قواعد التحقق. الانتظار حتى تُعاد كتابته ليستهلك server actions.",
-    desc: "بوت LIBYA — مساعد الإدخال السريع للجوال\n\n🎯 الهدف:\nبدل ما تفتح اللابتوب لإدخال حركة بسيطة (سلفة، استلاف، تحويل)، تكتب أمرًا في تيليجرام وينحفظ مباشرةً في القاعدة.\n\n🤖 الأوامر:\n/start — ملخّص + قائمة الأوامر\n/balance — صافي الأرصدة بكل العملات\n/debts — ديون عليك + ديون لك (تفصيلي بالأسماء)\n/deals — الصفقات المفتوحة\n/add — إضافة حركة عبر inline keyboards (نوع → مبلغ → عملة → ملاحظة → تأكيد)\n/web — رابط الموقع الكامل\n/cancel — إلغاء أي عملية جارية\n\n🔐 الأمان:\nallowlist بـTelegram user_id (env: ALLOWED_TG_USERS)\nيرفض أي شخص ليس في القائمة\nيستخدم نفس Supabase anon key (RLS مُفعّل)\n\n⚙️ التشغيل:\nيعمل كخدمة systemd user على Contabo (libya-bot.service)\nautostart عند الإقلاع، restart تلقائي عند التعطّل\nاللوغات: /home/argaz/logs/libya-bot.log + libya-bot-error.log\n\n📍 المسار:\n/Users/rabeeshaban/Documents/New project/libya/app/bot/bot.ts\nالنشر: rsync إلى /home/argaz/apps/libya/bot/",
+    desc: "بوت LIBYA — مساعد الإدخال السريع للجوال\n\n🎯 الهدف:\nبدل ما تفتح اللابتوب لإدخال حركة بسيطة (سلفة، استلاف، تحويل)، تكتب أمرًا في تيليجرام وينحفظ مباشرةً في القاعدة.\n\n🤖 الأوامر:\n/start — ملخّص + قائمة الأوامر\n/balance — صافي الأرصدة بكل العملات\n/debts — ديون عليك + ديون لك (تفصيلي بالأسماء)\n/deals — الصفقات المفتوحة\n/add — إضافة حركة عبر inline keyboards (نوع → مبلغ → عملة → ملاحظة → تأكيد)\n/web — رابط الموقع الكامل\n/cancel — إلغاء أي عملية جارية\n\n🔐 الأمان:\nallowlist بـTelegram user_id (env: ALLOWED_TG_USERS)\nيرفض أي شخص ليس في القائمة\nيستخدم نفس Supabase anon key (RLS مُفعّل)\n\n⚙️ التشغيل:\nيعمل كخدمة systemd user على Contabo (libya-bot.service)\nautostart عند الإقلاع، restart تلقائي عند التعطّل\nاللوغات: /home/argaz/logs/libya-bot.log + libya-bot-error.log\n\n📍 المسار:\n/Users/rabeeshaban/Developer/libya/app/bot/bot.ts\nالنشر: rsync إلى /home/argaz/apps/libya/bot/",
     tags: [
       "Telegram",
       "Node.js 20",
@@ -2117,14 +2117,14 @@ const BOT = [
       "systemd",
       "Allowlist",
     ],
-    path: "/Users/rabeeshaban/Documents/New project/libya/app/bot/bot.ts",
+    path: "/Users/rabeeshaban/Developer/libya/app/bot/bot.ts",
     server_path: "server:/home/argaz/apps/libya/bot/bot.ts",
     config_paths: [
       "server:/home/argaz/apps/libya/.env.production",
       "server:/home/argaz/.config/systemd/user/libya-bot.service",
     ],
     links: {
-      "كود البوت": "file:///Users/rabeeshaban/Documents/New%20project/libya/app/bot/bot.ts",
+      "كود البوت": "file:///Users/rabeeshaban/Developer/libya/app/bot/bot.ts",
     },
   },
 ];
@@ -2524,8 +2524,8 @@ const TL = [
       "علاقات: deals → customer/bank/locations · movements → deal/people/locations",
     ],
     config_paths: [
-      "/Users/rabeeshaban/Documents/New project/libya/app/drizzle.config.ts",
-      "/Users/rabeeshaban/Documents/New project/libya/app/src/lib/db/schema.ts",
+      "/Users/rabeeshaban/Developer/libya/app/drizzle.config.ts",
+      "/Users/rabeeshaban/Developer/libya/app/src/lib/db/schema.ts",
     ],
     tags: ["TypeScript", "Postgres", "ORM", "Type-safe", "Migrations"],
     links: { Docs: "https://orm.drizzle.team" },
