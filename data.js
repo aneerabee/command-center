@@ -1360,7 +1360,7 @@ const PRJ = [
     cl: "#4A8856",
     cl_brand: "#4A8856",
     brand_note: "Espresso & Sage v2 — هوية بصرية حصرية بألوان أجرأ",
-    pct: 90,
+    pct: 93,
     parent: "infra",
     parent_role: "personal-finance",
     revenue_model: "internal",
@@ -1371,7 +1371,7 @@ const PRJ = [
     next_milestone: "تفعيل المصادقة (Magic Link + allowlist) + ربط الدومين libya.rabee.dev بـCloudflare Tunnel + بناء بوت تلقرام مُتزامن مع server actions",
     summary:
       "دفتر مالي للشراكة بين ربيع وأحمد — حيّ على Contabo. Next.js 15 + Supabase REST. CRUD كامل (إنشاء/تعديل/حذف) لكل الكيانات، صفقات ذكية بمؤشرات حية، ودجت رصيد شريك، ويزرد إغلاق ٣ أنواع صفقات، مزامنة تلقائية لحالة الصفقة بعد كل تعديل.",
-    local_path: "/Users/rabeeshaban/Developer/libya/app",
+    local_path: null,
     server_path: "/home/argaz/apps/libya",
     repo_url: "https://github.com/aneerabee/libya",
     deploy_url: "http://62.171.128.44:3001",
@@ -1426,12 +1426,12 @@ const PRJ = [
       "Financial Ledger",
       "Espresso & Sage",
     ],
-    path: "/Users/rabeeshaban/Developer/libya/app",
+    path: null,
     links: {
-      "نموذج اليوم (HTML)": "file:///Users/rabeeshaban/Developer/libya/mockups/v2-app-01-today.html",
-      "نموذج إغلاق صفقة": "file:///Users/rabeeshaban/Developer/libya/mockups/app-02-close-deal.html",
-      "نموذج صفحة شخص": "file:///Users/rabeeshaban/Developer/libya/mockups/app-03-person.html",
-      "فهرس النماذج": "file:///Users/rabeeshaban/Developer/libya/mockups/app-index.html",
+      "نموذج اليوم (HTML)": "https://github.com/aneerabee/libya/blob/main/mockups/v2-app-01-today.html",
+      "نموذج إغلاق صفقة": "https://github.com/aneerabee/libya/blob/main/mockups/app-02-close-deal.html",
+      "نموذج صفحة شخص": "https://github.com/aneerabee/libya/blob/main/mockups/app-03-person.html",
+      "فهرس النماذج": "https://github.com/aneerabee/libya/blob/main/mockups/app-index.html",
       GitHub: "https://github.com/aneerabee/libya",
     },
     links_desc: {
@@ -1442,9 +1442,9 @@ const PRJ = [
       GitHub: "المستودع الخاص على جيت‑هَب — المصدر الأساسي للمشروع",
     },
     current_status: {
-      updated: "2026-05-22",
+      updated: "2026-05-23",
       where:
-        "حيّ على Contabo VPS عبر http://62.171.128.44:3001 (systemd user service: libya-web). Supabase REST API كقاعدة (libya schema + public views). كل المراحل 1-3 مكتملة وأكثر: CRUD كامل لكل الكيانات، صفحة صفقات ذكية بمؤشرات حية ومراحل، ودجت رصيد شريك مع ملاحظة سلفة منفصلة، ويزرد إغلاق يدعم 3 أنواع صفقات (عائلة + خارج + شخصية لشريك)، مزامنة تلقائية لـreceived_usd وstatus بعد كل تعديل/حذف، حماية من السحب على المكشوف، تصميم متجاوب للهاتف. middleware معطّل مؤقتًا (استخدام مفتوح). [تحديث 2026-05-22] دُمج منطق صفقات العائلة بالكامل مع نظام البيع والتغطية (١٢ إصلاحًا)، وطُبّق تعديل قاعدة البيانات 0014، والبناء يمرّ نظيفًا. المشروع الآن على جيت‑هَب كمستودع خاص — وجيت‑هَب هو المصدر الأساسي للمشروع. ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود لإيقاف أرشفة ملفات الاعتماديات.",
+        "حيّ على Contabo VPS عبر http://62.171.128.44:3001 (systemd user service: libya-web). Supabase REST API كقاعدة (libya schema + public views). كل المراحل 1-3 مكتملة وأكثر: CRUD كامل لكل الكيانات، صفحة صفقات ذكية بمؤشرات حية ومراحل، ودجت رصيد شريك مع ملاحظة سلفة منفصلة، ويزرد إغلاق يدعم 3 أنواع صفقات (عائلة + خارج + شخصية لشريك)، مزامنة تلقائية لـreceived_usd وstatus بعد كل تعديل/حذف، حماية من السحب على المكشوف، تصميم متجاوب للهاتف. middleware معطّل مؤقتًا (استخدام مفتوح). [تحديث 2026-05-22] دُمج منطق صفقات العائلة بالكامل مع نظام البيع والتغطية (١٢ إصلاحًا)، وطُبّق تعديل قاعدة البيانات 0014، والبناء يمرّ نظيفًا. المشروع الآن على جيت‑هَب كمستودع خاص — وجيت‑هَب هو المصدر الأساسي للمشروع. ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود لإيقاف أرشفة ملفات الاعتماديات. [تحديث 2026-05-23] نُشِرت الإصلاحات الـ١٢ + تعديل 0014 على الخادم الحيّ بنجاح، وكل الصفحات السبع (/, /deals, /people, /movements, /debts, /hedges, /reports) ترجع HTTP 200. بُنيت نسخة احتياطية تلقائية على الخادم قبل النشر (~/apps/libya.bak-20260523-175801) ولم يُحذف أي ملف. النسخة المحلية حُذفت بعد التحقّق من اكتمال جيت‑هَب والخادم — جيت‑هَب صار النسخة الكاملة الأساسية الوحيدة محليًا. أي استنساخ مستقبلي يجب أن يكون خارج آي‑كلاود (~/Developer مثلًا، لا داخل ~/Documents ولا ~/Desktop).",
       next_step:
         "تفعيل المصادقة (Magic Link + ALLOWED_EMAILS allowlist) بإعادة تفعيل middleware. ثم ربط دومين libya.rabee.dev عبر Cloudflare Tunnel أو Caddy + Let's Encrypt. ثم إعادة كتابة بوت تلقرام ليستخدم نفس server actions/validators (البوت الحالي معطّل لأنه كان يتجاوز كل قواعد التحقق).",
       blockers: [
@@ -1458,7 +1458,7 @@ const PRJ = [
         },
       ],
       use_guide:
-        "محليًا: cd /Users/rabeeshaban/Developer/libya/app && pnpm install && cp .env.example .env.local && املأ NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY ثم pnpm dev → http://localhost:3000.\n\nللنشر على Contabo: rsync الكود (--exclude node_modules .next/cache .env.production next.config.ts) ثم على الخادم: cd ~/apps/libya && npm install --omit=dev && systemctl --user restart libya-web. .env.production مطلوب على الخادم بصلاحية 600 (يحتوي SUPABASE_URL + ANON_KEY + SUPABASE_DB_PASSWORD + PORT=3001).\n\nتعديل المخطط: حاليًا الجداول موجودة في libya schema مع views في public. تعديلات schema تُطبَّق مباشرة عبر Supabase SQL editor.",
+        "للتطوير محليًا (المسار يجب أن يكون خارج آي‑كلاود — لا داخل ~/Documents أو ~/Desktop): gh repo clone aneerabee/libya ~/Developer/libya && cd ~/Developer/libya/app && pnpm install && cp ~/Developer/.libya-env-local-backup-* .env.local && pnpm dev → http://localhost:3000.\n\nللنشر على Contabo: cd ~/Developer/libya/app && ./deploy/deploy.sh (يبني محليًا ثم rsync مع استثناء node_modules و.next/cache وكل ملفات .env*). للنشر الحذِر (بدون أي حذف): rsync -avz بدون --delete مع نفس الاستثناءات، ثم systemctl --user restart libya-web على الخادم.\n\nتعديل المخطط: التعديلات تُطبَّق مباشرة على Supabase عبر SQL editor، ثم يُحفَظ ملف 0xxx.sql في drizzle/migrations/ ويُرفع لجيت‑هَب ثم rsync للخادم.\n\nاسترجاع طارئ: نسخة احتياطية للخادم محفوظة في ~/apps/libya.bak-20260523-175801 — نسخة احتياطية للأسرار في ~/Developer/.libya-env-local-backup-20260523-180414 (صلاحية 600).",
     },
     bot_features: {
       summary: "منظومة Next.js + Drizzle + Supabase تتعامل مع 5 جداول و14 نوع حركة، تحسب كل الأرصدة بـSQL على الطاير، وتعرضها بهوية بصرية مخصصة.",
@@ -1512,6 +1512,13 @@ const PRJ = [
             "✅ نشر على Contabo VPS: systemd user service libya-web على port 3001",
             "✅ تصميم متجاوب للهاتف (mobile-first overrides)",
             "✅ إيصال صفقة قابل للطباعة",
+            "✅ منطق صفقات العائلة مدمَج كاملًا مع نظام البيع/التغطية — ١٢ إصلاحًا (F1→F12) — 2026-05-23",
+            "✅ تعديل قاعدة البيانات 0014: حارس التغطية الإلزامي عند إغلاق صفقات العائلة — مُطبَّق على Supabase وعلى الخادم — 2026-05-23",
+            "✅ المشروع على جيت‑هَب كمستودع خاص (المصدر الأساسي): aneerabee/libya — 106 ملفات، 15 تعديل قاعدة بيانات — 2026-05-22",
+            "✅ نُشِر للخادم: actions.ts + queries.ts + كل صفحات الإصلاحات + تعديل 0014 + .next/ — Hash متطابق — 2026-05-23",
+            "✅ نسخة احتياطية تلقائية على الخادم قبل النشر: ~/apps/libya.bak-20260523-175801",
+            "✅ التحقّق الحيّ: كل الصفحات السبع ترجع HTTP 200 (/, /deals, /people, /movements, /debts, /hedges, /reports) — 2026-05-23",
+            "✅ النسخة المحلية محذوفة (~/Developer/libya) — جيت‑هَب والخادم يحويان نفس الكود — 2026-05-23",
           ],
         },
         {
@@ -1539,10 +1546,10 @@ const PRJ = [
     claude_session: {
       session_name: "[libya]",
       terminal: "Codex / Core Shell",
-      cwd: "/Users/rabeeshaban/Developer/libya/app",
+      cwd: null,
       command:
-        "cd /Users/rabeeshaban/Developer/libya/app && claude",
-      note: "آخر نقطة (2026-05-22): النظام حيّ على Contabo. المراحل 1-3 مكتملة، ودُمج منطق صفقات العائلة بالكامل مع نظام البيع/التغطية (١٢ إصلاحًا + تعديل قاعدة بيانات 0014) والبناء يمرّ نظيفًا. المشروع رُفع إلى جيت‑هَب كمستودع خاص (المصدر الأساسي) ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود. التالي: تفعيل المصادقة + ربط الدومين + إعادة بناء البوت.",
+        "[ -d ~/Developer/libya ] || gh repo clone aneerabee/libya ~/Developer/libya; cd ~/Developer/libya/app && claude",
+      note: "آخر نقطة (2026-05-23): الإصلاحات الـ١٢ + تعديل 0014 منشورة على الخادم الحيّ (~/apps/libya على Contabo) ومُتحقَّق من استجابة كل الصفحات HTTP 200. النسخة المحلية حُذفت بعد التحقّق الكامل من اكتمال جيت‑هَب والخادم. الكود الأساسي على https://github.com/aneerabee/libya (خاص، الفرع main، الحفظة bbb88e4). للعمل لاحقًا: gh repo clone aneerabee/libya ~/Developer/libya (يجب أن يكون خارج آي‑كلاود — لا داخل ~/Documents أو ~/Desktop). التالي: تفعيل المصادقة + ربط دومين libya.rabee.dev + إعادة بناء بوت تلقرام.",
     },
   },
 ];
