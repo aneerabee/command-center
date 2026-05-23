@@ -1,15 +1,15 @@
 {
-  "checked_at": "2026-05-23T01:26:21Z",
-  "checked_at_local": "2026-05-23 04:26:21 +03",
+  "checked_at": "2026-05-23T01:41:25Z",
+  "checked_at_local": "2026-05-23 04:41:25 +03",
   "ok": true,
   "reachable": true,
   "metrics": {
-    "disk_pct": 21,
+    "disk_pct": 22,
     "disk_free": "76G",
     "wapy_backup_age_h": 0,
     "docker_running": 3,
     "svc_failed": 0,
-    "load_1m": "0.22"
+    "load_1m": "0.09"
   },
   "alerts": []
 }
