@@ -1244,7 +1244,7 @@ const PRJ = [
     cl: "#059669",
     cl_brand: "#059669",
     brand_note: "SaaS Green — منتج اشتراك",
-    pct: 88,
+    pct: 92,
     parent: "saas",
     parent_role: "product",
     revenue_model: "subscription",
@@ -1252,11 +1252,11 @@ const PRJ = [
     monthly_revenue_usd: 0,
     users_count: 3,
     priority: "med",
-    next_milestone: "إضافة checker آلي للبوت داخل runtime-sync ومتابعة نشر GitHub Pages للرابط المستقل",
+    next_milestone: "بعد التأكيد: حذف بقايا محمد من western-office بأمان ثم نشر تنظيف ويسترن منفصل",
     summary:
-      "دفتر مالي تشغيلي — React 19 + Supabase + Telegram Bot. الويب والبوت يستخدمان نفس ledgerCore ونفس قواعد الحسابات والحركات، والبوت يعمل سحابيًا على Contabo.",
+      "دفتر مالي تشغيلي — React 19 + Supabase + Telegram Bot. أصبح له repo ومسار محلي مستقلان، والويب منشور على GitHub Pages، والبوت السحابي يعمل من Contabo.",
     local_path:
-      "/Users/rabeeshaban/Documents/New project/western-office/src/mohammadLedger",
+      "/Users/rabeeshaban/Developer/mohammad-ledger",
     server_path: "server:/home/argaz/apps/mohammad-ledger-bot",
     repo_url: "https://github.com/aneerabee/mohammad-ledger",
     deploy_url: "https://aneerabee.github.io/mohammad-ledger/",
@@ -1288,16 +1288,18 @@ const PRJ = [
     ops: [
       "المستودع الرسمي المنفصل موجود: aneerabee/mohammad-ledger",
       "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/mohammad-ledger/",
-      "مجلد العمل المحلي الحالي ما زال /western-office، وفيه remote إضافي باسم mohammad يشير إلى مستودع محمد",
-      "تمت مزامنة western-office/main وmohammad-ledger/main على commit d30cc74 بتاريخ 2026-05-16",
+      "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/mohammad-ledger",
+      "آخر نشر مؤكد إلى mohammad-ledger/main: commit 5da5a78 بتاريخ 2026-05-23",
+      "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
+      "بقايا محمد داخل western-office لم تُحذف بعد؛ الحذف يحتاج خطوة منفصلة بعد التأكيد",
       "مصدر البيانات الحالي: صف واحد في Supabase ml_state مع mirror محلي ونسخ محلية تلقائية",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يعمل على Contabo كخدمة systemd user ويستخدم نفس ledgerCore وSupabase",
-      "آخر تحقق قوي 2026-05-16: اختبارات الويب والبوت وسيناريوهات الحسابات نجحت، والرابط الرسمي منفصل ويعمل HTTP 200",
+      "آخر تحقق قوي 2026-05-23: npm test وnpm run lint وnpm run build نجحت، ونشر GitHub Pages اكتمل بنجاح",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت محمد كي لا تختلط ردود Terminal مع البوت",
     ],
-    separation_status: "separate-github-repo-live",
-    separation_note: "الفصل الرسمي موجود على GitHub كرابط ومستودع مستقلين: aneerabee/mohammad-ledger و /mohammad-ledger/. العمل المحلي الحالي يتم من western-office مع remote إضافي باسم mohammad، وآخر commit d30cc74 مدفوع إلى المستودعين.",
+    separation_status: "separate-github-repo-live-local-worktree",
+    separation_note: "الفصل الرسمي أصبح GitHub + رابط + مسار محلي مستقل: aneerabee/mohammad-ledger و /mohammad-ledger/ و /Users/rabeeshaban/Developer/mohammad-ledger. لا تزال بقايا محمد داخل western-office بانتظار حذف آمن منفصل بعد التأكيد.",
     desc: "دفتر محمد — منظومة مالية للهاتف والويب والبوت مبنية من فهم ملف Numbers القديم\n\n🎯 الهدف:\nمحمد يستطيع إدخال ومراجعة حركاته من الهاتف بسهولة، مع واجهة ويب وبوت Telegram متوازيين في نفس المنطق ونفس مصدر البيانات.\n\n💰 نموذج الحسابات الحالي:\nشخص أو شركة: رصيد علاقة يعني إما أقبض منه أو أدفع له\nفلوسي كاش: مال نقدي عندي في اليد أو الخزنة، والعملة تحدد داخل الحركة دينار/دولار\nحساب بنكي لي: مال في مصرف أو بطاقة أو محفظة، والعملة تحدد داخل الحركة دينار/دولار\nأصل أملكه: شيء له قيمة\nنوع مصروف: تكلفة نهائية لا تُعامل كشخص أو مكان مال\n\n🔄 أنواع الحركات:\nتحويل عادي بين حسابين من نفس النوع: كاش↔كاش أو مصرف↔مصرف\nمصروف: يخصم من حساب محدد بدون طرف ثانٍ\nبيع/شراء دولار: حركة بسعر صرف، والأرقام الكسرية تظهر فقط في سعر الصرف\nتصحيح/رصيد افتتاحي/مراجعة عند الحاجة بدون ترك حركة معلقة بلا معنى\n\n🧠 المنطق المشترك:\nالويب والبوت يستخدمان نفس accountConfig وmovementAccounts وaccountCompatibility وledgerCore\nالعملة صفة للحركة وليست اسم حساب مستقل\nلا تحويل من نفس الحساب لنفس الحساب\nلا تحويل كاش إلى مصرف داخل التحويل العادي؛ هذا يحتاج نوع حركة مناسب\nكل حركة تعرض التأثير قبل الحفظ ثم تحفظ في Supabase عبر ml_state\nالأرقام تعرض بفواصل آلاف وبدون كسور إلا أسعار الصرف ومعدلات التحويل\n\n📱 الواجهة:\nمصممة للهاتف أولاً\nإدخال الحركة كخطوات متتابعة واضحة\nاختيار الأشخاص والحسابات يعتمد على البحث والترتيب حسب الرصيد والاستخدام\nالأرصدة تعرض بتمييز واضح: أقبض منه، أدفع له، مالي النقدي، حساباتي البنكية، الأصول، المصروفات، والمراجعة\nكل حساب يفتح ملخصه وحركاته وتعديل تصنيفه\n\n🤖 Telegram Bot:\nيعمل سحابيًا على Contabo عبر mohammad-ledger-bot.service\nPolling فقط حالياً: webhook فارغ وpending_update_count = 0\nيعتمد على نفس ملفات المنطق المستخدمة في الويب\nWizard لإضافة الحساب والحركة مع رجوع وإلغاء وتأكيد نهائي\nمنع تكرار الحفظ عند ضغط التأكيد مرتين عبر idempotencyKey\n\n🛡️ الأمان وحفظ البيانات:\nSupabase هو المصدر السحابي\nlocalStorage mirror ونسخ محلية تلقائية كشبكة أمان في الويب\nالبوت مغلق على مستخدم Telegram مسموح\nمفاتيح Supabase وTelegram موجودة في .env.production على السيرفر فقط ولا توضع في GitHub Pages\nتنبيه مهم: لا تشغّل Claude telegram plugin بالتوازي مع بوت محمد حتى لا تظهر ردود Terminal كأنها من بوت الدفتر",
     tags: [
       "React 19",
@@ -1310,7 +1312,7 @@ const PRJ = [
       "GitHub Pages",
       "Idempotency",
     ],
-    path: "/Users/rabeeshaban/Documents/New project/western-office/src/mohammadLedger",
+    path: "/Users/rabeeshaban/Developer/mohammad-ledger",
     links: {
       التطبيق: "https://aneerabee.github.io/mohammad-ledger/",
       GitHub: "https://github.com/aneerabee/mohammad-ledger",
@@ -1324,11 +1326,11 @@ const PRJ = [
       Telegram: "مرجع Telegram Bot API المستخدم لبناء تجربة الإدخال والمراجعة",
     },
     current_status: {
-      updated: "2026-05-16",
+      updated: "2026-05-23",
       where:
-        "الواجهة الرسمية الحية منشورة على GitHub Pages عبر /mohammad-ledger/ وتعمل HTTP 200. المستودع الرسمي aneerabee/mohammad-ledger متزامن الآن مع western-office/main على commit d30cc74. البوت يعمل سحابيًا على Contabo VPS داخل /home/argaz/apps/mohammad-ledger-bot ويقرأ/يحفظ من نفس Supabase.",
+        "الواجهة الرسمية الحية منشورة على GitHub Pages عبر /mohammad-ledger/ وتعمل HTTP 200. المستودع الرسمي aneerabee/mohammad-ledger على commit 5da5a78. المسار المحلي المستقل هو /Users/rabeeshaban/Developer/mohammad-ledger. بوت Contabo ما زال يعمل من /home/argaz/apps/mohammad-ledger-bot ويقرأ/يحفظ من نفس Supabase.",
       next_step:
-        "إضافة checker آلي للبوت داخل runtime-sync، ثم التأكد من آخر GitHub Pages deployment بعد كل دفع إلى mohammad-ledger.",
+        "بعد موافقة صريحة: حذف ملفات محمد من western-office وتنظيف remote القديم إن كان موجودًا، ثم تشغيل اختبارات ويسترن ونشره منفصلًا.",
       blockers: [
         {
           text: "runtime-sync لا يملك checker مباشرًا للبوت بعد؛ الحالة الحالية مثبتة من فحص يدوي/SSH",
@@ -1336,15 +1338,15 @@ const PRJ = [
         },
       ],
       use_guide:
-        "للاستخدام اليومي: افتح رابط /mohammad-ledger/ الرسمي أو استخدم بوت Telegram. للتطوير الحالي: worktree المحلي في western-office ثم الدفع إلى origin وremote mohammad عند نشر محمد، مع تشغيل الاختبارات والبناء قبل النشر. للتشغيل: الخدمة على السيرفر باسم mohammad-ledger-bot.service، والسرّيات محفوظة في .env.production بصلاحية 600. لا تشغّل Claude telegram plugin بالتوازي مع بوت محمد.",
+        "للاستخدام اليومي: افتح رابط /mohammad-ledger/ الرسمي أو استخدم بوت Telegram. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/mohammad-ledger فقط، ثم npm test وnpm run lint وnpm run build قبل الدفع إلى aneerabee/mohammad-ledger. للتشغيل السحابي: الخدمة على السيرفر باسم mohammad-ledger-bot.service، والسرّيات محفوظة في .env.production بصلاحية 600. لا تشغّل Claude telegram plugin بالتوازي مع بوت محمد.",
     },
     claude_session: {
       session_name: "[mohammad ledger telegram bot]",
       terminal: "Codex / Core Shell",
-      cwd: "/Users/rabeeshaban/Documents/New project/western-office",
+      cwd: "/Users/rabeeshaban/Developer/mohammad-ledger",
       command:
-        "cd /Users/rabeeshaban/Documents/New\\ project/western-office && claude",
-      note: "آخر نقطة 2026-05-16: البوت حي على Contabo، والرابط الرسمي لمحمد هو /mohammad-ledger/. آخر تعديلات التسميات ومنطق الحسابات مدفوعة إلى western-office/main وmohammad-ledger/main على commit d30cc74.",
+        "cd /Users/rabeeshaban/Developer/mohammad-ledger && claude",
+      note: "آخر نقطة 2026-05-23: مشروع محمد أصبح في repo ومسار محلي مستقلين، والرابط الرسمي /mohammad-ledger/ منشور من commit 5da5a78. حذف بقاياه من western-office لم يتم بعد.",
     },
   },
   {
@@ -2027,7 +2029,7 @@ const BOT = [
       "No Webhook",
     ],
     path: "server:/home/argaz/apps/mohammad-ledger-bot/server/telegram/bot.js",
-    local_path: "/Users/rabeeshaban/Documents/New project/western-office/server/telegram/bot.js",
+    local_path: "/Users/rabeeshaban/Developer/mohammad-ledger/server/telegram/bot.js",
     service_path:
       "server:/home/argaz/.config/systemd/user/mohammad-ledger-bot.service",
     config_paths: [
