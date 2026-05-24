@@ -1942,6 +1942,16 @@ const AUTO = [
         kind: "review",
       },
       {
+        id: "desktop-daily-heartbeat",
+        name: "Daily Heartbeat — Scheduled Reviews Digest",
+        freq: "يوميًا 05:00 UTC (~08:00 إسطنبول)",
+        on: true,
+        what: "تقرير يوميّ موحَّد يلخّص آخر ٢٤ ساعة من المراجعات الثلاث (Engine + API + Frontend). يستعلم GitHub API ويُرسل تلجرام واحدة بمحصّلة كلّ نطاق + روابط الفشل (إن وُجد). الفلسفة: المراجعات صامتة على النجاح؛ هذا الـheartbeat يقطع لبس \"لم تأتني رسالة = لم تشتغل أم نجحت؟\". أُنشئ 2026-05-24.",
+        prj: ["BRIX Travel System"],
+        path: "daily-heartbeat.yml + scripts/daily-heartbeat.mjs",
+        kind: "notification",
+      },
+      {
         id: "desktop-scheduled-review-frontend",
         name: "Scheduled Review — Frontend + Deploy",
         freq: "٣×/يوم: 04:00 + 12:00 + 20:00 UTC (~07:00 + 15:00 + 23:00 إسطنبول)",
