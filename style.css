@@ -13405,107 +13405,146 @@ button.cx-chip:hover {
 .mod-card-ghost { align-self: stretch; }
 
 /* ══════════════════════════════════════════════════════════════
-   FRESHNESS BAR — overlay strip on every entity card + drawer chips.
-   Absolute-positioned so it NEVER participates in the card's flex
-   or grid layout (v1 broke card layouts because the bar became a
-   flex item). The .cc-has-fresh class adds top padding to the host
-   card to reserve visual room for the 22px overlay.
+   FRESHNESS — quiet status pill that respects existing card design.
+   • Floats in the top-end corner of any entity card (no layout impact)
+   • Same visual language as .prj-card-fresh / .prj-card-blockers-badge
+   • Glass background + soft border + tiny coloured dot + day count
+   • Pulse animation only for the "very old" tier (red)
+   • Review button (✓) reveals on hover only — no visual clutter
    ══════════════════════════════════════════════════════════════ */
-.cc-fresh-bar {
+.cc-fresh-badge {
   position: absolute;
-  top: 0;
-  inset-inline: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 22px;
-  padding: 0 10px;
-  margin: 0;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-  border-radius: inherit;
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  user-select: none;
-  cursor: help;
-  letter-spacing: 0.2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
-  z-index: 6;
-  pointer-events: none; /* clicks pass through to the card */
-}
-.cc-fresh-bar > * { pointer-events: auto; }
-
-/* Reserve 28px at the top of every decorated card */
-.cc-has-fresh.prj-card,
-.cc-has-fresh.bot-card,
-.cc-has-fresh.cloud-card,
-.cc-has-fresh.arc-card,
-.cc-has-fresh.archive-card,
-.cc-has-fresh.tl-card,
-.cc-has-fresh.tool-card,
-.cc-has-fresh.ideas-card,
-.cc-has-fresh.svc-card,
-.cc-has-fresh.umb-card,
-.cc-has-fresh.emp-card,
-.cc-has-fresh.mod-card,
-.cc-has-fresh[data-cc-name] {
-  padding-top: 28px !important;
-}
-.cc-fresh-bar .cc-fresh-icon { font-size: 10px; line-height: 1; opacity: 0.95; }
-.cc-fresh-bar .cc-fresh-label { font-size: 11px; opacity: 0.95; }
-.cc-fresh-bar .cc-fresh-days {
-  margin-inline-start: auto;
-  font-size: 10px;
-  opacity: 0.92;
-  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
-  font-weight: 700;
-}
-.cc-fresh-bar .cc-fresh-review {
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.40);
-  color: #fff;
-  font-size: 11px;
-  width: 18px;
-  height: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 0;
-  margin-inline-start: 6px;
+  top: 10px;
+  inset-inline-end: 10px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  transition: background 0.15s, transform 0.1s;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+  letter-spacing: 0.2px;
   line-height: 1;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  color: #475569;
+  cursor: help;
+  user-select: none;
+  z-index: 5;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, padding 0.18s ease;
+  white-space: nowrap;
 }
-.cc-fresh-bar .cc-fresh-review:hover {
-  background: rgba(255, 255, 255, 0.42);
-  transform: scale(1.08);
+.cc-fresh-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
 }
-.cc-fresh-bar .cc-fresh-review:active { transform: scale(0.95); }
+.cc-fresh-num {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+.cc-fresh-unit {
+  font-size: 9px;
+  opacity: 0.55;
+  font-weight: 600;
+  margin-inline-start: -1px;
+}
+.cc-fresh-review {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(-2px);
+  transition: width 0.18s ease, opacity 0.18s ease, transform 0.18s ease, color 0.15s ease;
+}
+.cc-fresh-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  padding-inline-end: 7px;
+}
+.cc-fresh-badge:hover .cc-fresh-review {
+  width: 12px;
+  opacity: 1;
+  transform: translateX(0);
+}
+.cc-fresh-review:hover {
+  color: #10b981;
+  transform: scale(1.15);
+}
 
-/* Colour palette: green → yellow → orange → red */
-.cc-fresh-bar.cc-fresh-green  { background: linear-gradient(90deg, #10B981 0%, #059669 100%); }
-.cc-fresh-bar.cc-fresh-yellow { background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%); }
-.cc-fresh-bar.cc-fresh-orange { background: linear-gradient(90deg, #F97316 0%, #EA580C 100%); }
-.cc-fresh-bar.cc-fresh-red    { background: linear-gradient(90deg, #EF4444 0%, #DC2626 100%); }
+/* Tier palette — coloured dot only; pill stays neutral glass */
+.cc-fresh-green  .cc-fresh-dot { background: #10b981; box-shadow: 0 0 0 2px rgba(16,185,129,0.18); }
+.cc-fresh-yellow .cc-fresh-dot { background: #f59e0b; box-shadow: 0 0 0 2px rgba(245,158,11,0.18); }
+.cc-fresh-orange .cc-fresh-dot { background: #f97316; box-shadow: 0 0 0 2px rgba(249,115,22,0.18); }
+.cc-fresh-red    .cc-fresh-dot {
+  background: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239,68,68,0.22);
+  animation: cc-fresh-pulse 2.2s ease-in-out infinite;
+}
+@keyframes cc-fresh-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.78); }
+}
 
-/* Drawer per-section chip (smaller, inline beside the section heading) */
+/* For very old cards: hint the urgency with a warm pill tint */
+.cc-fresh-badge.cc-fresh-red {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.78);
+  border-color: rgba(239, 68, 68, 0.20);
+}
+.cc-fresh-badge.cc-fresh-orange {
+  color: #9a3412;
+  background: rgba(254, 235, 226, 0.78);
+  border-color: rgba(249, 115, 22, 0.18);
+}
+
+/* Drawer per-section chip — same language, even smaller, inline beside heading */
 .cc-fresh-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
+  height: 18px;
+  padding: 0 7px;
   margin-inline-start: 8px;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  color: #fff;
+  font-family: "IBM Plex Mono", monospace;
   border-radius: 9999px;
   vertical-align: middle;
-  font-family: "IBM Plex Mono", monospace;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: #64748b;
+  cursor: help;
+  user-select: none;
 }
-.cc-fresh-chip.cc-fresh-green  { background: #10B981; }
-.cc-fresh-chip.cc-fresh-yellow { background: #F59E0B; color: #422006; }
-.cc-fresh-chip.cc-fresh-orange { background: #F97316; }
-.cc-fresh-chip.cc-fresh-red    { background: #EF4444; }
+.cc-fresh-chip .cc-fresh-dot { width: 6px; height: 6px; }
+.cc-fresh-chip.cc-fresh-red { color: #b91c1c; background: rgba(254,226,226,0.7); border-color: rgba(239,68,68,0.18); }
+.cc-fresh-chip.cc-fresh-orange { color: #9a3412; background: rgba(254,235,226,0.7); border-color: rgba(249,115,22,0.18); }
+
+/* Dark surfaces inside drawer / dark theme */
+.cx-panel .cc-fresh-badge,
+.cx-panel .cc-fresh-chip {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(255, 255, 255, 0.10);
+  color: #cbd5e1;
+}
+.cx-panel .cc-fresh-chip.cc-fresh-red,
+.cx-panel .cc-fresh-badge.cc-fresh-red { color: #fecaca; background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.35); }
+.cx-panel .cc-fresh-chip.cc-fresh-orange,
+.cx-panel .cc-fresh-badge.cc-fresh-orange { color: #fed7aa; background: rgba(249,115,22,0.18); border-color: rgba(249,115,22,0.32); }

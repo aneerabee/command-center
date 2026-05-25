@@ -5589,7 +5589,7 @@ window.addEventListener("hashchange", function () {
       const fresh = await _loadFreshness();
       if (!fresh || !Object.keys(fresh).length) return;
       document.querySelectorAll(CARD_SELECTORS).forEach((el) => {
-        if (el.querySelector(":scope > .cc-fresh-bar")) return;
+        if (el.querySelector(":scope > .cc-fresh-badge")) return;
         const entity = _findEntity(el);
         if (!entity || !entity.id) return;
         const data = fresh[entity.id];
@@ -5600,29 +5600,31 @@ window.addEventListener("hashchange", function () {
         const days = _ageDays(effectiveDate);
         const meta = _ageMeta(days);
 
-        const bar = document.createElement("div");
-        bar.className = "cc-fresh-bar " + meta.cls;
-        bar.setAttribute(
+        const badge = document.createElement("div");
+        badge.className = "cc-fresh-badge " + meta.cls;
+        badge.setAttribute(
           "title",
           `آخر تحديث: ${effectiveDate}${review ? " (راجعتَ يدويًّا في " + review + ")" : ""} — قبل ${days} يومًا`,
         );
-        bar.innerHTML =
-          `<span class="cc-fresh-icon">${meta.icon}</span>` +
-          `<span class="cc-fresh-label">${meta.label}</span>` +
-          `<span class="cc-fresh-days">${days}ي</span>` +
-          `<button type="button" class="cc-fresh-review" title="راجعتُ يدويًّا — اجعلها حديثة">✓</button>`;
+        badge.innerHTML =
+          `<span class="cc-fresh-dot"></span>` +
+          `<span class="cc-fresh-num">${days}</span>` +
+          `<span class="cc-fresh-unit">ي</span>` +
+          `<button type="button" class="cc-fresh-review" title="راجعتُ — اجعلها حديثة">✓</button>`;
 
         const cs = getComputedStyle(el);
         if (cs.position === "static") el.style.position = "relative";
-        el.classList.add("cc-has-fresh"); // CSS reserves padding-top: 28px
-        el.insertBefore(bar, el.firstChild);
+        // No padding-tweak needed — the badge floats in existing top whitespace
+        el.appendChild(badge);
 
-        bar.querySelector(".cc-fresh-review").addEventListener("click", (e) => {
+        badge.addEventListener("click", (e) => {
+          // The badge itself is a card-overlay; ignore card-click bubbling
+          // unless the user is clicking the review button.
+          if (!(e.target instanceof Element) || !e.target.closest(".cc-fresh-review")) return;
           e.stopPropagation();
           e.preventDefault();
           _setReview(entity.id);
-          bar.remove();
-          el.classList.remove("cc-has-fresh");
+          badge.remove();
           _decorating = false;
           _decorateCards();
         });
@@ -5667,7 +5669,10 @@ window.addEventListener("hashchange", function () {
         const chip = document.createElement("span");
         chip.className = "cc-fresh-chip " + meta.cls;
         chip.title = `آخر تحديث: ${effectiveDate} — قبل ${days} يومًا`;
-        chip.textContent = `${meta.icon} ${days}ي`;
+        chip.innerHTML =
+          `<span class="cc-fresh-dot"></span>` +
+          `<span class="cc-fresh-num">${days}</span>` +
+          `<span class="cc-fresh-unit">ي</span>`;
         h.appendChild(chip);
         h.dataset.ccFreshHooked = "1";
       }
