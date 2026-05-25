@@ -5523,15 +5523,21 @@ window.addEventListener("hashchange", function () {
       typeof TEAM !== "undefined" ? TEAM : null,
       typeof AUTO !== "undefined" ? AUTO : null,
     ];
+    const _index = (e) => {
+      const key = e.id || e.nm;
+      if (!key) return;
+      [e.name, e.ar, e.nm, e.id]
+        .filter(Boolean)
+        .forEach((n) => (lk[n] = Object.assign({}, e, { id: key })));
+    };
     for (const arr of arrs) {
       if (!Array.isArray(arr)) continue;
       for (const e of arr) {
         if (!e) continue;
-        const key = e.id || e.nm;
-        if (!key) continue;
-        [e.name, e.ar, e.nm, e.id]
-          .filter(Boolean)
-          .forEach((n) => (lk[n] = Object.assign({}, e, { id: key })));
+        _index(e);
+        // Walk nested groupings (AUTO has `tasks`, others may have `items`)
+        if (Array.isArray(e.tasks)) e.tasks.forEach(_index);
+        if (Array.isArray(e.items)) e.items.forEach(_index);
       }
     }
     _nameLookup = lk;
