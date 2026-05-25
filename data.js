@@ -1302,7 +1302,7 @@ const PRJ = [
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
       "آخر تحقق قوي 2026-05-25: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 90 اختبار ناجح",
-      "ملاحظة تشغيلية: SSH إلى Contabo فشل من جلسة Codex الحالية بـ Permission denied، لذلك حالة السيرفر تحتاج فحصًا حيًا قبل إعلان تشغيل API الجديد",
+      "ملاحظة تشغيلية: تم الوصول إلى Contabo ونشر الكود في /home/argaz/apps/adreem على commit f5e4534، لكن adreem-api.service و adreem-bot.service غير مفعّلين لأن SUPABASE_SERVICE_ROLE_KEY غير موجود بعد في adreem.env",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
     separation_status: "separate-github-repo-live-local-worktree",
@@ -1336,12 +1336,12 @@ const PRJ = [
     current_status: {
       updated: "2026-05-25",
       where:
-        "ADREEM جاهز محليًا كأساس تشغيل موسع: API معزول، RLS schema، bot يدعم ADREEM env، workflow لا يحقن Supabase anon، ومراحل تشغيل داخل الويب للمشاريع/الأصول، المطابقة، المرفقات كروابط، والتكرار الشهري. آخر فحص محلي نجح: lint/test/build مع 90 اختبار. الوصول SSH إلى Contabo غير متاح من هذه الجلسة، لذلك لم يتم تأكيد تشغيل API الجديد على السيرفر بعد.",
+        "ADREEM منشور على GitHub Pages من commit f5e4534 ونجح workflow. كود السيرفر منشور على Contabo في /home/argaz/apps/adreem، وملفات systemd موجودة. التشغيل الحي لـAPI والبوت متوقف فقط على إضافة SUPABASE_SERVICE_ROLE_KEY إلى adreem.env ثم تفعيل adreem-api.service و adreem-bot.service.",
       next_step:
-        "فتح صلاحية SSH أو تنفيذ Runbook التشغيل على Contabo، ثم ضبط GitHub secret VITE_ADREEM_API_URL وتشغيل adreem-api.service و adreem-bot.service.",
+        "إضافة SUPABASE_SERVICE_ROLE_KEY الحقيقي إلى /home/argaz/apps/adreem/adreem.env، ثم تشغيل adreem-api.service و adreem-bot.service، وبعدها ضبط VITE_ADREEM_API_URL على رابط HTTPS للـAPI.",
       blockers: [
         {
-          text: "SSH إلى Contabo فشل من جلسة Codex الحالية؛ يلزم فحص حي قبل إعلان تشغيل API الجديد",
+          text: "SUPABASE_SERVICE_ROLE_KEY ناقص في adreem.env؛ الخدمات موجودة لكنها inactive عمدًا حتى لا تعمل ببيئة غير آمنة",
           priority: "med",
         },
       ],
@@ -1604,8 +1604,8 @@ const SVC = [
     path: "server:/home/argaz/apps/adreem",
     port: "Telegram polling",
     schedule: "مخطط كخدمة systemd user بعد تثبيت /home/argaz/apps/adreem",
-    dt: "adreem-bot.service · يحتاج فحص حي على Contabo",
-    info: "ADREEM bot جاهز محليًا ككود ويستخدم npm run bot:adreem. لم يتم تأكيد الخدمة الجديدة على Contabo لأن SSH من جلسة Codex الحالية فشل بـ Permission denied.",
+    dt: "adreem-bot.service · installed inactive · ينتظر service role",
+    info: "ADREEM bot منشور على Contabo في /home/argaz/apps/adreem، وملف adreem-bot.service موجود لكنه inactive حتى إضافة SUPABASE_SERVICE_ROLE_KEY.",
     last_check: "2026-05-25 local",
     config_paths: [
       "server:/home/argaz/apps/adreem",
@@ -2069,8 +2069,8 @@ const BOT = [
     last_check: "2026-05-25 local",
     last_run: "غير مؤكد على Contabo بعد أساس ADREEM",
     check_method: "local lint/test/build (90 tests) + planned SSH/systemd check",
-    uptime_status: "ready-for-cloud-install",
-    check_note: "الكود جاهز محليًا، لكن SSH إلى Contabo فشل من جلسة Codex الحالية بـ Permission denied. لا تعتبر الخدمة الجديدة active حتى ينجح systemctl --user status adreem-bot.service.",
+    uptime_status: "installed-waiting-secret",
+    check_note: "الكود منشور على Contabo، لكن adreem-bot.service غير مفعّل لأن SUPABASE_SERVICE_ROLE_KEY ناقص. البوت القديم mohammad-ledger-bot.service ما زال active ولم يتم لمسه.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2080,7 +2080,7 @@ const BOT = [
     related_entities: ["ADREEM", "Supabase", "GitHub", "Contabo VPS"],
     summary:
       "بوت Telegram لـADREEM لإدخال الحركات ومراجعة الحسابات والسجل من الهاتف، ويستخدم نفس ملفات المنطق التي يستخدمها الويب.",
-    desc: "بوت ADREEM — جاهز للتشغيل السحابي على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ المنجز محليًا:\nحماية allowlist عبر Telegram user id\nعزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري أصبحت موجودة في web/core محليًا، ولم تتحول بعد إلى Wizard كامل داخل Telegram.\n\n📍 التشغيل المقترح:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nالبوت مغلق على user id محدد\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت\n\n⚠️ الحالة:\nلم يتم تأكيد التشغيل الحي على Contabo من هذه الجلسة لأن SSH فشل بـ Permission denied.",
+    desc: "بوت ADREEM — جاهز للتشغيل السحابي على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ المنجز محليًا:\nحماية allowlist عبر Telegram user id\nعزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري أصبحت موجودة في web/core محليًا، ولم تتحول بعد إلى Wizard كامل داخل Telegram.\n\n📍 التشغيل المقترح:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nالبوت مغلق على user id محدد\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت\n\n⚠️ الحالة:\nتم نشر الكود على Contabo، لكن التشغيل الحي ينتظر SUPABASE_SERVICE_ROLE_KEY الحقيقي في adreem.env.",
     tags: [
       "Telegram",
       "Node.js",
@@ -2113,9 +2113,9 @@ const BOT = [
     current_status: {
       updated: "2026-05-25",
       where:
-        "جاهز محليًا للتثبيت على Contabo كخدمة systemd user باسم adreem-bot.service للحركات الأساسية والحسابات. ميزات التشغيل الجديدة في web/core تحتاج Wizard بوت لاحق. لم يتم تأكيد التشغيل الحي بسبب فشل SSH من جلسة Codex الحالية.",
+        "منشور على Contabo في /home/argaz/apps/adreem، وملف adreem-bot.service موجود لكنه inactive بسبب نقص SUPABASE_SERVICE_ROLE_KEY. ميزات التشغيل الجديدة في web/core تحتاج Wizard بوت لاحق.",
       next_step:
-        "تثبيت /home/argaz/apps/adreem وتشغيل adreem-bot.service ثم إضافة checker دوري داخل Command Center runtime-sync.",
+        "إضافة SUPABASE_SERVICE_ROLE_KEY ثم تشغيل adreem-api.service و adreem-bot.service وإضافة checker دوري داخل Command Center runtime-sync.",
       use_guide:
         "للفحص بعد التثبيت: ssh إلى Contabo ثم systemctl --user status adreem-bot.service. لإعادة التشغيل: systemctl --user restart adreem-bot.service. لا تشغل نسخة MacBook أو Claude telegram plugin بالتوازي.",
     },
