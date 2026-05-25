@@ -13405,26 +13405,52 @@ button.cx-chip:hover {
 .mod-card-ghost { align-self: stretch; }
 
 /* ══════════════════════════════════════════════════════════════
-   FRESHNESS BAR — top strip on every entity card + drawer chips.
-   Medium-visible (22px tall), reads from data.freshness.json
+   FRESHNESS BAR — overlay strip on every entity card + drawer chips.
+   Absolute-positioned so it NEVER participates in the card's flex
+   or grid layout (v1 broke card layouts because the bar became a
+   flex item). The .cc-has-fresh class adds top padding to the host
+   card to reserve visual room for the 22px overlay.
    ══════════════════════════════════════════════════════════════ */
 .cc-fresh-bar {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
   height: 22px;
   padding: 0 10px;
-  margin: 0 0 6px 0;
+  margin: 0;
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  border-radius: 6px 6px 0 0;
+  border-radius: inherit;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   user-select: none;
   cursor: help;
   letter-spacing: 0.2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  z-index: 6;
+  pointer-events: none; /* clicks pass through to the card */
+}
+.cc-fresh-bar > * { pointer-events: auto; }
+
+/* Reserve 28px at the top of every decorated card */
+.cc-has-fresh.prj-card,
+.cc-has-fresh.bot-card,
+.cc-has-fresh.cloud-card,
+.cc-has-fresh.arc-card,
+.cc-has-fresh.archive-card,
+.cc-has-fresh.tl-card,
+.cc-has-fresh.tool-card,
+.cc-has-fresh.ideas-card,
+.cc-has-fresh.svc-card,
+.cc-has-fresh.umb-card,
+.cc-has-fresh.emp-card,
+.cc-has-fresh.mod-card,
+.cc-has-fresh[data-cc-name] {
+  padding-top: 28px !important;
 }
 .cc-fresh-bar .cc-fresh-icon { font-size: 10px; line-height: 1; opacity: 0.95; }
 .cc-fresh-bar .cc-fresh-label { font-size: 11px; opacity: 0.95; }

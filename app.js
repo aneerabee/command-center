@@ -5614,6 +5614,7 @@ window.addEventListener("hashchange", function () {
 
         const cs = getComputedStyle(el);
         if (cs.position === "static") el.style.position = "relative";
+        el.classList.add("cc-has-fresh"); // CSS reserves padding-top: 28px
         el.insertBefore(bar, el.firstChild);
 
         bar.querySelector(".cc-fresh-review").addEventListener("click", (e) => {
@@ -5621,6 +5622,7 @@ window.addEventListener("hashchange", function () {
           e.preventDefault();
           _setReview(entity.id);
           bar.remove();
+          el.classList.remove("cc-has-fresh");
           _decorating = false;
           _decorateCards();
         });
