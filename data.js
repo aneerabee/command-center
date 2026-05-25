@@ -1305,6 +1305,7 @@ const PRJ = [
       "آخر تحقق قوي 2026-05-25: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 90 اختبار ناجح",
       "تشغيل Contabo مؤكد: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
       "فحص runtime على السيرفر نجح: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
+      "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
     separation_status: "separate-github-repo-live-local-worktree",
@@ -1340,7 +1341,7 @@ const PRJ = [
     current_status: {
       updated: "2026-05-25",
       where:
-        "ADREEM منشور على GitHub Pages من commit f5e4534، وworkflow 26399190719 نجح بعد ضبط VITE_ADREEM_API_URL. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api.",
+        "ADREEM منشور على GitHub Pages من commit f5e4534، وworkflow 26399190719 نجح بعد ضبط VITE_ADREEM_API_URL. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. صف adreem:adreem:main موجود الآن، واختبار القراءة والكتابة عبر API نجح.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب.",
       blockers: [],
@@ -2117,7 +2118,7 @@ const BOT = [
     current_status: {
       updated: "2026-05-25",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem. adreem-bot.service active، وadreem-api.service active، وTelegram getMe نجح. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api.",
+        "يعمل على Contabo في /home/argaz/apps/adreem. adreem-bot.service active، وadreem-api.service active، وTelegram getMe نجح. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api. قراءة وكتابة الدفتر عبر API تم اختبارهما بعد إنشاء صف adreem:adreem:main.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم توسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
