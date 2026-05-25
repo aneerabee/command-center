@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 
-ROOT="/Users/rabeeshaban/Documents/New project/command-center"
+ROOT="/Users/rabeeshaban/Developer/command-center"
 NODE_BIN="$(command -v node || echo /usr/local/bin/node)"
 GIT_BIN="$(command -v git || echo /usr/bin/git)"
 LOCK_DIR="$ROOT/.runtime-sync.lock"

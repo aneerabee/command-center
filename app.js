@@ -2006,7 +2006,7 @@ R.home = function () {
     `<span class="exec-section-link" style="cursor:default">أين كل شيء</span>` +
     `</div>` +
     `<div class="exec-access-rows">` +
-    `<div class="exec-acc-row"><span class="exec-acc-key">💻 محلي</span><code class="exec-acc-val">~/Desktop/Projects · ~/Documents/New project</code></div>` +
+    `<div class="exec-acc-row"><span class="exec-acc-key">💻 محلي</span><code class="exec-acc-val">~/Desktop/Projects · ~/Developer</code></div>` +
     `<div class="exec-acc-row"><span class="exec-acc-key">☁️ سيرفر</span><code class="exec-acc-val">62.171.128.44 · Tailscale: 100.116.69.101</code></div>` +
     `<div class="exec-acc-row"><span class="exec-acc-key">🌐 سحابي</span><code class="exec-acc-val">GitHub · Railway · Supabase · Hostinger · Meta Business</code></div>` +
     `<div class="exec-acc-row"><span class="exec-acc-key">🔐 حساس</span><code class="exec-acc-val">Vault · Tron Bot · Tailscale (طبقات أمنية حيّة)</code></div>` +

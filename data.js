@@ -788,7 +788,7 @@ const PRJ = [
     cl: "#8B5CF6",
     cl_brand: "#8B5CF6",
     brand_note: "Infra Purple — هوية البنية التحتية الشخصية",
-    pct: 90,
+    pct: 92,
     parent: "infra",
     parent_role: "management",
     revenue_model: "none",
@@ -799,7 +799,7 @@ const PRJ = [
     next_milestone: "إضافة عرض المظلات (Umbrellas View) للتنقل بين الشركات",
     summary:
       "لوحة تحكم موحّدة — 12 صفحة، 4 شركات، 12 مشروع، 5 موظفين. تحديث تلقائي كل 6 ساعات عبر launchd → GitHub Pages.",
-    local_path: "/Users/rabeeshaban/Documents/New project/command-center",
+    local_path: "/Users/rabeeshaban/Developer/command-center",
     server_path: null,
     repo_url: "https://github.com/aneerabee/command-center",
     deploy_url: "https://aneerabee.github.io/command-center/",
@@ -828,9 +828,9 @@ const PRJ = [
       GitHub: "https://github.com/aneerabee/command-center",
     },
     current_status: {
-      updated: "2026-05-11",
+      updated: "2026-05-25",
       where:
-        "نشطة ومنشورة. شملت دفعة 11 مايو إضافة UMBRELLAS + DEPARTMENTS + TEAM + Rihlaty Travel + إصلاح مسارات + ربط هرمي بين الشركات والأقسام والموظفين.",
+        "نشطة ومنشورة. شملت دفعة 11 مايو إضافة UMBRELLAS + DEPARTMENTS + TEAM + Rihlaty Travel + إصلاح مسارات + ربط هرمي بين الشركات والأقسام والموظفين. [تحديث 2026-05-25] نُقلت النسخة المحلية من ~/Documents/New project/command-center إلى ~/Developer/command-center لإخراجها من آي‑كلاود (المشكلة نفسها التي عُولجت لمشروع ليبيا — أرشفة ملفات تلقائيّة تعطّل git أحيانًا). جيت‑هَب https://github.com/aneerabee/command-center هو المصدر الأساسي. نسخة launchd الآلية للنشر تعيش منفصلة في ~/.local/share/command-center ولم تتأثّر بالنقل.",
       next_step:
         "إضافة بحث Cmd+K موحّد، وضع داكن، KPIs لكل مشروع، استبيان لجمع بيانات الموظفين.",
     },
@@ -2324,11 +2324,11 @@ const TL = [
       "نظام محلي على macOS يشغّل فحصًا دوريًا عبر launchd، ثم يحدّث data.runtime.json ويدفعه إلى GitHub عند وجود تغيير فقط.",
     desc: "هذا ليس MCP ولا خدمة سحابية.\nإنه نظام محلي على الماك مكوّن من 3 طبقات:\n\n1) runtime-sync.js\nيفحص projects + services + tools + cloud + bots + archive بدرجات تحقق متفاوتة حسب كل نوع\n\n2) runtime-sync-publish.sh\nيشغّل الفحص ثم commit/push فقط إذا تغيّر data.runtime.json\n\n3) LaunchAgent على macOS\nيشغّل النظام كل 6 ساعات عبر launchd\n\nالمهم:\nالذي يُعرض في اللوحة هو آخر نتيجة محفوظة في data.runtime.json، وليس ضمانًا أن كل عنصر مغطى checker مستقل بنفس الجودة.\n\nالغرض:\nتقليل المعلومات القديمة في اللوحة المنشورة بدون الاعتماد على تشغيل يدوي مستمر.",
     tags: ["launchd", "runtime-sync", "GitHub push", "Command Center"],
-    path: "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync.js",
+    path: "/Users/rabeeshaban/Developer/command-center/runtime-sync.js",
     config_paths: [
-      "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync.js",
-      "/Users/rabeeshaban/Documents/New project/command-center/runtime-sync-publish.sh",
-      "/Users/rabeeshaban/Documents/New project/command-center/RUNTIME_SYNC.md",
+      "/Users/rabeeshaban/Developer/command-center/runtime-sync.js",
+      "/Users/rabeeshaban/Developer/command-center/runtime-sync-publish.sh",
+      "/Users/rabeeshaban/Developer/command-center/RUNTIME_SYNC.md",
       "/Users/rabeeshaban/Library/LaunchAgents/com.rabeeshaban.command-center-runtime-publish.plist",
     ],
     facts: [
