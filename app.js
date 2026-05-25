@@ -5505,17 +5505,33 @@ window.addEventListener("hashchange", function () {
     return                  { cls: "cc-fresh-red",    label: "قديم جدًّا", icon: "🔴" };
   }
 
-  // Build name→entity lookup once
+  // Build name→entity lookup once (covers ALL 11 entity arrays in data.js)
   let _nameLookup = null;
   function _buildLookup() {
     if (_nameLookup) return _nameLookup;
     const lk = {};
-    const arrs = { PRJ, BOT, CLD, TL, ARC, IDEAS, SVC };
-    for (const arr of Object.values(arrs)) {
+    const arrs = [
+      typeof PRJ !== "undefined" ? PRJ : null,
+      typeof BOT !== "undefined" ? BOT : null,
+      typeof CLD !== "undefined" ? CLD : null,
+      typeof TL !== "undefined" ? TL : null,
+      typeof ARC !== "undefined" ? ARC : null,
+      typeof IDEAS !== "undefined" ? IDEAS : null,
+      typeof SVC !== "undefined" ? SVC : null,
+      typeof UMBRELLAS !== "undefined" ? UMBRELLAS : null,
+      typeof DEPARTMENTS !== "undefined" ? DEPARTMENTS : null,
+      typeof TEAM !== "undefined" ? TEAM : null,
+      typeof AUTO !== "undefined" ? AUTO : null,
+    ];
+    for (const arr of arrs) {
       if (!Array.isArray(arr)) continue;
       for (const e of arr) {
-        if (!e || !e.id) continue;
-        [e.name, e.ar, e.nm].filter(Boolean).forEach((n) => (lk[n] = e));
+        if (!e) continue;
+        const key = e.id || e.nm;
+        if (!key) continue;
+        [e.name, e.ar, e.nm, e.id]
+          .filter(Boolean)
+          .forEach((n) => (lk[n] = Object.assign({}, e, { id: key })));
       }
     }
     _nameLookup = lk;
@@ -5544,14 +5560,20 @@ window.addEventListener("hashchange", function () {
 
   const CARD_SELECTORS = [
     "[data-cc-name]",
-    ".prj-card",
-    ".bot-card",
-    ".cloud-card",
+    // Entity cards — outermost only (use :not() to exclude inner sub-elements that
+    // share the same prefix like .prj-card-body, .umb-card-header, .mod-card-head).
+    ".prj-card:not([class*='prj-card-'])",
+    ".bot-card:not([class*='bot-card-'])",
+    ".cloud-card:not([class*='cloud-card-'])",
     ".arc-card",
+    ".archive-card",
     ".tl-card",
     ".tool-card",
     ".ideas-card",
     ".svc-card",
+    ".umb-card:not([class*='umb-card-'])",
+    ".emp-card:not([class*='emp-card-'])",
+    ".mod-card:not([class*='mod-card-'])",
   ].join(", ");
 
   async function _decorateCards() {
