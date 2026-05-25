@@ -1,0 +1,299 @@
+{
+  "generated_at": "2026-05-25T14:20:16.609Z",
+  "source": "data.js + git blame",
+  "entities": {
+    "etranex": {
+      "_root": "2026-04-05"
+    },
+    "brix": {
+      "_root": "2026-05-11"
+    },
+    "saas": {
+      "_root": "2026-05-25"
+    },
+    "infra": {
+      "_root": "2026-05-15"
+    },
+    "brix-b2b": {
+      "_root": "2026-05-12"
+    },
+    "easybooking": {
+      "_root": "2026-05-20",
+      "links": "2026-04-05",
+      "current_status": "2026-05-11"
+    },
+    "rihlaty": {
+      "_root": "2026-05-11"
+    },
+    "rabab": {
+      "_root": "2026-05-12"
+    },
+    "tasneem": {
+      "_root": "2026-05-12"
+    },
+    "wisam": {
+      "_root": "2026-05-12"
+    },
+    "hanan": {
+      "_root": "2026-05-12"
+    },
+    "mohamed-rihlaty": {
+      "_root": "2026-05-12"
+    },
+    "brix-travel-system": {
+      "links": "2026-05-12",
+      "links_desc": "2026-05-20",
+      "current_status": "2026-05-20",
+      "bot_features": "2026-05-20",
+      "claude_session": "2026-05-20",
+      "_root": "2026-05-20"
+    },
+    "rihlaty-travel": {
+      "links": "2026-05-11",
+      "current_status": "2026-05-11",
+      "_root": "2026-05-20"
+    },
+    "meta-mcp": {
+      "current_status": "2026-05-11",
+      "_root": "2026-05-20"
+    },
+    "wapy-dev": {
+      "current_status": "2026-05-11",
+      "_root": "2026-05-20"
+    },
+    "command-center": {
+      "links": "2026-04-05",
+      "current_status": "2026-05-25",
+      "_root": "2026-05-25"
+    },
+    "whatsapp-crm": {
+      "links": "2026-05-05",
+      "links_desc": "2026-05-05",
+      "current_status": "2026-05-05",
+      "claude_session": "2026-05-05",
+      "_root": "2026-05-20"
+    },
+    "money-manager": {
+      "current_status": "2026-05-11",
+      "_root": "2026-05-20"
+    },
+    "brix-travel-website": {
+      "links": "2026-05-14",
+      "current_status": "2026-05-15",
+      "_root": "2026-05-20"
+    },
+    "chess-academy": {
+      "links": "2026-04-05",
+      "current_status": "2026-05-11",
+      "_root": "2026-05-20"
+    },
+    "western-office": {
+      "links": "2026-04-13",
+      "current_status": "2026-05-23",
+      "_root": "2026-05-23"
+    },
+    "mohammad-ledger": {
+      "links": "2026-05-25",
+      "links_desc": "2026-05-25",
+      "current_status": "2026-05-25",
+      "claude_session": "2026-05-23",
+      "_root": "2026-05-25"
+    },
+    "libya": {
+      "links": "2026-05-23",
+      "links_desc": "2026-05-22",
+      "current_status": "2026-05-25",
+      "bot_features": "2026-05-25",
+      "claude_session": "2026-05-25",
+      "_root": "2026-05-25"
+    },
+    "libya-web": {
+      "_root": "2026-05-15"
+    },
+    "mohammad-ledger-bot-svc": {
+      "_root": "2026-05-25"
+    },
+    "cc-runtime-publish": {
+      "_root": "2026-05-12"
+    },
+    "wapy-app": {
+      "_root": "2026-05-12"
+    },
+    "wapy-cron": {
+      "_root": "2026-05-12"
+    },
+    "wapy-db": {
+      "_root": "2026-05-12"
+    },
+    "wapy-backup-cron": {
+      "_root": "2026-05-12"
+    },
+    "wapy-cleanup-cron": {
+      "_root": "2026-05-12"
+    },
+    "tailscale-vpn": {
+      "_root": "2026-05-12"
+    },
+    "desktop-github": {
+      "_root": "2026-05-20"
+    },
+    "server-wapy": {
+      "_root": "2026-05-21"
+    },
+    "desktop-pretooluse": {
+      "_root": "2026-05-20"
+    },
+    "desktop-ci-build-test-auto-deploy": {
+      "_root": "2026-05-25"
+    },
+    "tron-address-bot": {
+      "_root": "2026-05-12"
+    },
+    "bank-bot": {
+      "_root": "2026-05-12"
+    },
+    "claude-code-bot": {
+      "_root": "2026-05-15"
+    },
+    "mohammad-ledger-bot": {
+      "links": "2026-05-25",
+      "current_status": "2026-05-25",
+      "_root": "2026-05-25"
+    },
+    "brixprice-bot": {
+      "links": "2026-05-12",
+      "_root": "2026-05-20"
+    },
+    "libya-bot": {
+      "links": "2026-05-22",
+      "_root": "2026-05-22"
+    },
+    "codex-cli": {
+      "_root": "2026-04-05"
+    },
+    "claude-code": {
+      "_root": "2026-04-05"
+    },
+    "runtime-sync-system": {
+      "_root": "2026-05-25"
+    },
+    "meta-mcp-tool": {
+      "_root": "2026-04-16"
+    },
+    "github-tool": {
+      "_root": "2026-04-05"
+    },
+    "tailscale-tool": {
+      "_root": "2026-05-12"
+    },
+    "notion-mcp": {
+      "_root": "2026-04-05"
+    },
+    "perplexity-mcp": {
+      "_root": "2026-04-05"
+    },
+    "filesystem-mcp": {
+      "_root": "2026-04-05"
+    },
+    "memory-mcp": {
+      "_root": "2026-05-12"
+    },
+    "sequential-thinking-mcp": {
+      "_root": "2026-04-05"
+    },
+    "firecrawl-mcp": {
+      "_root": "2026-04-05"
+    },
+    "magic-mcp": {
+      "_root": "2026-04-05"
+    },
+    "supabase-mcp": {
+      "_root": "2026-04-05"
+    },
+    "vercel-mcp": {
+      "_root": "2026-04-05"
+    },
+    "railway-mcp": {
+      "_root": "2026-04-05"
+    },
+    "testsprite-mcp": {
+      "_root": "2026-04-05"
+    },
+    "drizzle-orm": {
+      "_root": "2026-05-22"
+    },
+    "github": {
+      "_root": "2026-05-20"
+    },
+    "supabase": {
+      "_root": "2026-05-20"
+    },
+    "vercel": {
+      "_root": "2026-05-20"
+    },
+    "railway": {
+      "_root": "2026-05-20"
+    },
+    "heroku": {
+      "_root": "2026-05-20"
+    },
+    "meta-business": {
+      "_root": "2026-05-20"
+    },
+    "airtable": {
+      "_root": "2026-05-12"
+    },
+    "telegram": {
+      "_root": "2026-05-20"
+    },
+    "contabo-vps": {
+      "_root": "2026-05-20"
+    },
+    "hostinger": {
+      "_root": "2026-05-20"
+    },
+    "icloud-drive": {
+      "_root": "2026-05-12"
+    },
+    "perplexity": {
+      "_root": "2026-05-20"
+    },
+    "firecrawl": {
+      "_root": "2026-05-12"
+    },
+    "notion": {
+      "_root": "2026-05-20"
+    },
+    "tailscale": {
+      "_root": "2026-05-20"
+    },
+    "trongrid": {
+      "_root": "2026-05-12"
+    },
+    "coingecko": {
+      "_root": "2026-05-12"
+    },
+    "exchanger": {
+      "_root": "2026-04-05"
+    },
+    "boyner-pipeline": {
+      "_root": "2026-04-05"
+    },
+    "brix-real-estate": {
+      "_root": "2026-05-12"
+    },
+    "smart-media-indexer": {
+      "_root": "2026-04-05"
+    },
+    "vault": {
+      "_root": "2026-04-05"
+    },
+    "rabee-online-empire": {
+      "blueprint": "2026-05-13",
+      "_root": "2026-05-13"
+    },
+    "brix-website-v2": {
+      "_root": "2026-05-11"
+    }
+  }
+}

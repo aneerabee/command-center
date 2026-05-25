@@ -5454,3 +5454,210 @@ window.addEventListener("hashchange", function () {
     }
   }
 });
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FRESHNESS BAR — auto-injected coloured top-strip on every entity card.
+   Reads data.freshness.json (generated from git history) so we never have
+   to remember to bump an "updated" date by hand. Per-section dates are
+   used inside the drawer; the entity _root date is used on listing cards.
+
+   Colours (medium-visible bar, ~22px tall):
+     ≤  7 days → 🟢 green   "حديث"
+     ≤ 30 days → 🟡 yellow  "متوسّط"
+     ≤ 90 days → 🟠 orange  "قديم"
+     > 90 days → 🔴 red     "قديم جدًّا"
+
+   The "✓ راجعتُ" button stores a manual review date in localStorage so the
+   user can mark unchanged-but-verified entities as fresh again.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  let FRESH_DATA = null;
+  let _decorating = false;
+
+  async function _loadFreshness() {
+    if (FRESH_DATA) return FRESH_DATA;
+    try {
+      const r = await fetch("data.freshness.json?v=" + Date.now());
+      const j = await r.json();
+      FRESH_DATA = j.entities || {};
+    } catch (e) {
+      FRESH_DATA = {};
+    }
+    return FRESH_DATA;
+  }
+
+  function _reviewKey(id) { return "cc_reviewed_" + id; }
+  function _getReview(id) { return localStorage.getItem(_reviewKey(id)) || null; }
+  function _setReview(id) {
+    const today = new Date().toISOString().slice(0, 10);
+    localStorage.setItem(_reviewKey(id), today);
+  }
+
+  function _ageDays(dateStr) {
+    if (!dateStr) return 9999;
+    return Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000);
+  }
+
+  function _ageMeta(days) {
+    if (days <= 7)  return { cls: "cc-fresh-green",  label: "حديث",       icon: "🟢" };
+    if (days <= 30) return { cls: "cc-fresh-yellow", label: "متوسّط",     icon: "🟡" };
+    if (days <= 90) return { cls: "cc-fresh-orange", label: "قديم",       icon: "🟠" };
+    return                  { cls: "cc-fresh-red",    label: "قديم جدًّا", icon: "🔴" };
+  }
+
+  // Build name→entity lookup once
+  let _nameLookup = null;
+  function _buildLookup() {
+    if (_nameLookup) return _nameLookup;
+    const lk = {};
+    const arrs = { PRJ, BOT, CLD, TL, ARC, IDEAS, SVC };
+    for (const arr of Object.values(arrs)) {
+      if (!Array.isArray(arr)) continue;
+      for (const e of arr) {
+        if (!e || !e.id) continue;
+        [e.name, e.ar, e.nm].filter(Boolean).forEach((n) => (lk[n] = e));
+      }
+    }
+    _nameLookup = lk;
+    return lk;
+  }
+
+  function _findEntity(el) {
+    const lk = _buildLookup();
+    const dcn = el.getAttribute("data-cc-name");
+    if (dcn) return lk[dcn] || (typeof _entityLookup === "function" ? _entityLookup(dcn) : null);
+    const oc = el.getAttribute("onclick") || "";
+    const m = /open[A-Z]\w*Detail\w*\(['"]([^'"]+)['"]/.exec(oc);
+    if (m) return lk[m[1]] || (typeof _entityLookup === "function" ? _entityLookup(m[1]) : null);
+    // last resort: heading text inside the card
+    const h = el.querySelector(
+      "h2, h3, h4, .pj-card-name, .bot-card-name, .tl-card-name, .ideas-card-name, .cld-cards .cloud-card-name",
+    );
+    if (h) {
+      const t = h.textContent.trim();
+      for (const [n, e] of Object.entries(lk)) {
+        if (t === n || t.includes(n)) return e;
+      }
+    }
+    return null;
+  }
+
+  const CARD_SELECTORS = [
+    "[data-cc-name]",
+    ".prj-card",
+    ".bot-card",
+    ".cloud-card",
+    ".arc-card",
+    ".tl-card",
+    ".tool-card",
+    ".ideas-card",
+    ".svc-card",
+  ].join(", ");
+
+  async function _decorateCards() {
+    if (_decorating) return;
+    _decorating = true;
+    try {
+      const fresh = await _loadFreshness();
+      if (!fresh || !Object.keys(fresh).length) return;
+      document.querySelectorAll(CARD_SELECTORS).forEach((el) => {
+        if (el.querySelector(":scope > .cc-fresh-bar")) return;
+        const entity = _findEntity(el);
+        if (!entity || !entity.id) return;
+        const data = fresh[entity.id];
+        if (!data || !data._root) return;
+
+        const review = _getReview(entity.id);
+        const effectiveDate = review && review > data._root ? review : data._root;
+        const days = _ageDays(effectiveDate);
+        const meta = _ageMeta(days);
+
+        const bar = document.createElement("div");
+        bar.className = "cc-fresh-bar " + meta.cls;
+        bar.setAttribute(
+          "title",
+          `آخر تحديث: ${effectiveDate}${review ? " (راجعتَ يدويًّا في " + review + ")" : ""} — قبل ${days} يومًا`,
+        );
+        bar.innerHTML =
+          `<span class="cc-fresh-icon">${meta.icon}</span>` +
+          `<span class="cc-fresh-label">${meta.label}</span>` +
+          `<span class="cc-fresh-days">${days}ي</span>` +
+          `<button type="button" class="cc-fresh-review" title="راجعتُ يدويًّا — اجعلها حديثة">✓</button>`;
+
+        const cs = getComputedStyle(el);
+        if (cs.position === "static") el.style.position = "relative";
+        el.insertBefore(bar, el.firstChild);
+
+        bar.querySelector(".cc-fresh-review").addEventListener("click", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          _setReview(entity.id);
+          bar.remove();
+          _decorating = false;
+          _decorateCards();
+        });
+      });
+    } finally {
+      _decorating = false;
+    }
+  }
+
+  // Inside the drawer: add per-section bars (current_status, bot_features, …)
+  async function _decorateDrawer() {
+    const fresh = await _loadFreshness();
+    if (!fresh) return;
+    const panel = document.querySelector(".cx-panel");
+    if (!panel) return;
+    const name = (panel.getAttribute("data-cc-entity") || panel.querySelector("#cx-title")?.textContent || "").trim();
+    if (!name) return;
+    const entity =
+      _buildLookup()[name] || (typeof _entityLookup === "function" ? _entityLookup(name) : null);
+    if (!entity || !entity.id) return;
+    const sections = fresh[entity.id];
+    if (!sections) return;
+    // Look for known section markers in the drawer (text headings)
+    const SECTION_HINTS = {
+      current_status: ["الحالة", "أين هي", "Where"],
+      bot_features: ["المميزات", "الإمكانات", "Features"],
+      claude_session: ["جلسة كلود", "Claude session"],
+      links: ["روابط"],
+      blockers: ["معوّقات", "Blockers"],
+    };
+    panel.querySelectorAll("h2, h3, h4").forEach((h) => {
+      const txt = h.textContent.trim();
+      for (const [key, hints] of Object.entries(SECTION_HINTS)) {
+        if (!sections[key]) continue;
+        if (h.dataset.ccFreshHooked) continue;
+        const matched = hints.some((hint) => txt.includes(hint));
+        if (!matched) continue;
+        const review = _getReview(entity.id + "::" + key);
+        const effectiveDate = review && review > sections[key] ? review : sections[key];
+        const days = _ageDays(effectiveDate);
+        const meta = _ageMeta(days);
+        const chip = document.createElement("span");
+        chip.className = "cc-fresh-chip " + meta.cls;
+        chip.title = `آخر تحديث: ${effectiveDate} — قبل ${days} يومًا`;
+        chip.textContent = `${meta.icon} ${days}ي`;
+        h.appendChild(chip);
+        h.dataset.ccFreshHooked = "1";
+      }
+    });
+  }
+
+  function _scheduleDecorate() {
+    setTimeout(_decorateCards, 80);
+    setTimeout(_decorateCards, 350);
+    setTimeout(_decorateDrawer, 200);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", _scheduleDecorate);
+  } else {
+    _scheduleDecorate();
+  }
+  window.addEventListener("hashchange", _scheduleDecorate);
+
+  // Safety net: re-scan periodically for dynamic re-renders
+  setInterval(_decorateCards, 4000);
+  setInterval(_decorateDrawer, 1500);
+})();
