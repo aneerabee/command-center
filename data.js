@@ -1258,7 +1258,7 @@ const PRJ = [
       "ADREEM — دفتر مالي تشغيلي مستقل للويب وTelegram Bot. يعتمد على React 19 + Supabase + API معزول + بوت Telegram بنفس منطق الدفتر.",
     local_path:
       "/Users/rabeeshaban/Developer/mohammad-ledger",
-    server_path: "server:/home/argaz/apps/adreem",
+    server_path: "/home/argaz/apps/adreem",
     repo_url: "https://github.com/aneerabee/mohammad-ledger",
     deploy_url: "https://aneerabee.github.io/mohammad-ledger/",
     stack: [
@@ -1296,15 +1296,15 @@ const PRJ = [
       "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/mohammad-ledger/",
       "ADREEM API العام يعمل عبر Caddy: https://www.brixtravel.com/adreem-api/health",
       "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/mohammad-ledger",
-      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit f5e4534",
+      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit cdf3ad2",
       "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
       "تم حذف بقايا محمد من western-office في commit 42cdddd بتاريخ 2026-05-23 مع بقاء نسخة أمان: backup/western-before-mohammad-removal-d30cc74",
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
-      "آخر تحقق قوي 2026-05-25: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 90 اختبار ناجح",
-      "تشغيل Contabo مؤكد: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
-      "فحص runtime على السيرفر نجح: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
+      "آخر تحقق قوي 2026-05-26: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 102 اختبار ناجح، وفحص Playwright للهاتف والكمبيوتر بلا overflow أو clipping",
+      "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit cdf3ad2: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
+      "فحص runtime على السيرفر نجح بعد تحميل adreem.env: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
@@ -1339,11 +1339,11 @@ const PRJ = [
       Telegram: "بوت ADREEM الحي على Contabo",
     },
     current_status: {
-      updated: "2026-05-25",
+      updated: "2026-05-26",
       where:
-        "ADREEM منشور على GitHub Pages من commit f5e4534، وworkflow 26399190719 نجح بعد ضبط VITE_ADREEM_API_URL. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. صف adreem:adreem:main موجود الآن، واختبار القراءة والكتابة عبر API نجح.",
+        "ADREEM منشور على GitHub Pages من commit cdf3ad2. Workflow 26420729617 نجح لنشر ميزات hardening، ثم دُفع commit cdf3ad2 لحماية ملفات env. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem ومحدّث إلى cdf3ad2. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. runtime verifier نجح: env كامل، health 200، وقراءة ledger عبر API نجحت.",
       next_step:
-        "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب.",
+        "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
       use_guide:
         "للاستخدام اليومي: افتح https://aneerabee.github.io/mohammad-ledger/ مع ledger_token الخاص بك أو استخدم https://t.me/SystemAzol_bot. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/mohammad-ledger فقط، ثم npm run lint وnpm test وnpm run build قبل الدفع.",
@@ -1354,7 +1354,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/mohammad-ledger",
       command:
         "cd /Users/rabeeshaban/Developer/mohammad-ledger && claude",
-      note: "آخر نقطة 2026-05-23: مشروع محمد أصبح في repo ومسار محلي مستقلين، والرابط الرسمي /mohammad-ledger/ منشور من commit 5da5a78، وwestern-office نُظف من بقاياه في commit 42cdddd.",
+      note: "آخر نقطة 2026-05-26: ADREEM محدّث في GitHub والسيرفر إلى commit cdf3ad2. المراحل 6-12 موثقة في docs/adreem-implementation-progress.md، والنشر/السيرفر تحققا بنجاح.",
     },
   },
   {
@@ -1610,7 +1610,7 @@ const SVC = [
     schedule: "systemd user service enabled على Contabo",
     dt: "adreem-bot.service · active · Telegram polling",
     info: "ADREEM bot يعمل على Contabo من /home/argaz/apps/adreem. ملف adreem.env بصلاحية 600، والـ allowlist مفعّل عبر ADREEM_TELEGRAM_USER_IDS.",
-    last_check: "2026-05-25 Contabo runtime",
+    last_check: "2026-05-26 Contabo runtime",
     config_paths: [
       "server:/home/argaz/apps/adreem",
       "server:/home/argaz/apps/adreem/adreem.env",
@@ -2074,7 +2074,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo، Telegram getMe نجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo بعد تحديث الكود إلى commit cdf3ad2. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2116,11 +2116,11 @@ const BOT = [
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
     },
     current_status: {
-      updated: "2026-05-25",
+      updated: "2026-05-26",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem. adreem-bot.service active، وadreem-api.service active، وTelegram getMe نجح. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api. قراءة وكتابة الدفتر عبر API تم اختبارهما بعد إنشاء صف adreem:adreem:main.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من commit cdf3ad2. adreem-bot.service active، وadreem-api.service active، وruntime verifier نجح مع adreem.env. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api. قراءة الدفتر عبر API نجحت بمصدر merged-primary-legacy.",
       next_step:
-        "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم توسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
+        "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
         "للفحص بعد التثبيت: ssh إلى Contabo ثم systemctl --user status adreem-bot.service. لإعادة التشغيل: systemctl --user restart adreem-bot.service. لا تشغل نسخة MacBook أو Claude telegram plugin بالتوازي.",
     },
