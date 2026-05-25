@@ -5582,6 +5582,35 @@ window.addEventListener("hashchange", function () {
     ".mod-card:not([class*='mod-card-'])",
   ].join(", ");
 
+  // Per-card-type title anchors — the pill is inserted INSIDE the card's
+  // natural title element so it flows with the layout instead of overlaying
+  // existing corner badges. Falls back to any h2/h3/h4 found in the card.
+  const TITLE_ANCHORS = {
+    "prj-card":   ".prj-card-name",
+    "bot-card":   ".bot-card-name, .bot-card-h, h3",
+    "cloud-card": ".cloud-card-name, .cloud-card-info h3, h3",
+    "arc-card":   ".arc-card-name, h3",
+    "archive-card": "h3",
+    "tl-card":    ".tl-card-name, h3",
+    "tool-card":  ".tool-card-name, h3",
+    "ideas-card": ".ideas-card-name, h3",
+    "svc-card":   ".svc-card-name, h3",
+    "umb-card":   ".umb-card-name",
+    "emp-card":   ".emp-name, h3",
+    "mod-card":   ".mod-card-title, h3",
+  };
+  const FALLBACK_ANCHOR = "h2, h3, h4, [class*='-name'], [class*='-title']";
+
+  function _findTitleAnchor(card) {
+    for (const [cls, sel] of Object.entries(TITLE_ANCHORS)) {
+      if (card.classList.contains(cls)) {
+        const t = card.querySelector(sel);
+        if (t) return t;
+      }
+    }
+    return card.querySelector(FALLBACK_ANCHOR);
+  }
+
   async function _decorateCards() {
     if (_decorating) return;
     _decorating = true;
@@ -5589,42 +5618,42 @@ window.addEventListener("hashchange", function () {
       const fresh = await _loadFreshness();
       if (!fresh || !Object.keys(fresh).length) return;
       document.querySelectorAll(CARD_SELECTORS).forEach((el) => {
-        if (el.querySelector(":scope > .cc-fresh-badge")) return;
+        // Already decorated?
+        if (el.querySelector(":scope .cc-fresh-pill")) return;
         const entity = _findEntity(el);
         if (!entity || !entity.id) return;
         const data = fresh[entity.id];
         if (!data || !data._root) return;
+
+        const anchor = _findTitleAnchor(el);
+        if (!anchor) return; // no natural place to insert — skip silently
 
         const review = _getReview(entity.id);
         const effectiveDate = review && review > data._root ? review : data._root;
         const days = _ageDays(effectiveDate);
         const meta = _ageMeta(days);
 
-        const badge = document.createElement("div");
-        badge.className = "cc-fresh-badge " + meta.cls;
-        badge.setAttribute(
+        const pill = document.createElement("span");
+        pill.className = "cc-fresh-pill " + meta.cls;
+        pill.setAttribute(
           "title",
           `آخر تحديث: ${effectiveDate}${review ? " (راجعتَ يدويًّا في " + review + ")" : ""} — قبل ${days} يومًا`,
         );
-        badge.innerHTML =
+        pill.innerHTML =
           `<span class="cc-fresh-dot"></span>` +
           `<span class="cc-fresh-num">${days}</span>` +
           `<span class="cc-fresh-unit">ي</span>` +
-          `<button type="button" class="cc-fresh-review" title="راجعتُ — اجعلها حديثة">✓</button>`;
+          `<button type="button" class="cc-fresh-review" tabindex="-1" title="راجعتُ — اجعلها حديثة">✓</button>`;
 
-        const cs = getComputedStyle(el);
-        if (cs.position === "static") el.style.position = "relative";
-        // No padding-tweak needed — the badge floats in existing top whitespace
-        el.appendChild(badge);
+        // Insert AT THE END of the title element so it flows after the name
+        anchor.appendChild(pill);
 
-        badge.addEventListener("click", (e) => {
-          // The badge itself is a card-overlay; ignore card-click bubbling
-          // unless the user is clicking the review button.
+        pill.addEventListener("click", (e) => {
           if (!(e.target instanceof Element) || !e.target.closest(".cc-fresh-review")) return;
           e.stopPropagation();
           e.preventDefault();
           _setReview(entity.id);
-          badge.remove();
+          pill.remove();
           _decorating = false;
           _decorateCards();
         });

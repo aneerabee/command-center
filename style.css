@@ -13405,43 +13405,47 @@ button.cx-chip:hover {
 .mod-card-ghost { align-self: stretch; }
 
 /* ══════════════════════════════════════════════════════════════
-   FRESHNESS — quiet status pill that respects existing card design.
-   • Floats in the top-end corner of any entity card (no layout impact)
-   • Same visual language as .prj-card-fresh / .prj-card-blockers-badge
-   • Glass background + soft border + tiny coloured dot + day count
-   • Pulse animation only for the "very old" tier (red)
-   • Review button (✓) reveals on hover only — no visual clutter
+   FRESHNESS — INLINE pill that lives inside the card's own structure
+   (next to the title), so it never collides with existing badges in
+   the corners. Matches the existing visual language of small pills
+   already present in the dashboard (.prj-card-seg, .prj-card-fresh,
+   tag chips). Same module renders in three contexts:
+     • .cc-fresh-pill   — inside card titles
+     • .cc-fresh-chip   — inside drawer section headings
+     • .cc-fresh-dot    — bare dot (used by both)
    ══════════════════════════════════════════════════════════════ */
-.cc-fresh-badge {
-  position: absolute;
-  top: 10px;
-  inset-inline-end: 10px;
+.cc-fresh-pill,
+.cc-fresh-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 22px;
-  padding: 0 9px;
+  gap: 4px;
+  height: 18px;
+  padding: 0 7px;
   border-radius: 9999px;
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 700;
   font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
   letter-spacing: 0.2px;
   line-height: 1;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  color: #475569;
+  vertical-align: middle;
+  background: rgba(15, 23, 42, 0.045);
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  color: #64748b;
   cursor: help;
   user-select: none;
-  z-index: 5;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, padding 0.18s ease;
   white-space: nowrap;
+  transition: background 0.15s ease, transform 0.15s ease, padding 0.15s ease;
 }
+.cc-fresh-pill {
+  margin-inline-start: 8px;
+}
+.cc-fresh-chip {
+  margin-inline-start: 8px;
+}
+
 .cc-fresh-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
   display: inline-block;
@@ -13451,17 +13455,48 @@ button.cx-chip:hover {
   font-variant-numeric: tabular-nums;
 }
 .cc-fresh-unit {
-  font-size: 9px;
+  font-size: 8.5px;
   opacity: 0.55;
   font-weight: 600;
   margin-inline-start: -1px;
 }
+
+/* Tier palette — coloured dot only; pill stays neutral by default */
+.cc-fresh-green  .cc-fresh-dot { background: #10b981; box-shadow: 0 0 0 1.5px rgba(16,185,129,0.20); }
+.cc-fresh-yellow .cc-fresh-dot { background: #f59e0b; box-shadow: 0 0 0 1.5px rgba(245,158,11,0.20); }
+.cc-fresh-orange .cc-fresh-dot { background: #f97316; box-shadow: 0 0 0 1.5px rgba(249,115,22,0.22); }
+.cc-fresh-red    .cc-fresh-dot {
+  background: #ef4444;
+  box-shadow: 0 0 0 1.5px rgba(239,68,68,0.25);
+  animation: cc-fresh-pulse 2.4s ease-in-out infinite;
+}
+@keyframes cc-fresh-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.78); }
+}
+
+/* Warm tint ONLY for tiers that need attention (orange + red).
+   Green and yellow stay neutral — the dot alone signals "fine". */
+.cc-fresh-pill.cc-fresh-orange,
+.cc-fresh-chip.cc-fresh-orange {
+  color: #9a3412;
+  background: rgba(254, 235, 226, 0.6);
+  border-color: rgba(249, 115, 22, 0.18);
+}
+.cc-fresh-pill.cc-fresh-red,
+.cc-fresh-chip.cc-fresh-red {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.65);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+/* Hidden ✓ button — slides out on hover of the parent card */
 .cc-fresh-review {
   appearance: none;
   background: transparent;
   border: 0;
   color: #94a3b8;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
   cursor: pointer;
   padding: 0;
@@ -13472,13 +13507,11 @@ button.cx-chip:hover {
   transform: translateX(-2px);
   transition: width 0.18s ease, opacity 0.18s ease, transform 0.18s ease, color 0.15s ease;
 }
-.cc-fresh-badge:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  padding-inline-end: 7px;
-}
-.cc-fresh-badge:hover .cc-fresh-review {
-  width: 12px;
+/* Reveal on hover of the parent CARD (not the pill alone), so even tiny
+   pills are easy to target. */
+*:hover > .cc-fresh-pill .cc-fresh-review,
+*:hover .cc-fresh-pill .cc-fresh-review {
+  width: 11px;
   opacity: 1;
   transform: translateX(0);
 }
@@ -13487,64 +13520,23 @@ button.cx-chip:hover {
   transform: scale(1.15);
 }
 
-/* Tier palette — coloured dot only; pill stays neutral glass */
-.cc-fresh-green  .cc-fresh-dot { background: #10b981; box-shadow: 0 0 0 2px rgba(16,185,129,0.18); }
-.cc-fresh-yellow .cc-fresh-dot { background: #f59e0b; box-shadow: 0 0 0 2px rgba(245,158,11,0.18); }
-.cc-fresh-orange .cc-fresh-dot { background: #f97316; box-shadow: 0 0 0 2px rgba(249,115,22,0.18); }
-.cc-fresh-red    .cc-fresh-dot {
-  background: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239,68,68,0.22);
-  animation: cc-fresh-pulse 2.2s ease-in-out infinite;
-}
-@keyframes cc-fresh-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.55; transform: scale(0.78); }
+/* When our pill is present, suppress the existing per-card "جديد" badge
+   that some renderers add — avoid double-signalling */
+.prj-card:has(.cc-fresh-pill) .prj-card-fresh,
+.prj-card:has(.cc-fresh-pill) .prj-card-stale-badge {
+  display: none;
 }
 
-/* For very old cards: hint the urgency with a warm pill tint */
-.cc-fresh-badge.cc-fresh-red {
-  color: #b91c1c;
-  background: rgba(254, 226, 226, 0.78);
-  border-color: rgba(239, 68, 68, 0.20);
-}
-.cc-fresh-badge.cc-fresh-orange {
-  color: #9a3412;
-  background: rgba(254, 235, 226, 0.78);
-  border-color: rgba(249, 115, 22, 0.18);
-}
-
-/* Drawer per-section chip — same language, even smaller, inline beside heading */
-.cc-fresh-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  height: 18px;
-  padding: 0 7px;
-  margin-inline-start: 8px;
-  font-size: 9.5px;
-  font-weight: 700;
-  font-family: "IBM Plex Mono", monospace;
-  border-radius: 9999px;
-  vertical-align: middle;
-  letter-spacing: 0.2px;
-  background: rgba(15, 23, 42, 0.04);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  color: #64748b;
-  cursor: help;
-  user-select: none;
-}
-.cc-fresh-chip .cc-fresh-dot { width: 6px; height: 6px; }
-.cc-fresh-chip.cc-fresh-red { color: #b91c1c; background: rgba(254,226,226,0.7); border-color: rgba(239,68,68,0.18); }
-.cc-fresh-chip.cc-fresh-orange { color: #9a3412; background: rgba(254,235,226,0.7); border-color: rgba(249,115,22,0.18); }
-
-/* Dark surfaces inside drawer / dark theme */
-.cx-panel .cc-fresh-badge,
-.cx-panel .cc-fresh-chip {
-  background: rgba(15, 23, 42, 0.55);
+/* Dark surfaces (drawer, dark cards) */
+.cx-panel .cc-fresh-pill,
+.cx-panel .cc-fresh-chip,
+[data-theme="dark"] .cc-fresh-pill,
+[data-theme="dark"] .cc-fresh-chip {
+  background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.10);
   color: #cbd5e1;
 }
-.cx-panel .cc-fresh-chip.cc-fresh-red,
-.cx-panel .cc-fresh-badge.cc-fresh-red { color: #fecaca; background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.35); }
-.cx-panel .cc-fresh-chip.cc-fresh-orange,
-.cx-panel .cc-fresh-badge.cc-fresh-orange { color: #fed7aa; background: rgba(249,115,22,0.18); border-color: rgba(249,115,22,0.32); }
+.cx-panel .cc-fresh-pill.cc-fresh-orange,
+.cx-panel .cc-fresh-chip.cc-fresh-orange { color: #fed7aa; background: rgba(249,115,22,0.16); border-color: rgba(249,115,22,0.30); }
+.cx-panel .cc-fresh-pill.cc-fresh-red,
+.cx-panel .cc-fresh-chip.cc-fresh-red { color: #fecaca; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.35); }
