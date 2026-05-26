@@ -1296,14 +1296,14 @@ const PRJ = [
       "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/mohammad-ledger/",
       "ADREEM API العام يعمل عبر Caddy: https://www.brixtravel.com/adreem-api/health",
       "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/mohammad-ledger",
-      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit cdf3ad2",
+      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit 758cfeb",
       "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
       "تم حذف بقايا محمد من western-office في commit 42cdddd بتاريخ 2026-05-23 مع بقاء نسخة أمان: backup/western-before-mohammad-removal-d30cc74",
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
       "آخر تحقق قوي 2026-05-26: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 102 اختبار ناجح، وفحص Playwright للهاتف والكمبيوتر بلا overflow أو clipping",
-      "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit cdf3ad2: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
+      "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit 758cfeb: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
@@ -1341,7 +1341,7 @@ const PRJ = [
     current_status: {
       updated: "2026-05-26",
       where:
-        "ADREEM منشور على GitHub Pages من commit cdf3ad2. Workflow 26420729617 نجح لنشر ميزات hardening، ثم دُفع commit cdf3ad2 لحماية ملفات env. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem ومحدّث إلى cdf3ad2. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. runtime verifier نجح: env كامل، health 200، وقراءة ledger عبر API نجحت.",
+        "ADREEM منشور على GitHub Pages من commit 758cfeb. Workflow 26420729617 نجح لنشر ميزات hardening، ثم دُفع commit 758cfeb لحماية ملفات env. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem ومحدّث إلى 758cfeb. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. runtime verifier نجح: env كامل، health 200، وقراءة ledger عبر API نجحت.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1354,7 +1354,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/mohammad-ledger",
       command:
         "cd /Users/rabeeshaban/Developer/mohammad-ledger && claude",
-      note: "آخر نقطة 2026-05-26: ADREEM محدّث في GitHub والسيرفر إلى commit cdf3ad2. المراحل 6-12 موثقة في docs/adreem-implementation-progress.md، والنشر/السيرفر تحققا بنجاح.",
+      note: "آخر نقطة 2026-05-26: ADREEM محدّث في GitHub والسيرفر إلى commit 758cfeb. المراحل 6-12 موثقة في docs/adreem-implementation-progress.md، والنشر/السيرفر تحققا بنجاح.",
     },
   },
   {
@@ -2074,7 +2074,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo بعد تحديث الكود إلى commit cdf3ad2. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo بعد تحديث الكود إلى commit 758cfeb. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2118,7 +2118,7 @@ const BOT = [
     current_status: {
       updated: "2026-05-26",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من commit cdf3ad2. adreem-bot.service active، وadreem-api.service active، وruntime verifier نجح مع adreem.env. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api. قراءة الدفتر عبر API نجحت بمصدر merged-primary-legacy.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من commit 758cfeb. adreem-bot.service active، وadreem-api.service active، وruntime verifier نجح مع adreem.env. الويب منشور ويقرأ API العام عبر https://www.brixtravel.com/adreem-api. قراءة الدفتر عبر API نجحت بمصدر merged-primary-legacy.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
