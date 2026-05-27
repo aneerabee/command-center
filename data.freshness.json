@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-26T06:32:19.819Z",
+  "generated_at": "2026-05-27T09:55:38.305Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -113,6 +113,9 @@
     "mohammad-ledger-bot-svc": {
       "_root": "2026-05-25"
     },
+    "adreem-api": {
+      "_root": "2026-05-27"
+    },
     "cc-runtime-publish": {
       "_root": "2026-05-12"
     },
@@ -135,16 +138,16 @@
       "_root": "2026-05-12"
     },
     "desktop-github": {
-      "_root": "2026-05-20"
+      "_root": "2026-05-27"
     },
     "server-wapy": {
-      "_root": "2026-05-21"
+      "_root": "2026-05-27"
     },
     "desktop-pretooluse": {
       "_root": "2026-05-20"
     },
     "desktop-ci-build-test-auto-deploy": {
-      "_root": "2026-05-25"
+      "_root": "2026-05-27"
     },
     "tron-address-bot": {
       "_root": "2026-05-12"
@@ -166,7 +169,7 @@
     },
     "libya-bot": {
       "links": "2026-05-22",
-      "_root": "2026-05-22"
+      "_root": "2026-05-27"
     },
     "codex-cli": {
       "_root": "2026-04-05"
