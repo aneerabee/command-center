@@ -2092,7 +2092,7 @@ R.home = function () {
         const updatedISO = p.current_status?.updated;
         const whereStr = p.current_status?.where || "";
         return (
-          `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${EJ(p.name)}')">` +
+          `<div class="cc-feed-item cc-clickable" data-action="openProject" data-arg="${E(p.name)}">` +
           `<div class="cc-feed-dot" style="background:${p.cl}"></div>` +
           `<div class="cc-feed-body">` +
           `<div class="cc-feed-top">` +
@@ -2241,7 +2241,7 @@ R.home = function () {
           ? Math.floor((Date.now() - new Date(p.current_status.updated).getTime()) / 86400000)
           : null;
         return (
-          `<button class="exec-prog-row" onclick="openProjectDetail('${EJ(p.name)}')" style="--c:${p.cl}">` +
+          `<button class="exec-prog-row" data-action="openProject" data-arg="${E(p.name)}" style="--c:${p.cl}">` +
           `<span class="exec-prog-icon">${_ic(p.em, 16)}</span>` +
           `<span class="exec-prog-name">${E(p.ar || p.name)}</span>` +
           `<span class="exec-prog-bar"><i style="width:${p.pct}%"></i></span>` +
@@ -2357,7 +2357,7 @@ R.projects = function () {
         { v: PRJ.filter((p) => p.deploy_url).length, l: "عناصر لها نشر" },
       ],
     }) +
-    `<div class="prj-hero" onclick="openProjectDetail('${EJ(hero.name)}')">` +
+    `<div class="prj-hero" data-action="openProject" data-arg="${E(hero.name)}">` +
     `<div class="prj-hero-accent" style="background:linear-gradient(135deg,${hero.cl},${hero.cl}aa)"></div>` +
     `<div class="prj-hero-content">` +
     `<div class="prj-hero-top">` +
@@ -2427,7 +2427,7 @@ R.projects = function () {
                     ? `<span class="prj-card-stale-badge" title="لم يُحدّث منذ ${ageDays} يوم">⏰ متأخر</span>`
                     : "";
                 return (
-                  `<div class="prj-card" data-cc-name="${E(p.name)}" onclick="openProjectDetail('${EJ(p.name)}')" style="--umb:${u.cl};--prj:${p.cl}">` +
+                  `<div class="prj-card" data-cc-name="${E(p.name)}" data-action="openProject" data-arg="${E(p.name)}" style="--umb:${u.cl};--prj:${p.cl}">` +
                   badge +
                   `<div class="prj-card-strip" title="${E(u.name)}"></div>` +
                   `<div class="prj-card-accent" style="background:${p.cl}"></div>` +
@@ -2574,7 +2574,7 @@ R.team = function () {
       `<button class="emp-copy" id="${E(id)}" onclick="event.stopPropagation();teamCopy('${EJ(text)}','${EJ(id)}')" title="${E(title)}" aria-label="${E(title)}">📋</button>`;
 
     return (
-      `<div class="emp-card emp-card-clickable" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}" role="button" tabindex="0" aria-haspopup="dialog" onclick="openTeamDetail('${EJ(m.full_name || m.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTeamDetail('${EJ(m.full_name || m.name)}')}">` +
+      `<div class="emp-card emp-card-clickable" data-cc-name="${E(m.name)}" data-employee-card data-search="${E(searchHay)}" style="--mc:${m.cl}" role="button" tabindex="0" aria-haspopup="dialog" data-action="openTeam" data-arg="${E(m.full_name || m.name)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTeamDetail('${EJ(m.full_name || m.name)}')}">` +
       // ── HEADER: Identity ──
       `<div class="emp-header">` +
       `<div class="emp-avatar" style="background:linear-gradient(135deg,${m.cl},${m.cl}88)">${E(initial)}</div>` +
@@ -2649,7 +2649,7 @@ R.team = function () {
           projs
             .map(
               (p) =>
-                `<a class="emp-proj-tag" onclick="openProjectDetail('${EJ(p.name)}')" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
+                `<a class="emp-proj-tag" data-action="openProject" data-arg="${E(p.name)}" style="--pc:${p.cl}">${_ic(p.em, 11)} ${E(p.ar || p.name)}</a>`,
             )
             .join("") +
           `</span></div>`
@@ -2760,7 +2760,7 @@ R.umbrellas = function () {
 
   // مكوّن: بطاقة مشروع مصغّرة داخل قسم
   const renderProjectRow = (p) =>
-    `<div class="umb-project" onclick="openProjectDetail('${EJ(p.name)}')" style="--pc:${p.cl}">` +
+    `<div class="umb-project" data-action="openProject" data-arg="${E(p.name)}" style="--pc:${p.cl}">` +
     `<span class="umb-project-ic">${_ic(p.em, 18)}</span>` +
     `<span class="umb-project-name">${E(p.ar || p.name)}</span>` +
     (p.parent_role
@@ -3045,7 +3045,7 @@ R.auto = function () {
         (t) => {
           const taskKey = g.host + "::" + t.name;
           return (
-            `<button type="button" class="auto-task auto-task-clickable" data-cc-name="${E(t.id || taskKey)}" data-auto-key="${E(taskKey)}" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}" aria-haspopup="dialog" onclick="openAutoDetail('${EJ(taskKey)}')">` +
+            `<button type="button" class="auto-task auto-task-clickable" data-cc-name="${E(t.id || taskKey)}" data-auto-key="${E(taskKey)}" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}" aria-haspopup="dialog" data-action="openAuto" data-arg="${E(taskKey)}">` +
             `<span class="led ${t.on ? "led-on" : "led-off"}"></span>` +
             `<span class="auto-task-name">${E(t.name)}</span>` +
             `<span class="auto-task-dt">${E(t.freq)}</span>` +
@@ -3258,7 +3258,7 @@ R.server = function () {
               `data-svc-type="${E(type || 'unknown')}" ` +
               `data-svc-status="${s.st ? 'on' : 'off'}" ` +
               `aria-label="${E(s.name)} — ${s.st ? 'شغّال' : 'متوقف'}" ` +
-              `onclick="openServiceDetail('${EJ(s.name)}')">` +
+              `data-action="openService" data-arg="${E(s.name)}">` +
               `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}" aria-hidden="true"></span>` +
               `<span class="svc-em">${_ic(s.em, 18)}</span>` +
               `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
@@ -3394,7 +3394,7 @@ R.bots = function () {
     const featuredClass = opts.featured ? " is-featured" : "";
     const matchAttrs = `data-bot-kind="${E(b.kind || '')}" data-bot-status="${isActive ? 'on' : 'off'}" data-bot-host="${E((b.host || '').toLowerCase())}"`;
     return (
-      `<div class="mod-card mod-bot-card ${sizeClass}${featuredClass}" style="--card-cl:${b.cl || '#7C3AED'}" ${matchAttrs} data-cc-name="${E(b.name)}" onclick="openBotDetail('${EJ(b.name)}')">` +
+      `<div class="mod-card mod-bot-card ${sizeClass}${featuredClass}" style="--card-cl:${b.cl || '#7C3AED'}" ${matchAttrs} data-cc-name="${E(b.name)}" data-action="openBot" data-arg="${E(b.name)}">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-icon">${_ic(b.em, opts.featured ? 28 : 22)}</div>` +
       `<span class="mod-card-status ${isActive ? 'is-on' : 'is-off'}"><span class="dot"></span>${isActive ? 'نشط' : 'متوقف'}</span>` +
@@ -3494,7 +3494,7 @@ R.tools = function () {
     const isLive = t.st === "a";
     const cat = `${t.category || ""} ${_tlTok(t)}`.trim();
     return (
-      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(cat)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(t.name)}')">` +
+      `<div class="mod-card ${sizeClass}" data-cc-name="${E(t.name)}" data-mod-cat="${E(cat)}" data-mod-name="${E((t.ar || t.name)).toLowerCase()}" style="--card-cl:${t.cl || '#7C3AED'}" data-action="openTool" data-arg="${E(t.name)}">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(t.em || "🔧", 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3510,7 +3510,7 @@ R.tools = function () {
   };
 
   const featuredCard = featured
-    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(`${featured.category || ""} ${_tlTok(featured)}`.trim())}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" onclick="openToolDetail('${EJ(featured.name)}')">` +
+    ? `<div class="mod-card mod-card--featured b-6" data-cc-name="${E(featured.name)}" data-mod-cat="${E(`${featured.category || ""} ${_tlTok(featured)}`.trim())}" data-mod-name="${E((featured.ar || featured.name)).toLowerCase()}" style="--card-cl:${featured.cl || '#7C3AED'}" data-action="openTool" data-arg="${E(featured.name)}">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em mod-card-em--lg">${_ic(featured.em || "🛠️", 36)}</div>` +
       `<div class="mod-card-status is-live">⭐ بيئة العمل الأساسية</div>` +
@@ -3645,7 +3645,7 @@ R.cloud = function () {
     let groupKey = "";
     filterGroups.forEach((g) => { if (g.match && g.match(c)) groupKey += " " + g.key; });
     return (
-      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${E(groupKey.trim())}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" onclick="openCloudDetail('${EJ(c.nm)}')">` +
+      `<div class="mod-card b-3" data-cc-name="${E(c.nm)}" data-mod-cat="${E(groupKey.trim())}" data-mod-name="${E(c.nm.toLowerCase())}" style="--card-cl:${cpc}" data-action="openCloud" data-arg="${E(c.nm)}">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(c.em, 22)}</div>` +
       `<div class="mod-card-status${isLive ? " is-live" : ""}">${isLive ? "نشط" : "متوقف"}</div>` +
@@ -3716,7 +3716,7 @@ R.ideas = function () {
     const hasBp = !!idea.blueprint;
     const cats = `pr${idea.pr}${hasBp ? " bp" : ""}`;
     return (
-      `<div class="mod-card ${sizeClass}${hasBp ? " mod-card--featured" : ""}" data-cc-name="${E(idea.name)}" data-mod-cat="${cats}" data-mod-name="${E(idea.name.toLowerCase())}" style="--card-cl:${cl}" onclick="openIdeaDetail('${EJ(idea.name)}')">` +
+      `<div class="mod-card ${sizeClass}${hasBp ? " mod-card--featured" : ""}" data-cc-name="${E(idea.name)}" data-mod-cat="${cats}" data-mod-name="${E(idea.name.toLowerCase())}" style="--card-cl:${cl}" data-action="openIdea" data-arg="${E(idea.name)}">` +
       `<div class="mod-card-head">` +
       `<div class="mod-card-em">${_ic(idea.em || "💡", 22)}</div>` +
       `<div class="mod-card-status${idea.pr === 1 ? " is-live" : ""}">${E(prLabels[idea.pr] || "")}</div>` +
@@ -3824,7 +3824,7 @@ R.archive = function () {
     const size = a.size || "";
     const count = a.count || "";
     return (
-      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" data-cc-name="${E(a.name)}" onclick="openArchiveDetail('${EJ(a.name)}')">` +
+      `<div class="book-card ${activeRef ? "book-card-active-ref" : ""}" data-cc-name="${E(a.name)}" data-action="openArchive" data-arg="${E(a.name)}">` +
       `<div class="book-spine" style="background:${a.cl}"></div>` +
       `<div class="book-body">` +
       `<span class="book-emoji">${_ic(a.em, 32)}</span>` +
@@ -5042,7 +5042,7 @@ function openAutoDetail(taskKey) {
   const stateLabel = task.on ? "نشطة" : "معطّلة";
   const linkedProjects = (task.prj || []).map((p) => {
     const pc = _prjColor(p) || "#888";
-    return `<button class="cx-chip" onclick="openProjectDetail('${EJ(p)}')" style="background:${pc}22;border-color:${pc}50">${E(p)}</button>`;
+    return `<button class="cx-chip" data-action="openProject" data-arg="${E(p)}" style="background:${pc}22;border-color:${pc}50">${E(p)}</button>`;
   }).join("");
 
   const facts = [
@@ -5086,7 +5086,7 @@ function openTeamDetail(name) {
   const projects = (m.assigned_projects || []).map((pid) => {
     const p = PRJ.find((x) => x.id === pid);
     if (!p) return null;
-    return `<button class="cx-chip" onclick="openProjectDetail('${EJ(p.name)}')">${_ic(p.em, 12)} ${E(p.ar || p.name)}</button>`;
+    return `<button class="cx-chip" data-action="openProject" data-arg="${E(p.name)}">${_ic(p.em, 12)} ${E(p.ar || p.name)}</button>`;
   }).filter(Boolean).join("");
 
   const facts = [
@@ -5674,7 +5674,49 @@ function _updateCountdown() {
 
 /* ─────────────── 8. INIT ─────────────── */
 
+/* normalizeAllEntities — apply normalizeEntity() defaults to every entity
+ * array IN-PLACE so all renderers can trust shape. Idempotent.
+ * Called once at bootstrap, before init() touches data. */
+function normalizeAllEntities() {
+  const map = [
+    [typeof PRJ !== "undefined" && PRJ, "project"],
+    [typeof SVC !== "undefined" && SVC, "service"],
+    [typeof BOT !== "undefined" && BOT, "bot"],
+    [typeof CLD !== "undefined" && CLD, "cloud"],
+    [typeof TL  !== "undefined" && TL,  "tool"],
+    [typeof ARC !== "undefined" && ARC, "archive"],
+    [typeof IDEAS !== "undefined" && IDEAS, "idea"],
+    [typeof UMBRELLAS !== "undefined" && UMBRELLAS, "umbrella"],
+    [typeof DEPARTMENTS !== "undefined" && DEPARTMENTS, "department"],
+    [typeof TEAM !== "undefined" && TEAM, "team"],
+  ];
+  for (const [arr, kind] of map) {
+    if (!Array.isArray(arr)) continue;
+    for (let i = 0; i < arr.length; i++) {
+      const norm = normalizeEntity(arr[i], kind);
+      if (norm) {
+        // Merge defaults back without losing object identity (in-place upgrade)
+        for (const k in norm) if (arr[i][k] === undefined) arr[i][k] = norm[k];
+      }
+    }
+  }
+  // AUTO has nested .tasks arrays
+  if (typeof AUTO !== "undefined" && Array.isArray(AUTO)) {
+    for (const g of AUTO) {
+      if (!Array.isArray(g.tasks)) continue;
+      for (let i = 0; i < g.tasks.length; i++) {
+        const norm = normalizeEntity(g.tasks[i], "automation");
+        if (norm) for (const k in norm) if (g.tasks[i][k] === undefined) g.tasks[i][k] = norm[k];
+      }
+    }
+  }
+}
+
 async function bootstrap() {
+  // PHASE-4A: normalize entity arrays IN-PLACE before any renderer runs.
+  // Fills missing defaults (cl/em/tags/links/st) per entity kind so the
+  // ~33 scattered `e.field || fallback` checks become redundant.
+  normalizeAllEntities();
   init();
   _startLiveTicks();
   _loadRuntimeData().then(() => {
