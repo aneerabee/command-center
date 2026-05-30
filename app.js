@@ -72,6 +72,47 @@ function _hChild(c) {
 /* h.raw — wrap pre-built HTML so h() won't re-escape it. USE SPARINGLY. */
 h.raw = function (htmlStr) { return { __html: String(htmlStr || "") }; };
 
+/* smartRender(el, html) — diff-and-patch DOM instead of nuke-and-replace.
+ *
+ * Falls back to plain innerHTML if morphdom isn't loaded (offline CDN, etc).
+ * Use for runtime refresh paths where we want to preserve user state
+ * (scroll position, open drawer, focused input, hover states).
+ *
+ * Wrap HTML in the same outer tag as el so morphdom diffs the children
+ * (morphdom requires same root tag).
+ */
+function smartRender(el, html) {
+  if (!el) return;
+  // morphdom requires the new content to be wrapped in a tag matching el
+  if (typeof morphdom !== "function") {
+    el.innerHTML = html;
+    return;
+  }
+  try {
+    // Build a wrapper of same tag with same id/class so morphdom diffs children
+    const tag = el.tagName.toLowerCase();
+    const idAttr = el.id ? ` id="${el.id}"` : "";
+    const clsAttr = el.className ? ` class="${el.className}"` : "";
+    const wrapped = `<${tag}${idAttr}${clsAttr}>${html}</${tag}>`;
+    morphdom(el, wrapped, {
+      onBeforeElUpdated: (fromEl, toEl) => {
+        // Preserve focused input value so user typing isn't disrupted
+        if (fromEl === document.activeElement && fromEl.tagName === "INPUT") {
+          toEl.value = fromEl.value;
+        }
+        // Skip elements explicitly marked to preserve (e.g., open drawer)
+        if (fromEl.hasAttribute && fromEl.hasAttribute("data-cc-keep")) {
+          return false;
+        }
+        return true;
+      },
+    });
+  } catch (e) {
+    console.warn("[cc] smartRender fallback:", e && e.message);
+    el.innerHTML = html;
+  }
+}
+
 /* ccActions — central dispatch table for data-action delegated events.
  * Replaces inline onclick="..." patterns. Renderers that opt in just emit:
  *
@@ -815,7 +856,9 @@ function _refreshRuntimeBoundViews() {
   if (!_RUNTIME_BOUND_PAGES.has(cur)) return;
   const pageEl = document.getElementById("page-" + cur);
   if (!pageEl || !R[cur]) return;
-  pageEl.innerHTML = R[cur]();
+  // PHASE-3B: diff-and-patch instead of nuke-rebuild — preserves scroll,
+  // focus, hover states, and any inputs the user is currently typing in.
+  smartRender(pageEl, R[cur]());
   _updateCountdown();
   requestAnimationFrame(_processIcons);
 }
