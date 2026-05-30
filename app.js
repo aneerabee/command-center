@@ -26,6 +26,92 @@ const EJ = (s) =>
     .replace(/>/g, "\\u003E")
     .replace(/\r?\n/g, "\\n");
 
+/* h(tag, attrs, ...children) — tiny safe HTML builder.
+ *
+ * - Auto-escapes attribute values via E()
+ * - Auto-escapes text children (strings) via E()
+ * - Passes pre-built HTML through ONLY via h.raw("...") sentinel
+ * - Skips null/undefined children silently (so `cond && h(...)` works)
+ *
+ * Use to eliminate the manual-escape XSS surface that produced ~7 fixes
+ * across two prior commits. Migrate hot render sites first.
+ *
+ * Example:
+ *   h("button", { class: "x", onclick: `go('${EJ(name)}')`, "data-id": id },
+ *     h("span", { class: "em" }, em),
+ *     name)
+ */
+function h(tag, attrs, ...children) {
+  let html = "<" + tag;
+  if (attrs && typeof attrs === "object") {
+    for (const k in attrs) {
+      const v = attrs[k];
+      if (v == null || v === false) continue;
+      if (v === true) { html += " " + k; continue; }
+      html += ` ${k}="${E(v)}"`;
+    }
+  }
+  // void elements have no closing tag and no children
+  const VOID = /^(area|base|br|col|embed|hr|img|input|link|meta|source|track|wbr)$/i;
+  if (VOID.test(tag)) return html + " />";
+  html += ">";
+  for (const c of children) {
+    if (c == null || c === false) continue;
+    if (Array.isArray(c)) { html += c.map(x => _hChild(x)).join(""); continue; }
+    html += _hChild(c);
+  }
+  return html + "</" + tag + ">";
+}
+function _hChild(c) {
+  if (c == null || c === false) return "";
+  if (c && c.__html != null) return c.__html;          // h.raw output
+  if (typeof c === "string") return E(c);
+  if (typeof c === "number") return String(c);
+  return E(String(c));
+}
+/* h.raw — wrap pre-built HTML so h() won't re-escape it. USE SPARINGLY. */
+h.raw = function (htmlStr) { return { __html: String(htmlStr || "") }; };
+
+/* ccActions — central dispatch table for data-action delegated events.
+ * Replaces inline onclick="..." patterns. Renderers that opt in just emit:
+ *
+ *   <button data-action="openProject" data-arg="LIBYA">…</button>
+ *
+ * The single document-level click handler at bottom of file looks up
+ * data-action in ccActions and calls the function with data-arg + element.
+ *
+ * Benefits over inline onclick:
+ *  - Zero XSS surface from string-interpolated handlers
+ *  - Listener attached once, not per-render — no orphan listeners
+ *  - Re-renders don't lose handlers (no setTimeout race-hack needed)
+ */
+const ccActions = {
+  openProject:  (arg) => typeof openProjectDetail === "function" && openProjectDetail(arg),
+  openService:  (arg) => typeof openServiceDetail === "function" && openServiceDetail(arg),
+  openBot:      (arg) => typeof openBotDetail === "function" && openBotDetail(arg),
+  openTool:     (arg) => typeof openToolDetail === "function" && openToolDetail(arg),
+  openCloud:    (arg) => typeof openCloudDetail === "function" && openCloudDetail(arg),
+  openArchive:  (arg) => typeof openArchiveDetail === "function" && openArchiveDetail(arg),
+  openAuto:     (arg) => typeof openAutoDetail === "function" && openAutoDetail(arg),
+  openTeam:     (arg) => typeof openTeamDetail === "function" && openTeamDetail(arg),
+  openIdea:     (arg) => typeof openIdeaDetail === "function" && openIdeaDetail(arg),
+  goPage:       (arg) => typeof go === "function" && go(arg),
+  copyDrawerLink: (arg, el) => ccCopyDrawerLink(el),
+  closeDetail:  () => typeof closeDetail === "function" && closeDetail(),
+};
+/* Single delegated click handler — runs once, covers all data-action buttons */
+document.addEventListener("click", function (e) {
+  const t = e.target instanceof Element && e.target.closest("[data-action]");
+  if (!t) return;
+  const action = t.getAttribute("data-action");
+  const fn = ccActions[action];
+  if (!fn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const arg = t.getAttribute("data-arg") || "";
+  try { fn(arg, t); } catch (err) { console.warn("[cc] action " + action + " failed:", err); }
+});
+
 /* normalizeEntity(e, kind) — apply per-kind defaults so renderers can trust
  * that common fields exist. Idempotent: calling twice returns same shape.
  * Returns a NEW object (immutable pattern). Does NOT mutate input.
@@ -5080,7 +5166,7 @@ function _codexShell(opts) {
     `<aside class="cx-panel" role="dialog" aria-modal="true" aria-labelledby="cx-title">` +
       `<header class="cx-cover">` +
         `<button class="cx-close" data-cx-close aria-label="إغلاق">×</button>` +
-        `<button class="cx-copy-link" type="button" aria-label="نسخ رابط هذا الكيان" title="نسخ الرابط" onclick="ccCopyDrawerLink(this)">🔗</button>` +
+        `<button class="cx-copy-link" type="button" aria-label="نسخ رابط هذا الكيان" title="نسخ الرابط" data-action="copyDrawerLink">🔗</button>` +
         `<div class="cx-cover-row">` +
           `<div class="cx-emoji">${_ic(emoji, 44)}</div>` +
           `<div class="cx-titles">` +
