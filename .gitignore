@@ -1,0 +1,13 @@
+# Node / brix-mailops
+node_modules/
+.env
+brix-mailops/node_modules/
+brix-mailops/.env
+brix-mailops/**/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store

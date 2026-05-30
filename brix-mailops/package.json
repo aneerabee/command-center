@@ -1,0 +1,19 @@
+{
+  "name": "brix-mailops",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "أداة إدارة بريد brixtravel عبر IMAP/SMTP على Hostinger — تعمل محليًا وسحابًا",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "phase0": "node phase0-hostinger-test.mjs",
+    "phase0:env": "node --env-file=.env phase0-hostinger-test.mjs",
+    "check": "node --check phase0-hostinger-test.mjs && node --check src/imap.mjs && node --check src/smtp.mjs && node --check src/config.mjs"
+  },
+  "dependencies": {
+    "imapflow": "^1.0.171",
+    "nodemailer": "^6.9.16"
+  }
+}
