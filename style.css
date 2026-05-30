@@ -9476,6 +9476,20 @@ html {
   text-size-adjust: 100%;
   touch-action: pan-x pan-y; /* يسمح فقط بالتمرير، لا zoom */
 }
+/* Remove 300ms tap delay on all interactive elements */
+button,
+[role="button"],
+a,
+.auto-task,
+.svc-item,
+.mod-card,
+.prj-card,
+.bot-card,
+.umb-card,
+.emp-card,
+.cc-clickable {
+  touch-action: manipulation;
+}
 body {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
@@ -13580,4 +13594,64 @@ button.cx-chip:hover {
 [data-theme="dark"] .cc-fresh-review:hover,
 [data-theme="dark"] .cc-fresh-review:focus-visible {
   color: #34d399;
+}
+
+/* ── DEEP audit P0: bring close buttons + tap targets to ≥44×44 (WCAG/HIG) ──
+   Mobile breakpoint: keep visual size but inflate hit area via padding box. */
+.cx-close,
+.dt-close,
+.di-close,
+.da-close,
+.dsp-close,
+.search-close,
+.umb-member-btn,
+.cc-greet-action {
+  min-width: 44px;
+  min-height: 44px;
+}
+/* Inflate row tap targets only on touch — desktop keeps slim look */
+@media (hover: none) {
+  .auto-task,
+  .filter-btn,
+  .team-view-btn,
+  .salary-toggle,
+  .emp-action {
+    min-height: 44px;
+  }
+}
+/* Font-size floor for tiny pills — extend prior floor block */
+.mc-ring-label,
+.cc-fresh-pill,
+.cc-fresh-chip,
+.cc-fresh-unit {
+  font-size: max(11px, 0.75rem);
+}
+
+/* Screen-reader-only utility (used by freshness pill for category text) */
+.cc-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Empty page state (used when an entity array is empty) */
+.page-empty {
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--t2, #6b7280);
+}
+.page-empty h1 {
+  font-size: 22px;
+  margin: 0 0 12px;
+  color: var(--t1, #0f172a);
+}
+.page-empty p {
+  font-size: 14px;
+  margin: 0;
 }

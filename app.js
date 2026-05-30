@@ -240,7 +240,7 @@ function _applyBridgeHighlight() {
       b.highlight.forEach((name) => {
         // ابحث بالاسم في أي بطاقة
         document.querySelectorAll("[data-cc-name]").forEach((el) => {
-          if (el.dataset.ccName === name || el.dataset.ccName.includes(name)) {
+          if (el.dataset.ccName === name || el.dataset.ccName?.includes(name)) {
             el.classList.add("cc-highlight");
             if (!firstEl) firstEl = el;
           }
@@ -1258,7 +1258,7 @@ function init() {
       '<div class="search-panel">' +
       '<div class="search-head">' +
       `<span class="search-icon">${_ic("🔍", 18)}</span>` +
-      '<input id="search-input" class="search-input" type="text" dir="rtl" placeholder="ابحث في المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابة، الأرشيف..." autocomplete="off" />' +
+      '<input id="search-input" class="search-input" type="search" dir="rtl" aria-label="بحث شامل في كل الكيانات" placeholder="ابحث في المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابة، الأرشيف..." autocomplete="off" />' +
       '<button class="search-close" onclick="closeSearch()" aria-label="إغلاق">&times;</button>' +
       "</div>" +
       '<div class="search-helper">يشمل كل البيانات المنظمة في اللوحة. جرّب اسم مشروع، مسار، خدمة، أداة، أو كلمة من الوصف.</div>' +
@@ -1399,7 +1399,7 @@ R.home = function () {
   const pausedP = PRJ.filter((p) => p.st === "p");
   const activeSvc = SVC.filter((s) => s.st).length;
   const activeBots = BOT.filter((b) => b.st === "a").length;
-  const allTasks = AUTO.flatMap((g) => g.tasks);
+  const allTasks = AUTO.flatMap((g) => g.tasks || []);
   const activeTasks = allTasks.filter((t) => t.on).length;
   const runningContainers = SVC.filter(
     (s) => s.service_type === "container" && s.st,
@@ -1681,7 +1681,7 @@ R.home = function () {
       icon: "⏰",
       title: `${staleProjects.length} مشاريع ذات أولوية عالية لم تُحدّث`,
       detail: staleProjects.map((p) => p.ar || p.name).join(" · "),
-      action: `ccGoWithContext('projects',{highlight:${JSON.stringify(names)},reason:'مشاريع متأخرة في التحديث'})`,
+      action: `ccGoWithContext('projects',{highlight:${E(JSON.stringify(names))},reason:'مشاريع متأخرة في التحديث'})`,
       actionLabel: "راجع",
       tone: "#f59e0b",
     });
@@ -1693,7 +1693,7 @@ R.home = function () {
       icon: "💰",
       title: `${projectsWithNoRevenue.length} مشاريع بدون تتبّع إيراد`,
       detail: projectsWithNoRevenue.map((p) => p.ar || p.name).slice(0,3).join(" · "),
-      action: `ccGoWithContext('projects',{highlight:${JSON.stringify(names)},reason:'مشاريع تحتاج تسجيل إيراد شهري'})`,
+      action: `ccGoWithContext('projects',{highlight:${E(JSON.stringify(names))},reason:'مشاريع تحتاج تسجيل إيراد شهري'})`,
       actionLabel: "افتح",
       tone: "#10b981",
     });
@@ -1806,7 +1806,7 @@ R.home = function () {
     umbPulse
       .map(
         (u) =>
-          `<div class="cc-pulse-card cc-clickable" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(u.name)}],reason:${JSON.stringify(u.name)}})" style="--umb:${u.cl}">` +
+          `<div class="cc-pulse-card cc-clickable" onclick="ccGoWithContext('umbrellas',{highlight:[${E(JSON.stringify(u.name))}],reason:${E(JSON.stringify(u.name))}})" style="--umb:${u.cl}">` +
           `<div class="cc-pulse-head">` +
           `<span class="cc-pulse-em">${_ic(u.em, 18)}</span>` +
           `<span class="cc-pulse-name">${E(u.name)}</span>` +
@@ -1834,7 +1834,8 @@ R.home = function () {
     activityFeed
       .map((p) => {
         const u = UMBRELLAS.find((x) => x.id === p.parent);
-        const updatedISO = p.current_status.updated;
+        const updatedISO = p.current_status?.updated;
+        const whereStr = p.current_status?.where || "";
         return (
           `<div class="cc-feed-item cc-clickable" onclick="openProjectDetail('${EJ(p.name)}')">` +
           `<div class="cc-feed-dot" style="background:${p.cl}"></div>` +
@@ -1845,7 +1846,7 @@ R.home = function () {
             ? `<span class="cc-feed-umb" style="background:${u.cl}18;color:${u.cl}">${E(u.name)}</span>`
             : "") +
           `</div>` +
-          `<div class="cc-feed-text">${E((p.current_status.where || "").slice(0, 100))}${(p.current_status.where || "").length > 100 ? "…" : ""}</div>` +
+          `<div class="cc-feed-text">${E(whereStr.slice(0, 100))}${whereStr.length > 100 ? "…" : ""}</div>` +
           `</div>` +
           `<div class="cc-feed-time" data-live-time="${E(updatedISO)}">${E(relTime(updatedISO))}</div>` +
           `</div>`
@@ -1960,7 +1961,7 @@ R.home = function () {
       .map((e) => {
         const pct = e.total ? Math.round((e.ok / e.total) * 100) : 0;
         return (
-          `<button class="exec-cov" onclick="ccGoWithContext('${e.page}',{reason:${JSON.stringify(e.label + ' · ' + (e.fail ? e.fail+' فشل' : e.warn ? e.warn+' تحذير' : e.manual ? e.manual+' يدوي' : 'مغطى'))}})" style="--c:${e.color}">` +
+          `<button class="exec-cov" onclick="ccGoWithContext('${E(e.page)}',{reason:${E(JSON.stringify(e.label + ' · ' + (e.fail ? e.fail+' فشل' : e.warn ? e.warn+' تحذير' : e.manual ? e.manual+' يدوي' : 'مغطى')))}})" style="--c:${e.color}">` +
           `<div class="exec-cov-top">` +
           `<span class="exec-cov-label">${E(e.label)}</span>` +
           `<span class="exec-cov-num"><strong>${e.ok}</strong>/${e.total}</span>` +
@@ -2039,6 +2040,9 @@ R.home = function () {
 
 /* ── PROJECTS — Hero + Grid ── */
 R.projects = function () {
+  if (!PRJ.length) {
+    return '<section class="page-empty"><h1>لا توجد مشاريع بعد</h1><p>أضف أوّل مشروع في data.js لتظهر هنا.</p></section>';
+  }
   const hero = PRJ[0];
   const rest = PRJ.slice(1);
   const heroDesc = (hero.desc || "").split("\n")[0];
@@ -2429,7 +2433,7 @@ R.team = function () {
     }) +
     // ── شريط التحكم ──
     `<div class="team-controls">` +
-    `<input type="search" class="team-search" placeholder="🔍 ابحث: اسم، رقم، بريد، لغة، مشروع..." oninput="teamFilter(this.value)" />` +
+    `<input type="search" class="team-search" aria-label="بحث في الفريق" placeholder="🔍 ابحث: اسم، رقم، بريد، لغة، مشروع..." oninput="teamFilter(this.value)" />` +
     `<div class="team-view-switcher">` +
     `<button class="team-view-btn active" data-view="grouped" onclick="teamSwitchView('grouped')">📂 بالأقسام</button>` +
     `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
@@ -2860,6 +2864,7 @@ function _prjColor(name) {
 
 /* ── SERVER ── */
 function _sparkline(data, color) {
+  if (!Array.isArray(data) || data.length === 0) return "";
   const w = 80,
     h = 20,
     max = Math.max(...data),
@@ -2997,8 +3002,9 @@ R.server = function () {
               `data-cc-name="${E(s.name)}" ` +
               `data-svc-type="${E(type || 'unknown')}" ` +
               `data-svc-status="${s.st ? 'on' : 'off'}" ` +
+              `aria-label="${E(s.name)} — ${s.st ? 'شغّال' : 'متوقف'}" ` +
               `onclick="openServiceDetail('${EJ(s.name)}')">` +
-              `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}"></span>` +
+              `<span class="svc-status ${s.st ? "svc-on" : "svc-off"}" aria-hidden="true"></span>` +
               `<span class="svc-em">${_ic(s.em, 18)}</span>` +
               `<div class="svc-info"><span class="svc-name">${E(s.name)}</span>` +
               (prj ? `<span class="svc-prj" style="background:${pc}15;color:${pc}">${E(ownerLabel)} · ${E(prj)}</span>` : "") +
@@ -3054,7 +3060,7 @@ function _modernToolbar({ filters, searchPlaceholder, id }) {
     `<div class="mod-toolbar" id="${E(id)}">` +
     (searchPlaceholder
       ? `<div class="mod-search"><span class="mod-search-ico">🔍</span>` +
-        `<input type="search" placeholder="${E(searchPlaceholder)}" data-mod-search/></div>`
+        `<input type="search" aria-label="${E(searchPlaceholder)}" placeholder="${E(searchPlaceholder)}" data-mod-search/></div>`
       : "") +
     `<div class="mod-chips">` +
     (filters || []).map((f) => (
@@ -3831,10 +3837,10 @@ function _currentStatusCard(item) {
     (umb || dept
       ? `<div class="prj-status-context">` +
         (umb
-          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(umb.name)}],reason:'مظلة ${E(umb.name)}'})" style="--c:${umb.cl}">${_ic(umb.em, 12)} ${E(umb.name)}</button>`
+          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${E(JSON.stringify(umb.name))}],reason:'مظلة ${E(umb.name)}'})" style="--c:${umb.cl}">${_ic(umb.em, 12)} ${E(umb.name)}</button>`
           : "") +
         (dept
-          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${JSON.stringify(umb ? umb.name : '')}],reason:'قسم ${E(dept.name)} داخل ${E(umb ? umb.name : '')}'})" style="--c:${dept.cl}">${_ic(dept.em, 12)} ${E(dept.name)}</button>`
+          ? `<button class="prj-ctx-chip" onclick="ccGoWithContext('umbrellas',{highlight:[${E(JSON.stringify(umb ? umb.name : ''))}],reason:'قسم ${E(dept.name)} داخل ${E(umb ? umb.name : '')}'})" style="--c:${dept.cl}">${_ic(dept.em, 12)} ${E(dept.name)}</button>`
           : "") +
         `</div>`
       : "") +
@@ -3884,7 +3890,7 @@ function _currentStatusCard(item) {
         team
           .map(
             (m) =>
-              `<button class="prj-team-chip" onclick="ccGoWithContext('team',{highlight:[${JSON.stringify(m.name)}],reason:'موظف مسؤول عن ${E(item.ar || item.name)}'})" style="--c:${m.cl}">` +
+              `<button class="prj-team-chip" onclick="ccGoWithContext('team',{highlight:[${E(JSON.stringify(m.name))}],reason:'موظف مسؤول عن ${E(item.ar || item.name)}'})" style="--c:${m.cl}">` +
               `<span class="prj-team-avatar" style="background:${m.cl}">${E((m.name || '?').slice(0,1))}</span>` +
               `<span class="prj-team-name">${E(m.full_name || m.name)}</span>` +
               `<span class="prj-team-role">${E(m.role || '')}</span>` +
@@ -4987,9 +4993,12 @@ function _codexShell(opts) {
     });
   });
 
-  // ESC to close
+  // ESC to close — DO NOT use {once:true} (any keydown would remove handler
+  // before user even reached Escape). Handler is removed in closeDetail()
+  // via the same `_cxEscHandler` reference attached below.
   const esc = (e) => { if (e.key === "Escape") closeDetail(); };
-  document.addEventListener("keydown", esc, { once: true });
+  document.addEventListener("keydown", esc);
+  root._cxEscHandler = esc;
 
   if (item.name || item.nm) {
     _setHashSilently(cur + "/" + encodeURIComponent(item.name || item.nm));
@@ -5165,6 +5174,9 @@ function closeDetail(instant) {
     if ("inert" in HTMLElement.prototype) el.inert = false;
   });
   if (d._cxTrap) document.removeEventListener("keydown", d._cxTrap);
+  // ESC handler attached at drawer open — remove explicitly (was leaking before)
+  const root = d.querySelector(".cx-panel");
+  if (root && root._cxEscHandler) document.removeEventListener("keydown", root._cxEscHandler);
   const lastFocus = d._cxLastFocus;
   if (lastFocus && typeof lastFocus.focus === "function") {
     setTimeout(() => lastFocus.focus(), 0);
@@ -5367,23 +5379,26 @@ function selectSearchResult(id) {
 
 /* ─────────────── 6. INTERACTIVE EFFECTS ─────────────── */
 
+// Glass-card mouse glow — listen ONLY on the glass cards themselves so we
+// don't query the whole DOM on every global mousemove. Each card handles its
+// own pointermove and computes rect lazily (offsetLeft/Top, no layout flush).
 let _mRaf = false;
-document.addEventListener("mousemove", function (e) {
+let _mEvent = null;
+document.addEventListener("pointermove", function (e) {
+  if (e.pointerType !== "mouse") return; // skip touch — saves battery
+  _mEvent = e;
   if (_mRaf) return;
   _mRaf = true;
   requestAnimationFrame(() => {
     _mRaf = false;
-    const active = document.querySelector(".page.active");
-    if (!active) return;
-    active.querySelectorAll(".glass").forEach((card) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left,
-        y = e.clientY - rect.top;
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        card.style.setProperty("--mouse-x", x + "px");
-        card.style.setProperty("--mouse-y", y + "px");
-      }
-    });
+    // Only the card under the cursor — no need to update siblings
+    const target = _mEvent.target.closest(".glass");
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    const x = _mEvent.clientX - rect.left;
+    const y = _mEvent.clientY - rect.top;
+    target.style.setProperty("--mouse-x", x + "px");
+    target.style.setProperty("--mouse-y", y + "px");
   });
 });
 
@@ -5607,8 +5622,12 @@ window.addEventListener("hashchange", function () {
   async function _decorateCards() {
     if (_decorating) return;
     _decorating = true;
+    // Capture the page that triggered us; if user navigates during await, bail.
+    const pageAtStart = typeof cur !== "undefined" ? cur : null;
     try {
       const fresh = await _loadFreshness();
+      // Race guard: did user navigate away while we awaited?
+      if (pageAtStart !== null && typeof cur !== "undefined" && pageAtStart !== cur) return;
       if (!fresh || !Object.keys(fresh).length) return;
       document.querySelectorAll(CARD_SELECTORS).forEach((el) => {
         // Already decorated?
@@ -5632,10 +5651,13 @@ window.addEventListener("hashchange", function () {
           "title",
           `آخر تحديث: ${effectiveDate}${review ? " (راجعتَ يدويًّا في " + review + ")" : ""} — قبل ${days} يومًا`,
         );
+        pill.setAttribute("role", "status");
         pill.innerHTML =
           `<span class="cc-fresh-dot" aria-hidden="true"></span>` +
+          // Visually-hidden category for screen readers (color alone isn't accessible)
+          `<span class="cc-sr-only">${meta.label} —</span>` +
           `<span class="cc-fresh-num">${days}</span>` +
-          `<span class="cc-fresh-unit" aria-hidden="true">ي</span>` +
+          `<span class="cc-fresh-unit">ي</span>` +
           // tabindex="-1": this ✓ is a power-user convenience for mouse/touch.
           // Adding it to the tab order would create N tab-stops on dense pages.
           // Keyboard users mark-reviewed through the drawer instead.
@@ -5666,47 +5688,53 @@ window.addEventListener("hashchange", function () {
 
   // Inside the drawer: add per-section bars (current_status, bot_features, …)
   async function _decorateDrawer() {
-    const fresh = await _loadFreshness();
-    if (!fresh) return;
-    const panel = document.querySelector(".cx-panel");
-    if (!panel) return;
-    const name = (panel.getAttribute("data-cc-entity") || panel.querySelector("#cx-title")?.textContent || "").trim();
-    if (!name) return;
-    const entity =
-      _buildLookup()[name] || (typeof _entityLookup === "function" ? _entityLookup(name) : null);
-    if (!entity || !entity.id) return;
-    const sections = fresh[entity.id];
-    if (!sections) return;
-    // Look for known section markers in the drawer (text headings)
-    const SECTION_HINTS = {
-      current_status: ["الحالة", "أين هي", "Where"],
-      bot_features: ["المميزات", "الإمكانات", "Features"],
-      claude_session: ["جلسة كلود", "Claude session"],
-      links: ["روابط"],
-      blockers: ["معوّقات", "Blockers"],
-    };
-    panel.querySelectorAll("h2, h3, h4").forEach((h) => {
-      const txt = h.textContent.trim();
-      for (const [key, hints] of Object.entries(SECTION_HINTS)) {
-        if (!sections[key]) continue;
-        if (h.dataset.ccFreshHooked) continue;
-        const matched = hints.some((hint) => txt.includes(hint));
-        if (!matched) continue;
-        const review = _getReview(entity.id + "::" + key);
-        const effectiveDate = review && review > sections[key] ? review : sections[key];
-        const days = _ageDays(effectiveDate);
-        const meta = _ageMeta(days);
-        const chip = document.createElement("span");
-        chip.className = "cc-fresh-chip " + meta.cls;
-        chip.title = `آخر تحديث: ${effectiveDate} — قبل ${days} يومًا`;
-        chip.innerHTML =
-          `<span class="cc-fresh-dot"></span>` +
-          `<span class="cc-fresh-num">${days}</span>` +
-          `<span class="cc-fresh-unit">ي</span>`;
-        h.appendChild(chip);
-        h.dataset.ccFreshHooked = "1";
-      }
-    });
+    try {
+      const fresh = await _loadFreshness();
+      if (!fresh) return;
+      // Re-query AFTER await — drawer may have closed/reopened
+      const panel = document.querySelector(".cx-panel");
+      if (!panel) return;
+      const name = (panel.getAttribute("data-cc-entity") || panel.querySelector("#cx-title")?.textContent || "").trim();
+      if (!name) return;
+      const entity =
+        _buildLookup()[name] || (typeof _entityLookup === "function" ? _entityLookup(name) : null);
+      if (!entity || !entity.id) return;
+      const sections = fresh[entity.id];
+      if (!sections) return;
+      // Look for known section markers in the drawer (text headings)
+      const SECTION_HINTS = {
+        current_status: ["الحالة", "أين هي", "Where"],
+        bot_features: ["المميزات", "الإمكانات", "Features"],
+        claude_session: ["جلسة كلود", "Claude session"],
+        links: ["روابط"],
+        blockers: ["معوّقات", "Blockers"],
+      };
+      panel.querySelectorAll("h2, h3, h4").forEach((h) => {
+        const txt = h.textContent.trim();
+        for (const [key, hints] of Object.entries(SECTION_HINTS)) {
+          if (!sections[key]) continue;
+          if (h.dataset.ccFreshHooked) continue;
+          const matched = hints.some((hint) => txt.includes(hint));
+          if (!matched) continue;
+          const review = _getReview(entity.id + "::" + key);
+          const effectiveDate = review && review > sections[key] ? review : sections[key];
+          const days = _ageDays(effectiveDate);
+          const meta = _ageMeta(days);
+          const chip = document.createElement("span");
+          chip.className = "cc-fresh-chip " + meta.cls;
+          chip.title = `آخر تحديث: ${effectiveDate} — قبل ${days} يومًا`;
+          chip.innerHTML =
+            `<span class="cc-fresh-dot"></span>` +
+            `<span class="cc-fresh-num">${days}</span>` +
+            `<span class="cc-fresh-unit">ي</span>`;
+          h.appendChild(chip);
+          h.dataset.ccFreshHooked = "1";
+        }
+      });
+    } catch (e) {
+      // Decorator failures should never crash the app
+      console.warn("[CC] _decorateDrawer error:", e?.message || e);
+    }
   }
 
   let _scheduledAt = 0;
