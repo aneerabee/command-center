@@ -2936,8 +2936,8 @@ const ARC = [
     links: {},
   },
   {
-    name: "Etranex",
-    id: "etranex",
+    name: "Etranex (مؤرشف)",
+    id: "etranex-arc",
     ar: "شركة إيترانكس",
     kind: "archived-brand",
     em: "🏢",

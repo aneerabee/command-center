@@ -2786,7 +2786,7 @@ R.auto = function () {
         (t) => {
           const taskKey = g.host + "::" + t.name;
           return (
-            `<button type="button" class="auto-task auto-task-clickable" data-auto-key="${E(taskKey)}" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}" aria-haspopup="dialog" onclick="openAutoDetail('${EJ(taskKey)}')">` +
+            `<button type="button" class="auto-task auto-task-clickable" data-cc-name="${E(t.id || taskKey)}" data-auto-key="${E(taskKey)}" id="auto-${encodeURIComponent(g.group + "-" + t.name).replace(/%/g, "")}" aria-haspopup="dialog" onclick="openAutoDetail('${EJ(taskKey)}')">` +
             `<span class="led ${t.on ? "led-on" : "led-off"}"></span>` +
             `<span class="auto-task-name">${E(t.name)}</span>` +
             `<span class="auto-task-dt">${E(t.freq)}</span>` +
@@ -5636,7 +5636,10 @@ window.addEventListener("hashchange", function () {
           `<span class="cc-fresh-dot" aria-hidden="true"></span>` +
           `<span class="cc-fresh-num">${days}</span>` +
           `<span class="cc-fresh-unit" aria-hidden="true">ي</span>` +
-          `<button type="button" class="cc-fresh-review" aria-label="ضع علامة كمراجَع — اجعلها حديثة" title="راجعتُ — اجعلها حديثة">✓</button>`;
+          // tabindex="-1": this ✓ is a power-user convenience for mouse/touch.
+          // Adding it to the tab order would create N tab-stops on dense pages.
+          // Keyboard users mark-reviewed through the drawer instead.
+          `<button type="button" class="cc-fresh-review" tabindex="-1" aria-label="تأكيد المراجعة" title="تأكيد المراجعة — تحديث التاريخ">✓</button>`;
 
         // Insert AT THE END of the title element so it flows after the name
         anchor.appendChild(pill);
@@ -5646,9 +5649,14 @@ window.addEventListener("hashchange", function () {
           e.stopPropagation();
           e.preventDefault();
           _setReview(entity.id);
+          // Pause observer so pill.remove() doesn't cascade into a redundant
+          // decorate pass that the throttle would just block anyway.
+          if (window.__ccFreshPause) window.__ccFreshPause();
           pill.remove();
           _decorating = false;
-          _decorateCards();
+          _decorateCards().finally(() => {
+            if (window.__ccFreshResume) window.__ccFreshResume();
+          });
         });
       });
     } finally {
@@ -5722,16 +5730,33 @@ window.addEventListener("hashchange", function () {
   // Use MutationObserver instead of setInterval polling — fires only when
   // DOM actually changes (e.g., page re-render, drawer open). Much cheaper
   // than scanning every 1.5s forever.
+  let _observing = false;
+  let _moTargets = [];
   const _mo = new MutationObserver(() => {
-    if (_scheduledAt && Date.now() - _scheduledAt < 250) return;
+    // Our own pill insertions also trigger the observer — guard against the loop.
+    if (_decorating || (_scheduledAt && Date.now() - _scheduledAt < 250)) return;
     _scheduleDecorate();
   });
+  function _pauseObserver() {
+    if (_observing) { _mo.disconnect(); _observing = false; }
+  }
+  function _resumeObserver() {
+    if (_observing || !_moTargets.length) return;
+    _moTargets.forEach(([el, opts]) => _mo.observe(el, opts));
+    _observing = true;
+  }
   // Wait for #app to exist before observing
   function _startObserving() {
     const app = document.getElementById("app");
     if (!app) { setTimeout(_startObserving, 100); return; }
-    _mo.observe(app, { childList: true, subtree: true });
-    _mo.observe(document.body, { childList: true }); // catch drawer mount/unmount
+    _moTargets = [
+      [app, { childList: true, subtree: true }],
+      [document.body, { childList: true }],
+    ];
+    _resumeObserver();
   }
   _startObserving();
+  // Expose pause/resume to decorators
+  window.__ccFreshPause = _pauseObserver;
+  window.__ccFreshResume = _resumeObserver;
 })();

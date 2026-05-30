@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-30T15:03:29.785Z",
+  "generated_at": "2026-05-30T15:09:29.405Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
-      "_root": "2026-04-05"
+      "_root": "2026-05-11"
     },
     "brix": {
       "_root": "2026-05-11"
@@ -281,6 +281,9 @@
     },
     "exchanger": {
       "_root": "2026-04-05"
+    },
+    "etranex-arc": {
+      "_root": "2026-05-30"
     },
     "boyner-pipeline": {
       "_root": "2026-04-05"

@@ -3615,6 +3615,10 @@ svg.lucide {
   font-size: 12px;
   font-weight: 600;
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
 }
 .auto-task-dt {
   font-size: 10px;
@@ -3837,6 +3841,10 @@ svg.lucide {
 .svc-name {
   flex: 1;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
 }
 .svc-info {
   display: flex;
@@ -13561,3 +13569,15 @@ button.cx-chip:hover {
 .cx-panel .cc-fresh-chip.cc-fresh-orange { color: #fed7aa; background: rgba(249,115,22,0.16); border-color: rgba(249,115,22,0.30); }
 .cx-panel .cc-fresh-pill.cc-fresh-red,
 .cx-panel .cc-fresh-chip.cc-fresh-red { color: #fecaca; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.35); }
+
+/* ✓ button stays visible on dark surfaces — keep contrast ≥ 4.5:1 */
+.cx-panel .cc-fresh-review,
+[data-theme="dark"] .cc-fresh-review {
+  color: #cbd5e1;
+}
+.cx-panel .cc-fresh-review:hover,
+.cx-panel .cc-fresh-review:focus-visible,
+[data-theme="dark"] .cc-fresh-review:hover,
+[data-theme="dark"] .cc-fresh-review:focus-visible {
+  color: #34d399;
+}

@@ -1,0 +1,476 @@
+{
+  "generated_at": "2026-05-30T15:04:37.905Z",
+  "entities": {
+    "brix-travel-system": {
+      "kind": "project",
+      "name": "BRIX Travel System",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/brix-travel-system",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://brix-hotel-web-app-production.up.railway.app",
+        "status": 307,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
+        "exists": true
+      }
+    },
+    "easybooking": {
+      "kind": "project",
+      "name": "EasyBooking",
+      "local_path": {
+        "value": "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking",
+        "exists": true
+      }
+    },
+    "rihlaty-travel": {
+      "kind": "project",
+      "name": "Rihlaty Travel"
+    },
+    "meta-mcp": {
+      "kind": "project",
+      "name": "Meta MCP",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/meta-mcp",
+        "exists": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Developer/meta-mcp",
+        "exists": true
+      }
+    },
+    "wapy-dev": {
+      "kind": "project",
+      "name": "Wapy.dev",
+      "deploy_url": {
+        "value": "http://100.116.69.101:3000",
+        "status": 200,
+        "ok": true
+      },
+      "server_path": {
+        "value": "/opt/wapy",
+        "exists": true
+      }
+    },
+    "command-center": {
+      "kind": "project",
+      "name": "Command Center",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/command-center",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://aneerabee.github.io/command-center/",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Developer/command-center",
+        "exists": true
+      }
+    },
+    "whatsapp-crm": {
+      "kind": "project",
+      "name": "WhatsApp CRM",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/easybooking-whatsapp-crm",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://easybooking-whatsapp-crm-production.up.railway.app/#inbox",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking/💬 whatsapp-crm",
+        "exists": true
+      }
+    },
+    "money-manager": {
+      "kind": "project",
+      "name": "Money Manager",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/money-manager",
+        "exists": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Desktop/Projects/💰 Money-Manager",
+        "exists": true
+      }
+    },
+    "brix-travel-website": {
+      "kind": "project",
+      "name": "BRIX Travel Website",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/brixtravel",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://www.brixtravel.com",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Desktop/Projects/🌐 brixtravelwebsite",
+        "exists": true
+      },
+      "server_path": {
+        "value": "/opt/brixtravel/site",
+        "exists": true
+      }
+    },
+    "chess-academy": {
+      "kind": "project",
+      "name": "Chess Academy",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/chess-academy",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://aneerabee.github.io/chess-academy/",
+        "status": 200,
+        "ok": true
+      }
+    },
+    "western-office": {
+      "kind": "project",
+      "name": "Western Office",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/western-office",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://aneerabee.github.io/western-office/",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Documents/New project/western-office",
+        "exists": true
+      }
+    },
+    "mohammad-ledger": {
+      "kind": "project",
+      "name": "ADREEM",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/mohammad-ledger",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "https://aneerabee.github.io/mohammad-ledger/",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Developer/mohammad-ledger",
+        "exists": true
+      },
+      "server_path": {
+        "value": "/home/argaz/apps/adreem",
+        "exists": true
+      }
+    },
+    "libya": {
+      "kind": "project",
+      "name": "LIBYA",
+      "repo_url": {
+        "value": "https://github.com/aneerabee/libya",
+        "exists": true
+      },
+      "deploy_url": {
+        "value": "http://62.171.128.44:3001",
+        "status": 200,
+        "ok": true
+      },
+      "server_path": {
+        "value": "/home/argaz/apps/libya",
+        "exists": true
+      }
+    },
+    "libya-web": {
+      "kind": "service",
+      "name": "LIBYA Web Service",
+      "port_http": {
+        "port": "3001",
+        "status": 200
+      }
+    },
+    "mohammad-ledger-bot-svc": {
+      "kind": "service",
+      "name": "ADREEM Bot Service",
+      "port_http": {
+        "port": "Telegram polling",
+        "status": 0
+      }
+    },
+    "adreem-api": {
+      "kind": "service",
+      "name": "ADREEM API Service",
+      "port_http": {
+        "port": "8787",
+        "status": 0
+      }
+    },
+    "cc-runtime-publish": {
+      "kind": "service",
+      "name": "Command Center Runtime Publish"
+    },
+    "wapy-app": {
+      "kind": "service",
+      "name": "Wapy App",
+      "port_http": {
+        "port": "3000",
+        "status": 0
+      }
+    },
+    "wapy-cron": {
+      "kind": "service",
+      "name": "Wapy Cron",
+      "port_http": {
+        "port": "—",
+        "status": 0
+      }
+    },
+    "wapy-db": {
+      "kind": "service",
+      "name": "Wapy DB",
+      "port_http": {
+        "port": "5432",
+        "status": 0
+      }
+    },
+    "wapy-backup-cron": {
+      "kind": "service",
+      "name": "Wapy Backup",
+      "port_http": {
+        "port": "—",
+        "status": 0
+      }
+    },
+    "wapy-cleanup-cron": {
+      "kind": "service",
+      "name": "Wapy Cleanup",
+      "port_http": {
+        "port": "—",
+        "status": 0
+      }
+    },
+    "tailscale-vpn": {
+      "kind": "service",
+      "name": "Tailscale VPN",
+      "port_http": {
+        "port": "—",
+        "status": 0
+      }
+    },
+    "github": {
+      "kind": "cloud",
+      "name": "GitHub"
+    },
+    "supabase": {
+      "kind": "cloud",
+      "name": "Supabase"
+    },
+    "vercel": {
+      "kind": "cloud",
+      "name": "Vercel"
+    },
+    "railway": {
+      "kind": "cloud",
+      "name": "Railway"
+    },
+    "heroku": {
+      "kind": "cloud",
+      "name": "Heroku"
+    },
+    "meta-business": {
+      "kind": "cloud",
+      "name": "Meta Business"
+    },
+    "airtable": {
+      "kind": "cloud",
+      "name": "Airtable"
+    },
+    "telegram": {
+      "kind": "cloud",
+      "name": "Telegram"
+    },
+    "contabo-vps": {
+      "kind": "cloud",
+      "name": "Contabo VPS"
+    },
+    "cloudflare": {
+      "kind": "cloud",
+      "name": "Cloudflare"
+    },
+    "hostinger": {
+      "kind": "cloud",
+      "name": "Hostinger"
+    },
+    "icloud-drive": {
+      "kind": "cloud",
+      "name": "iCloud Drive"
+    },
+    "perplexity": {
+      "kind": "cloud",
+      "name": "Perplexity"
+    },
+    "firecrawl": {
+      "kind": "cloud",
+      "name": "Firecrawl"
+    },
+    "notion": {
+      "kind": "cloud",
+      "name": "Notion"
+    },
+    "tailscale": {
+      "kind": "cloud",
+      "name": "Tailscale"
+    },
+    "trongrid": {
+      "kind": "cloud",
+      "name": "TronGrid"
+    },
+    "coingecko": {
+      "kind": "cloud",
+      "name": "CoinGecko"
+    },
+    "tron-address-bot": {
+      "kind": "bot",
+      "name": "Tron Address Bot"
+    },
+    "bank-bot": {
+      "kind": "bot",
+      "name": "Bank Bot"
+    },
+    "claude-code-bot": {
+      "kind": "bot",
+      "name": "Claude Code Bot"
+    },
+    "mohammad-ledger-bot": {
+      "kind": "bot",
+      "name": "ADREEM Bot"
+    },
+    "brixprice-bot": {
+      "kind": "bot",
+      "name": "BrixPrice Bot"
+    },
+    "libya-bot": {
+      "kind": "bot",
+      "name": "LIBYA Bot"
+    },
+    "desktop-github": {
+      "kind": "automation",
+      "name": "نسخ المشاريع لـGitHub",
+      "group": "MacBook Pro"
+    },
+    "desktop-command-center-runtime-publish": {
+      "kind": "automation",
+      "name": "Command Center Runtime Publish",
+      "group": "MacBook Pro"
+    },
+    "desktop-pm2": {
+      "kind": "automation",
+      "name": "إحياء عمليات PM2 عند الإقلاع",
+      "group": "MacBook Pro"
+    },
+    "desktop-cc-health-monitor": {
+      "kind": "automation",
+      "name": "Command Center Health Monitor",
+      "group": "MacBook Pro"
+    },
+    "desktop-mohammad-ledger-bot-local": {
+      "kind": "automation",
+      "name": "Mohammad Ledger Bot (محلي — معطّل فعليًّا)",
+      "group": "MacBook Pro"
+    },
+    "desktop-brix": {
+      "kind": "automation",
+      "name": "خادم فواتير BRIX المحلي",
+      "group": "MacBook Pro"
+    },
+    "server-wapy": {
+      "kind": "automation",
+      "name": "نسخ احتياطي قاعدة Wapy",
+      "group": "Contabo VPS"
+    },
+    "server-wapy-cleanup": {
+      "kind": "automation",
+      "name": "تنظيف نسخ Wapy القديمة",
+      "group": "Contabo VPS"
+    },
+    "server-libya-web-next-js": {
+      "kind": "automation",
+      "name": "LIBYA Web (Next.js)",
+      "group": "Contabo VPS"
+    },
+    "server-libya-bot-telegram": {
+      "kind": "automation",
+      "name": "LIBYA Bot (Telegram)",
+      "group": "Contabo VPS"
+    },
+    "server-libya": {
+      "kind": "automation",
+      "name": "نسخ احتياطي LIBYA يوميًا",
+      "group": "Contabo VPS"
+    },
+    "desktop-pretooluse": {
+      "kind": "automation",
+      "name": "PreToolUse",
+      "group": "Claude Code"
+    },
+    "desktop-posttooluse": {
+      "kind": "automation",
+      "name": "PostToolUse",
+      "group": "Claude Code"
+    },
+    "desktop-stop": {
+      "kind": "automation",
+      "name": "Stop",
+      "group": "Claude Code"
+    },
+    "desktop-ci-build-test-auto-deploy": {
+      "kind": "automation",
+      "name": "CI Build + Test + Auto-Deploy",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-daily-contract-backup": {
+      "kind": "automation",
+      "name": "Daily Contract Backup",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-telegram-notifier-on-claude-pr": {
+      "kind": "automation",
+      "name": "Telegram Notifier on Claude PR",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-scheduled-review-engine": {
+      "kind": "automation",
+      "name": "Scheduled Review — Engine",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-scheduled-review-api": {
+      "kind": "automation",
+      "name": "Scheduled Review — API + Security",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-daily-heartbeat": {
+      "kind": "automation",
+      "name": "Daily Heartbeat — Scheduled Reviews Digest",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-scheduled-review-frontend": {
+      "kind": "automation",
+      "name": "Scheduled Review — Frontend + Deploy",
+      "group": "GitHub Actions (BRIX)"
+    },
+    "desktop-brix-contract-study": {
+      "kind": "automation",
+      "name": "دراسة عقود BRIX — مرونة النظام (launchd مستقلّ — مُوقَفة 2026-05-26)",
+      "group": "GitHub Actions (BRIX)"
+    }
+  }
+}
