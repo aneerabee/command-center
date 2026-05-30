@@ -5478,12 +5478,15 @@ window.addEventListener("hashchange", function () {
     if (FRESH_DATA) return FRESH_DATA;
     try {
       const r = await fetch("data.freshness.json?v=" + Date.now());
+      if (!r.ok) throw new Error("HTTP " + r.status);
       const j = await r.json();
       FRESH_DATA = j.entities || {};
+      return FRESH_DATA;
     } catch (e) {
-      FRESH_DATA = {};
+      // Don't cache the failure — next call retries (transient network/404).
+      console.warn("[CC] freshness load failed, will retry:", e.message);
+      return {};
     }
-    return FRESH_DATA;
   }
 
   function _reviewKey(id) { return "cc_reviewed_" + id; }
@@ -5553,7 +5556,7 @@ window.addEventListener("hashchange", function () {
     if (m) return lk[m[1]] || (typeof _entityLookup === "function" ? _entityLookup(m[1]) : null);
     // last resort: heading text inside the card
     const h = el.querySelector(
-      "h2, h3, h4, .pj-card-name, .bot-card-name, .tl-card-name, .ideas-card-name, .cld-cards .cloud-card-name",
+      "h2, h3, h4, .prj-card-name, .mod-card-title, .svc-name, .auto-task-name, .emp-name, .umb-card-name, .bot-card-name",
     );
     if (h) {
       const t = h.textContent.trim();
@@ -5566,20 +5569,15 @@ window.addEventListener("hashchange", function () {
 
   const CARD_SELECTORS = [
     "[data-cc-name]",
-    // Entity cards — outermost only (use :not() to exclude inner sub-elements that
-    // share the same prefix like .prj-card-body, .umb-card-header, .mod-card-head).
+    // Active entity cards only — dead classes (.tl-card/.tool-card/.cloud-card/.ideas-card/.arc-card/.svc-card)
+    // were replaced by .mod-card in the modern bento redesign. Keep .bot-card for legacy bot drawer renders.
     ".prj-card:not([class*='prj-card-'])",
     ".bot-card:not([class*='bot-card-'])",
-    ".cloud-card:not([class*='cloud-card-'])",
-    ".arc-card",
-    ".archive-card",
-    ".tl-card",
-    ".tool-card",
-    ".ideas-card",
-    ".svc-card",
     ".umb-card:not([class*='umb-card-'])",
     ".emp-card:not([class*='emp-card-'])",
     ".mod-card:not([class*='mod-card-'])",
+    ".svc-item",
+    ".auto-task",
   ].join(", ");
 
   // Per-card-type title anchors — the pill is inserted INSIDE the card's
@@ -5588,16 +5586,11 @@ window.addEventListener("hashchange", function () {
   const TITLE_ANCHORS = {
     "prj-card":   ".prj-card-name",
     "bot-card":   ".bot-card-name, .bot-card-h, h3",
-    "cloud-card": ".cloud-card-name, .cloud-card-info h3, h3",
-    "arc-card":   ".arc-card-name, h3",
-    "archive-card": "h3",
-    "tl-card":    ".tl-card-name, h3",
-    "tool-card":  ".tool-card-name, h3",
-    "ideas-card": ".ideas-card-name, h3",
-    "svc-card":   ".svc-card-name, h3",
     "umb-card":   ".umb-card-name",
     "emp-card":   ".emp-name, h3",
-    "mod-card":   ".mod-card-title, h3",
+    "mod-card":   ".mod-card-title",
+    "svc-item":   ".svc-name",
+    "auto-task":  ".auto-task-name",
   };
   const FALLBACK_ANCHOR = "h2, h3, h4, [class*='-name'], [class*='-title']";
 
@@ -5640,10 +5633,10 @@ window.addEventListener("hashchange", function () {
           `آخر تحديث: ${effectiveDate}${review ? " (راجعتَ يدويًّا في " + review + ")" : ""} — قبل ${days} يومًا`,
         );
         pill.innerHTML =
-          `<span class="cc-fresh-dot"></span>` +
+          `<span class="cc-fresh-dot" aria-hidden="true"></span>` +
           `<span class="cc-fresh-num">${days}</span>` +
-          `<span class="cc-fresh-unit">ي</span>` +
-          `<button type="button" class="cc-fresh-review" tabindex="-1" title="راجعتُ — اجعلها حديثة">✓</button>`;
+          `<span class="cc-fresh-unit" aria-hidden="true">ي</span>` +
+          `<button type="button" class="cc-fresh-review" aria-label="ضع علامة كمراجَع — اجعلها حديثة" title="راجعتُ — اجعلها حديثة">✓</button>`;
 
         // Insert AT THE END of the title element so it flows after the name
         anchor.appendChild(pill);
@@ -5708,7 +5701,12 @@ window.addEventListener("hashchange", function () {
     });
   }
 
+  let _scheduledAt = 0;
   function _scheduleDecorate() {
+    // Throttle: collapse rapid hashchange storms into one decorate pass.
+    const now = Date.now();
+    if (now - _scheduledAt < 250) return;
+    _scheduledAt = now;
     setTimeout(_decorateCards, 80);
     setTimeout(_decorateCards, 350);
     setTimeout(_decorateDrawer, 200);
@@ -5721,7 +5719,19 @@ window.addEventListener("hashchange", function () {
   }
   window.addEventListener("hashchange", _scheduleDecorate);
 
-  // Safety net: re-scan periodically for dynamic re-renders
-  setInterval(_decorateCards, 4000);
-  setInterval(_decorateDrawer, 1500);
+  // Use MutationObserver instead of setInterval polling — fires only when
+  // DOM actually changes (e.g., page re-render, drawer open). Much cheaper
+  // than scanning every 1.5s forever.
+  const _mo = new MutationObserver(() => {
+    if (_scheduledAt && Date.now() - _scheduledAt < 250) return;
+    _scheduleDecorate();
+  });
+  // Wait for #app to exist before observing
+  function _startObserving() {
+    const app = document.getElementById("app");
+    if (!app) { setTimeout(_startObserving, 100); return; }
+    _mo.observe(app, { childList: true, subtree: true });
+    _mo.observe(document.body, { childList: true }); // catch drawer mount/unmount
+  }
+  _startObserving();
 })();

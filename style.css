@@ -741,7 +741,7 @@ svg.lucide {
   background: transparent;
   border-radius: 14px;
   cursor: pointer;
-  text-align: right;
+  text-align: start;
   transition: all 0.18s var(--ease);
 }
 .search-result:hover {
@@ -826,7 +826,7 @@ svg.lucide {
   font-weight: 800;
   letter-spacing: -0.8px;
   margin-bottom: 22px;
-  text-align: right;
+  text-align: start;
   color: #1e232b;
   text-wrap: balance;
 }
@@ -1172,7 +1172,7 @@ svg.lucide {
 }
 .hqx-signal {
   width: 100%;
-  text-align: right;
+  text-align: start;
   border: none;
   padding: 14px 15px;
   border-radius: 18px;
@@ -1256,7 +1256,7 @@ svg.lucide {
 }
 .hqx-focus-item {
   width: 100%;
-  text-align: right;
+  text-align: start;
   border: none;
   padding: 16px;
   border-radius: 20px;
@@ -1421,7 +1421,7 @@ svg.lucide {
 }
 .hqx-runtime-chip {
   width: 100%;
-  text-align: right;
+  text-align: start;
   border: none;
   padding: 13px 14px;
   border-radius: 18px;
@@ -1492,7 +1492,7 @@ svg.lucide {
 }
 .hqx-attention-item {
   width: 100%;
-  text-align: right;
+  text-align: start;
   border: none;
   padding: 15px;
   border-radius: 18px;
@@ -1550,7 +1550,7 @@ svg.lucide {
 }
 .hqx-cli-item {
   width: 100%;
-  text-align: right;
+  text-align: start;
   border: none;
   padding: 15px;
   border-radius: 18px;
@@ -1652,7 +1652,7 @@ svg.lucide {
   border: none;
   appearance: none;
   -webkit-appearance: none;
-  text-align: right;
+  text-align: start;
   padding: 15px 16px;
   border-radius: 18px;
   background: linear-gradient(
@@ -1752,7 +1752,7 @@ svg.lucide {
 }
 .hb-date {
   font-size: 11px;
-  color: #9b9590;
+  color: #6b6760;
   margin-top: 2px;
 }
 .hb-a-status {
@@ -1819,7 +1819,7 @@ svg.lucide {
 }
 .hb-b-date {
   font-size: 10px;
-  color: #9b9590;
+  color: #6b6760;
   margin-top: 2px;
 }
 
@@ -1843,7 +1843,7 @@ svg.lucide {
 }
 .hb-c-label {
   font-size: 11px;
-  color: #9b9590;
+  color: #6b6760;
   display: block;
   margin-top: 3px;
 }
@@ -2065,7 +2065,7 @@ svg.lucide {
 
 /* Home icon overrides for warm theme */
 #page-home svg.lucide {
-  color: #9b9590;
+  color: #6b6760;
 }
 #page-home .hb-proj-anim svg {
   color: inherit;
@@ -2232,7 +2232,7 @@ svg.lucide {
 .mc-section-label {
   font-size: 11px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #64748b;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -2389,7 +2389,7 @@ svg.lucide {
   gap: 6px;
   padding: 3px 0;
   font-size: 10px;
-  color: #94a3b8;
+  color: #64748b;
 }
 .mc-led {
   width: 6px;
@@ -2491,7 +2491,7 @@ svg.lucide {
 }
 .mc-feed-txt {
   font-size: 10px;
-  color: #94a3b8;
+  color: #64748b;
   line-height: 1.5;
   flex: 1;
 }
@@ -2508,7 +2508,7 @@ svg.lucide {
 .mc-lnk {
   font-size: 11px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #64748b;
   padding: 6px 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
@@ -2525,7 +2525,7 @@ svg.lucide {
   background: rgba(167, 139, 250, 0.06);
 }
 #page-home svg.lucide {
-  color: #94a3b8;
+  color: #64748b;
 }
 #page-home .mc-section-label svg.lucide {
   color: #64748b;
@@ -3366,7 +3366,7 @@ svg.lucide {
 }
 .map-item {
   width: 100%;
-  text-align: right;
+  text-align: start;
   background: var(--surface);
   box-shadow: var(--sh);
   border: 1px solid var(--brd);
@@ -3776,7 +3776,7 @@ svg.lucide {
 }
 .svc-item {
   width: 100%;
-  text-align: right;
+  text-align: start;
   appearance: none;
   display: flex;
   align-items: center;
@@ -5263,7 +5263,7 @@ svg.lucide {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 4px;
-  text-align: left;
+  text-align: end;
   font-family: var(--mono);
 }
 
@@ -5398,7 +5398,7 @@ svg.lucide {
   font-size: 11px;
   color: var(--t3);
   min-width: 50px;
-  text-align: left;
+  text-align: end;
 }
 .bot-h-bar-track {
   flex: 1;
@@ -5417,7 +5417,7 @@ svg.lucide {
   font-weight: 700;
   font-family: var(--mono);
   min-width: 40px;
-  text-align: right;
+  text-align: start;
 }
 .bot-card-h .bot-tags {
   padding: 0;
@@ -5541,7 +5541,7 @@ svg.lucide {
   font-family: var(--mono);
   font-size: 11px;
   direction: ltr;
-  text-align: left;
+  text-align: end;
 }
 .tool-detail-grid {
   display: grid;
@@ -6699,7 +6699,7 @@ svg.lucide {
   font-size: 0.75rem;
   opacity: 0.75;
   flex: 1;
-  text-align: left;
+  text-align: end;
 }
 .auto-task {
   flex-wrap: wrap;
@@ -7462,7 +7462,7 @@ svg.lucide {
   color: var(--t2, #475569);
   background: transparent;
   word-break: break-all;
-  text-align: left;
+  text-align: end;
 }
 
 @media (max-width: 640px) {
@@ -9839,7 +9839,7 @@ button, input, select, textarea {
 }
 .exec-mini.ok { color: #34d399; background: rgba(52, 211, 153, 0.12); }
 .exec-mini.warn { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
-.exec-mini.man { color: #94a3b8; background: rgba(148, 163, 184, 0.12); }
+.exec-mini.man { color: #64748b; background: rgba(148, 163, 184, 0.12); }
 .exec-health-time {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.4);
@@ -9862,7 +9862,7 @@ button, input, select, textarea {
   cursor: pointer;
   transition: all var(--motion-fast);
   font-family: inherit;
-  text-align: right;
+  text-align: start;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -9912,7 +9912,7 @@ button, input, select, textarea {
 .exec-cov-state.exec-state-ok { color: #34d399; }
 .exec-cov-state.exec-state-warn { color: #fbbf24; }
 .exec-cov-state.exec-state-fail { color: #f87171; }
-.exec-cov-state.exec-state-manual { color: #94a3b8; }
+.exec-cov-state.exec-state-manual { color: #64748b; }
 
 /* ─── Panel 3: PROGRESS ─── */
 .exec-progress, .exec-access, .exec-actions {
@@ -9964,7 +9964,7 @@ button, input, select, textarea {
   cursor: pointer;
   transition: all var(--motion-fast);
   font-family: inherit;
-  text-align: right;
+  text-align: start;
 }
 .exec-prog-row:hover {
   background: rgba(255, 255, 255, 0.06);
@@ -10296,7 +10296,7 @@ button, input, select, textarea {
   border-radius: 12px;
   cursor: pointer;
   font-family: inherit;
-  text-align: right;
+  text-align: start;
   transition: all var(--motion-fast);
 }
 .prj-team-chip:hover {
@@ -11050,7 +11050,7 @@ button, input, select, textarea {
   padding: 3px 8px;
   border-radius: 6px;
   direction: ltr;
-  text-align: left;
+  text-align: end;
 }
 .bp-sub-arrow { color: var(--t3); font-weight: 700; }
 .bp-sub-name { font-size: 13px; color: var(--t1); }
@@ -13490,13 +13490,13 @@ button.cx-chip:hover {
   border-color: rgba(239, 68, 68, 0.22);
 }
 
-/* Hidden ✓ button — slides out on hover of the parent card */
+/* Hidden ✓ button — slides out on hover, focus, or touch devices */
 .cc-fresh-review {
   appearance: none;
   background: transparent;
   border: 0;
-  color: #94a3b8;
-  font-size: 10px;
+  color: #64748b; /* darkened from #94a3b8 for WCAG AA on white */
+  font-size: 11px;
   line-height: 1;
   cursor: pointer;
   padding: 0;
@@ -13505,19 +13505,40 @@ button.cx-chip:hover {
   opacity: 0;
   overflow: hidden;
   transform: translateX(-2px);
+  border-radius: 999px;
   transition: width 0.18s ease, opacity 0.18s ease, transform 0.18s ease, color 0.15s ease;
+  /* expand touch target without growing visible footprint */
+  position: relative;
 }
-/* Reveal on hover of the parent CARD (not the pill alone), so even tiny
-   pills are easy to target. */
+.cc-fresh-review::before {
+  content: "";
+  position: absolute;
+  inset: -10px -8px;
+}
+/* Reveal on hover of the parent card, focus within the pill, or always on touch */
 *:hover > .cc-fresh-pill .cc-fresh-review,
-*:hover .cc-fresh-pill .cc-fresh-review {
-  width: 11px;
+*:hover .cc-fresh-pill .cc-fresh-review,
+.cc-fresh-pill:focus-within .cc-fresh-review {
+  width: 12px;
   opacity: 1;
   transform: translateX(0);
 }
-.cc-fresh-review:hover {
+@media (hover: none) {
+  /* On touch devices (phones/tablets) hover doesn't exist — always show */
+  .cc-fresh-pill .cc-fresh-review {
+    width: 12px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.cc-fresh-review:hover,
+.cc-fresh-review:focus-visible {
   color: #10b981;
   transform: scale(1.15);
+  outline: none;
+}
+.cc-fresh-review:focus-visible {
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.45);
 }
 
 /* When our pill is present, suppress the existing per-card "جديد" badge
