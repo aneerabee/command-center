@@ -1686,6 +1686,37 @@ R.home = function () {
       tone: "#f59e0b",
     });
   }
+
+  // P0 UX: surface DOWN services and FAILED automations above the fold —
+  // previously only counts of "active" appeared, hiding real failures.
+  const downServices = SVC.filter((s) => !s.st);
+  if (downServices.length) {
+    briefs.unshift({
+      level: "critical",
+      icon: "🔴",
+      title: `${downServices.length} خدمة متوقّفة`,
+      detail: downServices.slice(0, 3).map((s) => s.name).join(" · ") +
+        (downServices.length > 3 ? ` · +${downServices.length - 3}` : ""),
+      action: `go('server')`,
+      actionLabel: "افتح الخدمات",
+      tone: "#ef4444",
+    });
+  }
+  const failedAutos = (typeof AUTO !== "undefined" ? AUTO : [])
+    .flatMap((g) => g.tasks || [])
+    .filter((t) => t.on === false);
+  if (failedAutos.length) {
+    briefs.unshift({
+      level: "warn",
+      icon: "🟡",
+      title: `${failedAutos.length} أتمتة معطّلة`,
+      detail: failedAutos.slice(0, 3).map((t) => t.name).join(" · ") +
+        (failedAutos.length > 3 ? ` · +${failedAutos.length - 3}` : ""),
+      action: `go('automations')`,
+      actionLabel: "افتح الأتمتة",
+      tone: "#f59e0b",
+    });
+  }
   if (projectsWithNoRevenue.length > 0 && hourNow >= 10 && hourNow < 19) {
     const names = projectsWithNoRevenue.map((p) => p.name);
     briefs.push({
@@ -2778,7 +2809,7 @@ R.map = function () {
 /* ── AUTO ── */
 R.auto = function () {
   const allGroups = AUTO || [];
-  const allTasks = allGroups.flatMap((g) => g.tasks);
+  const allTasks = allGroups.flatMap((g) => g.tasks || []);
   const totalTasks = allTasks.length;
   const onTasks = allTasks.filter((t) => t.on).length;
 
@@ -5379,28 +5410,10 @@ function selectSearchResult(id) {
 
 /* ─────────────── 6. INTERACTIVE EFFECTS ─────────────── */
 
-// Glass-card mouse glow — listen ONLY on the glass cards themselves so we
-// don't query the whole DOM on every global mousemove. Each card handles its
-// own pointermove and computes rect lazily (offsetLeft/Top, no layout flush).
-let _mRaf = false;
-let _mEvent = null;
-document.addEventListener("pointermove", function (e) {
-  if (e.pointerType !== "mouse") return; // skip touch — saves battery
-  _mEvent = e;
-  if (_mRaf) return;
-  _mRaf = true;
-  requestAnimationFrame(() => {
-    _mRaf = false;
-    // Only the card under the cursor — no need to update siblings
-    const target = _mEvent.target.closest(".glass");
-    if (!target) return;
-    const rect = target.getBoundingClientRect();
-    const x = _mEvent.clientX - rect.left;
-    const y = _mEvent.clientY - rect.top;
-    target.style.setProperty("--mouse-x", x + "px");
-    target.style.setProperty("--mouse-y", y + "px");
-  });
-});
+// Removed: .glass-card mouse-glow effect. The .glass class was dropped in the
+// bento redesign (no card template assigns it anymore), so the handler was
+// running on every mousemove with zero visible effect. CSS for .glass at
+// style.css:884 is also dead — slated for SWEEP 1 cleanup.
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
@@ -5670,6 +5683,10 @@ window.addEventListener("hashchange", function () {
           if (!(e.target instanceof Element) || !e.target.closest(".cc-fresh-review")) return;
           e.stopPropagation();
           e.preventDefault();
+          // Guard against concurrent clicks on different pills firing
+          // before _decorating is re-armed by the next decorate pass.
+          if (pill.dataset.ccClicked === "1") return;
+          pill.dataset.ccClicked = "1";
           _setReview(entity.id);
           // Pause observer so pill.remove() doesn't cascade into a redundant
           // decorate pass that the throttle would just block anyway.

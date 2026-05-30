@@ -7367,7 +7367,7 @@ svg.lucide {
   flex: 1;
   padding: 12px 14px;
   font-family: "SF Mono", Menlo, Consolas, monospace;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t1, #0f172a);
   background: transparent;
   word-break: break-all;
@@ -7406,7 +7406,7 @@ svg.lucide {
   counter-increment: cs;
   position: relative;
   padding: 8px 44px 8px 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.7;
   color: var(--t1, #0f172a);
   background: color-mix(in srgb, var(--cs-cl) 5%, transparent);
@@ -7430,7 +7430,7 @@ svg.lucide {
 }
 .prj-claude-steps code {
   font-family: "SF Mono", Menlo, Consolas, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   padding: 1px 6px;
   border-radius: 5px;
   background: color-mix(in srgb, var(--cs-cl) 14%, transparent);
@@ -7477,7 +7477,7 @@ svg.lucide {
   .prj-claude-card { padding: 16px 14px; margin: 14px 0; }
   .prj-claude-cmd-wrap { flex-direction: column; }
   .prj-claude-copy { padding: 10px 16px; justify-content: center; }
-  .prj-claude-cmd { font-size: 11.5px; }
+  .prj-claude-cmd { font-size: 12px; }
 }
 
 /* ══════ Current Status Card — أين وصلنا ══════ */
@@ -7554,7 +7554,7 @@ svg.lucide {
   gap: 10px;
   padding: 8px 12px;
   border-radius: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.7;
   background: rgba(0,0,0,0.025);
   border: 1px solid transparent;
@@ -7649,7 +7649,7 @@ svg.lucide {
   transform: translate(2px, -2px);
 }
 .pql-desc {
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.6;
   color: var(--t2, #64748b);
   padding-right: 24px;
@@ -8002,7 +8002,7 @@ svg.lucide {
   color: var(--t1, #0f172a);
 }
 .umb-card-specialty {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t2, #64748b);
   margin: 0 0 4px;
   font-weight: 500;
@@ -8042,7 +8042,7 @@ svg.lucide {
   font-family: "Inter", sans-serif;
 }
 .umb-stat span {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3, #94a3b8);
   margin-top: 2px;
 }
@@ -8091,14 +8091,14 @@ svg.lucide {
   text-overflow: ellipsis;
 }
 .umb-project-role {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3, #94a3b8);
   padding: 2px 8px;
   background: rgba(0, 0, 0, 0.04);
   border-radius: 6px;
 }
 .umb-project-pct {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--pc);
   font-family: "Inter", sans-serif;
@@ -8108,7 +8108,7 @@ svg.lucide {
   border-right-style: dashed;
 }
 .umb-idea-stage {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3, #94a3b8);
   padding: 2px 8px;
   background: rgba(0, 0, 0, 0.04);
@@ -8153,7 +8153,7 @@ svg.lucide {
   font-weight: 600;
 }
 .prj-umb-specialty {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3, #94a3b8);
   margin-right: auto;
 }
@@ -8164,7 +8164,7 @@ svg.lucide {
   flex-wrap: wrap;
 }
 .prj-card-role {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3, #94a3b8);
   padding: 2px 8px;
   background: rgba(0, 0, 0, 0.04);
@@ -8172,7 +8172,7 @@ svg.lucide {
   font-weight: 500;
 }
 .prj-card-priority {
-  font-size: 10.5px;
+  font-size: 11px;
   padding: 2px 8px;
   border-radius: 6px;
   font-weight: 600;
@@ -8235,7 +8235,7 @@ svg.lucide {
   margin: 2px 0 0;
 }
 .team-dept-count {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--dept);
   background: color-mix(in srgb, var(--dept) 12%, transparent);
   padding: 4px 10px;
@@ -8306,7 +8306,7 @@ svg.lucide {
   border-radius: 10px;
   text-decoration: none;
   color: var(--t1, #0f172a);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 500;
   transition: background 0.15s, transform 0.15s;
   border-right: 3px solid transparent;
@@ -8338,7 +8338,7 @@ svg.lucide {
   letter-spacing: 0.01em;
 }
 .team-notes {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3, #94a3b8);
   background: rgba(0, 0, 0, 0.02);
   padding: 8px 10px;
@@ -8388,7 +8388,7 @@ svg.lucide {
 }
 .umb-dept-titles { flex: 1; min-width: 0; }
 .umb-dept-name {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--t1, #0f172a);
   line-height: 1.3;
@@ -8404,7 +8404,7 @@ svg.lucide {
   flex-shrink: 0;
 }
 .umb-dept-count {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--dept);
   background: color-mix(in srgb, var(--dept) 12%, transparent);
@@ -8426,7 +8426,7 @@ svg.lucide {
   padding-right: 4px;
 }
 .umb-dept-empty {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3, #94a3b8);
   font-style: italic;
   text-align: center;
@@ -8469,13 +8469,13 @@ svg.lucide {
 }
 .umb-member-info { min-width: 0; }
 .umb-member-name {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--t1, #0f172a);
   line-height: 1.3;
 }
 .umb-member-role {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3, #94a3b8);
   margin-top: 1px;
 }
@@ -8521,7 +8521,7 @@ svg.lucide {
   padding: 11px 16px;
   border: 1px solid var(--border, rgba(15, 23, 42, 0.1));
   border-radius: 12px;
-  font-size: 13.5px;
+  font-size: 14px;
   background: var(--bg, #fff);
   color: var(--t1, #0f172a);
   font-family: inherit;
@@ -8657,13 +8657,13 @@ svg.lucide {
   text-transform: uppercase;
 }
 .emp-name-en {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3, #94a3b8);
   margin-top: 2px;
   font-family: "Inter", sans-serif;
 }
 .emp-role {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t2, #64748b);
   margin-top: 4px;
 }
@@ -8674,7 +8674,7 @@ svg.lucide {
   margin-top: 6px;
 }
 .emp-chip {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 6px;
@@ -8754,7 +8754,7 @@ svg.lucide {
 .emp-field-val.empty-val { color: var(--t3, #94a3b8); }
 .emp-field-val.mono {
   font-family: "Inter", monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   letter-spacing: 0.01em;
 }
 a.emp-field-val { text-decoration: none; }
@@ -8792,7 +8792,7 @@ a.emp-field-val:hover { color: #6366f1; }
   gap: 4px;
 }
 .emp-proj-tag {
-  font-size: 10.5px;
+  font-size: 11px;
   padding: 3px 8px;
   background: color-mix(in srgb, var(--pc) 15%, transparent);
   color: var(--pc);
@@ -8859,7 +8859,7 @@ a.emp-field-val:hover { color: #6366f1; }
   margin-right: auto;
 }
 .prj-card-fresh {
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
   color: #fff;
@@ -9051,7 +9051,7 @@ a.emp-field-val:hover { color: #6366f1; }
   background: var(--bg);
   border: 1px solid var(--brd);
   border-radius: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--t1);
   font-family: inherit;
@@ -9101,7 +9101,7 @@ a.emp-field-val:hover { color: #6366f1; }
   display: flex;
   align-items: center;
   gap: var(--s3);
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--t2);
   font-weight: 500;
 }
@@ -9127,7 +9127,7 @@ a.emp-field-val:hover { color: #6366f1; }
 .cc-brief-icon { font-size: 20px; flex-shrink: 0; }
 .cc-brief-body { flex: 1; min-width: 0; }
 .cc-brief-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--t1);
   margin-bottom: 2px;
@@ -9143,7 +9143,7 @@ a.emp-field-val:hover { color: #6366f1; }
   border: 0;
   padding: 8px 12px;
   border-radius: 8px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   flex-shrink: 0;
@@ -9228,7 +9228,7 @@ a.emp-field-val:hover { color: #6366f1; }
   line-height: 1.2;
 }
 .cc-pulse-stat span {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3);
   margin-top: 1px;
 }
@@ -9300,7 +9300,7 @@ a.emp-field-val:hover { color: #6366f1; }
   border-radius: 5px;
 }
 .cc-feed-text {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t2);
   line-height: 1.5;
 }
@@ -9337,7 +9337,7 @@ a.emp-field-val:hover { color: #6366f1; }
 .cc-sug-em { font-size: 18px; flex-shrink: 0; }
 .cc-sug-text {
   flex: 1;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t1);
   font-weight: 500;
 }
@@ -9517,7 +9517,7 @@ button, input, select, textarea {
   /* عناوين صغيرة على الموبايل */
   h1, .hqx-title, .cc-greet-title { font-size: 19px !important; line-height: 1.3 !important; }
   h2, .cc-section-title { font-size: 14px !important; }
-  h3 { font-size: 13.5px !important; }
+  h3 { font-size: 14px !important; }
   /* tap targets آمنة (44px+) */
   button, a.cc-greet-action, .cc-brief-cta, .cc-sug-cta,
   .team-view-btn, .salary-toggle, .survey-link {
@@ -9547,7 +9547,7 @@ button, input, select, textarea {
   flex-wrap: wrap;
 }
 .cc-runtime-info {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3);
   flex: 1;
   min-width: 0;
@@ -9647,7 +9647,7 @@ button, input, select, textarea {
     grid-column: 2 !important; 
     grid-row: 2 !important;
     text-align: end;
-    font-size: 10.5px;
+    font-size: 11px;
   }
   
   /* اقتراحات مكدسة */
@@ -9952,7 +9952,7 @@ button, input, select, textarea {
   margin-bottom: 12px;
 }
 .exec-section-title {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.02em;
@@ -9995,7 +9995,7 @@ button, input, select, textarea {
 }
 .exec-prog-icon { color: var(--c); display: inline-flex; }
 .exec-prog-name {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
 }
@@ -10022,7 +10022,7 @@ button, input, select, textarea {
 }
 .exec-prog-time {
   font-family: "Inter", sans-serif;
-  font-size: 10.5px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.45);
   background: rgba(255, 255, 255, 0.04);
   padding: 3px 8px;
@@ -10046,7 +10046,7 @@ button, input, select, textarea {
 }
 .exec-acc-row:last-child { border-bottom: 0; }
 .exec-acc-key {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -10093,7 +10093,7 @@ button, input, select, textarea {
 /* ─── Mobile Responsive ─── */
 @media (max-width: 640px) {
   .exec-summary { padding: 14px 16px; }
-  .exec-summary-text { font-size: 13.5px; }
+  .exec-summary-text { font-size: 14px; }
   .exec-body { padding: 0 14px 14px; gap: 10px; grid-template-columns: 1fr; }
   .exec-health {
     grid-template-columns: 100px 1fr;
@@ -10287,7 +10287,7 @@ button, input, select, textarea {
   background: color-mix(in srgb, var(--c) 10%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
   border-radius: 999px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--c);
   cursor: pointer;
@@ -10340,13 +10340,13 @@ button, input, select, textarea {
   font-family: "Inter", sans-serif;
 }
 .prj-team-name {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--t1);
   line-height: 1.2;
 }
 .prj-team-role {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--t3);
   line-height: 1;
 }
@@ -10389,7 +10389,7 @@ button, input, select, textarea {
   color: #6366f1;
   border: 1px solid rgba(99, 102, 241, 0.18);
   border-radius: 6px;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
@@ -10469,7 +10469,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t3);
   --health-cl: #94a3b8;
 }
@@ -11661,7 +11661,7 @@ button, input, select, textarea {
 .mod-card-bullet {
   display: flex;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t2);
   line-height: 1.5;
   align-items: flex-start;
@@ -11681,7 +11681,7 @@ button, input, select, textarea {
 .mod-card--featured::before { height: 5px; }
 .mod-card--featured .mod-card-desc {
   -webkit-line-clamp: unset;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -11885,7 +11885,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
   z-index: 2;
 }
 .cx-pill {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
@@ -11954,7 +11954,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 .cx-tab-count {
   display: inline-block;
   margin-inline-start: 4px;
-  font-size: 9.5px;
+  font-size: 10px;
   padding: 1px 6px;
   border-radius: 999px;
   background: rgba(255,255,255,.08);
@@ -11980,7 +11980,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 
 /* CONTENT BLOCKS inside panes */
 .cx-summary {
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.85;
   color: var(--cx-t1);
   padding: 16px 18px;
@@ -12036,7 +12036,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 }
 .cx-fact:hover::before { opacity: 1; }
 .cx-fact-label {
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -12077,7 +12077,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 .cx-section--rose::before { background: #F472B6; }
 
 .cx-section-title {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--cx-t2);
   text-transform: uppercase;
@@ -12098,7 +12098,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 .cx-section-row code,
 .cx-path {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: color-mix(in srgb, var(--cx-cl) 80%, var(--cx-t1));
   background: rgba(255,255,255,.04);
   padding: 1px 6px;
@@ -12108,7 +12108,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
 
 /* SECTION HEADING (group separator inside pane) */
 .cx-group-heading {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .12em;
@@ -12176,7 +12176,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
   border-radius: 10px;
   padding: 12px 14px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11.5px;
+  font-size: 12px;
   color: #7DD3FC;
   direction: ltr;
   word-break: break-all;
@@ -12223,7 +12223,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
   border: 1px solid var(--cx-line);
   background: var(--cx-elev);
   color: var(--cx-t1);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all .2s;
@@ -12509,7 +12509,7 @@ html.cx-locked, html.cx-locked body { overflow: hidden; }
   padding: 2px 6px !important;
   border-radius: 4px;
   font-family: var(--mono, ui-monospace);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 
 /* [A2.5] Safety net — any descendant whose computed background is white/near-white
@@ -12716,7 +12716,7 @@ button.cx-chip:hover {
   border: 1px solid var(--cx-line);
   border-radius: 8px;
   font-family: var(--mono, ui-monospace);
-  font-size: 11.5px;
+  font-size: 12px;
   color: #93c5fd;
   word-break: break-all;
   line-height: 1.6;
@@ -12737,7 +12737,7 @@ button.cx-chip:hover {
   background: var(--cx-elev);
   border: 1px solid var(--cx-line);
   border-radius: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   text-decoration: none;
 }
@@ -12985,7 +12985,7 @@ button.cx-chip:hover {
 .cx-section-block li {
   padding: 4px 0 4px 18px;
   position: relative;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--cx-t1);
   line-height: 1.65;
 }
@@ -12997,7 +12997,7 @@ button.cx-chip:hover {
   font-weight: 800;
 }
 .cx-section-block p {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--cx-t1);
   line-height: 1.7;
   margin: 0 0 6px;
@@ -13283,7 +13283,7 @@ button.cx-chip:hover {
   border: 1px dashed var(--cx-line);
   border-radius: 14px;
   color: var(--cx-t3);
-  font-size: 12.5px;
+  font-size: 13px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -13315,7 +13315,7 @@ button.cx-chip:hover {
   color: var(--t2);
 }
 .mod-ghost-sub {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--t3);
   line-height: 1.7;
   max-width: 240px;
@@ -13348,7 +13348,7 @@ button.cx-chip:hover {
   color: var(--t2);
 }
 .cc-page-empty-sub {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--t3);
   line-height: 1.7;
   max-width: 320px;
@@ -13444,7 +13444,7 @@ button.cx-chip:hover {
   height: 18px;
   padding: 0 7px;
   border-radius: 9999px;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 700;
   font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
   letter-spacing: 0.2px;
@@ -13477,7 +13477,7 @@ button.cx-chip:hover {
   font-variant-numeric: tabular-nums;
 }
 .cc-fresh-unit {
-  font-size: 8.5px;
+  font-size: 9px;
   opacity: 0.55;
   font-weight: 600;
   margin-inline-start: -1px;
