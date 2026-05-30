@@ -139,6 +139,12 @@ const ccActions = {
   goPage:       (arg) => typeof go === "function" && go(arg),
   copyDrawerLink: (arg, el) => ccCopyDrawerLink(el),
   closeDetail:  () => typeof closeDetail === "function" && closeDetail(),
+  openSearch:   () => typeof openSearch === "function" && openSearch(),
+  closeSearch:  () => typeof closeSearch === "function" && closeSearch(),
+  openMore:     () => typeof openMore === "function" && openMore(),
+  mapFilter:    (arg) => typeof mapFilter === "function" && mapFilter(arg),
+  teamSwitchView: (arg) => typeof teamSwitchView === "function" && teamSwitchView(arg),
+  teamToggleSalary: () => typeof teamToggleSalary === "function" && teamToggleSalary(),
 };
 /* Single delegated click handler — runs once, covers all data-action buttons */
 document.addEventListener("click", function (e) {
@@ -705,7 +711,7 @@ function _healthClusterHTML() {
   const syncHTML = synced
     ? `<span class="cc-health-sync" data-live-time="${E(synced)}" title="آخر مزامنة تلقائية">${E(relTime(synced))}</span>`
     : "";
-  return `<button class="cc-health-cluster" onclick="go('home')" aria-label="ملخّص صحة الأنظمة — افتح الرئيسية">` +
+  return `<button class="cc-health-cluster" data-action="goPage" data-arg="home" aria-label="ملخّص صحة الأنظمة — افتح الرئيسية">` +
     parts.join("") + syncHTML + `</button>`;
 }
 
@@ -1442,14 +1448,14 @@ function init() {
   if (sidebar) {
     sidebar.innerHTML =
       '<div class="sidebar-brand"><span class="brand-icon"><img src="cc-favicon.svg" alt="" width="24" height="24" style="display:block"/></span><span class="brand-text">مركز التحكم</span></div>' +
-      '<button class="search-trigger" onclick="openSearch()" aria-label="بحث">' +
+      '<button class="search-trigger" data-action="openSearch" aria-label="بحث">' +
       _ic("🔍", 16) +
       "<span>بحث</span></button>" +
       `<div id="cc-health-slot">${_healthClusterHTML()}</div>` +
       '<nav class="sidebar-nav">' +
       PG.map(
         (p) =>
-          `<a class="nav-item${cur === p.id ? " active" : ""}" data-page="${p.id}" onclick="go('${p.id}')">` +
+          `<a class="nav-item${cur === p.id ? " active" : ""}" data-page="${p.id}" data-action="goPage" data-arg="${E(p.id)}">` +
           `<span class="nav-icon">${p.ic}</span><span class="nav-label">${E(p.n)}</span></a>`,
       ).join("") +
       "</nav>";
@@ -1462,12 +1468,12 @@ function init() {
       mobilePages
         .map(
           (p) =>
-            `<a class="bar-item${cur === p.id ? " active" : ""}" data-page="${p.id}" onclick="go('${p.id}')">` +
+            `<a class="bar-item${cur === p.id ? " active" : ""}" data-page="${p.id}" data-action="goPage" data-arg="${E(p.id)}">` +
             `<span class="bar-icon">${p.ic}</span><span class="bar-label">${E(p.n)}</span></a>`,
         )
         .join("") +
-      `<a class="bar-item" onclick="openSearch()"><span class="bar-icon">⌕</span><span class="bar-label">بحث</span></a>` +
-      `<a class="bar-item" onclick="openMore()"><span class="bar-icon">⋯</span><span class="bar-label">المزيد</span></a>`;
+      `<a class="bar-item" data-action="openSearch"><span class="bar-icon">⌕</span><span class="bar-label">بحث</span></a>` +
+      `<a class="bar-item" data-action="openMore"><span class="bar-icon">⋯</span><span class="bar-label">المزيد</span></a>`;
 
     if (!document.getElementById("more-sheet")) {
       const sheet = document.createElement("div");
@@ -1494,12 +1500,12 @@ function init() {
     search.id = "global-search";
     search.className = "global-search";
     search.innerHTML =
-      '<div class="search-overlay" onclick="closeSearch()"></div>' +
+      '<div class="search-overlay" data-action="closeSearch"></div>' +
       '<div class="search-panel">' +
       '<div class="search-head">' +
       `<span class="search-icon">${_ic("🔍", 18)}</span>` +
       '<input id="search-input" class="search-input" type="search" dir="rtl" aria-label="بحث شامل في كل الكيانات" placeholder="ابحث في المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابة، الأرشيف..." autocomplete="off" />' +
-      '<button class="search-close" onclick="closeSearch()" aria-label="إغلاق">&times;</button>' +
+      '<button class="search-close" data-action="closeSearch" aria-label="إغلاق">&times;</button>' +
       "</div>" +
       '<div class="search-helper">يشمل كل البيانات المنظمة في اللوحة. جرّب اسم مشروع، مسار، خدمة، أداة، أو كلمة من الوصف.</div>' +
       '<div id="search-results" class="search-results"></div>' +
@@ -2043,7 +2049,7 @@ R.home = function () {
     `<p class="cc-greet-sub">${E(todayLong())} · ${arPluralProj(PRJ.length)} · ${arPluralEmp(TEAM ? TEAM.length : 0)} · ${arPluralDept(DEPARTMENTS ? DEPARTMENTS.length : 0)}</p>` +
     `</div>` +
     `<div class="cc-greet-actions">` +
-    `<button class="cc-greet-action cc-clickable" onclick="openSearch()" title="بحث (Cmd+K)">🔍 بحث</button>` +
+    `<button class="cc-greet-action cc-clickable" data-action="openSearch" title="بحث (Cmd+K)">🔍 بحث</button>` +
     `<a class="cc-greet-action cc-clickable" href="graph.html" title="Knowledge Graph">🧠 العلاقات</a>` +
     `<a class="cc-greet-action cc-clickable" href="survey.html" target="_blank" title="استبيان موظف">📋 استبيان</a>` +
     `</div>` +
@@ -2257,7 +2263,7 @@ R.home = function () {
     `<div class="exec-progress">` +
     `<div class="exec-section-head">` +
     `<span class="exec-section-title">المحاور النشطة</span>` +
-    `<button class="exec-section-link" onclick="go('projects')">كل المشاريع ←</button>` +
+    `<button class="exec-section-link" data-action="goPage" data-arg="projects">كل المشاريع ←</button>` +
     `</div>` +
     `<div class="exec-progress-list">` +
     focus
@@ -2715,11 +2721,11 @@ R.team = function () {
     `<div class="team-controls">` +
     `<input type="search" class="team-search" aria-label="بحث في الفريق" placeholder="🔍 ابحث: اسم، رقم، بريد، لغة، مشروع..." oninput="teamFilter(this.value)" />` +
     `<div class="team-view-switcher">` +
-    `<button class="team-view-btn active" data-view="grouped" onclick="teamSwitchView('grouped')">📂 بالأقسام</button>` +
-    `<button class="team-view-btn" data-view="all" onclick="teamSwitchView('all')">🔲 الكل</button>` +
+    `<button class="team-view-btn active" data-view="grouped" data-action="teamSwitchView" data-arg="grouped">📂 بالأقسام</button>` +
+    `<button class="team-view-btn" data-view="all" data-action="teamSwitchView" data-arg="all">🔲 الكل</button>` +
     `</div>` +
     `<a href="survey.html" target="_blank" class="survey-link" title="رابط استبيان لملء بيانات موظف جديد">📋 استبيان موظف</a>` +
-    `<button id="salary-toggle-btn" class="salary-toggle" onclick="teamToggleSalary()">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
+    `<button id="salary-toggle-btn" class="salary-toggle" data-action="teamToggleSalary">${localStorage.getItem("cc_show_salary") === "1" ? "إخفاء الرواتب" : "إظهار الرواتب"}</button>` +
     `</div>` +
     // ── المحتوى ──
     `<div id="team-content" class="team-content" data-view="grouped">` +
@@ -3029,10 +3035,10 @@ R.map = function () {
     "</div>" +
     '<div class="map-note">هذه الصفحة تجيب على سؤال واحد: أين يوجد كل عنصر فعليًا، وما هو نوع وجوده: محلي، GitHub، أو سيرفر.</div>' +
     '<div class="map-filters">' +
-    `<button class="filter-btn active" data-filter="all" onclick="mapFilter('all')">الكل</button>` +
-    `<button class="filter-btn" data-filter="github" onclick="mapFilter('github')">GitHub</button>` +
-    `<button class="filter-btn" data-filter="local" onclick="mapFilter('local')">محلي</button>` +
-    `<button class="filter-btn" data-filter="server" onclick="mapFilter('server')">سيرفر</button>` +
+    `<button class="filter-btn active" data-filter="all" data-action="mapFilter" data-arg="all">الكل</button>` +
+    `<button class="filter-btn" data-filter="github" data-action="mapFilter" data-arg="github">GitHub</button>` +
+    `<button class="filter-btn" data-filter="local" data-action="mapFilter" data-arg="local">محلي</button>` +
+    `<button class="filter-btn" data-filter="server" data-action="mapFilter" data-arg="server">سيرفر</button>` +
     "</div>" +
     '<div class="map-list" id="map-list">' +
     mapData
