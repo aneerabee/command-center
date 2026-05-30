@@ -26,6 +26,90 @@ const EJ = (s) =>
     .replace(/>/g, "\\u003E")
     .replace(/\r?\n/g, "\\n");
 
+/* normalizeEntity(e, kind) — apply per-kind defaults so renderers can trust
+ * that common fields exist. Idempotent: calling twice returns same shape.
+ * Returns a NEW object (immutable pattern). Does NOT mutate input.
+ *
+ * Eliminates the 33+ scattered `e.tags || []`, `e.cl || "#888"`, `e.links || {}`
+ * checks across render functions. Add new kinds via DEFAULTS table.
+ */
+const ENTITY_DEFAULTS = {
+  project:   { cl: "#7C3AED", em: "📦", tags: [], links: {}, st: "p" },
+  service:   { cl: "#22C55E", em: "🔧", tags: [], links: {}, st: 0, port: "—" },
+  bot:       { cl: "#0088CC", em: "🤖", tags: [], links: {}, st: "p" },
+  cloud:     { cl: "#475569", em: "☁️", tags: [], links: {} },
+  tool:      { cl: "#0EA5E9", em: "🛠️", tags: [], links: {} },
+  archive:   { cl: "#94A3B8", em: "📁", tags: [], links: {}, st: "arc" },
+  idea:      { cl: "#A855F7", em: "💡", tags: [], links: {} },
+  umbrella:  { cl: "#6366F1", em: "🏢", tags: [], links: {} },
+  department:{ cl: "#64748B", em: "📂", tags: [], links: {} },
+  team:      { cl: "#3B82F6", em: "👤", tags: [], links: {} },
+  automation:{ cl: "#10B981", em: "⏱️",  tags: [], links: {}, on: false },
+};
+function normalizeEntity(e, kind) {
+  if (!e || typeof e !== "object") return null;
+  const defaults = ENTITY_DEFAULTS[kind] || {};
+  return {
+    ...defaults,
+    ...e,
+    // Always-derived
+    name: e.name || e.nm || e.ar || e.id || "بدون اسم",
+    ar: e.ar || e.name || e.nm || e.id || "بدون اسم",
+    id: e.id || e.nm || (e.name || "unknown").toLowerCase().replace(/\s+/g, "-"),
+    tags: Array.isArray(e.tags) ? e.tags : (defaults.tags || []),
+    links: (e.links && typeof e.links === "object") ? e.links : (defaults.links || {}),
+  };
+}
+
+/* ccCopyDrawerLink — copies the current drawer's full URL to clipboard. */
+function ccCopyDrawerLink(btn) {
+  const url = location.href;
+  const done = (ok) => {
+    if (typeof ccToast === "function") {
+      ccToast(ok ? "تم نسخ الرابط ✓" : "تعذّر النسخ — انسخ من شريط العنوان", ok ? "ok" : null);
+    }
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = ok ? "✓" : "✗";
+      setTimeout(() => { if (btn.isConnected) btn.textContent = orig; }, 1200);
+    }
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(url).then(() => done(true), () => done(false));
+  } else {
+    // Fallback for older browsers
+    const ta = document.createElement("textarea");
+    ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    ta.remove();
+  }
+}
+
+/* ccToast — small aria-live toast surface. Use ccToast('text') after any
+ * silent UI action (mark-reviewed, copy-link, save) so user gets feedback. */
+function ccToast(text, kind) {
+  let host = document.getElementById("cc-toast-host");
+  if (!host) {
+    host = document.createElement("div");
+    host.id = "cc-toast-host";
+    host.setAttribute("role", "status");
+    host.setAttribute("aria-live", "polite");
+    host.setAttribute("aria-atomic", "true");
+    document.body.appendChild(host);
+  }
+  const toast = document.createElement("div");
+  toast.className = "cc-toast" + (kind ? " cc-toast-" + kind : "");
+  toast.textContent = text;
+  host.appendChild(toast);
+  // Animate in next frame
+  requestAnimationFrame(() => toast.classList.add("is-show"));
+  setTimeout(() => {
+    toast.classList.remove("is-show");
+    setTimeout(() => toast.remove(), 220);
+  }, 2400);
+}
+
 /* ══════════════════════════════════════════════
    DESIGN SYSTEM — Smart Helpers
    ══════════════════════════════════════════════ */
@@ -1181,7 +1265,18 @@ function _setHashSilently(nextHash) {
     _suppressHash = false;
     return;
   }
+  // Use replaceState so we don't pollute browser history with duplicate
+  // entries (was causing back-button to need 2 presses to leave a drawer).
+  // history.replaceState doesn't fire hashchange, so no need for _suppressHash
+  // flag — but keep it set for the legacy fallback below.
   _suppressHash = true;
+  if (history.replaceState) {
+    try {
+      history.replaceState(history.state, "", normalized);
+      _suppressHash = false; // no hashchange will fire, clear immediately
+      return;
+    } catch (e) { /* fall through to legacy path */ }
+  }
   location.hash = normalized;
 }
 
@@ -4985,6 +5080,7 @@ function _codexShell(opts) {
     `<aside class="cx-panel" role="dialog" aria-modal="true" aria-labelledby="cx-title">` +
       `<header class="cx-cover">` +
         `<button class="cx-close" data-cx-close aria-label="إغلاق">×</button>` +
+        `<button class="cx-copy-link" type="button" aria-label="نسخ رابط هذا الكيان" title="نسخ الرابط" onclick="ccCopyDrawerLink(this)">🔗</button>` +
         `<div class="cx-cover-row">` +
           `<div class="cx-emoji">${_ic(emoji, 44)}</div>` +
           `<div class="cx-titles">` +
@@ -5688,6 +5784,11 @@ window.addEventListener("hashchange", function () {
           if (pill.dataset.ccClicked === "1") return;
           pill.dataset.ccClicked = "1";
           _setReview(entity.id);
+          // Visible confirmation — previously the pill flashed away/back
+          // silently, leaving user unsure if save worked.
+          if (typeof ccToast === "function") {
+            ccToast(`تم تحديث "${entity.ar || entity.name || entity.id}"`, "ok");
+          }
           // Pause observer so pill.remove() doesn't cascade into a redundant
           // decorate pass that the throttle would just block anyway.
           if (window.__ccFreshPause) window.__ccFreshPause();
