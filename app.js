@@ -880,7 +880,8 @@ function _rtStatusTokens(kind, id) {
 
 function _entityLookup(name) {
   if (!name) return null;
-  return (
+  // First try exact match (fast path, common case)
+  let hit = (
     PRJ.find((x) => x.name === name || x.ar === name) ||
     BOT.find((x) => x.name === name || x.ar === name) ||
     CLD.find((x) => x.nm === name) ||
@@ -888,6 +889,21 @@ function _entityLookup(name) {
     ARC.find((x) => x.name === name || x.ar === name) ||
     IDEAS.find((x) => x.name === name) ||
     SVC.find((x) => x.name === name) ||
+    null
+  );
+  if (hit) return hit;
+  // PHASE-5B: fall back to case-insensitive — shared links like
+  // #projects/libya (lowercased by user) used to silently fail.
+  const lc = name.toLowerCase();
+  const ci = (arr, ...keys) => arr.find((x) => keys.some((k) => (x[k] || "").toLowerCase() === lc));
+  return (
+    ci(PRJ, "name", "ar", "id") ||
+    ci(BOT, "name", "ar", "id") ||
+    ci(CLD, "nm", "id") ||
+    ci(TL, "name", "ar", "id") ||
+    ci(ARC, "name", "ar", "id") ||
+    ci(IDEAS, "name", "id") ||
+    ci(SVC, "name", "id") ||
     null
   );
 }
@@ -1508,7 +1524,11 @@ function init() {
   if (hashParts[1]) {
     const itemName = decodeURIComponent(hashParts[1]);
     if (_entityLookup(itemName)) {
-      setTimeout(() => openDetailSmart(itemName, hashParts[0]), 300);
+      // PHASE-5B: was setTimeout(300) — caused visible page-then-drawer
+      // flash on shared links. requestAnimationFrame waits exactly one
+      // paint frame, so the page lays out once and the drawer opens
+      // immediately on top, no visible flicker.
+      requestAnimationFrame(() => openDetailSmart(itemName, hashParts[0]));
     }
   }
 
@@ -1953,6 +1973,11 @@ R.home = function () {
       tone: "#10b981",
     });
   }
+
+  // PHASE-5B: rank briefs by SEVERITY (critical > warn > info), not insertion
+  // order — previously a 'survey reminder' could float above a 'high blocker'.
+  const _briefRank = { critical: 0, warn: 1, info: 2 };
+  briefs.sort((a, b) => (_briefRank[a.level] ?? 9) - (_briefRank[b.level] ?? 9));
 
   // pulse: الإيرادات الحية لكل مظلة
   const umbPulse = UMBRELLAS.map((u) => {

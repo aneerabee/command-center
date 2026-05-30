@@ -30,6 +30,7 @@
   --sh2: 0 10px 30px rgba(31, 37, 47, 0.08), 0 2px 6px rgba(31, 37, 47, 0.04);
   --sh3: 0 16px 48px rgba(31, 37, 47, 0.1), 0 4px 12px rgba(31, 37, 47, 0.05);
   --sh-xl: 0 24px 64px rgba(31, 37, 47, 0.14), 0 8px 20px rgba(31, 37, 47, 0.08);
+  --sh-pulse-green: 0 0 0 0 rgba(34, 197, 94, 0.5); /* 3 uses — button pulse rings */
 
   /* ── PHASE-3A: Design tokens — top-30 most-used colors ────────────
      Migrate inline hex to vars below. Sed-replace is safe for top-5
@@ -72,6 +73,42 @@
   --c-cream-elev:      #eeece8;       /* 5 uses */
   --c-cream-warm:      #e9e2d6;       /* 5 uses */
   --c-lilac-pale:      #ece6fb;       /* 5 uses */
+
+  /* ── Merged from former :root block @ L8208 ─────────────────────── */
+  /* Status semantic tokens */
+  --st-fresh: var(--c-success);
+  --st-recent: var(--c-brand-blue);
+  --st-ok: var(--c-brand-indigo);
+  --st-stale: var(--c-warn);
+  --st-critical: var(--c-danger);
+  --st-unknown: var(--c-text-soft);
+
+  /* Motion tokens — single source of truth */
+  --motion-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 8px spacing scale */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  /* ── Merged from former :root block @ L8685 ─────────────────────── */
+  /* Umbrella soft tints (8% alpha for backgrounds) */
+  --umb-etranex-soft: rgba(15, 118, 110, 0.08);
+  --umb-brix-soft: rgba(232, 69, 60, 0.08);
+  --umb-saas-soft: rgba(16, 185, 129, 0.08);
+  --umb-infra-soft: rgba(139, 92, 246, 0.08);
+
+  /* ── Merged from former :root block @ L9783 ─────────────────────── */
+  /* Spring/easing curves */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
 }
 
 /* ══════ BASE ══════ */
@@ -8205,29 +8242,7 @@ a.emp-field-val:hover { color: #6366f1; }
 /* ═══════════════════════════════════════════════
    DESIGN SYSTEM — Status & Motion Tokens
    ═══════════════════════════════════════════════ */
-:root {
-  /* حالات دلالية */
-  --st-fresh: var(--c-success);
-  --st-recent: #0ea5e9;
-  --st-ok: #6366f1;
-  --st-stale: #f59e0b;
-  --st-critical: #ef4444;
-  --st-unknown: var(--c-text-soft);
-
-  /* drives انفعال الأزرار */
-  --motion-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
-  --motion-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --motion-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* مقياس مسافات 8px */
-  --s1: 4px;
-  --s2: 8px;
-  --s3: 12px;
-  --s4: 16px;
-  --s5: 24px;
-  --s6: 32px;
-  --s7: 48px;
-}
+/* (former :root block — merged into main @ top of file) */
 /* نقطة حية نابضة عامة */
 .cc-pulse-dot {
   display: inline-block;
@@ -8682,13 +8697,7 @@ a.emp-field-val:hover { color: #6366f1; }
    ═══════════════════════════════════════════════ */
 
 /* تخفيف ألوان المظلات لتقليل التشتت — نسخة هادئة */
-:root {
-  --umb-etranex-soft: rgba(15, 118, 110, 0.08);
-  --umb-brix-soft: rgba(232, 69, 60, 0.08);
-  --umb-saas-soft: rgba(16, 185, 129, 0.08);
-  --umb-infra-soft: rgba(139, 92, 246, 0.08);
-}
-
+/* (former :root block — merged into main @ top of file) */
 /* جميع الأقسام تستخدم نفس مستوى الظل والحواف */
 .cc-greet, .cc-brief, .cc-pulse, .cc-feed, .cc-sug,
 .umb-card, .emp-card, .prj-card,
@@ -9780,12 +9789,7 @@ button, input, select, textarea {
    ═══════════════════════════════════════════════════════════ */
 
 /* Spring easing tokens */
-:root {
-  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
-  --ease-out: cubic-bezier(.16, 1, .3, 1);
-  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
-}
-
+/* (former :root block — merged into main @ top of file) */
 /* ── 1. Aurora background (Linear-style subtle gradient) ── */
 .cc-aurora {
   position: relative;
@@ -10069,11 +10073,11 @@ button, input, select, textarea {
 .svc-item .svc-status.svc-on {
   background: #22C55E;
   position: relative;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  box-shadow: var(--sh-pulse-green);
   animation: cc-svc-pulse 2.2s ease-out infinite;
 }
 @keyframes cc-svc-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+  0%   { box-shadow: var(--sh-pulse-green); }
   70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
   100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
@@ -10716,7 +10720,7 @@ button, input, select, textarea {
   width: 6px; height: 6px;
   border-radius: 50%;
   background: #22C55E;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  box-shadow: var(--sh-pulse-green);
   animation: cc-svc-pulse 2.2s ease-out infinite;
 }
 .mod-card-status.is-off {
