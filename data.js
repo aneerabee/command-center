@@ -1237,7 +1237,7 @@ const PRJ = [
   },
   {
     name: "ADREEM",
-    id: "mohammad-ledger",
+    id: "adreem",
     kind: "financial-ledger",
     ar: "أدريم — الدفتر المالي",
     st: "a",
@@ -1257,10 +1257,10 @@ const PRJ = [
     summary:
       "ADREEM — دفتر مالي تشغيلي مستقل للويب وTelegram Bot. يعتمد على React 19 + Supabase + API معزول + بوت Telegram بنفس منطق الدفتر.",
     local_path:
-      "/Users/rabeeshaban/Developer/mohammad-ledger",
+      "/Users/rabeeshaban/Developer/adreem",
     server_path: "/home/argaz/apps/adreem",
-    repo_url: "https://github.com/aneerabee/mohammad-ledger",
-    deploy_url: "https://aneerabee.github.io/mohammad-ledger/",
+    repo_url: "https://github.com/aneerabee/adreem",
+    deploy_url: "https://aneerabee.github.io/adreem/",
     stack: [
       "React 19",
       "Vite 8",
@@ -1292,25 +1292,25 @@ const PRJ = [
     related_tools: ["Claude Code"],
     related_cloud: ["GitHub", "Supabase", "Telegram", "Contabo VPS"],
     ops: [
-      "المستودع الرسمي المنفصل موجود: aneerabee/mohammad-ledger",
-      "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/mohammad-ledger/",
-      "رابط خيارات التصميم الجذري يعمل: https://aneerabee.github.io/mohammad-ledger/adreem-redesign-options.html",
+      "المستودع الرسمي المنفصل موجود: aneerabee/adreem",
+      "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/adreem/",
+      "رابط خيارات التصميم الجذري يعمل: https://aneerabee.github.io/adreem/adreem-redesign-options.html",
       "ADREEM API العام يعمل عبر Caddy: https://www.brixtravel.com/adreem-api/health",
-      "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/mohammad-ledger",
-      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit 1fd067b",
+      "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/adreem",
+      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit 56422d4",
       "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
       "تم حذف بقايا محمد من western-office في commit 42cdddd بتاريخ 2026-05-23 مع بقاء نسخة أمان: backup/western-before-mohammad-removal-d30cc74",
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
       "آخر تحقق قوي 2026-05-31: npm run lint وnpm test وnpm run build نجحت محليًا، 103 اختبار ناجح، واختبارات البوت والمنطق المشترك 29/29، ورابط التصميم رجع 200",
-      "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit 758cfeb: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
+      "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit 758cfeb: adreem-api.service active و adreem-bot.service active، والبوت القديم legacy mohammad-ledger-bot.service inactive لمنع تضارب polling",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
     separation_status: "separate-github-repo-live-local-worktree",
-    separation_note: "الفصل الرسمي أصبح GitHub + رابط + مسار محلي مستقل: aneerabee/mohammad-ledger و /mohammad-ledger/ و /Users/rabeeshaban/Developer/mohammad-ledger. تم تنظيف western-office من ملفات ومسارات محمد في commit 42cdddd بعد إنشاء فرع أمان مستقل.",
+    separation_note: "الفصل الرسمي أصبح GitHub + رابط + مسار محلي مستقل: aneerabee/adreem و /adreem/ و /Users/rabeeshaban/Developer/adreem. تم تنظيف western-office من ملفات ومسارات محمد في commit 42cdddd بعد إنشاء فرع أمان مستقل.",
     desc: "ADREEM — دفتر مالي للهاتف والويب والبوت\n\n🎯 الهدف:\nنظام مالي مستقل لكل مستخدم، يفصل الدفاتر بصرامة، ويجعل الإدخال والمراجعة من الهاتف أو Telegram بنفس المنطق ونفس مصدر البيانات.\n\n💰 نموذج الحسابات:\nشخص أو جهة: علاقة مالية واضحة، إما أقبض منه أو أدفع له\nمالي كاش: مال نقدي مملوك، مع تحديد العملة دينار/دولار\nمالي مصرفي: حساب أو محفظة أو بطاقة مصرفية، مع تحديد العملة دينار/دولار\nأصل: شيء مملوك له قيمة ويمكن تتبع مصاريفه وإيراداته\nمشروع/مركز تكلفة: نشاط له دخل ومصاريف وربح/خسارة\nمصروف: تكلفة نهائية تخصم من حساب مالي ولا تُعامل كشخص\n\n🔄 الحركات:\nتحويل عادي بين حسابين متوافقين في النوع والعملة\nمصروف من حساب واحد بدون طرف ثانٍ\nبيع/شراء دولار بسعر صرف، والكسر يظهر في السعر فقط\nتصحيح/رصيد افتتاحي/مراجعة بدون ترك حركة مؤثرة ناقصة\nربط اختياري بمشروع/أصل، مرفق كرابط/مرجع، وتكرار شهري يدوي يمنع تكرار نفس الشهر\n\n📊 التشغيل:\nتقرير ربح/خسارة للمشروع أو الأصل بالدينار والدولار\nمطابقة رصيد فعلية تسجل تاريخ المطابقة وتنتج تصحيحًا عند وجود فرق\nتنبيهات للحركات الناقصة، الحسابات غير المصنفة، الفروقات، والحركات المتكررة المستحقة\nنسخ محلية تلقائية بدون تعقيد واجهة، مع استرجاع داخلي آمن للاختبار أو الطوارئ\n\n🧠 المنطق المشترك:\nالويب والبوت يستخدمان نفس accountConfig وmovementAccounts وaccountCompatibility وledgerCore للحركات الأساسية\nالعملة صفة للحركة والحساب وليست اسمًا عشوائيًا\nلا تحويل من نفس الحساب لنفس الحساب\nلا تحويل بين أنواع غير متوافقة داخل التحويل العادي\nكل حركة تعرض التأثير قبل الحفظ ثم تحفظ عبر ADREEM API أو Telegram repository\nالأرقام تعرض بفواصل آلاف وبدون كسور إلا أسعار الصرف ومعدلات التحويل\n\n📱 الواجهة:\nأربع مناطق فقط: إدخال سريع، الأرصدة، الحركات، مراجعة\nالهاتف هو الأولوية، والخطوات متتابعة بدل نموذج مزدحم\nالأرصدة تعرض بتمييز: مالي، أقبض، أدفع، أصول، مصروفات، مراجعة\n\n🤖 Telegram Bot:\nمساعد إدخال ومراجعة، لا نسخة ويب مصغرة\nخطوة واحدة في كل مرة، رجوع وإلغاء، ملخص قبل الحفظ، ومنع تكرار الحفظ\nيدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS\n\n🛡️ الأمان:\nGitHub Pages لا يحمل مفاتيح Supabase\nالويب السحابي يمر عبر ADREEM API فقط\nAPI يستخدم SUPABASE_SERVICE_ROLE_KEY على السيرفر فقط\nRLS في ml_state مغلق بدون سياسات anon بعد تطبيق schema.sql\nتنبيه: لا تشغّل Claude telegram plugin بالتوازي مع البوت حتى لا تختلط ردود Terminal مع الدردشة",
     tags: [
       "React 19",
@@ -1324,11 +1324,11 @@ const PRJ = [
       "GitHub Pages",
       "Idempotency",
     ],
-    path: "/Users/rabeeshaban/Developer/mohammad-ledger",
+    path: "/Users/rabeeshaban/Developer/adreem",
     links: {
-      التطبيق: "https://aneerabee.github.io/mohammad-ledger/",
+      التطبيق: "https://aneerabee.github.io/adreem/",
       API: "https://www.brixtravel.com/adreem-api/health",
-      GitHub: "https://github.com/aneerabee/mohammad-ledger",
+      GitHub: "https://github.com/aneerabee/adreem",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
       Telegram: "https://t.me/SystemAzol_bot",
     },
@@ -1342,20 +1342,20 @@ const PRJ = [
     current_status: {
       updated: "2026-05-31",
       where:
-        "ADREEM منشور على GitHub Pages من commit 1fd067b. Workflow 26713738975 نجح: test + build + deploy. الرابط الحي يعمل، ورابط خيارات التصميم يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. اختبارات البوت والمنطق المشترك نجحت محليًا، أما تشغيل البوت المحلي المباشر يتطلب TELEGRAM_BOT_TOKEN خارج Git.",
+        "ADREEM منشور على GitHub Pages من commit 56422d4. Workflow 26715599212 نجح: test + build + deploy. الرابط الحي يعمل، ورابط خيارات التصميم يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. اختبارات البوت والمنطق المشترك نجحت محليًا، أما تشغيل البوت المحلي المباشر يتطلب TELEGRAM_BOT_TOKEN خارج Git.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
       use_guide:
-        "للاستخدام اليومي: افتح https://aneerabee.github.io/mohammad-ledger/ مع ledger_token الخاص بك أو استخدم https://t.me/SystemAzol_bot. خيارات التصميم: https://aneerabee.github.io/mohammad-ledger/adreem-redesign-options.html. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/mohammad-ledger فقط، ثم npm run lint وnpm test وnpm run build قبل الدفع.",
+        "للاستخدام اليومي: افتح https://aneerabee.github.io/adreem/ مع ledger_token الخاص بك أو استخدم https://t.me/SystemAzol_bot. خيارات التصميم: https://aneerabee.github.io/adreem/adreem-redesign-options.html. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/adreem فقط، ثم npm run lint وnpm test وnpm run build قبل الدفع.",
     },
     claude_session: {
-      session_name: "[mohammad ledger telegram bot]",
+      session_name: "[ADREEM telegram bot]",
       terminal: "Codex / Core Shell",
-      cwd: "/Users/rabeeshaban/Developer/mohammad-ledger",
+      cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
-        "cd /Users/rabeeshaban/Developer/mohammad-ledger && claude",
-      note: "آخر نقطة 2026-05-31: ADREEM محدّث في GitHub إلى commit 1fd067b، رابط التصميم منشور، والاختبارات المحلية والبناء والنشر نجحت.",
+        "cd /Users/rabeeshaban/Developer/adreem && claude",
+      note: "آخر نقطة 2026-05-31: ADREEM محدّث في GitHub إلى commit 56422d4، رابط التصميم منشور، والاختبارات المحلية والبناء والنشر نجحت.",
     },
   },
   {
@@ -1597,7 +1597,7 @@ const SVC = [
   {
     name: "ADREEM Bot Service",
     ar: "خدمة بوت ADREEM",
-    id: "mohammad-ledger-bot-svc",
+    id: "adreem-bot-svc",
     st: 1,
     em: "📒",
     host: "Contabo VPS",
@@ -1834,7 +1834,7 @@ const AUTO = [
         name: "Mohammad Ledger Bot (محلي — معطّل فعليًّا)",
         freq: "KeepAlive (لكن spawn فاشل)",
         on: false,
-        what: "⚠ launchd loaded لكن آخر تشغيل خرج بـ exit code 1. WorkingDirectory يَشير إلى مسار iCloud قديم (/Users/rabeeshaban/Documents/New project/western-office) ربّما مُفرَّغ. النسخة الإنتاجيّة الحقيقيّة تعمل على Contabo (mohammad-ledger-bot.service). يَنبغي إزالة هذا plist أو تَحديث WorkingDirectory.",
+        what: "⚠ launchd loaded لكن آخر تشغيل خرج بـ exit code 1. WorkingDirectory يَشير إلى مسار iCloud قديم (/Users/rabeeshaban/Documents/New project/western-office) ربّما مُفرَّغ. النسخة الإنتاجيّة الحقيقيّة تعمل على Contabo (legacy mohammad-ledger-bot.service). يَنبغي إزالة هذا plist أو تَحديث WorkingDirectory.",
         prj: ["ADREEM"],
         path: "/Users/rabeeshaban/Library/LaunchAgents/com.rabeeshaban.mohammad-ledger-bot.plist",
         kind: "bot",
@@ -2111,7 +2111,7 @@ const BOT = [
   },
   {
     name: "ADREEM Bot",
-    id: "mohammad-ledger-bot",
+    id: "adreem-bot",
     kind: "telegram-bot",
     ar: "بوت ADREEM",
     st: "a",
@@ -2122,7 +2122,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo بعد تحديث الكود إلى commit 758cfeb. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo بعد تحديث الكود إلى commit 758cfeb. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2132,7 +2132,7 @@ const BOT = [
     related_entities: ["ADREEM", "Supabase", "GitHub", "Contabo VPS"],
     summary:
       "بوت Telegram لـADREEM لإدخال الحركات ومراجعة الحسابات والسجل من الهاتف، ويستخدم نفس ملفات المنطق التي يستخدمها الويب.",
-    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist مفعّل عبر ADREEM_TELEGRAM_USER_IDS\nعزل المستخدم عبر ADREEM_TELEGRAM_LEDGER_IDS إلى دفتر main\nالبوت القديم mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري موجودة في web/core، وتحتاج Wizard بوت كامل لاحقًا.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
+    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist مفعّل عبر ADREEM_TELEGRAM_USER_IDS\nعزل المستخدم عبر ADREEM_TELEGRAM_LEDGER_IDS إلى دفتر main\nالبوت القديم legacy mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري موجودة في web/core، وتحتاج Wizard بوت كامل لاحقًا.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
     tags: [
       "Telegram",
       "Node.js",
@@ -2146,7 +2146,7 @@ const BOT = [
       "No Webhook",
     ],
     path: "server:/home/argaz/apps/adreem/server/telegram/bot.js",
-    local_path: "/Users/rabeeshaban/Developer/mohammad-ledger/server/telegram/bot.js",
+    local_path: "/Users/rabeeshaban/Developer/adreem/server/telegram/bot.js",
     service_path:
       "server:/home/argaz/.config/systemd/user/adreem-bot.service",
     config_paths: [
@@ -2158,7 +2158,7 @@ const BOT = [
     related_projects: ["ADREEM"],
     links: {
       Telegram: "https://t.me/SystemAzol_bot",
-      GitHub: "https://github.com/aneerabee/mohammad-ledger",
+      GitHub: "https://github.com/aneerabee/adreem",
       "ADREEM API": "https://www.brixtravel.com/adreem-api/health",
       "Telegram Bot API": "https://core.telegram.org/bots",
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-31T13:22:23.820Z",
+  "generated_at": "2026-05-31T14:44:05.264Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -92,8 +92,8 @@
       "current_status": "2026-05-23",
       "_root": "2026-05-23"
     },
-    "mohammad-ledger": {
-      "links": "2026-05-25",
+    "adreem": {
+      "links": "2026-05-31",
       "links_desc": "2026-05-25",
       "current_status": "2026-05-31",
       "claude_session": "2026-05-31",
@@ -110,8 +110,8 @@
     "libya-web": {
       "_root": "2026-05-15"
     },
-    "mohammad-ledger-bot-svc": {
-      "_root": "2026-05-25"
+    "adreem-bot-svc": {
+      "_root": "2026-05-31"
     },
     "adreem-api": {
       "_root": "2026-05-27"
@@ -138,7 +138,7 @@
       "_root": "2026-05-12"
     },
     "desktop-github": {
-      "_root": "2026-05-27"
+      "_root": "2026-05-31"
     },
     "server-wapy": {
       "_root": "2026-05-27"
@@ -158,10 +158,10 @@
     "claude-code-bot": {
       "_root": "2026-05-15"
     },
-    "mohammad-ledger-bot": {
-      "links": "2026-05-25",
+    "adreem-bot": {
+      "links": "2026-05-31",
       "current_status": "2026-05-26",
-      "_root": "2026-05-26"
+      "_root": "2026-05-31"
     },
     "brixprice-bot": {
       "links": "2026-05-12",
