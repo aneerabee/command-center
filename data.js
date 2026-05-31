@@ -1294,15 +1294,16 @@ const PRJ = [
     ops: [
       "المستودع الرسمي المنفصل موجود: aneerabee/mohammad-ledger",
       "الرابط الرسمي المنفصل يعمل: https://aneerabee.github.io/mohammad-ledger/",
+      "رابط خيارات التصميم الجذري يعمل: https://aneerabee.github.io/mohammad-ledger/adreem-redesign-options.html",
       "ADREEM API العام يعمل عبر Caddy: https://www.brixtravel.com/adreem-api/health",
       "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/mohammad-ledger",
-      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit 758cfeb",
+      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit 1fd067b",
       "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
       "تم حذف بقايا محمد من western-office في commit 42cdddd بتاريخ 2026-05-23 مع بقاء نسخة أمان: backup/western-before-mohammad-removal-d30cc74",
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
-      "آخر تحقق قوي 2026-05-26: npm run lint وnpm test وnpm run build نجحت محليًا بعد ميزات التشغيل: 102 اختبار ناجح، وفحص Playwright للهاتف والكمبيوتر بلا overflow أو clipping",
+      "آخر تحقق قوي 2026-05-31: npm run lint وnpm test وnpm run build نجحت محليًا، 103 اختبار ناجح، واختبارات البوت والمنطق المشترك 29/29، ورابط التصميم رجع 200",
       "تشغيل Contabo مؤكد بعد تحديث السيرفر إلى commit 758cfeb: adreem-api.service active و adreem-bot.service active، والبوت القديم mohammad-ledger-bot.service inactive لمنع تضارب polling",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
@@ -1339,14 +1340,14 @@ const PRJ = [
       Telegram: "بوت ADREEM الحي على Contabo",
     },
     current_status: {
-      updated: "2026-05-26",
+      updated: "2026-05-31",
       where:
-        "ADREEM منشور على GitHub Pages من commit 758cfeb. Workflow 26420729617 نجح لنشر ميزات hardening، ثم دُفع commit 758cfeb لحماية ملفات env. كود السيرفر يعمل على Contabo في /home/argaz/apps/adreem ومحدّث إلى 758cfeb. adreem-api.service و adreem-bot.service active، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. runtime verifier نجح: env كامل، health 200، وقراءة ledger عبر API نجحت.",
+        "ADREEM منشور على GitHub Pages من commit 1fd067b. Workflow 26713738975 نجح: test + build + deploy. الرابط الحي يعمل، ورابط خيارات التصميم يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. اختبارات البوت والمنطق المشترك نجحت محليًا، أما تشغيل البوت المحلي المباشر يتطلب TELEGRAM_BOT_TOKEN خارج Git.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
       use_guide:
-        "للاستخدام اليومي: افتح https://aneerabee.github.io/mohammad-ledger/ مع ledger_token الخاص بك أو استخدم https://t.me/SystemAzol_bot. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/mohammad-ledger فقط، ثم npm run lint وnpm test وnpm run build قبل الدفع.",
+        "للاستخدام اليومي: افتح https://aneerabee.github.io/mohammad-ledger/ مع ledger_token الخاص بك أو استخدم https://t.me/SystemAzol_bot. خيارات التصميم: https://aneerabee.github.io/mohammad-ledger/adreem-redesign-options.html. للتطوير المحلي استخدم /Users/rabeeshaban/Developer/mohammad-ledger فقط، ثم npm run lint وnpm test وnpm run build قبل الدفع.",
     },
     claude_session: {
       session_name: "[mohammad ledger telegram bot]",
@@ -1354,7 +1355,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/mohammad-ledger",
       command:
         "cd /Users/rabeeshaban/Developer/mohammad-ledger && claude",
-      note: "آخر نقطة 2026-05-26: ADREEM محدّث في GitHub والسيرفر إلى commit 758cfeb. المراحل 6-12 موثقة في docs/adreem-implementation-progress.md، والنشر/السيرفر تحققا بنجاح.",
+      note: "آخر نقطة 2026-05-31: ADREEM محدّث في GitHub إلى commit 1fd067b، رابط التصميم منشور، والاختبارات المحلية والبناء والنشر نجحت.",
     },
   },
   {
