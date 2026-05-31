@@ -1297,7 +1297,7 @@ const PRJ = [
       "رابط خيارات التصميم الجذري يعمل: https://aneerabee.github.io/adreem/adreem-redesign-options.html",
       "ADREEM API العام يعمل عبر Caddy: https://www.brixtravel.com/adreem-api/health",
       "مجلد العمل المحلي المستقل أصبح: /Users/rabeeshaban/Developer/adreem",
-      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit ffc7588",
+      "هوية ADREEM مطبقة في الكود والواجهة والبوت، وGitHub Pages أعيد بناؤه بنجاح من commit f1dd59d",
       "تم إنشاء فرع أمان قبل التنظيف: backup/mohammad-before-cleanup-d30cc74",
       "تم حذف بقايا محمد من western-office في commit 42cdddd بتاريخ 2026-05-23 مع بقاء نسخة أمان: backup/western-before-mohammad-removal-d30cc74",
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
@@ -1305,8 +1305,8 @@ const PRJ = [
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS",
       "آخر تحقق قوي 2026-05-31: npm test نجح بـ104 اختبارات، npm run lint نجح، npm run build نجح، وفحص Chrome/CDP للهاتف والكمبيوتر بدون horizontal overflow",
       "اختبار سيناريوهات منطقي بعد آخر تعديل نجح: 29 تحقق لمسارات التحويل والمصروف والدخل وبيع/شراء الدولار وفلاتر عملة الحسابات",
-      "GitHub Pages منشور من commit ffc7588 عبر Workflow 26717101871، والرابط الحي ورابط خيارات التصميم رجعا 200",
-      "تشغيل Contabo آخر تأكيد له كان على commit 758cfeb: adreem-api.service active و adreem-bot.service active، لكن تحديث السيرفر إلى ffc7588 لم يتم من هذه الجلسة بسبب رفض SSH لكلمة المرور المتاحة",
+      "GitHub Pages منشور من commit f1dd59d عبر Workflow 26717595556، والرابط الحي ورابط خيارات التصميم رجعا 200",
+      "تشغيل Contabo آخر تأكيد له كان على commit 758cfeb: adreem-api.service active و adreem-bot.service active، لكن تحديث السيرفر إلى f1dd59d لم يتم من هذه الجلسة بسبب رفض SSH لكلمة المرور المتاحة",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
@@ -1344,7 +1344,7 @@ const PRJ = [
     current_status: {
       updated: "2026-05-31",
       where:
-        "ADREEM منشور على GitHub Pages من commit ffc7588. Workflow 26717101871 نجح: test + build + deploy. الرابط الحي يعمل، ورابط خيارات التصميم يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجحت 104 اختبارات، lint، build، وفحص Chrome/CDP للهاتف والكمبيوتر بدون overflow. تنبيه: السيرفر/البوت على Contabo آخر نسخة مؤكدة لهما 758cfeb إلى أن يتم دخول SSH صحيح وتحديثهما.",
+        "ADREEM منشور على GitHub Pages من commit f1dd59d. Workflow 26717595556 نجح: test + build + deploy. الرابط الحي يعمل، ورابط خيارات التصميم يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجحت 104 اختبارات، lint، build، وفحص Chrome/CDP للهاتف والكمبيوتر بدون overflow. تنبيه: السيرفر/البوت على Contabo آخر نسخة مؤكدة لهما 758cfeb إلى أن يتم دخول SSH صحيح وتحديثهما.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1357,7 +1357,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر نقطة 2026-05-31: ADREEM محدّث في GitHub إلى commit ffc7588، رابط التصميم منشور، Pocket Ledger محسّن، والاختبارات المحلية والبناء والنشر نجحت.",
+      note: "آخر نقطة 2026-05-31: ADREEM محدّث في GitHub إلى commit f1dd59d، رابط التصميم منشور، Pocket Ledger محسّن، والاختبارات المحلية والبناء والنشر نجحت.",
     },
   },
   {
@@ -2124,7 +2124,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo من آخر نسخة مؤكدة commit 758cfeb. كود البوت المحلي/GitHub وصل إلى ffc7588، لكن تحديث Contabo لم يتم في فحص 2026-05-31 بسبب Permission denied عبر SSH. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo من آخر نسخة مؤكدة commit 758cfeb. كود البوت المحلي/GitHub وصل إلى f1dd59d، لكن تحديث Contabo لم يتم في فحص 2026-05-31 بسبب Permission denied عبر SSH. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2168,7 +2168,7 @@ const BOT = [
     current_status: {
       updated: "2026-05-31",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد 758cfeb. adreem-bot.service active وadreem-api.service active حسب آخر فحص سيرفر ناجح. الكود الأحدث في GitHub هو ffc7588 ويحتوي تحسينات Pocket Ledger للبوت، لكن تحديث السيرفر إليها لم يكتمل من هذه الجلسة بسبب Permission denied في SSH.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد 758cfeb. adreem-bot.service active وadreem-api.service active حسب آخر فحص سيرفر ناجح. الكود الأحدث في GitHub هو f1dd59d ويحتوي تحسينات Pocket Ledger للبوت، لكن تحديث السيرفر إليها لم يكتمل من هذه الجلسة بسبب Permission denied في SSH.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
