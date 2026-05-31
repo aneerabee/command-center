@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-31T14:44:05.264Z",
+  "generated_at": "2026-05-31T15:50:32.644Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -160,7 +160,7 @@
     },
     "adreem-bot": {
       "links": "2026-05-31",
-      "current_status": "2026-05-26",
+      "current_status": "2026-05-31",
       "_root": "2026-05-31"
     },
     "brixprice-bot": {
