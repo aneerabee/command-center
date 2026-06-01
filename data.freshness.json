@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-01T05:21:14.274Z",
+  "generated_at": "2026-06-01T19:11:21.731Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -111,10 +111,10 @@
       "_root": "2026-05-15"
     },
     "adreem-bot-svc": {
-      "_root": "2026-05-31"
+      "_root": "2026-06-01"
     },
     "adreem-api": {
-      "_root": "2026-05-27"
+      "_root": "2026-06-01"
     },
     "cc-runtime-publish": {
       "_root": "2026-05-12"
@@ -250,7 +250,7 @@
       "_root": "2026-05-30"
     },
     "contabo-vps": {
-      "_root": "2026-05-30"
+      "_root": "2026-06-01"
     },
     "cloudflare": {
       "_root": "2026-05-30"
