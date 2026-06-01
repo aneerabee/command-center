@@ -1306,7 +1306,7 @@ const PRJ = [
       "آخر تحقق قوي 2026-06-01: npm test نجح بـ112 اختبارًا، npm run lint نجح، npm run build نجح، وفحص Chrome/CDP للهاتف والكمبيوتر بدون horizontal overflow",
       "اختبار سيناريوهات منطقي بعد آخر تعديل نجح: 29 تحقق لمسارات التحويل والمصروف والدخل وبيع/شراء الدولار وفلاتر عملة الحسابات",
       "GitHub Pages منشور من الريبو الرسمي aneerabee/adreem، والرابط الحي هو https://aneerabee.github.io/adreem/",
-      "تشغيل Contabo مؤكد على commit 2be93b2: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل",
+      "تشغيل Contabo مؤكد على commit 561450e: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env بصيغة hashed web tokens: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تم تحويل ADREEM_WEB_LEDGER_TOKENS في السيرفر إلى تعليق، واعتماد ADREEM_WEB_LEDGER_TOKEN_HASHES مع ADREEM_RUNTIME_TEST_TOKEN للفحص الداخلي",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
@@ -1345,7 +1345,7 @@ const PRJ = [
     current_status: {
       updated: "2026-06-01",
       where:
-        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 112 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit 2be93b2، والخدمتان active، وverify:runtime نجح بعد تحويل web ledger tokens إلى hash.",
+        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 112 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit 561450e، والخدمتان active، وverify:runtime نجح بعد تحويل web ledger tokens إلى hash، وأداة ops:create-ledger-access أصبحت متاحة لإضافة دفاتر مستقلة.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1358,7 +1358,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر نقطة 2026-06-01: ADREEM محدّث في GitHub وعلى Contabo إلى commit 2be93b2، وتم تثبيت hashed web ledger tokens، وadreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
+      note: "آخر نقطة 2026-06-01: ADREEM محدّث في GitHub وعلى Contabo إلى commit 561450e، وتم تثبيت hashed web ledger tokens، وadreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
     },
   },
   {
@@ -2125,7 +2125,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo من commit 2be93b2. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo من commit 561450e. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist مفعّل لمستخدم Telegram المحدد. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2169,7 +2169,7 @@ const BOT = [
     current_status: {
       updated: "2026-06-01",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد 2be93b2. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-01، وverify:runtime نجح بعد اعتماد hashed web ledger tokens.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد 561450e. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-01، وverify:runtime نجح بعد اعتماد hashed web ledger tokens، وأداة توليد دفاتر مستقلة متاحة على السيرفر.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
