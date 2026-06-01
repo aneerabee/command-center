@@ -1303,13 +1303,14 @@ const PRJ = [
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS وسجل مستخدمين ديناميكي",
-      "آخر تحقق قوي 2026-06-01: npm test نجح بـ116 اختبارًا، npm run lint نجح، npm run build نجح، وفحص Chrome/CDP للهاتف والكمبيوتر بدون horizontal overflow",
+      "آخر تحقق قوي 2026-06-01: npm test نجح بـ117 اختبارًا، npm run lint نجح، npm run build نجح، وفحص Chrome/CDP للهاتف والكمبيوتر بدون horizontal overflow",
       "اختبار سيناريوهات منطقي بعد آخر تعديل نجح: 29 تحقق لمسارات التحويل والمصروف والدخل وبيع/شراء الدولار وفلاتر عملة الحسابات",
       "GitHub Pages منشور من الريبو الرسمي aneerabee/adreem، والرابط الحي هو https://aneerabee.github.io/adreem/",
-      "تشغيل Contabo مؤكد على commit 275b3d7: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل",
+      "تشغيل Contabo مؤكد على commit d5f84a1: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env بصيغة hashed web tokens: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تم تحويل ADREEM_WEB_LEDGER_TOKENS في السيرفر إلى تعليق، واعتماد ADREEM_WEB_LEDGER_TOKEN_HASHES مع ADREEM_RUNTIME_TEST_TOKEN للفحص الداخلي",
       "تم تفعيل ADREEM_TELEGRAM_ADMIN_IDS وADREEM_TELEGRAM_USERS_FILE حتى يضيف صاحب النظام مستخدمين مستقلين من البوت عبر /adduser",
+      "أمر /adduser يولد الآن رابط ويب خاص للمستخدم، والـ API يقرأ hash الرابط من registry بدون تعديل env أو restart",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
@@ -1346,7 +1347,7 @@ const PRJ = [
     current_status: {
       updated: "2026-06-01",
       where:
-        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 116 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit 275b3d7، والخدمتان active، وverify:runtime نجح. البوت يدعم الآن إضافة مستخدمين مستقلين من داخله عبر /adduser مع ملف registry على السيرفر.",
+        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 117 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit d5f84a1، والخدمتان active، وverify:runtime نجح. البوت يدعم الآن إضافة مستخدمين مستقلين من داخله عبر /adduser ويولد رابط ويب خاصًا لنفس الدفتر.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1359,7 +1360,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر نقطة 2026-06-01: ADREEM محدّث في GitHub وعلى Contabo إلى commit 275b3d7، وتم تثبيت hashed web ledger tokens وTelegram user registry. adreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
+      note: "آخر نقطة 2026-06-01: ADREEM محدّث في GitHub وعلى Contabo إلى commit d5f84a1، وتم تثبيت hashed web ledger tokens وTelegram user registry مع روابط ويب ديناميكية من /adduser. adreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
     },
   },
   {
@@ -2126,7 +2127,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo من commit 275b3d7. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/admin registry مفعّلان. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo من commit d5f84a1. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/admin registry مفعّلان. /adduser يضيف المستخدم للبوت ويولد له رابط ويب خاصًا. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2136,7 +2137,7 @@ const BOT = [
     related_entities: ["ADREEM", "Supabase", "GitHub", "Contabo VPS"],
     summary:
       "بوت Telegram لـADREEM لإدخال الحركات ومراجعة الحسابات والسجل من الهاتف، ويستخدم نفس ملفات المنطق التي يستخدمها الويب.",
-    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user من آخر نسخة سيرفر مؤكدة\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist مفعّل عبر ADREEM_TELEGRAM_USER_IDS\nعزل المستخدم عبر ADREEM_TELEGRAM_LEDGER_IDS إلى دفتر main\nإضافة مستخدم مستقل من البوت متاحة للأدمن عبر /adduser TELEGRAM_ID LEDGER_ID\nملف المستخدمين الديناميكي: /home/argaz/apps/adreem/adreem-telegram-users.json\nالبوت القديم legacy mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nقائمة رئيسية متناسقة مع Receipt OS: إدخال سريع، الأرصدة، السجل، مراجعة، حساب جديد، بحث\nشاشات البوت تستخدم عناوين ADREEM · المنطقة مثل الأرصدة وسجل اليوم والسجل والمراجعة\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري موجودة في web/core، وتحتاج Wizard بوت كامل لاحقًا.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
+    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user من آخر نسخة سيرفر مؤكدة\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist مفعّل عبر ADREEM_TELEGRAM_USER_IDS\nعزل المستخدم عبر ADREEM_TELEGRAM_LEDGER_IDS إلى دفتر main\nإضافة مستخدم مستقل من البوت متاحة للأدمن عبر /adduser TELEGRAM_ID LEDGER_ID\n/adduser يولد رابط ويب خاصًا لنفس ledgerId، ويحفظ hash الرابط فقط في registry\nملف المستخدمين الديناميكي: /home/argaz/apps/adreem/adreem-telegram-users.json\nالبوت القديم legacy mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nقائمة رئيسية متناسقة مع Receipt OS: إدخال سريع، الأرصدة، السجل، مراجعة، حساب جديد، بحث\nشاشات البوت تستخدم عناوين ADREEM · المنطقة مثل الأرصدة وسجل اليوم والسجل والمراجعة\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nالمشاريع/الأصول، المرفقات، المطابقة، والتكرار الشهري موجودة في web/core، وتحتاج Wizard بوت كامل لاحقًا.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
     tags: [
       "Telegram",
       "Node.js",
@@ -2170,7 +2171,7 @@ const BOT = [
     current_status: {
       updated: "2026-06-01",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد 275b3d7. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-01، وverify:runtime نجح بعد اعتماد hashed web ledger tokens. إضافة مستخدم مستقل من البوت متاحة عبر /adduser، وملف registry موجود وعدده الحالي 0 مستخدمين إضافيين.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد d5f84a1. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-01، وverify:runtime نجح بعد اعتماد hashed web ledger tokens. إضافة مستخدم مستقل من البوت متاحة عبر /adduser، وتنتج رابط ويب خاصًا لنفس الدفتر، وملف registry موجود وعدده الحالي 0 مستخدمين إضافيين.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
