@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-31T20:52:30.339Z",
+  "generated_at": "2026-06-01T05:21:14.274Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -95,9 +95,9 @@
     "adreem": {
       "links": "2026-05-31",
       "links_desc": "2026-05-25",
-      "current_status": "2026-05-31",
-      "claude_session": "2026-05-31",
-      "_root": "2026-05-31"
+      "current_status": "2026-06-01",
+      "claude_session": "2026-06-01",
+      "_root": "2026-06-01"
     },
     "libya": {
       "links": "2026-05-23",
@@ -160,8 +160,8 @@
     },
     "adreem-bot": {
       "links": "2026-05-31",
-      "current_status": "2026-05-31",
-      "_root": "2026-05-31"
+      "current_status": "2026-06-01",
+      "_root": "2026-06-01"
     },
     "brixprice-bot": {
       "links": "2026-05-12",
