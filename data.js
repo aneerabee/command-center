@@ -1304,15 +1304,15 @@ const PRJ = [
       "مصدر البيانات المستهدف: صفوف ADREEM معزولة داخل Supabase ml_state عبر row id مثل adreem:adreem:main",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS وسجل مستخدمين ديناميكي",
-      "آخر تحقق قوي 2026-06-02: npm test نجح بـ124 اختبارًا، npm run lint نجح، npm run build نجح، وفحص السيرفر runtime نجح بعد تحميل adreem.env",
+      "آخر تحقق قوي 2026-06-02: npm test نجح بـ126 اختبارًا، npm run lint نجح، npm run build نجح، وفحص السيرفر runtime نجح بعد تحميل adreem.env",
       "اختبار سيناريوهات منطقي بعد آخر تعديل نجح: 29 تحقق لمسارات التحويل والمصروف والدخل وبيع/شراء الدولار وفلاتر عملة الحسابات",
       "GitHub Pages منشور من الريبو الرسمي aneerabee/adreem، والرابط الحي هو https://aneerabee.github.io/adreem/",
-      "تشغيل Contabo مؤكد على commit c6a77ba: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل عبر systemd user",
+      "تشغيل Contabo مؤكد على commit ae6e168: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل عبر systemd user",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env بصيغة hashed web tokens: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تم تحويل ADREEM_WEB_LEDGER_TOKENS في السيرفر إلى تعليق، واعتماد ADREEM_WEB_LEDGER_TOKEN_HASHES مع ADREEM_RUNTIME_TEST_TOKEN للفحص الداخلي",
       "تم تفعيل ADREEM_TELEGRAM_ADMIN_IDS وADREEM_TELEGRAM_USERS_FILE حتى يضيف صاحب النظام مستخدمين مستقلين من البوت عبر /adduser",
       "أمر /adduser يولد الآن رابط ويب خاص للمستخدم، والـ API يقرأ hash الرابط من registry بدون تعديل env أو restart",
-      "قسم مراجعة البوت صار عمليًا: يعرض عناصر المراجعة بأرقام، يلغي الحركة الناقصة بدون تغيير الأرصدة، يخفي حساب المراجعة الصفري فقط، ويفتح Wizard لإصلاح حساب المراجعة واعتماده بنفس تصنيفات الويب",
+      "قسم مراجعة البوت صار عمليًا: يعرض عناصر المراجعة بأرقام، يلغي الحركة الناقصة بدون تغيير الأرصدة، يخفي حساب المراجعة الصفري فقط، ويفتح Wizard لإصلاح حساب المراجعة وحركة المراجعة واعتمادهما بنفس منطق الويب",
       "تمت هجرة آمنة من الصف القديم إلى adreem:adreem:main مع إبقاء legacy كاحتياط، واختبار PUT /api/ledger نجح بمصدر api-save",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
@@ -1349,7 +1349,7 @@ const PRJ = [
     current_status: {
       updated: "2026-06-02",
       where:
-        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 124 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit c6a77ba، والخدمتان active، وverify:runtime نجح. البوت يدعم إضافة مستخدمين مستقلين عبر /adduser وروابط ويب خاصة، وقسم المراجعة في البوت يستطيع إلغاء الحركات الناقصة وإخفاء الحسابات الصفرية وإصلاح حسابات المراجعة بنفس Wizard الحسابات.",
+        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 126 اختبارًا، lint، build. السيرفر/البوت على Contabo محدّثان إلى commit ae6e168، والخدمتان active، وverify:runtime نجح. البوت يدعم إضافة مستخدمين مستقلين عبر /adduser وروابط ويب خاصة، وقسم المراجعة في البوت يستطيع إلغاء الحركات الناقصة وإخفاء الحسابات الصفرية وإصلاح حسابات وحركات المراجعة بنفس Wizards الإدخال.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1362,7 +1362,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر نقطة 2026-06-02: ADREEM محدّث في GitHub وعلى Contabo إلى commit c6a77ba. hashed web ledger tokens وTelegram user registry وروابط /adduser تعمل. تمت إضافة إدارة مراجعة آمنة من البوت للحركات الناقصة والحسابات الصفرية وإصلاح حسابات المراجعة. adreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
+      note: "آخر نقطة 2026-06-02: ADREEM محدّث في GitHub وعلى Contabo إلى commit ae6e168. hashed web ledger tokens وTelegram user registry وروابط /adduser تعمل. تمت إضافة إدارة مراجعة آمنة من البوت للحركات الناقصة والحسابات الصفرية وإصلاح حسابات وحركات المراجعة. adreem-api.service وadreem-bot.service يعملان. npm run lint وnpm test وnpm run build نجحت.",
     },
   },
   {
@@ -2129,7 +2129,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo من commit c6a77ba. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/admin registry مفعّلان. /adduser يضيف المستخدم للبوت ويولد له رابط ويب خاصًا. قسم المراجعة في البوت أصبح يدير الحركات الناقصة والحسابات الصفرية وإصلاح حسابات المراجعة بأمان. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo من commit ae6e168. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/admin registry مفعّلان. /adduser يضيف المستخدم للبوت ويولد له رابط ويب خاصًا. قسم المراجعة في البوت أصبح يدير الحركات الناقصة والحسابات الصفرية وإصلاح حسابات وحركات المراجعة بأمان. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2173,7 +2173,7 @@ const BOT = [
     current_status: {
       updated: "2026-06-02",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد c6a77ba. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-02، وverify:runtime نجح بعد تحميل adreem.env واعتماد hashed web ledger tokens. إضافة مستخدم مستقل من البوت متاحة عبر /adduser، وتنتج رابط ويب خاصًا لنفس الدفتر. قسم المراجعة في البوت صار يدعم إلغاء الحركة الناقصة وإخفاء حساب المراجعة الصفري وإصلاح حساب المراجعة من نفس Wizard الحسابات.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من آخر commit مؤكد ae6e168. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-02، وverify:runtime نجح بعد تحميل adreem.env واعتماد hashed web ledger tokens. إضافة مستخدم مستقل من البوت متاحة عبر /adduser، وتنتج رابط ويب خاصًا لنفس الدفتر. قسم المراجعة في البوت صار يدعم إلغاء الحركة الناقصة وإخفاء حساب المراجعة الصفري وإصلاح حساب وحركة المراجعة من نفس Wizards الإدخال.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة وتوسيع Wizard البوت للمشاريع والمرفقات والمطابقة لاحقًا.",
       use_guide:
