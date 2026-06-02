@@ -1,6 +1,6 @@
 {
-  "checked_at": "2026-06-02T13:09:33Z",
-  "checked_at_local": "2026-06-02 16:09:33 +03",
+  "checked_at": "2026-06-02T13:24:40Z",
+  "checked_at_local": "2026-06-02 16:24:40 +03",
   "ok": true,
   "reachable": true,
   "metrics": {
@@ -9,7 +9,7 @@
     "wapy_backup_age_h": 12,
     "docker_running": 3,
     "svc_failed": 0,
-    "load_1m": "0.08"
+    "load_1m": "0.00"
   },
   "alerts": []
 }
