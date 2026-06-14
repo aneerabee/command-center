@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-14T20:52:02.996Z",
+  "generated_at": "2026-06-14T23:11:36.146Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -122,6 +122,9 @@
     "wapy-app": {
       "_root": "2026-05-12"
     },
+    "brixtravel-caddy": {
+      "_root": "2026-06-14"
+    },
     "wapy-cron": {
       "_root": "2026-05-12"
     },
@@ -172,10 +175,10 @@
       "_root": "2026-06-14"
     },
     "codex-cli": {
-      "_root": "2026-04-05"
+      "_root": "2026-06-14"
     },
     "claude-code": {
-      "_root": "2026-04-05"
+      "_root": "2026-06-14"
     },
     "runtime-sync-system": {
       "_root": "2026-05-25"
@@ -184,7 +187,7 @@
       "_root": "2026-04-16"
     },
     "github-tool": {
-      "_root": "2026-04-05"
+      "_root": "2026-06-14"
     },
     "tailscale-tool": {
       "_root": "2026-05-12"
@@ -223,10 +226,10 @@
       "_root": "2026-04-05"
     },
     "drizzle-orm": {
-      "_root": "2026-05-22"
+      "_root": "2026-06-14"
     },
     "github": {
-      "_root": "2026-05-30"
+      "_root": "2026-06-14"
     },
     "supabase": {
       "_root": "2026-06-14"
@@ -244,13 +247,13 @@
       "_root": "2026-05-20"
     },
     "airtable": {
-      "_root": "2026-05-12"
+      "_root": "2026-06-14"
     },
     "telegram": {
       "_root": "2026-05-30"
     },
     "contabo-vps": {
-      "_root": "2026-06-01"
+      "_root": "2026-06-14"
     },
     "cloudflare": {
       "_root": "2026-05-30"
@@ -259,25 +262,25 @@
       "_root": "2026-05-20"
     },
     "icloud-drive": {
-      "_root": "2026-05-12"
+      "_root": "2026-06-14"
     },
     "perplexity": {
       "_root": "2026-05-20"
     },
     "firecrawl": {
-      "_root": "2026-05-12"
+      "_root": "2026-06-14"
     },
     "notion": {
       "_root": "2026-05-20"
     },
     "tailscale": {
-      "_root": "2026-05-30"
+      "_root": "2026-06-14"
     },
     "trongrid": {
-      "_root": "2026-05-12"
+      "_root": "2026-06-14"
     },
     "coingecko": {
-      "_root": "2026-05-12"
+      "_root": "2026-06-14"
     },
     "exchanger": {
       "_root": "2026-04-05"

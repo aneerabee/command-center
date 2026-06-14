@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-14T20:50:57.917Z",
+  "generated_at": "2026-06-14T23:10:42.089Z",
   "entities": {
     "brix-travel-system": {
       "kind": "project",
@@ -241,6 +241,14 @@
       "port_http": {
         "port": "3000",
         "status": 0
+      }
+    },
+    "brixtravel-caddy": {
+      "kind": "service",
+      "name": "BRIX Caddy Proxy",
+      "port_http": {
+        "port": "80/443",
+        "status": 308
       }
     },
     "wapy-cron": {
