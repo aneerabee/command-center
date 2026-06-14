@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-30T20:37:57.091Z",
+  "generated_at": "2026-06-14T20:50:57.917Z",
   "entities": {
     "brix-travel-system": {
       "kind": "project",
@@ -148,24 +148,24 @@
         "ok": true
       },
       "local_path": {
-        "value": "/Users/rabeeshaban/Documents/New project/western-office",
+        "value": "/Users/rabeeshaban/iCloud Drive (Archive)/Documents/New project/western-office",
         "exists": true
       }
     },
-    "mohammad-ledger": {
+    "adreem": {
       "kind": "project",
       "name": "ADREEM",
       "repo_url": {
-        "value": "https://github.com/aneerabee/mohammad-ledger",
+        "value": "https://github.com/aneerabee/adreem",
         "exists": true
       },
       "deploy_url": {
-        "value": "https://aneerabee.github.io/mohammad-ledger/",
+        "value": "https://aneerabee.github.io/adreem/",
         "status": 200,
         "ok": true
       },
       "local_path": {
-        "value": "/Users/rabeeshaban/Developer/mohammad-ledger",
+        "value": "/Users/rabeeshaban/Developer/adreem",
         "exists": true
       },
       "server_path": {
@@ -182,11 +182,28 @@
       },
       "deploy_url": {
         "value": "http://62.171.128.44:3001",
-        "status": 200,
+        "status": 307,
         "ok": true
       },
       "server_path": {
         "value": "/home/argaz/apps/libya",
+        "exists": true
+      }
+    },
+    "dr-muhsen": {
+      "kind": "project",
+      "name": "Dr. Muhsen Ledger",
+      "deploy_url": {
+        "value": "http://100.116.69.101:3500",
+        "status": 200,
+        "ok": true
+      },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Developer/dr-muhsen",
+        "exists": true
+      },
+      "server_path": {
+        "value": "/home/argaz/dr-muhsen",
         "exists": true
       }
     },
@@ -195,10 +212,10 @@
       "name": "LIBYA Web Service",
       "port_http": {
         "port": "3001",
-        "status": 200
+        "status": 307
       }
     },
-    "mohammad-ledger-bot-svc": {
+    "adreem-bot-svc": {
       "kind": "service",
       "name": "ADREEM Bot Service",
       "port_http": {
@@ -263,6 +280,14 @@
       "name": "Tailscale VPN",
       "port_http": {
         "port": "—",
+        "status": 0
+      }
+    },
+    "dr-muhsen-svc": {
+      "kind": "service",
+      "name": "Dr. Muhsen Ledger Service",
+      "port_http": {
+        "port": "3500 (Tailscale فقط) → 3001 داخل الحاوية",
         "status": 0
       }
     },
@@ -350,7 +375,7 @@
       "kind": "bot",
       "name": "Claude Code Bot"
     },
-    "mohammad-ledger-bot": {
+    "adreem-bot": {
       "kind": "bot",
       "name": "ADREEM Bot"
     },
