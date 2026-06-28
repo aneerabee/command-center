@@ -387,6 +387,8 @@ const PRJ = [
     ],
     path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
     links: {
+      "🚀 لوحة BRIX الكاملة":
+        "https://aneerabee.github.io/command-center/brix.html",
       "النظام الحي":
         "https://brix-hotel-web-app-production.up.railway.app",
       "البحث عن أسعار":
@@ -410,6 +412,8 @@ const PRJ = [
         "https://htmlpreview.github.io/?https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/reports/booking_accounting_blueprint_jun28.html",
     },
     links_desc: {
+      "🚀 لوحة BRIX الكاملة":
+        "اللوحة المخصّصة الكاملة لهذا المشروع — التتبّع وكلّ الخطّة والتاريخ ودورة الحجز والمحاسبة في مكان واحد بهوية مستقلّة. ابدأ من هنا.",
       "الخطّة المرجعيّة الجامعة":
         "مصدر الحقيقة الوحيد — كلّ ما في النظام + التاريخ + الخطّة الـ٨ خطوات + الدروس + فهرس أين يعيش كلّ شيء. اقرأها أوّلاً.",
       "مخطّط الحجز والمحاسبة":
