@@ -10,19 +10,19 @@
 <style>
 :root{
   --bg:#0a0c10;--bg2:#0f1218;--panel:#141821;--panel2:#1a1f2a;--ink:#eef2f7;--mute:#94a2b3;--faint:#62707f;--line:#232a36;
-  --brix:#E8453C;--brix2:#ff6a5f;--gold:#e6b53f;--ok:#26c281;--warn:#e0922f;--must:#e8453c;--info:#3e9ae0;--acc:#15c08a;
+  --brix:#13a06b;--brix2:#43d39a;--gold:#e6b53f;--ok:#26c281;--warn:#e0922f;--must:#e8453c;--info:#3e9ae0;--acc:#15c08a;
   --shadow:0 1px 2px rgba(0,0,0,.55),0 18px 50px rgba(0,0,0,.45);--r:16px;
 }
 [data-theme="light"]{--bg:#eef1f6;--bg2:#e8ecf2;--panel:#fff;--panel2:#f6f8fb;--ink:#141922;--mute:#566273;--faint:#8a96a6;--line:#e2e7ee;--shadow:0 1px 3px rgba(20,30,50,.07),0 14px 40px rgba(20,30,50,.09);}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased;
   background:radial-gradient(130% 90% at 100% -5%,color-mix(in srgb,var(--brix) 13%,transparent),transparent 50%),radial-gradient(100% 70% at 0% 0%,color-mix(in srgb,var(--info) 7%,transparent),transparent 45%),var(--bg)}
-code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.85em;color:var(--brix2)}[data-theme="light"] code{color:#b8362e}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.85em;color:var(--brix2)}[data-theme="light"] code{color:#0a6b47}
 #prog{position:fixed;top:0;inset-inline:0;height:3px;z-index:9999;background:transparent}#prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brix),var(--gold))}
 .wrap{display:grid;grid-template-columns:280px 1fr;max-width:1360px;margin:0 auto}
 .side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:22px 16px;border-inline-start:1px solid var(--line);backdrop-filter:blur(6px)}
 .logo{display:flex;align-items:center;gap:11px;margin-bottom:4px}
-.logo .mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brix),#a81f18);display:grid;place-items:center;font-size:21px;box-shadow:0 8px 22px color-mix(in srgb,var(--brix) 45%,transparent)}
+.logo .mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brix),#0a5a3c);display:grid;place-items:center;font-size:21px;box-shadow:0 8px 22px color-mix(in srgb,var(--brix) 45%,transparent)}
 .logo b{font-size:18px;letter-spacing:.4px;display:block;line-height:1.1}.logo .sub{font-size:10px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:700}
 .side .meta{font-size:11.5px;color:var(--mute);margin:8px 2px 14px;padding-bottom:13px;border-bottom:1px solid var(--line)}
 .nav{list-style:none;margin:0;padding:0;font-size:13.5px}
@@ -36,8 +36,8 @@ code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.85em;color:var(--bri
 main{padding:24px 34px 90px;min-width:0}
 /* ===== MISSION HEADER ===== */
 .mission{position:relative;border-radius:22px;padding:26px 28px;overflow:hidden;border:1px solid color-mix(in srgb,var(--brix) 24%,var(--line));box-shadow:var(--shadow);
-  background:linear-gradient(135deg,#16100e,#1f0f0e 55%,#250d0c)}
-[data-theme="light"] .mission{background:linear-gradient(135deg,#fff,#fff4f3 55%,#ffeae8)}
+  background:linear-gradient(135deg,#0a1411,#0c1d17 55%,#082a1f)}
+[data-theme="light"] .mission{background:linear-gradient(135deg,#fff,#eefaf4 55%,#e2f6ec)}
 .mission .top{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start}
 .mission .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brix2);font-weight:700}
 .mission h1{font-size:25px;margin:.3em 0 .15em;line-height:1.25}
@@ -188,7 +188,7 @@ html.embedded .mission{border-radius:18px}
             <div class="sub">نظام تسعير وحجز فنادق B2B يعمل رسميّاً. هذه اللوحة هي المكان الواحد: تتبّعٌ ذكيٌّ حيّ + المرجع الكامل، لا شيء منسيّ.</div>
             <div style="margin-top:11px;display:flex;gap:8px;flex-wrap:wrap">
               <span class="pulse"><span class="dot"></span> حيٌّ · v15.5 · HTTP 200</span>
-              <span class="holding">🔴 BRIX Red — أعلى صرفٍ ودخلٍ وأثرٍ في المحفظة</span>
+              <span class="holding">🟢 الأخضر — هويّة المشروع · أعلى صرفٍ ودخلٍ وأثرٍ في المحفظة</span>
             </div>
           </div>
           <div class="gauges">
@@ -295,6 +295,10 @@ html.embedded .mission{border-radius:18px}
             <a class="lnk" href="https://github.com/aneerabee/brix-travel-system" target="_blank"><span class="i">💻</span><div><div class="t">GitHub</div><div class="d">الكود</div></div></a>
             <a class="lnk" href="https://github.com/aneerabee/brix-backups" target="_blank"><span class="i">🛡️</span><div><div class="t">النسخ اليوميّة</div><div class="d">تابعها أسبوعيّاً</div></div></a>
             <a class="lnk" href="https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/SYSTEM_MASTER_PLAN.md" target="_blank"><span class="i">📖</span><div><div class="t">الوثيقة المرجعيّة</div><div class="d">النسخة النصّيّة الكاملة</div></div></a>
+            <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app/contract-wizard" target="_blank"><span class="i">📝</span><div><div class="t">إدخال عقد جديد</div><div class="d">٨ خطوات (تسجيل دخول)</div></div></a>
+            <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app/contracts" target="_blank"><span class="i">📋</span><div><div class="t">قائمة العقود</div><div class="d">مراجعة/تعديل/حذف</div></div></a>
+            <a class="lnk" href="https://github.com/aneerabee/brix-travel-system/actions/workflows/daily-contract-backup.yml" target="_blank"><span class="i">🟢</span><div><div class="t">آخر تشغيل نسخ</div><div class="d">أخضر=نجح، أحمر=فشل</div></div></a>
+            <a class="lnk" href="https://htmlpreview.github.io/?https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/reports/booking_accounting_blueprint_jun28.html" target="_blank"><span class="i">🧾</span><div><div class="t">مخطّط الحجز والمحاسبة</div><div class="d">التصميم التفصيليّ الكامل</div></div></a>
           </div>
         </div>
         <div class="resume">
@@ -350,6 +354,15 @@ total = Σ كلّ ليلة بسعر فترتها</div>
           <tr><td>مجالات أخرى</td><td><code>wo_*</code> (دفتر تحويلات، ٧، ٢٥٧ تحويلاً)·<code>telegram_*</code> (٦) — فصل لاحق</td></tr>
         </table>
         ٢٧ أساسيّاً + ١٣ = ٤٠ بالتمام. لا <code>libya_*</code>. المخزن: bucket <code>hotel-contracts</code>.
+      </div></details>
+      <details class="acc"><summary><span>🧬</span> الأنظمة الفرعيّة · التشغيل · مكوّنات البوت<span class="arr">▾</span></summary><div class="inner">
+        <strong>الأنظمة الفرعيّة:</strong>
+        <div class="chips" style="margin:6px 0"><span class="chip">pricing-engine</span><span class="chip">contract-wizard</span><span class="chip">contract-edit</span><span class="chip">results-ui</span><span class="chip">api-layer</span><span class="chip">alerts-dashboard</span><span class="chip">telegram-bot</span><span class="chip">time-machine</span><span class="chip">daily-backup</span></div>
+        <strong>التشغيل (CI/CD والنسخ):</strong>
+        <ul class="t"><li>GitHub Actions يبني + يختبر (٢٤٧٣/٢٤٧٣) + يَنشر على Railway تلقائيّاً عند كلّ push على main (يعمل من ٢٠ مايو بعد إصلاح npm→pnpm).</li><li>Supabase مصدر الحقيقة الوحيد (منذ v15.0). النسخ اليوميّ ٠٣:٠٠ UTC إلى brix-backups — NDJSON مُجزّأ + gzip + sha256 + canary + مقارنة يوم-بيوم + تنبيه تلغرام عند نقص &gt;١٠٪.</li></ul>
+        <strong>مكوّنات البوت:</strong>
+        <div class="chips" style="margin:6px 0"><span class="chip">api.ts</span><span class="chip">auth.ts</span><span class="chip">calendar.ts</span><span class="chip">i18n.ts</span><span class="chip">invites.ts</span><span class="chip">menus.ts</span><span class="chip">formatter.ts</span><span class="chip">sessions.ts</span><span class="chip">user-admin.ts</span><span class="chip">hotel-resolver.ts</span></div>
+        <strong>سحابة وخدمات مرتبطة:</strong> GitHub · Supabase · Railway · Telegram (@BrixPrice_bot).
       </div></details>
     </section>
 
