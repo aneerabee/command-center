@@ -4459,9 +4459,9 @@ function openProjectDetail(name) {
     { label: "الروابط", value: String(Object.keys(links).length) },
   ];
 
-  const overview =
-    (item.custom_page ? `<div style="margin:0 0 16px"><iframe src="${E(item.custom_page)}" loading="lazy" title="BRIX Cockpit" style="width:100%;height:80vh;border:1px solid #262d38;border-radius:14px;background:#0c0e12;display:block"></iframe><div style="text-align:center;margin-top:6px"><a href="${E(item.custom_page)}" target="_blank" rel="noopener" style="font-size:12px;color:#9aa6b4;text-decoration:none">↗ فتح اللوحة في صفحة كاملة</a></div></div>` : "") +
-    _entityTrustBox(item, "project") +
+  const overview = item.custom_page
+    ? `<div style="margin:0"><iframe src="${E(item.custom_page)}" loading="lazy" title="BRIX Mission Control" style="width:100%;height:86vh;border:1px solid #232a36;border-radius:16px;background:#0a0c10;display:block"></iframe><div style="text-align:center;margin-top:8px"><a href="${E(item.custom_page)}" target="_blank" rel="noopener" style="font-size:12px;color:#94a2b3;text-decoration:none">↗ فتح في صفحة كاملة</a></div></div>`
+    : (_entityTrustBox(item, "project") +
     _currentStatusCard(item) +
     _botFeaturesCard(item) +
     _claudeSessionCard(item) +
@@ -4472,7 +4472,7 @@ function openProjectDetail(name) {
     (!item.stack?.length && tags.length
       ? `<div class="cx-group-heading">الوسوم</div>` +
         `<div class="cx-chips">${tags.map((t) => `<span class="cx-chip">${E(t)}</span>`).join("")}</div>`
-      : "");
+      : ""));
 
   const details = _cxSectionsFromParsed(sections) || _cxEmpty("لا توجد أقسام تفصيلية", "📭");
 

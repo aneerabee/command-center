@@ -3,123 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BRIX — مركز القيادة</title>
+<title>BRIX — Mission Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0c0e12; --bg2:#12151b; --panel:#161a22; --panel2:#1c2129; --ink:#eef2f6; --mute:#9aa6b4; --line:#262d38;
-  --brix:#E8453C; --brix2:#ff6a5f; --gold:#e0b341; --ok:#22b06b; --warn:#e0922f; --must:#e8453c; --info:#3b8ed6; --acc:#11765a;
-  --shadow:0 1px 2px rgba(0,0,0,.5),0 14px 40px rgba(0,0,0,.4); --radius:16px;
+  --bg:#0a0c10;--bg2:#0f1218;--panel:#141821;--panel2:#1a1f2a;--ink:#eef2f7;--mute:#94a2b3;--faint:#62707f;--line:#232a36;
+  --brix:#E8453C;--brix2:#ff6a5f;--gold:#e6b53f;--ok:#26c281;--warn:#e0922f;--must:#e8453c;--info:#3e9ae0;--acc:#15c08a;
+  --shadow:0 1px 2px rgba(0,0,0,.55),0 18px 50px rgba(0,0,0,.45);--r:16px;
 }
-[data-theme="light"]{
-  --bg:#f3f5f8; --bg2:#eef1f5; --panel:#ffffff; --panel2:#f7f9fb; --ink:#161a20; --mute:#5a6573; --line:#e3e8ee;
-  --shadow:0 1px 3px rgba(20,30,50,.06),0 12px 36px rgba(20,30,50,.08);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:
-  radial-gradient(120% 80% at 100% 0%, color-mix(in srgb,var(--brix) 10%,transparent), transparent 55%),
-  var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.72;font-size:15px;-webkit-font-smoothing:antialiased}
-code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.85em;color:var(--brix2)}
-[data-theme="light"] code{color:#b8362e}
-#prog{position:fixed;inset-block-start:0;inset-inline:0;height:3px;z-index:9999;background:transparent}
-#prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brix),var(--gold))}
-.wrap{display:grid;grid-template-columns:286px 1fr;max-width:1340px;margin:0 auto}
-.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:24px 18px;border-inline-start:1px solid var(--line)}
-.logo{display:flex;align-items:center;gap:11px;margin-bottom:3px}
-.logo .mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--brix),#b3271f);display:grid;place-items:center;font-size:20px;box-shadow:0 6px 18px color-mix(in srgb,var(--brix) 40%,transparent)}
-.logo b{font-size:18px;letter-spacing:.5px}
-.logo .sub{font-size:11px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
-.side .meta{font-size:12px;color:var(--mute);margin:6px 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.nav{list-style:none;margin:0;padding:0;font-size:13.7px}
-.nav .grp{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute);margin:14px 10px 5px;opacity:.7}
-.nav a{display:flex;gap:9px;align-items:center;text-decoration:none;color:var(--mute);padding:7px 11px;border-radius:9px;transition:.16s}
-.nav a .n{font-family:"IBM Plex Mono";font-size:11px;opacity:.6;min-width:16px}
+[data-theme="light"]{--bg:#eef1f6;--bg2:#e8ecf2;--panel:#fff;--panel2:#f6f8fb;--ink:#141922;--mute:#566273;--faint:#8a96a6;--line:#e2e7ee;--shadow:0 1px 3px rgba(20,30,50,.07),0 14px 40px rgba(20,30,50,.09);}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(130% 90% at 100% -5%,color-mix(in srgb,var(--brix) 13%,transparent),transparent 50%),radial-gradient(100% 70% at 0% 0%,color-mix(in srgb,var(--info) 7%,transparent),transparent 45%),var(--bg)}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.85em;color:var(--brix2)}[data-theme="light"] code{color:#b8362e}
+#prog{position:fixed;top:0;inset-inline:0;height:3px;z-index:9999;background:transparent}#prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brix),var(--gold))}
+.wrap{display:grid;grid-template-columns:280px 1fr;max-width:1360px;margin:0 auto}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:22px 16px;border-inline-start:1px solid var(--line);backdrop-filter:blur(6px)}
+.logo{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+.logo .mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brix),#a81f18);display:grid;place-items:center;font-size:21px;box-shadow:0 8px 22px color-mix(in srgb,var(--brix) 45%,transparent)}
+.logo b{font-size:18px;letter-spacing:.4px;display:block;line-height:1.1}.logo .sub{font-size:10px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+.side .meta{font-size:11.5px;color:var(--mute);margin:8px 2px 14px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.nav{list-style:none;margin:0;padding:0;font-size:13.5px}
+.nav .grp{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin:14px 10px 5px;font-weight:700}
+.nav a{display:flex;gap:9px;align-items:center;text-decoration:none;color:var(--mute);padding:7px 11px;border-radius:9px;transition:.15s}
+.nav a .n{font-family:"IBM Plex Mono";font-size:11px;opacity:.55;min-width:15px}
 .nav a:hover{background:color-mix(in srgb,var(--brix) 10%,transparent);color:var(--ink)}
-.nav a.active{background:color-mix(in srgb,var(--brix) 16%,transparent);color:var(--brix2);font-weight:600}
+.nav a.active{background:color-mix(in srgb,var(--brix) 17%,transparent);color:var(--brix2);font-weight:600}
 [data-theme="light"] .nav a.active{color:var(--brix)}
-.themebtn{margin-top:18px;width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:11px;padding:8px;cursor:pointer;font-family:inherit;font-size:12.5px}
-main{padding:26px 36px 90px;min-width:0}
-.hero{position:relative;border-radius:20px;padding:30px 30px 26px;overflow:hidden;
-  background:linear-gradient(135deg,#1b1410,#221013 60%,#2a0f0d);border:1px solid color-mix(in srgb,var(--brix) 26%,var(--line));box-shadow:var(--shadow)}
-[data-theme="light"] .hero{background:linear-gradient(135deg,#fff,#fff5f4 60%,#ffeceb)}
-.hero .tag{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brix2);font-weight:700}
-.hero h1{font-size:27px;margin:.3em 0 .25em;line-height:1.3}
-.hero p{margin:0;color:var(--mute);max-width:74ch;font-size:14.5px}
-.hero .holding{display:inline-block;margin-top:12px;font-size:12px;background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 34%,transparent);padding:4px 12px;border-radius:30px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:11px;margin:16px 0}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.themebtn{margin-top:16px;width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:11px;padding:9px;cursor:pointer;font-family:inherit;font-size:12.5px}
+main{padding:24px 34px 90px;min-width:0}
+/* ===== MISSION HEADER ===== */
+.mission{position:relative;border-radius:22px;padding:26px 28px;overflow:hidden;border:1px solid color-mix(in srgb,var(--brix) 24%,var(--line));box-shadow:var(--shadow);
+  background:linear-gradient(135deg,#16100e,#1f0f0e 55%,#250d0c)}
+[data-theme="light"] .mission{background:linear-gradient(135deg,#fff,#fff4f3 55%,#ffeae8)}
+.mission .top{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.mission .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brix2);font-weight:700}
+.mission h1{font-size:25px;margin:.3em 0 .15em;line-height:1.25}
+.mission .sub{color:var(--mute);font-size:13.5px;max-width:52ch}
+.mission .holding{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-size:11.5px;background:color-mix(in srgb,var(--gold) 15%,transparent);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);padding:4px 11px;border-radius:30px}
+.pulse{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);border:1px solid color-mix(in srgb,var(--ok) 26%,transparent);padding:5px 12px;border-radius:30px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 70%,transparent);animation:pp 2s infinite}
+@keyframes pp{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.gauges{display:flex;gap:14px}
+.gauge{text-align:center}
+.gauge svg{width:96px;height:96px;transform:rotate(-90deg)}
+.gauge .bgc{fill:none;stroke:color-mix(in srgb,var(--ink) 12%,transparent);stroke-width:9}
+.gauge .fgc{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dasharray 1.2s cubic-bezier(.4,0,.2,1)}
+.gauge .v{position:relative;margin-top:-62px;font-family:"IBM Plex Mono";font-size:21px;font-weight:600}
+.gauge .l{font-size:11px;color:var(--mute);margin-top:28px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px;margin:16px 0 0}
+.tile{background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--line);border-radius:13px;padding:12px 14px;position:relative;overflow:hidden}
 .tile::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:3px;background:var(--brix)}
-.tile b{display:block;font-size:23px;font-family:"IBM Plex Mono";color:var(--ink);font-weight:600}
-.tile span{font-size:11.5px;color:var(--mute)}
-.tile.live b{color:var(--ok)} .tile.warn b{color:var(--warn)}
-section{padding:28px 0 6px;border-top:1px solid var(--line);margin-top:12px;scroll-margin-top:14px}
-section:first-of-type{border-top:none}
-h2.s{font-size:20px;margin:0 0 3px;display:flex;align-items:center;gap:11px}
-h2.s .hn{font-family:"IBM Plex Mono";font-size:13px;color:#fff;background:var(--brix);width:28px;height:28px;display:grid;place-items:center;border-radius:8px;flex:none}
-.lead{color:var(--mute);font-size:14px;margin:.2em 0 1em}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:17px 19px;margin:11px 0;box-shadow:var(--shadow)}
-.card h3{margin:0 0 .5em;font-size:15.5px;color:var(--brix2)}
-[data-theme="light"] .card h3{color:var(--brix)}
-.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:13px}
-.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px}
-.callout{border-inline-start:4px solid var(--gold);background:color-mix(in srgb,var(--gold) 9%,var(--panel));padding:12px 16px;border-radius:11px;margin:11px 0;font-size:14px}
-.callout.must{border-color:var(--must);background:color-mix(in srgb,var(--must) 10%,var(--panel))}
-.callout.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--panel))}
-.pre{background:#080a0d;color:#d7efe4;border:1px solid #1a2129;border-radius:11px;padding:13px 15px;overflow-x:auto;font-family:"IBM Plex Mono";font-size:12.4px;line-height:1.7;direction:ltr;text-align:left}
-.pre .c{color:#6fae93}.pre .g{color:#e0b341}.pre .r{color:#ff8a80}
-ul.t{margin:.4em 0;padding-inline-start:1.25em}ul.t li{margin:.32em 0}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.chip{background:color-mix(in srgb,var(--brix) 8%,var(--panel));border:1px solid var(--line);border-radius:30px;padding:3px 10px;font-size:11.5px;color:var(--ink)}
-.chip.gold{background:color-mix(in srgb,var(--gold) 15%,transparent);border-color:color-mix(in srgb,var(--gold) 32%,transparent);color:var(--gold);font-weight:600}
-.chip.new{background:color-mix(in srgb,var(--acc) 16%,transparent);color:#3ec79a;border-color:color-mix(in srgb,var(--acc) 32%,transparent)}
-.chip.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
-table.t{width:100%;border-collapse:collapse;margin:11px 0;font-size:13px}
-table.t th,table.t td{border:1px solid var(--line);padding:7px 10px;text-align:start;vertical-align:top}
-table.t th{background:color-mix(in srgb,var(--brix) 9%,var(--panel));color:var(--brix2);font-weight:600;font-size:12.5px}
-[data-theme="light"] table.t th{color:var(--brix)}
-/* tracking widgets */
-.statusbar{display:grid;grid-template-columns:1.6fr 1fr;gap:13px;margin:12px 0}
-@media(max-width:760px){.statusbar{grid-template-columns:1fr}}
-.where{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
-.where .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brix2);font-weight:700;margin-bottom:6px}
-.where .next{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.5px}
-.resume{background:linear-gradient(160deg,color-mix(in srgb,var(--acc) 12%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--acc) 24%,var(--line));border-radius:14px;padding:16px 18px}
-.resume .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#3ec79a;font-weight:700;margin-bottom:8px}
-.resume .kv{font-size:12.7px;margin:3px 0;color:var(--mute)} .resume .kv b{color:var(--ink);font-weight:600}
-.block{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:10px;padding:10px 13px;margin:7px 0}
-.block.high{border-inline-start-color:var(--must)} .block.med{border-inline-start-color:var(--warn)}
-.block .p{font-size:10px;font-weight:700;color:#fff;border-radius:5px;padding:2px 7px;flex:none;height:fit-content}
-.block.high .p{background:var(--must)} .block.med .p{background:var(--warn)}
-.block .x{font-size:13.5px}
-.dec{display:flex;gap:11px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:9px 0;box-shadow:var(--shadow)}
-.dec .num{width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--brix) 16%,transparent);color:var(--brix2);display:grid;place-items:center;font-family:"IBM Plex Mono";font-size:12px;font-weight:600;flex:none}
-.dec.key{border-inline-start:4px solid var(--must)} .dec.key .num{background:var(--must);color:#fff}
-.dec .q{font-weight:600;font-size:14.3px;margin-bottom:2px}
-.dec .r{font-size:13px;color:var(--mute)}
-.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin:11px 0}
-.lnk{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 13px;text-decoration:none;color:var(--ink);transition:.16s}
-.lnk:hover{border-color:color-mix(in srgb,var(--brix) 40%,var(--line));transform:translateY(-1px)}
-.lnk .i{font-size:18px}.lnk .t{font-size:13.3px;font-weight:600}.lnk .d{font-size:11.3px;color:var(--mute)}
-.tl{position:relative;padding:0 28px 20px 0;border-inline-end:2px solid var(--line);margin-inline-end:13px}
+.tile.ok::before{background:var(--ok)}.tile.warn::before{background:var(--warn)}
+.tile b{display:block;font-size:21px;font-family:"IBM Plex Mono";font-weight:600}.tile span{font-size:11px;color:var(--mute)}
+.focus{margin-top:16px;display:flex;gap:13px;align-items:center;background:color-mix(in srgb,var(--brix) 11%,var(--panel));border:1px solid color-mix(in srgb,var(--brix) 28%,var(--line));border-radius:14px;padding:14px 17px}
+.focus .ic{font-size:22px}.focus .k{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--brix2);font-weight:700}
+.focus .tx{font-size:14px;margin-top:2px}
+/* ===== SECTIONS ===== */
+section{padding:30px 0 4px;border-top:1px solid var(--line);margin-top:10px;scroll-margin-top:12px}
+h2.s{font-size:19px;margin:0 0 3px;display:flex;align-items:center;gap:11px}
+h2.s .hn{font-family:"IBM Plex Mono";font-size:13px;color:#fff;background:var(--brix);width:27px;height:27px;display:grid;place-items:center;border-radius:8px;flex:none}
+.lead{color:var(--mute);font-size:13.7px;margin:.15em 0 1em}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:10px 0;box-shadow:var(--shadow)}
+.card h3{margin:0 0 .5em;font-size:15px;color:var(--brix2)}[data-theme="light"] .card h3{color:var(--brix)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:12px}
+.callout{border-inline-start:4px solid var(--gold);background:color-mix(in srgb,var(--gold) 9%,var(--panel));padding:11px 15px;border-radius:11px;margin:10px 0;font-size:13.7px}
+.callout.must{border-color:var(--must);background:color-mix(in srgb,var(--must) 10%,var(--panel))}.callout.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--panel))}
+.pre{background:#06080b;color:#d7efe4;border:1px solid #161d25;border-radius:11px;padding:12px 14px;overflow-x:auto;font-family:"IBM Plex Mono";font-size:12.2px;line-height:1.7;direction:ltr;text-align:left}
+.pre .c{color:#6fae93}.pre .g{color:#e6b53f}
+ul.t{margin:.35em 0;padding-inline-start:1.2em}ul.t li{margin:.3em 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:color-mix(in srgb,var(--brix) 8%,var(--panel));border:1px solid var(--line);border-radius:30px;padding:3px 10px;font-size:11px;color:var(--ink)}
+.chip.gold{background:color-mix(in srgb,var(--gold) 15%,transparent);border-color:color-mix(in srgb,var(--gold) 30%,transparent);color:var(--gold);font-weight:600}
+.chip.new{background:color-mix(in srgb,var(--acc) 15%,transparent);color:#2fcf9a;border-color:color-mix(in srgb,var(--acc) 30%,transparent)}
+table.t{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.7px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:start;vertical-align:top}
+table.t th{background:color-mix(in srgb,var(--brix) 9%,var(--panel));color:var(--brix2);font-weight:600;font-size:12px}[data-theme="light"] table.t th{color:var(--brix)}
+/* ===== ROADMAP STEPPER ===== */
+.steproad{margin:6px 0}
+.steproad .bar{display:flex;gap:6px;margin-bottom:14px}
+.steproad .bar i{height:6px;flex:1;border-radius:4px;background:var(--line);position:relative;overflow:hidden}
+.steproad .bar i.done{background:var(--ok)}.steproad .bar i.now{background:var(--gold)}
+.step{display:flex;gap:13px;align-items:flex-start;padding:11px 14px;border:1px solid var(--line);border-radius:12px;margin:7px 0;background:var(--panel);cursor:pointer;transition:.15s}
+.step:hover{border-color:color-mix(in srgb,var(--brix) 35%,var(--line))}
+.step .nd{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-family:"IBM Plex Mono";font-size:13px;font-weight:600;flex:none;background:color-mix(in srgb,var(--info) 14%,transparent);color:var(--info)}
+.step.now .nd{background:var(--gold);color:#1a1206}.step.done .nd{background:var(--ok);color:#04140c}
+.step .h{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:8px}
+.step .meta{font-size:11px;color:var(--faint)}
+.step .body{font-size:13px;color:var(--mute);margin-top:6px;display:none}
+.step.open .body{display:block}
+.step .arr{margin-inline-start:auto;color:var(--faint);transition:.2s;flex:none}.step.open .arr{transform:rotate(180deg)}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+.t-now{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)}.t-next{background:color-mix(in srgb,var(--info) 16%,transparent);color:var(--info)}.t-later{background:color-mix(in srgb,var(--faint) 22%,transparent);color:var(--mute)}
+/* ===== DECISION TRACKER ===== */
+.dechead{display:flex;align-items:center;gap:12px;margin:4px 0 12px;flex-wrap:wrap}
+.decprog{flex:1;min-width:160px;height:9px;border-radius:6px;background:var(--line);overflow:hidden}
+.decprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--acc));transition:width .5s}
+.deccount{font-family:"IBM Plex Mono";font-size:13px;color:var(--mute)}
+.dec{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 15px;margin:8px 0;transition:.18s}
+.dec.key{border-inline-start:4px solid var(--must)}
+.dec.decided{opacity:.62;border-inline-start-color:var(--ok)}
+.dec .num{width:25px;height:25px;border-radius:7px;background:color-mix(in srgb,var(--brix) 16%,transparent);color:var(--brix2);display:grid;place-items:center;font-family:"IBM Plex Mono";font-size:12px;font-weight:600;flex:none}
+.dec.key .num{background:var(--must);color:#fff}.dec.decided .num{background:var(--ok);color:#04140c}
+.dec .q{font-weight:600;font-size:14px;margin-bottom:2px}.dec .r{font-size:12.7px;color:var(--mute)}
+.dec .tog{margin-inline-start:auto;flex:none;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:30px;padding:4px 12px;font-family:inherit;font-size:11.5px;cursor:pointer;transition:.15s;white-space:nowrap}
+.dec .tog:hover{border-color:var(--ok);color:var(--ok)}.dec.decided .tog{background:var(--ok);color:#04140c;border-color:var(--ok)}
+/* ===== BLOCKER BOARD ===== */
+.block{display:flex;gap:11px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:11px;padding:11px 14px;margin:7px 0}
+.block.high{border-inline-start-color:var(--must)}
+.block .p{font-size:10px;font-weight:700;color:#fff;border-radius:5px;padding:2px 8px;flex:none;height:fit-content}
+.block.high .p{background:var(--must)}.block.med .p{background:var(--warn)}.block .x{font-size:13.3px}
+/* ===== RESUME + LINKS ===== */
+.resume{background:linear-gradient(160deg,color-mix(in srgb,var(--acc) 11%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--acc) 22%,var(--line));border-radius:14px;padding:15px 17px}
+.resume .lbl{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#2fcf9a;font-weight:700;margin-bottom:7px}
+.resume .kv{font-size:12.3px;margin:3px 0;color:var(--mute)}.resume .kv b{color:var(--ink);font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0}
+.lnk{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 12px;text-decoration:none;color:var(--ink);transition:.15s}
+.lnk:hover{border-color:color-mix(in srgb,var(--brix) 38%,var(--line));transform:translateY(-1px)}
+.lnk .i{font-size:17px}.lnk .t{font-size:12.8px;font-weight:600}.lnk .d{font-size:10.8px;color:var(--mute)}
+/* ===== TIMELINE ===== */
+.tl{position:relative;padding:0 26px 18px 0;border-inline-end:2px solid var(--line);margin-inline-end:12px}
 .tl:last-child{border-color:transparent}
-.tl .node{position:absolute;inset-inline-end:-14px;top:0;width:26px;height:26px;border-radius:50%;background:var(--panel);border:2px solid var(--brix);color:var(--brix2);display:grid;place-items:center;font-family:"IBM Plex Mono";font-size:11px;font-weight:600}
-.tl.now .node{background:var(--gold);border-color:var(--gold);color:#1a201d}
-.tl h4{margin:0 0 .25em;font-size:15px}.tl p{margin:0;color:var(--mute);font-size:13.4px}
-.tag{font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:600;margin-inline-start:6px}
-.t-now{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)}.t-next{background:color-mix(in srgb,var(--info) 16%,transparent);color:var(--info)}.t-later{background:color-mix(in srgb,var(--mute) 18%,transparent);color:var(--mute)}
-details.acc{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;overflow:hidden}
-details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:10px}
+.tl .node{position:absolute;inset-inline-end:-13px;top:1px;width:24px;height:24px;border-radius:50%;background:var(--panel);border:2px solid var(--brix);color:var(--brix2);display:grid;place-items:center;font-size:10px;font-weight:700}
+.tl h4{margin:0 0 .2em;font-size:14px}.tl p{margin:0;color:var(--mute);font-size:13px}
+/* ===== ACCORDION ===== */
+details.acc{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;overflow:hidden}
+details.acc summary{cursor:pointer;padding:12px 15px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:10px}
 details.acc summary::-webkit-details-marker{display:none}
-details.acc .arr{margin-inline-start:auto;color:var(--mute);transition:.2s}details.acc[open] .arr{transform:rotate(180deg)}
-details.acc .inner{padding:0 16px 15px;font-size:13.7px;color:var(--mute)}
+details.acc .arr{margin-inline-start:auto;color:var(--faint);transition:.2s}details.acc[open] .arr{transform:rotate(180deg)}
+details.acc .inner{padding:0 15px 14px;font-size:13.3px;color:var(--mute)}
 .sev{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;color:#fff;margin-inline-end:6px}.sev.c{background:var(--must)}.sev.h{background:var(--warn)}.sev.m{background:var(--info)}
-#top{position:fixed;inset-block-end:20px;inset-inline-start:20px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);font-size:17px;opacity:0;transition:.25s;z-index:120}#top.show{opacity:1}
+#top{position:fixed;inset-block-end:18px;inset-inline-start:18px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);font-size:17px;opacity:0;transition:.25s;z-index:120}#top.show{opacity:1}
 .menu{display:none}
-@media(max-width:920px){.wrap{grid-template-columns:1fr}.side{position:fixed;inset-block:0;inset-inline-end:0;width:280px;transform:translateX(100%);transition:.25s;z-index:200;background:var(--bg2)}.side.open{transform:translateX(0)}.menu{display:grid;place-items:center;position:fixed;top:13px;inset-inline-end:13px;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;z-index:210;cursor:pointer}main{padding:62px 16px 80px}.hero h1{font-size:22px}}
-@media print{.side,#top,.menu,#prog{display:none}.wrap{display:block}details.acc{open:true}}
+@media(max-width:940px){.wrap{grid-template-columns:1fr}.side{position:fixed;inset-block:0;inset-inline-end:0;width:272px;transform:translateX(100%);transition:.25s;z-index:200;background:var(--bg2)}.side.open{transform:translateX(0)}.menu{display:grid;place-items:center;position:fixed;top:12px;inset-inline-end:12px;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;z-index:210;cursor:pointer}main{padding:60px 15px 80px}.mission h1{font-size:21px}.gauges{margin-top:14px}}
+@media print{.side,#top,.menu,#prog{display:none}.wrap{display:block}details.acc[open] .inner,.step .body{display:block}}
 </style>
 </head>
 <body>
@@ -127,368 +146,338 @@ details.acc .inner{padding:0 16px 15px;font-size:13.7px;color:var(--mute)}
 <button class="menu" id="menu" aria-label="القائمة">☰</button>
 <div class="wrap">
   <nav class="side" id="side">
-    <div class="logo"><span class="mark">🏨</span><div><b>BRIX</b><div class="sub">Command Cockpit</div></div></div>
-    <div class="meta">نظام حجز الفنادق · التتبّع الشامل والمرجع الكامل في مكان واحد · آخر تحديث ٢٨ يونيو ٢٠٢٦</div>
+    <div class="logo"><span class="mark">🏨</span><div><b>BRIX</b><span class="sub">Mission Control</span></div></div>
+    <div class="meta">نظام حجز الفنادق · التتبّع الذكيّ والمرجع الكامل · ٢٨ يونيو ٢٠٢٦</div>
     <ul class="nav">
-      <li class="grp">التتبّع الحيّ</li>
-      <li><a href="#now"><span class="n">●</span> أين وصلنا الآن</a></li>
-      <li><a href="#dec"><span class="n">◆</span> القرارات المعلّقة</a></li>
-      <li><a href="#links"><span class="n">↗</span> روابط ووصول</a></li>
+      <li class="grp">التتبّع الذكيّ</li>
+      <li><a href="#mc"><span class="n">◈</span> المهمّة والمقاييس</a></li>
+      <li><a href="#road"><span class="n">▲</span> مسار البناء (٨ خطوات)</a></li>
+      <li><a href="#dec"><span class="n">◆</span> متتبّع القرارات</a></li>
+      <li><a href="#block"><span class="n">⛔</span> لوحة العوائق</a></li>
+      <li><a href="#log"><span class="n">⟲</span> سجلّ التقدّم</a></li>
+      <li><a href="#access"><span class="n">↗</span> الوصول والاستئناف</a></li>
       <li class="grp">المرجع الكامل</li>
       <li><a href="#vision"><span class="n">١</span> الرؤية والهدف</a></li>
-      <li><a href="#system"><span class="n">٢</span> ما في السيستم الآن</a></li>
-      <li><a href="#history"><span class="n">٣</span> التاريخ والرحلة</a></li>
-      <li><a href="#assess"><span class="n">٤</span> التقييم الصريح</a></li>
-      <li><a href="#roadmap"><span class="n">٥</span> خارطة الطريق ٨ خطوات</a></li>
-      <li><a href="#booking"><span class="n">٦</span> دورة الحجز والمحاسبة</a></li>
-      <li><a href="#bot"><span class="n">٧</span> بوت التسعير</a></li>
-      <li><a href="#rules"><span class="n">٨</span> الدستور</a></li>
-      <li><a href="#lessons"><span class="n">٩</span> الدروس والمطبّات</a></li>
+      <li><a href="#system"><span class="n">٢</span> السيستم الآن</a></li>
+      <li><a href="#assess"><span class="n">٣</span> التقييم الصريح</a></li>
+      <li><a href="#booking"><span class="n">٤</span> دورة الحجز والمحاسبة</a></li>
+      <li><a href="#bot"><span class="n">٥</span> بوت التسعير</a></li>
+      <li><a href="#rules"><span class="n">٦</span> الدستور</a></li>
+      <li><a href="#lessons"><span class="n">٧</span> الدروس والمطبّات</a></li>
       <li><a href="#index"><span class="n">⌘</span> أين يعيش كلّ شيء</a></li>
     </ul>
     <button class="themebtn" id="theme">☀️ الوضع النهاريّ</button>
   </nav>
 
   <main>
-    <div class="hero">
-      <div class="tag">المشروع الأهمّ · الشركة القابضة</div>
-      <h1>BRIX Travel — مركز القيادة الكامل</h1>
-      <p>نظام تسعير وحجز فنادق B2B يعمل رسميّاً لشركة BRIX Travel. هذه الصفحة هي <strong>المكان الواحد</strong> للتتبّع والمرجع معاً: أين وصلنا اليوم، القرارات المعلّقة، الخطّة كاملةً، ودورة الحجز والمحاسبة القادمة — لا شيء منسيّ، وكلّ رقمٍ محقَّقٌ حيّاً.</p>
-      <span class="holding">🔴 BRIX Red — هويّة الشركة الأمّ · أعلى صرفٍ وأعلى دخلٍ وأكبر أثرٍ في المحفظة</span>
-    </div>
+    <!-- ===== MISSION CONTROL ===== -->
+    <section id="mc" style="border-top:none;padding-top:4px">
+      <div class="mission">
+        <div class="top">
+          <div>
+            <div class="tag">المشروع الأهمّ · الشركة القابضة</div>
+            <h1>BRIX Travel — مركز القيادة</h1>
+            <div class="sub">نظام تسعير وحجز فنادق B2B يعمل رسميّاً. هذه اللوحة هي المكان الواحد: تتبّعٌ ذكيٌّ حيّ + المرجع الكامل، لا شيء منسيّ.</div>
+            <div style="margin-top:11px;display:flex;gap:8px;flex-wrap:wrap">
+              <span class="pulse"><span class="dot"></span> حيٌّ · v15.5 · HTTP 200</span>
+              <span class="holding">🔴 BRIX Red — أعلى صرفٍ ودخلٍ وأثرٍ في المحفظة</span>
+            </div>
+          </div>
+          <div class="gauges">
+            <div class="gauge">
+              <svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="42"/><circle class="fgc" cx="50" cy="50" r="42" pathLength="100" stroke-dasharray="94 100" style="stroke:var(--ok)"/></svg>
+              <div class="v">٩٤٪</div><div class="l">الأساس (أداة داخليّة)</div>
+            </div>
+            <div class="gauge">
+              <svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="42"/><circle class="fgc" cx="50" cy="50" r="42" pathLength="100" stroke-dasharray="50 100" style="stroke:var(--warn)"/></svg>
+              <div class="v">٥٠٪</div><div class="l">كمنصّة B2B</div>
+            </div>
+          </div>
+        </div>
+        <div class="tiles">
+          <div class="tile ok"><b>١٣٩</b><span>فندقاً متحقَّقاً بالقرش</span></div>
+          <div class="tile ok"><b>صفر</b><span>تسريب مال (مدقَّق)</span></div>
+          <div class="tile ok"><b>٢٤٧٣</b><span>اختباراً ناجحاً (١١٢ ملفّاً)</span></div>
+          <div class="tile"><b>٤٠</b><span>جدولاً في Supabase</span></div>
+          <div class="tile"><b>~١٠٣ ألف</b><span>معامل إشغال</span></div>
+          <div class="tile warn"><b>٠ / ٨</b><span>خطوات المنصّة المُنجَزة</span></div>
+        </div>
+        <div class="focus">
+          <span class="ic">🎯</span>
+          <div><div class="k">التركيز الآن</div><div class="tx">احسم <strong>القرارات الثمانية</strong> (أهمّها توقيت الاعتراف بالإيراد + سياسة حدّ الائتمان) لننطلق في بناء دورة الحجز والمحاسبة — وأصلِح فوترة GitHub (الحُرّاس متوقّفة منذ ٤ يونيو).</div></div>
+        </div>
+      </div>
+    </section>
 
-    <div class="tiles">
-      <div class="tile live"><b>حيّ ✓</b><span>Railway · v15.5 · HTTP 200</span></div>
-      <div class="tile"><b>١٣٩</b><span>فندقاً مُدخَلاً ومتحقَّقاً</span></div>
-      <div class="tile"><b>٢٤٧٣</b><span>اختباراً ناجحاً (١١٢ ملفّاً)</span></div>
-      <div class="tile"><b>٤٠</b><span>جدولاً في Supabase</span></div>
-      <div class="tile"><b>٩٤٪</b><span>إنجاز الأداة الداخليّة</span></div>
-      <div class="tile warn"><b>٥/١٠</b><span>كمنصّة B2B (فجوة بنيويّة)</span></div>
-    </div>
+    <!-- ===== ROADMAP STEPPER ===== -->
+    <section id="road">
+      <h2 class="s"><span class="hn">▲</span> مسار البناء — ٨ خطوات لمنصّة احترافيّة</h2>
+      <p class="lead">أين نحن في الرحلة؟ الأساس (الأداة الداخليّة) جاهزٌ ٩٤٪؛ مسار المنصّة يبدأ من الخطوة ٠. اضغط أيّ خطوة لتفاصيلها. كلّ خطوة بأقصى حذر، خلف الحاجز الأخضر (tsc+٢٤٧٣ اختباراً+بناء)، صفر مساس بمحرّك التسعير.</p>
+      <div class="steproad">
+        <div class="bar"><i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="step now" onclick="this.classList.toggle('open')"><span class="nd">٠</span><div style="flex:1"><div class="h">أوقِف النزيف <span class="tag t-now">اليوم</span></div><div class="meta">استعادة الحُرّاس + نسخ مكرَّر + مراقب خارجيّ</div><div class="body">فعّل فوترة GitHub بسقف إنفاق (الـ٨ ورك‌فلو تموت عند الفوترة قبل أن تبدأ) · مراقب خارجيّ Better Stack ينبض إن سقط التطبيق أو توقّفت النسخة · نسخة يوميّة مكرَّرة (جدولان: GitHub Actions + Railway Cron، موقعان: Supabase + Cloudflare R2/Backblaze) + تمرين استرجاع. <div class="chips"><span class="chip gold">Better Stack</span><span class="chip">Railway Cron</span><span class="chip">Cloudflare R2</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">١</span><div style="flex:1"><div class="h">الاستدامة <span class="tag t-next">هذا الأسبوع</span></div><div class="meta">البنية كمهاجرة + استرجاع حقيقيّ</div><div class="body">Supabase CLI (db diff) لتثبيت المخطّط كمهاجرة أساس تُطبَّق من CI · نسخ منطقيّة محمولة pg_dump تنجو حتى لو غابت Supabase + restic+Backblaze B2 (تشفير + تحقّق) · PITR المُدار يكمّلها.<div class="chips"><span class="chip gold">Supabase CLI</span><span class="chip">restic + B2</span><span class="chip">PITR</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٢</span><div style="flex:1"><div class="h">تنظيف مجّانيّ <span class="tag t-next">آمن</span></div><div class="meta">طرحٌ فقط، خلف الحاجز</div><div class="body"><strong style="color:var(--must)">تصحيح:</strong> مجلّد Step4 ليس ميّتاً (يُستورَد) — لا يُحذَف. أعِد ٥ اختبارات يتيمة بـgit mv · شذّب موتى knip بعد تقاطع ripgrep · أزِل ٣ تبعيّات · حدّث CLAUDE.md (يقول «١٣ جدولاً»).<div class="chips"><span class="chip gold">knip + knip.json</span><span class="chip">ripgrep</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٣</span><div style="flex:1"><div class="h">تقوية الحُرّاس <span class="tag t-next">ميكانيكيّ</span></div><div class="meta">اجعل الحاجز مفروضاً في CI</div><div class="body">الأقوى: <code>eslint-plugin-boundaries</code> + import/no-cycle يحوّلان حدّ الليقو إلى بوّابة CI تفشل آليّاً إن لمس أحدٌ المحرّك المحظور · Prettier 3 · husky+lint-staged · CI مقسّم · Sentry · بيئة Railway تجريب.<div class="chips"><span class="chip gold">ESLint 9 + boundaries</span><span class="chip">Sentry</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٤</span><div style="flex:1"><div class="h">إعادة هيكلة المسار الساخن</div><div class="meta">صفر مساس بالمحرّك</div><div class="body">فكّك <code>search/route.ts</code> (١١٠٢ سطر) إلى مساعِدات lib/search بشبكة لقطات «المخرَج لم يتغيّر» (toMatchSnapshot) + اختبارات تكامل Vitest 4 تمرّر طلباً حقيقيّاً عبر المعالج.<div class="chips"><span class="chip gold">Vitest 4</span><span class="chip">snapshots</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٥</span><div style="flex:1"><div class="h">بناء دورة الحجز <span class="tag t-later">المعرِّفة</span></div><div class="meta">كلّ ما تحته يعتمد عليها</div><div class="body">آلة حالات TS نقيّ (عرض/خيار/مؤكَّد/تسجيل‌دخول/مكتمل + ملغًى/no-show) + جدول أحداث ملحَق + لقطة سعر مجمَّدة (تنهي نزاع «المعروض ≠ المؤكَّد») + مرجع PNR. فاوتشر عبر Gotenberg. (التفاصيل في قسم «دورة الحجز».)<div class="chips"><span class="chip new">reservation_events</span><span class="chip new">frozen snapshot</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٦</span><div style="flex:1"><div class="h">إغلاق الحلقة التجاريّة</div><div class="meta">مخزون + إلغاء + ماليّة</div><div class="body">مخزون معدود يُخصَم بأقفال صفوف Postgres (يمنع البيع المزدوج) + دفتر قيد مزدوج غير قابل للتعديل + المال كأعداد صحيحة (lib/money) + محرّك سياسات إلغاء.<div class="chips"><span class="chip gold">SELECT … FOR UPDATE</span><span class="chip new">lib/ledger</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٧</span><div style="flex:1"><div class="h">صِر منصّة <span class="tag t-later">بعد الحجز</span></div><div class="meta">واجهة شركاء</div><div class="body">واجهة قراءة <code>/api/v1</code> بتوقيع HMAC — نفس معيار Hotelbeds APITUDE/RateHawk/TravelgateX — + OpenAPI من Zod + Scalar + supabase gen types.<div class="chips"><span class="chip gold">HMAC</span><span class="chip">OpenAPI</span></div></div></div><span class="arr">▾</span></div>
+        <div class="step" onclick="this.classList.toggle('open')"><span class="nd">٨</span><div style="flex:1"><div class="h">ميزات التوسّع <span class="tag t-later">وكالة ثانية</span></div><div class="meta">تعدّد مستأجرين</div><div class="body">مخطّط مشترك + tenant_id + Supabase RLS بمطالبات JWT + تحويل عملات (dinero.js+ECB) + تقارير/BI (Metabase) + فصل wo_*/telegram_* لمشروع brix-ops.<div class="chips"><span class="chip gold">RLS + JWT</span><span class="chip">Metabase</span></div></div></div><span class="arr">▾</span></div>
+      </div>
+    </section>
 
-    <!-- TRACKING: NOW -->
-    <section id="now">
-      <h2 class="s"><span class="hn">●</span> أين وصلنا الآن</h2>
-      <p class="lead">الموقف الحيّ — محدَّث ٢٨ يونيو ٢٠٢٦.</p>
-      <div class="statusbar">
-        <div class="where">
-          <div class="lbl">📍 الموقف</div>
-          النظام حيٌّ على Railway (الإصدار v15.5) ومرتبطٌ ببوت <code>@BrixPrice_bot</code> (نفس محرّك التسعير، نفس النتيجة). قفزة هذا الشهر: صار <strong>١٣٩ فندقاً</strong> مُدخَلاً ومتحقَّقاً بالقرش (<strong>صفر تسريب مال</strong> عبر تدقيقات سلوكيّة وحسابيّة وعقود متعدّدة الوكلاء)، <strong>٢٤٧٣ اختباراً</strong>، <strong>٤٠ جدولاً</strong>. وأُنجِزت: الوثيقة المرجعيّة الجامعة + الفحص الشامل الصادق + إعادة تصميم لوحة المستخدمين Workbench + ستيكرز v2 + تحديث SPO ٣٤ فندقاً + <strong>مخطّط دورة الحجز والمحاسبة الكامل</strong>.
-          <div class="next"><strong style="color:var(--brix2)">▶ الخطوة التالية:</strong> حسم ٨ قرارات لبدء بناء دورة الحجز + المحاسبة (أهمّها توقيت الاعتراف بالإيراد وسياسة حدّ الائتمان)، ثمّ البدء بأقصى حذر خلف الحاجز الأخضر، صفر مساس بمحرّك التسعير.</div>
+    <!-- ===== DECISION TRACKER ===== -->
+    <section id="dec">
+      <h2 class="s"><span class="hn">◆</span> متتبّع القرارات</h2>
+      <p class="lead">ثمانية قرارات تفتح بناء دورة الحجز + المحاسبة. اضغط «حُسِم» عند اتّخاذ القرار — اللوحة تحفظ الحالة وتُحدِّث العدّاد.</p>
+      <div class="dechead">
+        <div class="decprog"><i id="decbar"></i></div>
+        <div class="deccount" id="deccount">٠ / ٨ محسومة</div>
+        <button class="tog" id="decreset" style="margin:0">تصفير</button>
+      </div>
+      <div id="decs">
+        <div class="dec key" data-d="1"><span class="num">١</span><div style="flex:1"><div class="q">متى نعترف بالإيراد والتكلفة؟</div><div class="r">عند التأكيد (الهامش يظهر فوراً) أم عند الدخول/الخروج (أنظف للإلغاءات)؟ يحدّد كلّ رقمٍ لاحق.</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec key" data-d="2"><span class="num">٢</span><div style="flex:1"><div class="q">حدّ الائتمان عند التجاوز: حظر/تحذير/موافقة؟</div><div class="r">ذاكرتك تميل «حذّر لا تمنع»؛ أكّدها للمال. وبعملةٍ واحدة أم لكلّ عملة؟</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="3"><span class="num">٣</span><div style="flex:1"><div class="q">سياسة الإلغاء وعدم الحضور</div><div class="r">مبلغ ثابت، نسبة، أم سلّم لكلّ فندق من العقد (محرّك يحسبها)؟</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="4"><span class="num">٤</span><div style="flex:1"><div class="q">العملات والصرف</div><div class="r">يورو فقط أم +ليرة/دولار؟ مصدر الأسعار؟ إعادة تقييم شهريّاً أم تحقيق عند التسوية؟</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="5"><span class="num">٥</span><div style="flex:1"><div class="q">الأفراد: دفعٌ مُسبق أم ائتمان صغير؟</div><div class="r">النقد-فقط (قبل الفاوتشر، بلا ذمّة) يبسّط تدفّقهم.</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="6"><span class="num">٦</span><div style="flex:1"><div class="q">الفاتورة قانونيّة ضريبيّة أم بروفورما؟ + الضريبة</div><div class="r">يحدّد صرامة الترقيم ومعالجة ضريبة القيمة المضافة التركيّة.</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="7"><span class="num">٧</span><div style="flex:1"><div class="q">مزوّد البريد + مكتبة المال</div><div class="r">Resend أم SMTP من بريدك؟ dinero.js أم نوع داخليّ بسيط؟</div></div><button class="tog">حُسِم</button></div>
+        <div class="dec" data-d="8"><span class="num">٨</span><div style="flex:1"><div class="q">استيراد سجلّ wo_* + نافذة المطالبة</div><div class="r">نستورد ٢٥٧ تحويلاً + ٥٢ إغلاقاً كأرصدة افتتاحيّة أم نبدأ نظيفاً؟ وكم يوماً قبل الدخول يُطلِق تنبيه الدفع؟</div></div><button class="tog">حُسِم</button></div>
+      </div>
+      <div class="callout" style="margin-top:14px">بنود مال أخرى معلّقة (إصلاح بيانات فقط بانتظار موافقتك): رسم رضيع +٢٥٪ بـ٣ فنادق (Asteria Bloom/Turan Prince/Club Turan) · بريستيج ألانيا (2A+2C+رضيع=2.0) · ٤ غرف كريستال (max_infants=2) · فيلا ريكسوس كلوب بريفيه (قصّ ٣٣٧٤٫٩٩) · بنود قديمة (سجلّ تغييرات العقود · فجوة «بالغان+طفل» ~٥٠ غرفة · حظر رضيع تحت‑٧ لاقون · ليماك دفع SQL · فجوة Land of Legends نوفمبر · ٧٩ غرفة max_infants=0).</div>
+    </section>
+
+    <!-- ===== BLOCKERS ===== -->
+    <section id="block">
+      <h2 class="s"><span class="hn">⛔</span> لوحة العوائق</h2>
+      <p class="lead">مرتّبة بالأولويّة.</p>
+      <div class="block high"><span class="p">عاجل</span><span class="x"><strong>فوترة GitHub متوقّفة منذ ٤ يونيو</strong> — الحُرّاس (٨ ورك‌فلو: نسخ + فحوص + تنبيهات) تموت عند بوّابة الفوترة قبل أن تبدأ. لا إصلاح كود يساعد حتى تُدفَع.</span></div>
+      <div class="block high"><span class="p">عاجل</span><span class="x"><strong>٨ قرارات مالك معلّقة</strong> قبل بناء الحجز + المحاسبة (المتتبّع أعلاه).</span></div>
+      <div class="block med"><span class="p">مهمّ</span><span class="x"><strong>لا دورة حجز ولا مخزون/إتاحة ولا ماليّة بعد</strong> — أكبر فجوة بنيويّة للتحوّل إلى منصّة (مصمَّمة بالكامل، تنتظر البناء).</span></div>
+      <div class="block med"><span class="p">مهمّ</span><span class="x"><strong><code>contract_changes</code> بلا RLS</strong> — مكشوف لمفتاح anon. تفعيل RLS بسياسات مناسبة.</span></div>
+      <div class="block med"><span class="p">مهمّ</span><span class="x">المكان الثاني للنسخ (Backblaze B2) — الدليل جاهز، ينتظر إنشاء الصندوق · استرجاع مختبَر · تدوير مفتاح Supabase.</span></div>
+    </section>
+
+    <!-- ===== PROGRESS LOG ===== -->
+    <section id="log">
+      <h2 class="s"><span class="hn">⟲</span> سجلّ التقدّم</h2>
+      <p class="lead">الرحلة حتى الآن.</p>
+      <div style="margin-inline-start:6px">
+        <div class="tl"><div class="node">٢٨</div><h4>٢٧–٢٨ يونيو</h4><p>تحديث SPO (٣٤ فندقاً) + غرفة سوينو + ستيكرز v2 (مدفوع) + الفحص الشامل للمنصّة + تدقيق دقّة الوثيقة (٨٠ ادّعاءً، ٨ تصحيحات) + <strong>مخطّط دورة الحجز والمحاسبة الكامل</strong> + هذه اللوحة.</p></div>
+        <div class="tl"><div class="node">٢٦</div><h4>٢٥–٢٦ يونيو</h4><p>إعادة بناء <code>/admin/users</code> كـ«Workbench» + تعديل بالجملة + ستيكرات المدير + فحص واجهة شامل (~٧٠ إصلاحاً) + خطّة الاستدامة + اكتشاف توقّف النسخ منذ ٤ يونيو.</p></div>
+        <div class="tl"><div class="node">٢٤</div><h4>٢٢–٢٤ يونيو</h4><p>تدقيقات شاملة متعدّدة الوكلاء (محتوى الملفّات، مسح ~١٠٣ ألف معامل، سلوك حيّ ١٣٩٠ بحثاً) = <strong>صفر تسريب مال</strong>.</p></div>
+        <div class="tl"><div class="node">٢٢</div><h4>١٨–٢٢ يونيو</h4><p>ماراثون إدخال وصل إلى <strong>١٣٩ فندقاً</strong> + كُتيّب الإدخال + التحقّق المزدوج الإلزاميّ (عدّ صفر-ساقط + تطابق حيّ بالقرش).</p></div>
+        <div class="tl"><div class="node">٥</div><h4>حتى أبريل-مايو</h4><p>البناء الأوّليّ (v15.x)، المصادقة، نشر Railway، أوّل العقود، البوت @BrixPrice_bot.</p></div>
+      </div>
+    </section>
+
+    <!-- ===== ACCESS ===== -->
+    <section id="access">
+      <h2 class="s"><span class="hn">↗</span> الوصول والاستئناف</h2>
+      <div class="g2">
+        <div>
+          <div class="links">
+            <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app" target="_blank"><span class="i">🚀</span><div><div class="t">النظام الحيّ</div><div class="d">الواجهة الرئيسيّة</div></div></a>
+            <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app/search" target="_blank"><span class="i">🔎</span><div><div class="t">البحث عن أسعار</div><div class="d">فندق+تاريخ+ضيوف ← السعر</div></div></a>
+            <a class="lnk" href="https://t.me/BrixPrice_bot" target="_blank"><span class="i">✈️</span><div><div class="t">بوت تلغرام</div><div class="d">@BrixPrice_bot</div></div></a>
+            <a class="lnk" href="https://railway.com/project/2af4cb7e-f4ef-4de0-b86c-b4957fac185f" target="_blank"><span class="i">🚂</span><div><div class="t">Railway</div><div class="d">النشر واللوغات</div></div></a>
+            <a class="lnk" href="https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq" target="_blank"><span class="i">🗄️</span><div><div class="t">Supabase</div><div class="d">٤٠ جدولاً</div></div></a>
+            <a class="lnk" href="https://github.com/aneerabee/brix-travel-system" target="_blank"><span class="i">💻</span><div><div class="t">GitHub</div><div class="d">الكود</div></div></a>
+            <a class="lnk" href="https://github.com/aneerabee/brix-backups" target="_blank"><span class="i">🛡️</span><div><div class="t">النسخ اليوميّة</div><div class="d">تابعها أسبوعيّاً</div></div></a>
+            <a class="lnk" href="https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/SYSTEM_MASTER_PLAN.md" target="_blank"><span class="i">📖</span><div><div class="t">الوثيقة المرجعيّة</div><div class="d">النسخة النصّيّة الكاملة</div></div></a>
+          </div>
         </div>
         <div class="resume">
-          <div class="lbl">💬 استئناف العمل</div>
-          <div class="kv"><b>الجلسة:</b> [brix system] · /resume</div>
+          <div class="lbl">💬 استئناف العمل مع Claude</div>
+          <div class="kv"><b>الجلسة:</b> [brix system] · <code>/resume</code></div>
           <div class="kv"><b>التيرمينال:</b> iTerm2</div>
           <div class="kv"><b>الأمر:</b> <code>cd ~/Desktop/Projects/🏨\ BRIX-Travel && claude</code></div>
           <div class="kv"><b>الذاكرة:</b> MEMORY.md (~٥٠ خيطاً)</div>
           <div class="kv" style="margin-top:7px;color:var(--ink)">ابدأ من هذه اللوحة ← غُص للقسم الذي تعمل عليه.</div>
         </div>
       </div>
-      <h3 style="font-size:14px;color:var(--mute);margin:16px 0 4px">⛔ العوائق الحاليّة</h3>
-      <div class="block high"><span class="p">عاجل</span><span class="x">فوترة GitHub متوقّفة منذ ٤ يونيو — الحُرّاس (النسخ + الفحوص + التنبيهات، ٨ ورك‌فلو) معطّلة. تموت عند بوّابة الفوترة قبل أن تبدأ.</span></div>
-      <div class="block high"><span class="p">عاجل</span><span class="x">٨ قرارات مالك معلّقة قبل بناء الحجز + المحاسبة (القسم القرارات).</span></div>
-      <div class="block med"><span class="p">مهمّ</span><span class="x">لا دورة حجز ولا مخزون/إتاحة ولا ماليّة بعد — أكبر فجوة بنيويّة للتحوّل إلى منصّة (مصمَّمة، تنتظر البناء).</span></div>
-      <div class="block med"><span class="p">مهمّ</span><span class="x">تصحيحات الوثيقة المرجعيّة (٨ تصحيحات دقّة) مدفوعة؛ تبقى بنود مال معلّقة (رسم رضيع +٢٥٪ بـ٣ فنادق، بريستيج ألانيا، ٤ غرف كريستال، فيلا ريكسوس).</span></div>
     </section>
 
-    <!-- DECISIONS -->
-    <section id="dec">
-      <h2 class="s"><span class="hn">◆</span> القرارات المعلّقة (تنتظر حسمك)</h2>
-      <p class="lead">ثمانية قرارات تفتح بناء دورة الحجز + المحاسبة — مرتّبة بالأهمّيّة. كلّ قرارٍ يغيّر أرقاماً لاحقة.</p>
-      <div class="dec key"><span class="num">١</span><div><div class="q">متى نعترف بالإيراد والتكلفة؟</div><div class="r">عند التأكيد (الهامش يظهر فوراً وتقدر تطالب بذمّة) أم عند الدخول/الخروج (أنظف للإلغاءات قبل الإقامة)؟ يحدّد كلّ رقمٍ لاحق.</div></div></div>
-      <div class="dec key"><span class="num">٢</span><div><div class="q">حدّ الائتمان عند التجاوز: حظر أم تحذير أم موافقة مالك؟</div><div class="r">ذاكرتك تميل إلى «حذّر لا تمنع»؛ أكّدها للمال. وبعملةٍ واحدة أم لكلّ عملة؟</div></div></div>
-      <div class="dec"><span class="num">٣</span><div><div class="q">سياسة الإلغاء وعدم الحضور</div><div class="r">مبلغ ثابت، نسبة من البيع، أم سلّم لكلّ فندق من العقد (محرّك يحسبها تلقائيّاً)؟</div></div></div>
-      <div class="dec"><span class="num">٤</span><div><div class="q">العملات والصرف</div><div class="r">يورو فقط أم يورو/ليرة/دولار؟ ومن يزوّد الأسعار (يدويّ بالمحاسب أم سحب يوميّ)؟ وإعادة تقييم الأرصدة شهريّاً أم تحقيق الفرق عند التسوية؟</div></div></div>
-      <div class="dec"><span class="num">٥</span><div><div class="q">الأفراد: دفعٌ مُسبق فقط أم ائتمان صغير؟</div><div class="r">النقد-فقط (دفع قبل الفاوتشر، بلا ذمّة) يبسّط تدفّقهم كثيراً.</div></div></div>
-      <div class="dec"><span class="num">٦</span><div><div class="q">الفاتورة: قانونيّة ضريبيّة أم بروفورما؟ + ضريبة القيمة المضافة</div><div class="r">يحدّد صرامة الترقيم ومعالجة الضريبة التركيّة. إن لا ضريبة — نوثّقها قراراً لا إغفالاً.</div></div></div>
-      <div class="dec"><span class="num">٧</span><div><div class="q">مزوّد البريد + مكتبة المال</div><div class="r">Resend أم SMTP من بريدك الحاليّ؟ ومكتبة المال: dinero.js أم نوع داخليّ بسيط (أنسب لاستقلال الليقو)؟</div></div></div>
-      <div class="dec"><span class="num">٨</span><div><div class="q">سجلّ wo_* + نافذة المطالبة</div><div class="r">نستورد الـ٢٥٧ تحويلاً و٥٢ إغلاقاً كأرصدة افتتاحيّة أم نبدأ نظيفاً؟ وكم يوماً قبل الدخول يُطلِق تنبيه «طالِب بالدفع» (١٤؟ ٢١؟).</div></div></div>
-      <div class="callout">بنود مال أخرى معلّقة (تدقيقات سابقة، إصلاح بيانات فقط بانتظار موافقتك): رسم رضيع خاطئ +٢٥٪ بـ٣ فنادق (Asteria Bloom/Turan Prince/Club Turan، العقد «الرضيع مجّانيّ») · بريستيج ألانيا (2A+2C+رضيع=2.0 بدل 2.5) · ٤ غرف كريستال (max_infants=2) · فيلا ريكسوس كلوب بريفيه (قصّ ٣٣٧٤٫٩٩). وبنود قديمة: سجلّ تغييرات العقود · فجوة «بالغان+طفل» (~٥٠ غرفة) · حظر رضيع تحت‑٧ (لاقون) · ليماك (دفع SQL) · فجوة تغطية Land of Legends نوفمبر · ٧٩ غرفة max_infants=0.</div>
-    </section>
-
-    <!-- LINKS -->
-    <section id="links">
-      <h2 class="s"><span class="hn">↗</span> روابط ووصول سريع</h2>
-      <p class="lead">كلّ ما تحتاج فتحه — النظام الحيّ والإدارة والحماية.</p>
-      <div class="links">
-        <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app" target="_blank"><span class="i">🚀</span><div><div class="t">النظام الحيّ</div><div class="d">الواجهة الرئيسيّة (تحوّل للبحث)</div></div></a>
-        <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app/search" target="_blank"><span class="i">🔎</span><div><div class="t">البحث عن أسعار</div><div class="d">فندق + تاريخ + ضيوف ← السعر</div></div></a>
-        <a class="lnk" href="https://brix-hotel-web-app-production.up.railway.app/contract-wizard" target="_blank"><span class="i">📝</span><div><div class="t">إدخال عقد جديد</div><div class="d">٨ خطوات (يطلب تسجيل دخول)</div></div></a>
-        <a class="lnk" href="https://t.me/BrixPrice_bot" target="_blank"><span class="i">✈️</span><div><div class="t">بوت تلغرام</div><div class="d">@BrixPrice_bot — نفس نتيجة الويب</div></div></a>
-        <a class="lnk" href="https://railway.com/project/2af4cb7e-f4ef-4de0-b86c-b4957fac185f" target="_blank"><span class="i">🚂</span><div><div class="t">Railway</div><div class="d">النشر · اللوغات · المتغيّرات</div></div></a>
-        <a class="lnk" href="https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq" target="_blank"><span class="i">🗄️</span><div><div class="t">Supabase</div><div class="d">٤٠ جدولاً — مصدر الحقيقة الوحيد</div></div></a>
-        <a class="lnk" href="https://github.com/aneerabee/brix-travel-system" target="_blank"><span class="i">💻</span><div><div class="t">GitHub</div><div class="d">الكود المصدريّ</div></div></a>
-        <a class="lnk" href="https://github.com/aneerabee/brix-backups" target="_blank"><span class="i">🛡️</span><div><div class="t">النسخ اليوميّة</div><div class="d">تابعها أسبوعيّاً — مجلّد بكلّ يوم</div></div></a>
-        <a class="lnk" href="https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/SYSTEM_MASTER_PLAN.md" target="_blank"><span class="i">📖</span><div><div class="t">الوثيقة المرجعيّة</div><div class="d">المصدر العميق (نسخة نصّ)</div></div></a>
-        <a class="lnk" href="https://htmlpreview.github.io/?https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/reports/booking_accounting_blueprint_jun28.html" target="_blank"><span class="i">🧾</span><div><div class="t">مخطّط الحجز والمحاسبة</div><div class="d">التصميم التفصيليّ الكامل</div></div></a>
-      </div>
-    </section>
-
-    <!-- 1 VISION -->
+    <!-- ===== REFERENCE: 1 VISION ===== -->
     <section id="vision">
-      <h2 class="s"><span class="hn">١</span> ما هو BRIX — الرؤية والهدف</h2>
+      <h2 class="s"><span class="hn">١</span> الرؤية والهدف</h2>
       <div class="g2">
         <div class="card"><h3>ما هو الآن</h3>نظام <strong>تسعير عقود الفنادق + بحث</strong> يعمل رسميّاً لـBRIX Travel. الموظّف يبحث (فندق/تواريخ/إشغال) فيحصل على <strong>السعر الدقيق بالقرش</strong> من العقود المُدخَلة، ثمّ يحجز يدويّاً بالبريد.</div>
-        <div class="card"><h3>الأهداف</h3><strong>القريب (مُنجَز ٧/١٠):</strong> أداة داخليّة دقيقة جدّاً، صفر خطأ سعريّ، سريعة وآمنة.<br><strong>البعيد (٥/١٠):</strong> منصّة B2B احترافيّة تتّصل بها وكالات/شركاء — الفجوة بنيويّة: النظام يتوقّف عند «هذا هو السعر».</div>
+        <div class="card"><h3>الأهداف</h3><strong>القريب (٧/١٠ مُنجَز):</strong> أداة داخليّة دقيقة جدّاً، صفر خطأ سعريّ، سريعة وآمنة.<br><strong>البعيد (٥/١٠):</strong> منصّة B2B تتّصل بها وكالات — الفجوة بنيويّة: يتوقّف عند «هذا هو السعر».</div>
       </div>
       <div class="callout"><strong>القاعدة الذهبيّة:</strong> صفر نسبة خطأ في المال · كلّ تعديل يحترم استقلال الوحدات (الليقو) · التحقّق الحيّ قبل تأكيد أيّ إنجاز.</div>
     </section>
 
-    <!-- 2 SYSTEM -->
+    <!-- ===== 2 SYSTEM ===== -->
     <section id="system">
-      <h2 class="s"><span class="hn">٢</span> ما في السيستم الآن (الحالة التقنيّة)</h2>
-      <div class="card"><h3>٢.١ المعماريّة والأدوات</h3>
+      <h2 class="s"><span class="hn">٢</span> ما في السيستم الآن</h2>
+      <div class="card"><h3>المعماريّة والأدوات</h3>
         <div class="chips"><span class="chip gold">Next.js 16</span><span class="chip">TypeScript صارم</span><span class="chip">Supabase Postgres</span><span class="chip">Railway</span><span class="chip">Vitest</span><span class="chip">Playwright</span><span class="chip">Tailwind 4</span></div>
-        <ul class="t" style="margin-top:9px">
-          <li>القاعدة: <strong>٤٠ جدولاً</strong> (مصدر الحقيقة الوحيد).</li>
-          <li>النشر: Railway تلقائيّ من <code>main</code> (~٩٠ث)؛ <code>/api/version</code> يُرجِع <code>git.commitSha</code>.</li>
-          <li>الاختبار: <strong>٢٤٧٣ ناجحاً</strong> + ٥ متخطّاة (١١٢ ملفّاً) + Playwright + عتبة تغطية ٨٠٪.</li>
-          <li>التدفّق: Supabase ← Next.js API ← الواجهة. الإدخال يكتب لـSupabase؛ البحث يقرأ ثمّ يمرّ بالمحرّك.</li>
-        </ul>
-      </div>
-      <div class="card"><h3>٢.٢ مبدأ الليقو (القانون الأوّل)</h3>
-        كلّ وحدة في <code>lib/</code> قطعة مستقلّة. <strong>حساب التسعير نقيّ ومعزول</strong> (<code>calculatePrice</code>/<code>night-calculator</code> لا يلمسان الواجهة/القاعدة). دقّة: الوحدة تضمّ أيضاً <code>data-loader.ts</code> (يقرأ Supabase) ويُصدَّر لمسار البحث عبر <code>unified-pricing-engine.ts</code> — فالنقاء يخصّ <strong>الحساب</strong> لا كامل سطح الوحدة. الهامش والربح والرؤية <strong>فوق</strong> المحرّك لا داخله.
-        <div class="chips" style="margin-top:9px"><span class="chip gold">pricing</span><span class="chip">types</span><span class="chip">db</span><span class="chip">infra</span><span class="chip">validation</span><span class="chip">pricing-overrides</span><span class="chip">search</span><span class="chip">contracts</span><span class="chip">spo</span><span class="chip">price-sources</span><span class="chip">auth</span><span class="chip">cache</span><span class="chip">hooks</span><span class="chip">format</span><span class="chip">backup</span><span class="chip">occupancy-gaps</span><span class="chip">ui</span></div>
-        <div style="font-size:12.5px;color:var(--mute);margin-top:8px">+ ملفّات حرّة في جذر <code>lib/</code> أبرزها <code>unified-pricing-engine.ts</code> (المُنسِّق الفعليّ) + ٥ اختبارات يتيمة تُعاد لمواضعها.</div>
-      </div>
-      <div class="g2">
-        <div class="card"><h3>٢.٣ الأقسام</h3><ul class="t">
-          <li><strong>البحث والتسعير:</strong> <code>/search</code> ← <code>/api/search</code> ← المحرّك (per-period + شارات).</li>
-          <li><strong>معالج العقود:</strong> <code>/contract-wizard</code> (٨ خطوات) + <strong>تعديل:</strong> <code>/contract-edit/[hotelId]</code>.</li>
-          <li><strong>لوحة المستخدمين</strong> (مالك): أدوار · صلاحيّات رؤية · رؤية الهامش · ماركأب لكلّ مستخدم · تجاوزات لكلّ فندق · تعديل بالجملة · ستيكرات المدير.</li>
-          <li><strong>لوحات admin:</strong> time-machine · audit-logs · contract-log · eb-alerts · occupancy-gaps.</li>
-          <li><strong>مصادر الأسعار</strong> <code>/sources</code> · ملفّات العقود/SPO (Gotenberg) · النسخ + time-machine.</li>
-        </ul></div>
-        <div class="card"><h3>٢.٤ نموذج التسعير</h3>
-          <div class="pre">night = round(base_night_price × occupancy_multiplier, 2)
+        <ul class="t" style="margin-top:8px"><li>٤٠ جدولاً (مصدر الحقيقة الوحيد) · نشر Railway تلقائيّ من main (~٩٠ث) · <code>/api/version</code> يُرجِع <code>git.commitSha</code>.</li><li>٢٤٧٣ اختباراً + ٥ متخطّاة (١١٢ ملفّاً) + Playwright + عتبة تغطية ٨٠٪. التدفّق: Supabase ← API ← الواجهة.</li></ul></div>
+      <details class="acc"><summary><span>🧱</span> مبدأ الليقو + وحدات lib<span class="arr">▾</span></summary><div class="inner">
+        <strong>حساب التسعير نقيّ ومعزول</strong> (<code>calculatePrice</code>/<code>night-calculator</code> لا يلمسان الواجهة/القاعدة). دقّة: الوحدة تضمّ أيضاً <code>data-loader.ts</code> (يقرأ Supabase) ويُصدَّر لمسار البحث عبر <code>unified-pricing-engine.ts</code> — فالنقاء يخصّ الحساب لا كامل سطح الوحدة. الهامش والربح والرؤية فوق المحرّك لا داخله.
+        <div class="chips" style="margin-top:8px"><span class="chip gold">pricing</span><span class="chip">types</span><span class="chip">db</span><span class="chip">infra</span><span class="chip">validation</span><span class="chip">pricing-overrides</span><span class="chip">search</span><span class="chip">contracts</span><span class="chip">spo</span><span class="chip">price-sources</span><span class="chip">auth</span><span class="chip">cache</span><span class="chip">hooks</span><span class="chip">format</span><span class="chip">backup</span><span class="chip">occupancy-gaps</span><span class="chip">ui</span></div>
+      </div></details>
+      <details class="acc"><summary><span>🧩</span> الأقسام (ما يفعله النظام)<span class="arr">▾</span></summary><div class="inner"><ul class="t">
+        <li><strong>البحث والتسعير:</strong> <code>/search</code> ← <code>/api/search</code> ← المحرّك (per-period + شارات).</li>
+        <li><strong>معالج العقود:</strong> <code>/contract-wizard</code> (٨ خطوات) + تعديل <code>/contract-edit/[hotelId]</code>.</li>
+        <li><strong>لوحة المستخدمين</strong> (مالك): أدوار · صلاحيّات رؤية · رؤية الهامش · ماركأب لكلّ مستخدم · تجاوزات لكلّ فندق · تعديل بالجملة · ستيكرات المدير.</li>
+        <li><strong>لوحات admin:</strong> time-machine · audit-logs · contract-log · eb-alerts · occupancy-gaps. <strong>مصادر الأسعار</strong> <code>/sources</code> · ملفّات العقود/SPO (Gotenberg) · النسخ.</li>
+      </ul></div></details>
+      <details class="acc"><summary><span>🧮</span> نموذج التسعير (الجوهر الدقيق)<span class="arr">▾</span></summary><div class="inner">
+        <div class="pre">night = round(base_night_price × occupancy_multiplier, 2)
 total = Σ كلّ ليلة بسعر فترتها</div>
-          <ul class="t" style="margin-top:8px">
-            <li>المعامل = الحقيقة الكاملة (بالغين+أطفال+رضّع برقم واحد).</li>
-            <li>حِيَل: <code>PER_PERSON×ÇARPAN</code> أو <code>base=10/100</code> (base=100 إذا المعامل ≥١٠٠٠ لسقف <code>numeric(7,4)</code>).</li>
-            <li>فئتا طفل: <code>child_split_age</code>+<code>young_children</code> (الرضيع <code>[0,infant_age_max)</code> مجّانيّ غالباً).</li>
-            <li><strong>٨ أنواع خصم:</strong> EB · LONG_STAY · SPECIAL · SENIOR · HONEYMOON · PROMO · EARLY_PAYMENT · DISCOUNT_PP. دمج EXCLUSIVE→الأفضل، CAN_COMBINE→تراكميّ.</li>
-            <li>الماركأب <strong>بعد</strong> المحرّك (PER_NIGHT). إيقاف البيع: تحذير برتقاليّ «راجع السيد هيثم» (لا يمنع).</li>
-          </ul>
-        </div>
-      </div>
-      <details class="acc"><summary><span>🗄️</span> ٢.٥ البيانات — ٤٠ جدولاً (الجرد الكامل المحقَّق)<span class="arr">▾</span></summary><div class="inner">
+        <ul class="t" style="margin-top:8px"><li>المعامل = الحقيقة الكاملة (بالغين+أطفال+رضّع برقم واحد). حِيَل: <code>PER_PERSON×ÇARPAN</code> أو <code>base=10/100</code> (base=100 إذا المعامل ≥١٠٠٠ لسقف numeric(7,4)).</li><li>فئتا طفل: child_split_age+young_children (الرضيع [0,infant_age_max) مجّانيّ غالباً).</li><li><strong>٨ أنواع خصم:</strong> EB · LONG_STAY · SPECIAL · SENIOR · HONEYMOON · PROMO · EARLY_PAYMENT · DISCOUNT_PP. دمج EXCLUSIVE→الأفضل، CAN_COMBINE→تراكميّ.</li><li>الماركأب بعد المحرّك (PER_NIGHT). إيقاف البيع: تحذير «راجع السيد هيثم» (لا يمنع).</li></ul>
+      </div></details>
+      <details class="acc"><summary><span>🗄️</span> البيانات — ٤٠ جدولاً (الجرد الكامل)<span class="arr">▾</span></summary><div class="inner">
         <table class="t">
-          <tr><th>الفئة</th><th>الجداول (مع عدد الصفوف)</th></tr>
-          <tr><td>التسعير (نشط)</td><td><code>hotels</code> (١٥٦=١٣٩+١٧ دليل) · <code>room_types</code> (٩٩٣) · <code>periods</code> (١٣٩٨) · <code>base_rates</code> (١٠٠٧٢) · <code>occupancy_multipliers</code> (١٠٣٢٧٢) · <code>discount_rules</code> (٤٦) · <code>stop_sales</code> (٦) · <code>cities</code> (١٠) · <code>areas</code> (٢)</td></tr>
-          <tr><td>مهمل فارغ</td><td><code>child_rules</code> · <code>pricing_rules</code> (المعامل يحكم)</td></tr>
-          <tr><td>محمَّل بالمحرّك لكن فارغ</td><td><code>period_board_rates</code> (٠) · <code>supplements</code> (٠) — محفوظ للمستقبل</td></tr>
-          <tr><td>المستخدمون/التدقيق</td><td><code>app_users</code> (٦) · <code>user_hotel_overrides</code> (١٨) · <code>user_activity</code> (١٤٥٨) · <code>audit_logs</code> (٩١٢)</td></tr>
-          <tr><td>العقود/المصادر</td><td><code>contract_snapshots</code> (٤٦٢) · <code>contract_changes</code> (٥ — <strong>بلا RLS ⚠</strong>) · <code>contract_drafts</code> (١) · <code>price_sources</code> (٥) · <code>hotel_price_sources</code> (٧١)</td></tr>
-          <tr><td>فارغة تماماً</td><td><code>bookings</code> (لا دورة حجز بعد) · <code>precomputed_prices</code> · <code>seasons</code></td></tr>
-          <tr><td>إرث به صفوف</td><td><code>ml_state</code> (٥) · <code>sync_log</code> (٤٣)</td></tr>
-          <tr><td>مجالات أخرى (فصل لاحق)</td><td><code>wo_*</code> (دفتر تحويلات، ٧ جداول، ٢٥٧ تحويلاً) · <code>telegram_*</code> (٦)</td></tr>
+          <tr><th>الفئة</th><th>الجداول (مع الصفوف)</th></tr>
+          <tr><td>التسعير (نشط)</td><td><code>hotels</code> (١٥٦=١٣٩+١٧دليل) · <code>room_types</code> (٩٩٣) · <code>periods</code> (١٣٩٨) · <code>base_rates</code> (١٠٠٧٢) · <code>occupancy_multipliers</code> (١٠٣٢٧٢) · <code>discount_rules</code> (٤٦) · <code>stop_sales</code> (٦) · <code>cities</code> (١٠) · <code>areas</code> (٢)</td></tr>
+          <tr><td>مهمل/محمَّل فارغ</td><td><code>child_rules</code>·<code>pricing_rules</code> (المعامل يحكم) · <code>period_board_rates</code>·<code>supplements</code> (٠، محفوظ)</td></tr>
+          <tr><td>المستخدمون/التدقيق</td><td><code>app_users</code> (٦)·<code>user_hotel_overrides</code> (١٨)·<code>user_activity</code> (١٤٥٨)·<code>audit_logs</code> (٩١٢)</td></tr>
+          <tr><td>العقود/المصادر</td><td><code>contract_snapshots</code> (٤٦٢)·<code>contract_changes</code> (٥ <strong>بلا RLS⚠</strong>)·<code>contract_drafts</code> (١)·<code>price_sources</code> (٥)·<code>hotel_price_sources</code> (٧١)</td></tr>
+          <tr><td>فارغة / إرث</td><td>فارغة: <code>bookings</code>·<code>precomputed_prices</code>·<code>seasons</code> · إرث به صفوف: <code>ml_state</code> (٥)·<code>sync_log</code> (٤٣)</td></tr>
+          <tr><td>مجالات أخرى</td><td><code>wo_*</code> (دفتر تحويلات، ٧، ٢٥٧ تحويلاً)·<code>telegram_*</code> (٦) — فصل لاحق</td></tr>
         </table>
-        <div style="font-size:12.5px">المجموع: ٢٧ أساسيّاً + ١٣ (<code>wo_*</code>+<code>telegram_*</code>) = ٤٠ بالتمام. لا توجد جداول <code>libya_*</code> (حُسِم باستعلام عبر كلّ المخطّطات). المخزن: bucket <code>hotel-contracts</code> (عقود تحت hotel_id + SPO تحت <code>spo/</code>).</div>
+        ٢٧ أساسيّاً + ١٣ = ٤٠ بالتمام. لا <code>libya_*</code>. المخزن: bucket <code>hotel-contracts</code>.
       </div></details>
     </section>
 
-    <!-- 3 HISTORY -->
-    <section id="history">
-      <h2 class="s"><span class="hn">٣</span> كيف وصلنا هنا (التاريخ والرحلة)</h2>
-      <div class="card"><ul class="t">
-        <li><strong>حتى أبريل-مايو:</strong> البناء الأوّليّ (v15.x)، المصادقة، نشر Railway، أوّل العقود.</li>
-        <li><strong>١٨–٢٢ يونيو:</strong> ماراثون إدخال وصل إلى <strong>١٣٩ فندقاً</strong> + كُتيّب الإدخال + التحقّق المزدوج الإلزاميّ (عدّ المصدر صفر-ساقط + تطابق حيّ بالقرش).</li>
-        <li><strong>٢٢–٢٤ يونيو:</strong> تدقيقات شاملة متعدّدة الوكلاء (محتوى الملفّات، مسح ~١٠٣ ألف معامل، سلوك حيّ ١٣٩٠ بحثاً) = <strong>صفر تسريب مال</strong>؛ الاكتشاف الوحيد رسم رضيع خاطئ بـ٣ فنادق.</li>
-        <li><strong>٢٥–٢٦ يونيو:</strong> إعادة بناء <code>/admin/users</code> كـ«Workbench» + تعديل بالجملة + ستيكرات + فحص واجهة (~٧٠ إصلاحاً).</li>
-        <li><strong>٢٦–٢٧ يونيو:</strong> خطّة الاستدامة + تحسين النسخ (١٣→٤٠ جدولاً + المخزن) + <strong>اكتشاف توقّف النسخ منذ ٤ يونيو (فوترة GitHub)</strong> + نسخة طارئة.</li>
-        <li><strong>٢٧–٢٨ يونيو:</strong> تحديث SPO (٣٤ فندقاً) + غرفة سوينو + <strong>ستيكرز v2</strong> + الفحص الشامل + تدقيق دقّة الوثيقة (٨٠ ادّعاءً) + <strong>مخطّط الحجز والمحاسبة</strong>.</li>
-      </ul></div>
-    </section>
-
-    <!-- 4 ASSESS -->
+    <!-- ===== 3 ASSESS ===== -->
     <section id="assess">
-      <h2 class="s"><span class="hn">٤</span> التقييم الصريح</h2>
-      <p class="lead">٧/١٠ كأداة تسعير داخليّة · ٥/١٠ كمنصّة B2B (الفجوة بنيويّة لا تجميليّة).</p>
+      <h2 class="s"><span class="hn">٣</span> التقييم الصريح</h2>
+      <p class="lead">٧/١٠ كأداة داخليّة · ٥/١٠ كمنصّة B2B (الفجوة بنيويّة).</p>
       <div class="g2">
-        <div class="card" style="border-inline-start:4px solid var(--ok)"><h3 style="color:var(--ok)">القويّ (لا يُكسَر)</h3><ul class="t">
-          <li>محرّك تسعير نقيّ معزول · حدود ليقو محترمة.</li>
-          <li>مصادقة احترافيّة (جلسات httpOnly، تجريد ترويسات التزييف).</li>
-          <li>~٢٤٧٣ اختباراً + Playwright · نظافة استيراد عالية · ديون منخفضة.</li></ul></div>
-        <div class="card" style="border-inline-start:4px solid var(--must)"><h3 style="color:var(--must)">الضعف</h3><ul class="t">
-          <li>يتوقّف عند «هذا هو السعر»: <strong>لا حجز، لا مخزون، لا ماليّة، لا API شركاء</strong>.</li>
-          <li>الحُرّاس (ESLint منتهٍ، لا Prettier/خطّافات، CI ناقص).</li>
-          <li>لا migrations في المستودع (البنية حيّة فقط).</li></ul></div>
+        <div class="card" style="border-inline-start:4px solid var(--ok)"><h3 style="color:var(--ok)">القويّ (لا يُكسَر)</h3><ul class="t"><li>محرّك تسعير نقيّ معزول · حدود ليقو محترمة.</li><li>مصادقة احترافيّة (جلسات httpOnly، تجريد ترويسات التزييف).</li><li>~٢٤٧٣ اختباراً + Playwright · نظافة استيراد · ديون منخفضة.</li></ul></div>
+        <div class="card" style="border-inline-start:4px solid var(--must)"><h3 style="color:var(--must)">الضعف</h3><ul class="t"><li>يتوقّف عند «هذا هو السعر»: لا حجز/مخزون/ماليّة/API.</li><li>الحُرّاس (ESLint منتهٍ، لا Prettier/خطّافات، CI ناقص).</li><li>لا migrations في المستودع (البنية حيّة فقط).</li></ul></div>
       </div>
     </section>
 
-    <!-- 5 ROADMAP -->
-    <section id="roadmap">
-      <h2 class="s"><span class="hn">٥</span> خارطة الطريق (٨ خطوات لمنصّة احترافيّة)</h2>
-      <p class="lead">كلّ خطوة بأقصى حذر، خلف الحاجز الأخضر (tsc + ٢٤٧٣ اختباراً + بناء)، صفر مساس بمحرّك التسعير.</p>
-      <div style="margin-inline-start:8px">
-        <div class="tl now"><div class="node">٠</div><h4>أوقِف النزيف <span class="tag t-now">اليوم</span></h4><p>فوترة GitHub بسقف إنفاق (الـ٨ ورك‌فلو تموت قبل أن تبدأ) + نسخة مكرَّرة (جدولان، موقعان) + تمرين استرجاع.</p><div class="chips"><span class="chip gold">Better Stack</span><span class="chip">Railway Cron</span><span class="chip">Cloudflare R2</span><span class="chip">run-backup.mjs</span></div></div>
-        <div class="tl"><div class="node">١</div><h4>الاستدامة <span class="tag t-next">هذا الأسبوع</span></h4><p>تثبيت المخطّط كمهاجرة أساس من CI + نسخ منطقيّة محمولة تنجو حتى لو غابت Supabase.</p><div class="chips"><span class="chip gold">Supabase CLI db diff</span><span class="chip">restic + Backblaze B2</span><span class="chip">PITR (Pro)</span></div></div>
-        <div class="tl"><div class="node">٢</div><h4>تنظيف مجّانيّ <span class="tag t-next">آمن</span></h4><p><strong style="color:var(--must)">تصحيح:</strong> مجلّد Step4 ليس ميّتاً (يُستورَد) — لا يُحذَف. أعِد ٥ اختبارات يتيمة · شذّب knip بعد تقاطع ripgrep · أزِل ٣ تبعيّات · حدّث CLAUDE.md.</p><div class="chips"><span class="chip gold">knip + knip.json</span><span class="chip">ripgrep</span><span class="chip">git mv</span></div></div>
-        <div class="tl"><div class="node">٣</div><h4>تقوية الحُرّاس <span class="tag t-next">ميكانيكيّ</span></h4><p>الأقوى: <code>eslint-plugin-boundaries</code> يحوّل حدّ الليقو إلى بوّابة CI تفشل آليّاً إن لمس أحدٌ المحرّك المحظور.</p><div class="chips"><span class="chip gold">ESLint 9 flat + boundaries</span><span class="chip">Prettier 3</span><span class="chip">husky + lint-staged</span><span class="chip">Sentry</span></div></div>
-        <div class="tl"><div class="node">٤</div><h4>إعادة هيكلة المسار الساخن</h4><p>فكّك <code>search/route.ts</code> (١١٠٢ سطر) إلى مساعِدات <code>lib/search/</code> بشبكة لقطات «المخرَج لم يتغيّر».</p><div class="chips"><span class="chip gold">Vitest 4 تكامل</span><span class="chip">toMatchSnapshot</span></div></div>
-        <div class="tl"><div class="node">٥</div><h4>بناء دورة حياة الحجز <span class="tag t-later">المعرِّفة</span></h4><p>آلة حالات TS نقيّ + جدول أحداث ملحَق + لقطة سعر مجمَّدة + مرجع PNR. فاوتشر عبر Gotenberg. <strong>كلّ ما تحته يعتمد عليها.</strong></p><div class="chips"><span class="chip new">reservation_events</span><span class="chip new">frozen snapshot</span><span class="chip">Gotenberg</span></div></div>
-        <div class="tl"><div class="node">٦</div><h4>إغلاق الحلقة التجاريّة</h4><p>مخزون معدود يُخصَم بأقفال صفوف Postgres + دفتر قيد مزدوج + المال كأعداد صحيحة.</p><div class="chips"><span class="chip gold">SELECT … FOR UPDATE</span><span class="chip new">lib/ledger</span><span class="chip new">lib/money</span></div></div>
-        <div class="tl"><div class="node">٧</div><h4>صِر منصّة <span class="tag t-later">بعد الحجز</span></h4><p>واجهة <code>/api/v1</code> بتوقيع HMAC — نفس معيار Hotelbeds/RateHawk/TravelgateX — + OpenAPI من Zod.</p><div class="chips"><span class="chip gold">HMAC (node:crypto)</span><span class="chip">Scalar</span><span class="chip">supabase gen types</span></div></div>
-        <div class="tl"><div class="node">٨</div><h4>ميزات التوسّع <span class="tag t-later">وكالة ثانية</span></h4><p>تعدّد مستأجرين (RLS+JWT) + تحويل عملات + تقارير/BI + فصل <code>wo_*</code>/<code>telegram_*</code> لمشروع <code>brix-ops</code>.</p><div class="chips"><span class="chip gold">Supabase RLS + JWT</span><span class="chip">dinero.js + ECB</span><span class="chip">Metabase</span></div></div>
-      </div>
-    </section>
-
-    <!-- 6 BOOKING -->
+    <!-- ===== 4 BOOKING ===== -->
     <section id="booking">
-      <h2 class="s"><span class="hn">٦</span> دورة الحجز والمحاسبة (المخطّط الكامل)</h2>
-      <p class="lead">صُمّم بـ٨ خبراء + ٣ تدقيقات عدائيّة (٣٨ ثغرة عولِجت). تصميم فقط — لم يُبنَ. ينتظر قرارات القسم «القرارات».</p>
-
+      <h2 class="s"><span class="hn">٤</span> دورة الحجز والمحاسبة (المخطّط الكامل)</h2>
+      <p class="lead">صُمّم بـ٨ خبراء + ٣ تدقيقات عدائيّة (٣٨ ثغرة عولِجت). تصميم فقط — لم يُبنَ، ينتظر القرارات الثمانية.</p>
       <div class="card"><h3>آلة حالات الحجز الموحَّدة</h3>
         <div class="pre">استعلام → عرض سعر → خيار(مؤقّت) → <span class="g">مؤكَّد</span> → تسجيل دخول → <span class="g">مكتمل</span>
                                        ↘ ملغًى   ↘ لم يحضر</div>
-        <div style="font-size:13px;color:var(--mute);margin-top:8px">«مُعدَّل/فاوتشر‌صادر/مُسوّى» = أحداث/مشتقّات لا حالات. كلّ حجز: مرجع PNR · أسماء الضيوف · فاوتشر · تواريخ · ترانسفير خاصّ · لقطة سعر مجمَّدة (تكلفة+بيع+هامش). <strong>التأكيد معاملة واحدة ذرّيّة</strong> + منع تكرار <code>UNIQUE(booking_id,'confirm')</code>.</div>
+        <div style="font-size:12.7px;color:var(--mute);margin-top:7px">كلّ حجز: مرجع PNR · أسماء الضيوف · فاوتشر · تواريخ · ترانسفير خاصّ · لقطة سعر مجمَّدة (تكلفة+بيع+هامش). <strong>التأكيد معاملة واحدة ذرّيّة</strong> + منع تكرار.</div>
       </div>
-
       <details class="acc"><summary><span>🧱</span> نموذج البيانات الموحَّد (النواة)<span class="arr">▾</span></summary><div class="inner">
-        <table class="t">
-          <tr><th>الجدول</th><th>الغرض</th></tr>
-          <tr><td><code>bookings</code> (يُطوَّر)</td><td>جذر الحجز: PNR · المشتري · staff · الحالة · مجاميع تكلفة/بيع/هامش (قروش) · عملة · سياسة الإلغاء · row_version</td></tr>
-          <tr><td><code>booking_lines</code> (جديد)</td><td>سطر لكلّ غرفة + الترانسفير (<code>line_type</code>) · المورّد · <code>frozen_breakdown</code></td></tr>
-          <tr><td><code>booking_guests</code> (جديد)</td><td>أسماء الضيوف (لقب/اسم/عمر/مؤقّت)</td></tr>
-          <tr><td><code>reservation_events</code> (جديد)</td><td>سجلّ ملحَق فقط</td></tr>
-          <tr><td><code>counterparties</code> (جديد)</td><td>جدول أطراف <strong>واحد</strong>: شركة/فرد/فندق/وكيل — طرفٌ قد يكون مشترياً ومورّداً</td></tr>
-          <tr><td>دفتر واحد</td><td><code>chart_of_accounts</code> + <code>ledger_entries</code> + <code>ledger_lines</code> + <code>treasury_accounts</code> + <code>fx_rates</code></td></tr>
-        </table>
-        <div class="chips"><span class="chip new">cancellation_policy</span><span class="chip new">payment_schedule</span><span class="chip new">accounting_periods</span><span class="chip new">booking_group</span><span class="chip new">allotment</span><span class="chip new">names_deadline</span></div>
+        جدول أطراف <strong>واحد</strong> <code>counterparties</code> (شركة/فرد/فندق/وكيل — طرفٌ قد يكون مشترياً ومورّداً) · الحجز <code>bookings</code> (يُطوَّر) + <code>booking_lines</code> (سطر/غرفة + ترانسفير) + <code>booking_guests</code> + <code>reservation_events</code> · دفترٌ واحد <code>chart_of_accounts</code>+<code>ledger_entries</code>+<code>ledger_lines</code>+<code>treasury_accounts</code>+<code>fx_rates</code>.
+        <div class="chips" style="margin-top:7px"><span class="chip new">cancellation_policy</span><span class="chip new">payment_schedule</span><span class="chip new">accounting_periods</span><span class="chip new">booking_group</span><span class="chip new">allotment</span></div>
       </div></details>
-
       <details class="acc"><summary><span>💸</span> المحاسبة: دفترٌ واحد + تتبّع المال<span class="arr">▾</span></summary><div class="inner">
-        دفترٌ عامٌّ مزدوجٌ واحد؛ الذمم الدائنة (ندفع للفنادق/المصادر) والمدينة (نستلم من الشركات/الأفراد) <strong>مناظير</strong> فوقه. خزينة واحدة تعرف أين المال بأيّ عملة. المال أعداد صحيحة. توازن شامل = صفر (فحص ليليّ).
-        <div class="pre" style="margin-top:9px"><span class="c"># عند التأكيد — أربعة أطراف متوازنة:</span>
-  مدين ذمم الزبون (بيع)      دائن الإيراد (بيع)
-  مدين تكلفة المبيعات        دائن ذمم المورّد (تكلفة)
-<span class="c"># نستلم: مدين نقد / دائن ذمم الزبون — ندفع: مدين ذمم المورّد / دائن نقد</span>
-<span class="c"># الهامش = بيع − تكلفة، متتبَّع. حالاته: مستحقّ → قابل للتحصيل → مُحقَّق(الرصيدان صفر)</span></div>
+        دفترٌ عامٌّ مزدوجٌ واحد؛ الذمم الدائنة (ندفع للفنادق/المصادر) والمدينة (نستلم من الشركات/الأفراد) مناظير فوقه. خزينة واحدة تعرف أين المال بأيّ عملة. المال أعداد صحيحة. توازن شامل = صفر.
+        <div class="pre" style="margin-top:8px"><span class="c"># عند التأكيد — أربعة أطراف متوازنة:</span>
+  مدين ذمم الزبون(بيع)   دائن الإيراد(بيع)
+  مدين تكلفة المبيعات    دائن ذمم المورّد(تكلفة)
+<span class="c"># نستلم: مدين نقد/دائن ذمم — ندفع: مدين ذمم المورّد/دائن نقد</span>
+<span class="c"># الهامش: مستحقّ → قابل للتحصيل → مُحقَّق (الرصيدان صفر)</span></div>
         <strong>كشف حساب وإغلاق</strong> لكلّ شركة (فترات مغلقة لا تُعدَّل، حارس قاعدة).
       </div></details>
-
       <details class="acc"><summary><span>🔔</span> التنبيهات + المستندات + التقارير<span class="arr">▾</span></summary><div class="inner">
-        <strong>التنبيهات:</strong> دخول قريب ← طالِب بالدفع (حسب جدول الدفعات) · استحقاق المورّد · ذمّة متأخّرة · تجاوز ائتمان · أسماء ناقصة · عدم حضور. عبر تلغرام+بريد، اقتراحٌ لا فعلٌ تلقائيّ يمسّ المال.<br>
+        <strong>التنبيهات:</strong> دخول قريب ← طالِب بالدفع (حسب جدول الدفعات) · استحقاق المورّد · ذمّة متأخّرة · تجاوز ائتمان · أسماء ناقصة. عبر تلغرام+بريد، اقتراحٌ لا فعلٌ تلقائيّ يمسّ المال.<br>
         <strong>المستندات:</strong> فاوتشر/فاتورة/كشف/إيصال عبر Gotenberg + قوالب BRIX؛ سلسلة ترقيم واحدة؛ تأكيد «إجماليّ المستند = المُقيَّد فعلاً».<br>
         <strong>التقارير:</strong> ربح/خسارة لكلّ حجز·زبون·فترة · أعمار الذمم · موقع الخزينة · «ماذا أُحصّل هذا الأسبوع».
       </div></details>
-
       <details class="acc"><summary><span>🚧</span> تحقّق صادق: المكتمل والناقص<span class="arr">▾</span></summary><div class="inner">
-        النواة قويّة (~٨٥٪) لكنّها <strong>ليست دورةً مكتملةً ١٠٠٪ بعد</strong>. حُلّت تعارضات التصاميم (٤ جداول أطراف→واحد · ٣-٤ دفاتر→واحد · ٥ ترميزات عملة→واحد · ٣ آلات حالات→واحدة).<br>
-        <p style="margin:.5em 0 0"><span class="sev c">حرِج</span> طبقة الإقامة/تسجيل الدخول · <span class="sev c">حرِج</span> المخزون/الإتاحة · <span class="sev h">عالٍ</span> محرّك سياسة الإلغاء (يحسب الغرامة من العقد) · <span class="sev h">عالٍ</span> جدول الدفعات/العربون (يُشغّل تنبيه «طالِب بالدفع»).</p>
-        <strong>بنية جديدة لا توجد اليوم:</strong> بريد صادر (Resend/SMTP) · مهامّ مجدوَلة بمفتاح سرّيّ · منع تكرار · RLS على كلّ جداول التكلفة/الهامش · قفل الفترات.
+        النواة قويّة (~٨٥٪) لكنّها <strong>ليست دورةً مكتملةً ١٠٠٪ بعد</strong>. حُلّت تعارضات (٤ جداول أطراف→واحد · ٣-٤ دفاتر→واحد · ٥ ترميزات عملة→واحد · ٣ آلات حالات→واحدة).
+        <p style="margin:.5em 0 0"><span class="sev c">حرِج</span> طبقة الإقامة/تسجيل الدخول · <span class="sev c">حرِج</span> المخزون/الإتاحة · <span class="sev h">عالٍ</span> محرّك سياسة الإلغاء · <span class="sev h">عالٍ</span> جدول الدفعات/العربون.</p>
+        <strong>بنية جديدة لا توجد:</strong> بريد صادر (Resend/SMTP) · مهامّ مجدوَلة بمفتاح سرّيّ · منع تكرار · RLS على جداول التكلفة/الهامش · قفل الفترات.
       </div></details>
     </section>
 
-    <!-- 7 BOT -->
+    <!-- ===== 5 BOT ===== -->
     <section id="bot">
-      <h2 class="s"><span class="hn">٧</span> بوت التسعير @BrixPrice_bot</h2>
-      <p class="lead">بوت الوكلاء — ست خطوات بالأزرار، ثنائي اللغة، نفس نتيجة الويب بالضبط.</p>
+      <h2 class="s"><span class="hn">٥</span> بوت التسعير @BrixPrice_bot</h2>
       <div class="g2">
-        <div class="card"><h3>التدفّق والوصول</h3><ul class="t">
-          <li>المدينة ← الفندق ← تاريخ الدخول (تقويم تفاعليّ) ← الخروج ← الضيوف والأعمار ← النتيجة (أفضل الأسعار + ميداليات).</li>
-          <li>الوصول: دعوة بالهاتف — المستخدم يرسل رقمه، المدير يوافق، النظام يربط.</li>
-          <li>توقيت إسطنبول لكلّ حسابات booking-window (يحلّ مشكلة ٣ ساعات قبل منتصف UTC).</li>
-        </ul></div>
-        <div class="card"><h3>المتانة والأمان</h3><ul class="t">
-          <li>إغلاق HTML injection · حماية من انتحال جهات الاتصال · إصلاح race conditions · منع تسرّب PII · rate limit · تحقّق UUID.</li>
-          <li>Dedup للـwebhooks · تعافٍ من partial-failure · معالجة stale callbacks · env validation.</li>
-          <li>تطابق تامّ مع <code>/search</code> — مختبَر بـ٢٠+ سيناريو حافة + ٨ حيّة على الإنتاج.</li>
-        </ul></div>
+        <div class="card"><h3>التدفّق والوصول</h3><ul class="t"><li>المدينة ← الفندق ← الدخول (تقويم تفاعليّ) ← الخروج ← الضيوف والأعمار ← النتيجة (ميداليات).</li><li>الوصول: دعوة بالهاتف — المستخدم يرسل رقمه، المدير يوافق.</li><li>توقيت إسطنبول لكلّ حسابات booking-window.</li></ul></div>
+        <div class="card"><h3>المتانة والأمان</h3><ul class="t"><li>إغلاق HTML injection · حماية انتحال · إصلاح race conditions · منع تسرّب PII · rate limit · تحقّق UUID.</li><li>Dedup للـwebhooks · تعافٍ من partial-failure · env validation.</li><li>تطابق تامّ مع <code>/search</code> — مختبَر بـ٢٠+ سيناريو حافة + ٨ حيّة.</li></ul></div>
       </div>
     </section>
 
-    <!-- 8 RULES -->
+    <!-- ===== 6 RULES ===== -->
     <section id="rules">
-      <h2 class="s"><span class="hn">٨</span> الدستور (القواعد الثابتة — لا تُكسَر)</h2>
+      <h2 class="s"><span class="hn">٦</span> الدستور (لا يُكسَر)</h2>
       <div class="card"><ul class="t">
         <li><strong>الليقو:</strong> حدّد القطعة المتأثّرة قبل أيّ تعديل؛ لا لمس <code>lib/pricing/</code> ولا بنية الجداول لتغييرات الواجهة/البيانات.</li>
-        <li><strong>التحقّق:</strong> «تأكّد» = فحص حيّ فعليّ (curl على الإنتاج)، لا tsc+vitest فقط. الحاجز الأخضر بعد كلّ تغيير.</li>
-        <li><strong>المال:</strong> لا تغيّر سعراً دون قراءة العقد كاملاً + تحقّق حيّ بالقرش. لا تثق بإنذار وكلاء قراءة الملفّات — تحقّق يدويّاً.</li>
-        <li><strong>التواصل:</strong> عربيّ فصيح، بلا جداول، بلا مصطلحات إنجليزيّة (عدا أسماء الملفّات). تقارير HTML حيّة. التواصل اليوميّ تلغرام (chat 278516861).</li>
-        <li><strong>واجهة التطبيق:</strong> إنجليزيّة بسيطة (LTR فاتح).</li>
-        <li><strong>الأوامر:</strong> «ادفع» = git add+commit+push origin main (conventional + Co-Authored-By). «افحص» = وكلاء متوازون. «اشرحلي» = عربيّ ثمّ موافقة.</li>
-        <li><strong>الأمان:</strong> لا كشف مفتاح Supabase (يُحقَن عبر <code>railway run</code>)؛ المالك يدوّره ويضيف أسرار GitHub بنفسه.</li>
+        <li><strong>التحقّق:</strong> «تأكّد» = فحص حيّ (curl على الإنتاج). الحاجز الأخضر بعد كلّ تغيير.</li>
+        <li><strong>المال:</strong> لا تغيّر سعراً دون قراءة العقد كاملاً + تحقّق حيّ بالقرش. لا تثق بإنذار وكلاء — تحقّق يدويّاً.</li>
+        <li><strong>التواصل:</strong> عربيّ فصيح، بلا جداول، بلا مصطلحات (عدا أسماء الملفّات). تلغرام (chat 278516861). واجهة التطبيق إنجليزيّة LTR فاتح.</li>
+        <li><strong>الأوامر:</strong> «ادفع»=push origin main. «افحص»=وكلاء متوازون. «اشرحلي»=عربيّ ثمّ موافقة.</li>
+        <li><strong>الأمان:</strong> لا كشف مفتاح Supabase (يُحقَن عبر <code>railway run</code>)؛ المالك يدوّره.</li>
       </ul></div>
     </section>
 
-    <!-- 9 LESSONS -->
+    <!-- ===== 7 LESSONS ===== -->
     <section id="lessons">
-      <h2 class="s"><span class="hn">٩</span> الدروس والقوانين والمطبّات</h2>
-      <p class="lead">كلّ واحدة كلّفت خطأً أو وقتاً — احترمها في كلّ تعديل مستقبليّ.</p>
-      <details class="acc" open><summary><span>⚙️</span> مطبّات محرّك التسعير<span class="arr">▾</span></summary><div class="inner"><ul class="t">
-        <li><strong>hotel_id على base_rates و occupancy_multipliers:</strong> <code>base_rates.hotel_id</code> قابل للـnull → إدخال بلا hotel_id ينجح صامتاً لكنّ الأسعار <strong>غير مرئيّة</strong>. <code>occupancy_multipliers.hotel_id</code> NOT NULL (يفشل بصوت). دائماً <code>SELECT rt.hotel_id</code>.</li>
-        <li><strong>تصادم placeholder الدليل:</strong> <code>is_directory=true</code> → INSERT بنفس الاسم يُرجِع صفّين. افحص وUPDATE بدل INSERT.</li>
-        <li><strong>فيض numeric(7,4):</strong> سقف المعامل 999.9999. مع base=10 فيلا ≥١٠٠٠٠ يفشل → استعمل base=100.</li>
-        <li>تجنّب النسب غير المنتهية (7/3، 16/7 تحمل قصّ ≤€٠٫٠٤)؛ base=10 يتجاوزها.</li>
-        <li><code>PER_UNIT</code> يطبّق المضاعف، <code>PER_ROOM</code> لا. <code>CROSS JOIN</code> للرضّع يقلّل الصفوف ×٣.</li>
-        <li>فئتا الطفل: مسار submit للمعالج <strong>لا يكتب young_children</strong> (انتبه). الحدّ الكبير للتنفيذ: بُثّ REST بدفعات ٥٠٠ — لا تترك نصف حالة.</li>
-        <li>النموذج الموحّد base=10/100: الكرت يكشف <code>baseIsPlaceholder</code> ويُظهر سعر الشخص الحقيقيّ.</li>
+      <h2 class="s"><span class="hn">٧</span> الدروس والمطبّات</h2>
+      <p class="lead">كلّ واحدة كلّفت خطأً أو وقتاً — احترمها في كلّ تعديل.</p>
+      <details class="acc"><summary><span>⚙️</span> مطبّات محرّك التسعير<span class="arr">▾</span></summary><div class="inner"><ul class="t">
+        <li><strong>hotel_id:</strong> <code>base_rates.hotel_id</code> قابل للـnull → إدخال بلا hotel_id ينجح صامتاً لكنّ الأسعار غير مرئيّة. دائماً <code>SELECT rt.hotel_id</code>.</li>
+        <li>تصادم placeholder الدليل (<code>is_directory=true</code>): افحص وUPDATE بدل INSERT. فيض numeric(7,4): استعمل base=100. تجنّب النسب غير المنتهية.</li>
+        <li><code>PER_UNIT</code> يطبّق المضاعف لا <code>PER_ROOM</code>. CROSS JOIN للرضّع. مسار submit لا يكتب young_children. الحدّ الكبير: بُثّ بدفعات ٥٠٠ — لا تترك نصف حالة.</li>
       </ul></div></details>
       <details class="acc"><summary><span>💰</span> دروس المال (الأغلى)<span class="arr">▾</span></summary><div class="inner"><ul class="t">
-        <li><strong>لا تغيّر سعراً دون قراءة العقد كاملاً + تحقّق حيّ.</strong> درس سنغيت/غرينوود/شيروود: «إصلاحي» كان سيُحمّل الضيوف زائداً — كلّها إنذارات كاذبة. ٣٧ من ٣٨ صفّ رضيع تُسعَّر مجّانيّةً.</li>
-        <li>الرضيع مجّانيّ غالباً <code>[0, infant_age_max)</code> — لا تفرض معامل الطفل المدفوع (كان خطأ +٢٥٪ بـ٣ فنادق).</li>
-        <li><strong>خصم هيثم (سوينو):</strong> «Our contract» ٤٥٪/٥٠٪ دائم — لا يُحذف أبداً.</li>
-        <li>عروض SPO = ملفّات عرض فقط (لا أرقام في المحرّك) ما لم يقرّر المالك؛ الاستثناء = سوينو فقط.</li>
+        <li><strong>لا تغيّر سعراً دون قراءة العقد كاملاً + تحقّق حيّ.</strong> سنغيت/غرينوود/شيروود: «إصلاحي» كان سيُحمّل الضيوف زائداً — إنذارات كاذبة. ٣٧ من ٣٨ صفّ رضيع مجّانيّ.</li>
+        <li>الرضيع مجّانيّ غالباً [0,infant_age_max) — لا تفرض معامل الطفل (كان خطأ +٢٥٪ بـ٣ فنادق).</li>
+        <li><strong>خصم هيثم (سوينو):</strong> «Our contract» ٤٥٪/٥٠٪ دائم — لا يُحذف أبداً. عروض SPO = ملفّات عرض فقط (الاستثناء سوينو).</li>
       </ul></div></details>
       <details class="acc"><summary><span>🔍</span> دروس الوكلاء والتدقيق<span class="arr">▾</span></summary><div class="inner"><ul class="t">
         <li><strong>لا تثق بإنذار وكلاء قراءة الملفّات — تحقّق يدويّاً.</strong> أخطؤوا في كريستال/ريكسوس/SPO/الرويال/Palmora.</li>
-        <li>التحقّق العدائيّ إلزاميّ: «٤ عقول/ملاحظة» قلّص ١١٣ ملاحظة واجهة إلى ٣ حرِجة فعليّة.</li>
-        <li>اختبر مخرَج المحرّك الحيّ لا العقود الساكنة (السلوكيّ: ١٣٩٠ بحثاً + قواعد ثبات).</li>
+        <li>التحقّق العدائيّ إلزاميّ: «٤ عقول/ملاحظة» قلّص ١١٣ ملاحظة إلى ٣ حرِجة. اختبر مخرَج المحرّك الحيّ لا العقود الساكنة.</li>
       </ul></div></details>
       <details class="acc"><summary><span>🎨</span> مطبّات الواجهة<span class="arr">▾</span></summary><div class="inner"><ul class="t">
-        <li><strong>Portal للنوافذ الثابتة</strong> إلى <code>document.body</code>. سلّم z: dropdown 50 / sticky 100 / fixed 200 / modal 5000-5001 / popover 10001 / tooltip 10002 / banner 1000.</li>
-        <li><code>minmax(0,1fr)</code> لمسارات الشبكة + <code>min-width:0</code>. النمط الأبرز للعلل: قصّ overflow أو سياق تكديس + z خارج السلّم.</li>
-        <li>احترم prefers-reduced-motion + لمسات هاتف ٤٤px + aria. التطبيق إنجليزيّ LTR فاتح (لا RTL داكن).</li>
+        <li><strong>Portal للنوافذ الثابتة</strong> إلى document.body. سلّم z: dropdown 50 / sticky 100 / fixed 200 / modal 5000-5001 / popover 10001 / tooltip 10002 / banner 1000.</li>
+        <li><code>minmax(0,1fr)</code> + <code>min-width:0</code>. النمط الأبرز للعلل: قصّ overflow أو سياق تكديس + z خارج السلّم. التطبيق إنجليزيّ LTR فاتح.</li>
       </ul></div></details>
       <details class="acc"><summary><span>🛠️</span> قوانين تشغيليّة<span class="arr">▾</span></summary><div class="inner"><ul class="t">
-        <li><code>railway up --ci</code> (ليس <code>--detach</code> — يكذب بنجاح وهميّ).</li>
-        <li>snake_case في route.ts. <code>/api/version</code> يُرجِع <code>git.commitSha</code> تحت مفتاح <code>git</code> لا الجذر؛ حاجب <code>/api/admin/*</code> يعطي 401 حتى لمسار غير موجود.</li>
-        <li>رفع SPO/إكسل: المسار يرفض xlsx → ارفع بسكربت service-role عبر <code>railway run</code>. معاينة إكسل: Gotenberg→PDF. مخزن الصور: قيد allowed_mime_types صُفِّر + ٥٠ ميغا.</li>
-        <li>رمز الكرون: ارفض رفع رمز <٤ ساعات (فشل ١٥/١٥ سابقاً).</li>
+        <li><code>railway up --ci</code> (ليس --detach). <code>/api/version</code> يُرجِع commitSha تحت مفتاح <code>git</code>. حاجب <code>/api/admin/*</code> يعطي 401 حتى لمسار غير موجود.</li>
+        <li>رفع SPO/إكسل بسكربت service-role عبر <code>railway run</code>. معاينة إكسل Gotenberg→PDF. مخزن الصور: قيد allowed_mime_types صُفِّر + ٥٠ ميغا. رمز الكرون: ارفض <٤ ساعات.</li>
       </ul></div></details>
-      <details class="acc"><summary><span>📌</span> بنود مُدوَّنة لم تُحسَم<span class="arr">▾</span></summary><div class="inner"><ul class="t">
-        <li>سجلّ تغييرات العقود (audit_logs ناقص). فجوة «بالغان+طفل» (~٥٠ غرفة، طفل مجّانيّ قيمة 2.0).</li>
-        <li>٧٩ غرفة <code>max_infants=0</code> ترفض الرضيع رغم اتّساعها — قرار ماليّ. اختفاء الغرفة عند تركيبة ناقصة → تكثيف الرضّع + شبكة أمان.</li>
-        <li>فصل <code>wo_*</code> و<code>telegram_*</code> عن نظام التسعير.</li>
+      <details class="acc"><summary><span>📌</span> بنود لم تُحسَم<span class="arr">▾</span></summary><div class="inner"><ul class="t">
+        <li>سجلّ تغييرات العقود · فجوة «بالغان+طفل» (~٥٠ غرفة) · ٧٩ غرفة max_infants=0 · اختفاء الغرفة عند تركيبة ناقصة · فصل wo_*/telegram_*.</li>
       </ul></div></details>
     </section>
 
-    <!-- INDEX -->
+    <!-- ===== INDEX ===== -->
     <section id="index">
-      <h2 class="s"><span class="hn">⌘</span> أين يعيش كلّ شيء (الفهرس)</h2>
+      <h2 class="s"><span class="hn">⌘</span> أين يعيش كلّ شيء</h2>
       <div class="card"><ul class="t">
-        <li><strong>الدستور التقنيّ:</strong> <code>CLAUDE.md</code> (الليقو، نموذج التسعير، القواعد).</li>
-        <li><strong>المرجع الجامع:</strong> <code>docs/SYSTEM_MASTER_PLAN.md</code> + نسخته <code>docs/reports/system_master_plan_jun27.html</code>.</li>
-        <li><strong>مخطّط الحجز والمحاسبة:</strong> <code>docs/reports/booking_accounting_blueprint_jun28.html</code>.</li>
-        <li><strong>إدخال الفنادق:</strong> <code>docs/HOTEL_ENTRY_PLAYBOOK.md</code> + <code>docs/reports/ENTRY_RUNBOOK.md</code> + <code>docs/reports/_generated_sql/</code>.</li>
-        <li><strong>التقارير الحيّة:</strong> الفحص الشامل <code>platform_audit_jun27.html</code> · الاستدامة · فحوص الواجهة · تدقيقات البيانات/العقود/السلوك · تحديث SPO · دليل Backblaze.</li>
+        <li><strong>الدستور التقنيّ:</strong> <code>CLAUDE.md</code>. <strong>المرجع الجامع:</strong> <code>docs/SYSTEM_MASTER_PLAN.md</code> + نسخته <code>system_master_plan_jun27.html</code>.</li>
+        <li><strong>مخطّط الحجز والمحاسبة:</strong> <code>docs/reports/booking_accounting_blueprint_jun28.html</code>. <strong>إدخال الفنادق:</strong> <code>HOTEL_ENTRY_PLAYBOOK.md</code> + <code>ENTRY_RUNBOOK.md</code> + <code>_generated_sql/</code>.</li>
+        <li><strong>التقارير الحيّة:</strong> <code>platform_audit_jun27</code> · الاستدامة · فحوص الواجهة · تدقيقات البيانات/العقود/السلوك · تحديث SPO · دليل Backblaze.</li>
         <li><strong>الذاكرة الدائمة:</strong> <code>~/.claude/projects/.../memory/MEMORY.md</code> (~٥٠ خيطاً). قوالب البريد: <code>reference_brix_email_templates.md</code>.</li>
         <li><strong>النسخ:</strong> <code>scripts/run-backup.mjs</code> + GitHub Actions <code>daily-contract-backup.yml</code> (جذر المستودع).</li>
       </ul></div>
+      <p style="text-align:center;color:var(--faint);font-size:11.5px;margin-top:22px">BRIX Mission Control · تتبّعٌ ذكيٌّ + مرجعٌ كامل · ٢٨ يونيو ٢٠٢٦ · تُحدَّث بعد كلّ مرحلة كبرى</p>
     </section>
-
-    <p style="text-align:center;color:var(--mute);font-size:12px;margin-top:28px">
-      BRIX Command Cockpit · هذه الصفحة هي المكان الواحد للتتبّع والمرجع · آخر تحديث ٢٨ يونيو ٢٠٢٦ · تُحدَّث بعد كلّ مرحلة كبرى
-    </p>
   </main>
 </div>
 <button id="top" aria-label="للأعلى">↑</button>
 <script>
 (function(){
   var prog=document.querySelector('#prog i'),top=document.getElementById('top');
-  function s(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(p*100)+'%';top.classList.toggle('show',h.scrollTop>500)}
-  document.addEventListener('scroll',s,{passive:true});s();
+  function sc(){var h=document.documentElement,p=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(p*100)+'%';top.classList.toggle('show',h.scrollTop>520)}
+  document.addEventListener('scroll',sc,{passive:true});sc();
   top.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
   var links=[].slice.call(document.querySelectorAll('.nav a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var id='#'+e.target.id;links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')===id)})}})},{rootMargin:'-10% 0px -75% 0px'});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var id='#'+e.target.id;links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')===id)})}})},{rootMargin:'-9% 0px -78% 0px'});
   secs.forEach(function(x){if(x)io.observe(x)});
   var side=document.getElementById('side'),mb=document.getElementById('menu');
   mb.onclick=function(){side.classList.toggle('open')};links.forEach(function(l){l.onclick=function(){side.classList.remove('open')}});
-  var tb=document.getElementById('theme'),root=document.documentElement,sv=localStorage.getItem('brix-cockpit-theme');
+  var tb=document.getElementById('theme'),root=document.documentElement,sv=localStorage.getItem('brix-mc-theme');
   if(sv){root.setAttribute('data-theme',sv);tb.textContent=sv==='light'?'🌙 الوضع الليليّ':'☀️ الوضع النهاريّ'}
-  tb.onclick=function(){var d=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',d);localStorage.setItem('brix-cockpit-theme',d);tb.textContent=d==='light'?'🌙 الوضع الليليّ':'☀️ الوضع النهاريّ'};
+  tb.onclick=function(){var d=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',d);localStorage.setItem('brix-mc-theme',d);tb.textContent=d==='light'?'🌙 الوضع الليليّ':'☀️ الوضع النهاريّ'};
+  // Decision tracker (persisted)
+  var decs=[].slice.call(document.querySelectorAll('#decs .dec')),bar=document.getElementById('decbar'),cnt=document.getElementById('deccount');
+  function ar(n){return String(n).replace(/[0-9]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})}
+  function refresh(){var done=decs.filter(function(d){return d.classList.contains('decided')}).length;bar.style.width=(done/decs.length*100)+'%';cnt.textContent=ar(done)+' / '+ar(decs.length)+' محسومة'}
+  decs.forEach(function(d){var id='brix-dec-'+d.getAttribute('data-d');if(localStorage.getItem(id)==='1')d.classList.add('decided');var b=d.querySelector('.tog');b.textContent=d.classList.contains('decided')?'✓ محسوم':'حُسِم';b.onclick=function(){d.classList.toggle('decided');var on=d.classList.contains('decided');localStorage.setItem(id,on?'1':'0');b.textContent=on?'✓ محسوم':'حُسِم';refresh()}});
+  document.getElementById('decreset').onclick=function(){decs.forEach(function(d){d.classList.remove('decided');localStorage.setItem('brix-dec-'+d.getAttribute('data-d'),'0');d.querySelector('.tog').textContent='حُسِم'});refresh()};
+  refresh();
 })();
 </script>
 </body>
