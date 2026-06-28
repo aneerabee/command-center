@@ -326,6 +326,7 @@ const PRJ = [
   {
     name: "BRIX Travel System",
     id: "brix-travel-system",
+    custom_page: "brix.html",
     kind: "product",
     ar: "نظام حجز الفنادق",
     st: "a",
