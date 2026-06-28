@@ -138,8 +138,16 @@ details.acc .inner{padding:0 15px 14px;font-size:13.3px;color:var(--mute)}
 #top{position:fixed;inset-block-end:18px;inset-inline-start:18px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);font-size:17px;opacity:0;transition:.25s;z-index:120}#top.show{opacity:1}
 .menu{display:none}
 @media(max-width:940px){.wrap{grid-template-columns:1fr}.side{position:fixed;inset-block:0;inset-inline-end:0;width:272px;transform:translateX(100%);transition:.25s;z-index:200;background:var(--bg2)}.side.open{transform:translateX(0)}.menu{display:grid;place-items:center;position:fixed;top:12px;inset-inline-end:12px;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:20px;z-index:210;cursor:pointer}main{padding:60px 15px 80px}.mission h1{font-size:21px}.gauges{margin-top:14px}}
+/* embedded mode — clean single column when rendered inside the command-center detail panel */
+html.embedded .side{display:none}
+html.embedded .menu{display:none}
+html.embedded .wrap{display:block;max-width:none}
+html.embedded main{max-width:1060px;margin:0 auto;padding:20px 26px 70px}
+html.embedded #top{inset-inline-start:14px}
+html.embedded .mission{border-radius:18px}
 @media print{.side,#top,.menu,#prog{display:none}.wrap{display:block}details.acc[open] .inner,.step .body{display:block}}
 </style>
+<script>try{if(window.self!==window.top)document.documentElement.classList.add('embedded')}catch(e){document.documentElement.classList.add('embedded')}</script>
 </head>
 <body>
 <div id="prog"><i></i></div>
