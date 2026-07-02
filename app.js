@@ -4405,7 +4405,9 @@ function _claudeSessionCard(item) {
     (cwd || memoryFile
       ? `<div class="prj-claude-meta">` +
         (cwd
-          ? `<div class="prj-claude-meta-row"><span>المجلد</span><code dir="ltr">${E(cwd)}</code></div>`
+          ? `<div class="prj-claude-meta-row"><span>المجلد</span><code dir="ltr">${E(cwd)}</code>` +
+            `<button class="prj-claude-copy prj-claude-copy-sm" onclick="copyClaudeCmd(this, ${JSON.stringify('cd "' + cwd + '"').replace(/"/g, "&quot;")})" aria-label="نسخ أمر الدخول للمجلد">${_ic("📋", 12)} cd</button>` +
+            `</div>`
           : "") +
         (memoryFile
           ? `<div class="prj-claude-meta-row"><span>ملف الذاكرة</span><code dir="ltr">${E(memoryFile)}</code></div>`

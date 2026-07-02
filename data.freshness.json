@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-14T23:11:36.146Z",
+  "generated_at": "2026-07-02T08:03:13.162Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -45,8 +45,8 @@
       "links_desc": "2026-05-20",
       "current_status": "2026-05-20",
       "bot_features": "2026-05-20",
-      "claude_session": "2026-05-20",
-      "_root": "2026-06-07"
+      "claude_session": "2026-07-02",
+      "_root": "2026-07-02"
     },
     "rihlaty-travel": {
       "links": "2026-05-11",

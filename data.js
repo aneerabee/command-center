@@ -552,7 +552,7 @@ const PRJ = [
       terminal: "iTerm2",
       cwd: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
       command:
-        "cd ~/Desktop/Projects/🏨\\ BRIX-Travel && claude",
+        "cd \"/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel\" && claude",
       memory_file:
         "~/.claude/projects/-Users-rabeeshaban-Desktop-Projects----BRIX-Travel/memory/MEMORY.md",
       note: "بعد فتح كلود اكتب /resume واختر الجلسة المسماة بريكس سيستم. آخر نقطة (2026-06-28): اكتمل «مخطّط دورة الحجز والمحاسبة الكامل» وتنتظر ٨ قرارات مالك للبناء + دفع تصحيحات الوثيقة المرجعيّة. ابدأ من SYSTEM_MASTER_PLAN ثمّ مخطّط الحجز. ملف الذاكرة يحوي كلّ الخيوط (~٥٠ مشروعاً).",

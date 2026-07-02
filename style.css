@@ -6772,6 +6772,13 @@ svg.lucide {
   background: var(--c-success);
   filter: none;
 }
+.prj-claude-copy-sm {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  font-size: 10px;
+  border-radius: 6px;
+  gap: 4px;
+}
 .prj-claude-steps {
   list-style: none;
   counter-reset: cs;
