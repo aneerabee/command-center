@@ -239,22 +239,59 @@ function checkServices(services, previous, serverSnapshot) {
   const systemdByUnit = Object.fromEntries(((serverSnapshot.data || {}).systemd_user || []).map(x => [x.unit, x]));
   const crontab = ((serverSnapshot.data || {}).crontab || []).join('\n');
   const tailscale = safeExec('command -v tailscale >/dev/null 2>&1 && tailscale ip -4');
+  const dockerStatus = (name) => {
+    const row = dockerByName[name];
+    if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: `حاوية ${name} غير ظاهرة`, facts: [`container: ${name}`]};
+    return {
+      verification_status: row.status.toLowerCase().includes('up') ? 'ok' : 'warn',
+      checked_from: 'ssh',
+      summary: row.status,
+      facts: [`container: ${name}`]
+    };
+  };
+  const systemdStatus = (unitName) => {
+    const unit = systemdByUnit[unitName];
+    if (!unit) return {verification_status: 'fail', checked_from: 'ssh', summary: `${unitName} غير ظاهرة`, facts: [`unit: ${unitName}`]};
+    return {
+      verification_status: unit.active === 'active' ? 'ok' : 'warn',
+      checked_from: 'ssh',
+      summary: `unit: ${unit.active}/${unit.sub}`,
+      facts: [`unit: ${unit.unit}`, `description: ${unit.description}`]
+    };
+  };
+  const launchdStatus = (label) => {
+    const uid = process.getuid ? process.getuid() : '';
+    const result = safeExec(`launchctl print gui/${uid}/${label}`, {timeout: 4000});
+    if (!result.ok) return {verification_status: 'warn', checked_from: 'launchd', summary: `${label} غير محمل في launchd`, facts: [result.stderr || result.stdout || 'launchctl failed']};
+    const lastExit = String(result.stdout || '').match(/last exit code = (\d+)/)?.[1];
+    const interval = String(result.stdout || '').match(/run interval = (\d+) seconds/)?.[1];
+    return {
+      verification_status: lastExit === '0' ? 'ok' : 'warn',
+      checked_from: 'launchd',
+      summary: `loaded, last exit ${lastExit || 'unknown'}`,
+      facts: [`label: ${label}`, interval ? `interval: ${interval}s` : 'interval: unknown']
+    };
+  };
 
   const matchers = {
+    'libya-web': () => systemdStatus('libya-web.service'),
+    'adreem-bot-svc': () => systemdStatus('adreem-bot.service'),
+    'adreem-api': () => systemdStatus('adreem-api.service'),
+    'cc-runtime-publish': () => launchdStatus('com.rabeeshaban.command-center-runtime-publish'),
     'wapy-app': () => {
-      const row = dockerByName['wapydev-app'];
-      if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: 'حاوية wapydev-app غير ظاهرة', facts: []};
-      return {verification_status: row.status.toLowerCase().includes('up') ? 'ok' : 'warn', checked_from: 'ssh', summary: row.status, facts: ['container: wapydev-app']};
+      return dockerStatus('wapydev-app');
+    },
+    'brixtravel-caddy': () => {
+      return dockerStatus('brixtravel-caddy');
     },
     'wapy-cron': () => {
-      const row = dockerByName['wapydev-cron'];
-      if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: 'حاوية wapydev-cron غير ظاهرة', facts: []};
-      return {verification_status: row.status.toLowerCase().includes('up') ? 'ok' : 'warn', checked_from: 'ssh', summary: row.status, facts: ['container: wapydev-cron']};
+      return dockerStatus('wapydev-cron');
     },
     'wapy-db': () => {
-      const row = dockerByName['wapydev-db'];
-      if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: 'حاوية wapydev-db غير ظاهرة', facts: []};
-      return {verification_status: row.status.toLowerCase().includes('up') ? 'ok' : 'warn', checked_from: 'ssh', summary: row.status, facts: ['container: wapydev-db']};
+      return dockerStatus('wapydev-db');
+    },
+    'dr-muhsen-svc': () => {
+      return dockerStatus('dr-muhsen');
     },
     'argaz-gateway': () => {
       const unit = systemdByUnit['openclaw-gateway.service'];

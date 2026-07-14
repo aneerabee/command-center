@@ -37,12 +37,22 @@ const log = (e, k, v) => {
 };
 
 // ─── utils ───
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function httpStatus(url, timeoutMs = 10000) {
+  if (!isHttpUrl(url)) return null;
   try {
     const out = execFileSync(
       "curl",
-      ["-sS", "-o", "/dev/null", "-w", "%{http_code}", "--max-time", String(Math.ceil(timeoutMs / 1000)), url],
-      { encoding: "utf8" },
+      ["-s", "-o", "/dev/null", "-w", "%{http_code}", "--max-time", String(Math.ceil(timeoutMs / 1000)), url],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
     );
     return parseInt(out.trim(), 10);
   } catch {
@@ -138,7 +148,7 @@ for (const s of ctx.SVC) {
     const active = ssh(`systemctl --user is-active ${s.systemd} 2>/dev/null || echo missing`, `svc:${s.systemd}`);
     log(id, "systemd", { unit: s.systemd, status: active });
   }
-  if (s.port) {
+  if (s.port && /^\d+$/.test(String(s.port))) {
     const status = httpStatus(`http://62.171.128.44:${s.port}/`, 8000);
     log(id, "port_http", { port: s.port, status });
   }

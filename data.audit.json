@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-14T23:10:42.089Z",
+  "generated_at": "2026-07-14T01:48:02.613Z",
   "entities": {
     "brix-travel-system": {
       "kind": "project",
@@ -146,10 +146,6 @@
         "value": "https://aneerabee.github.io/western-office/",
         "status": 200,
         "ok": true
-      },
-      "local_path": {
-        "value": "/Users/rabeeshaban/iCloud Drive (Archive)/Documents/New project/western-office",
-        "exists": true
       }
     },
     "adreem": {
@@ -217,11 +213,7 @@
     },
     "adreem-bot-svc": {
       "kind": "service",
-      "name": "ADREEM Bot Service",
-      "port_http": {
-        "port": "Telegram polling",
-        "status": 0
-      }
+      "name": "ADREEM Bot Service"
     },
     "adreem-api": {
       "kind": "service",
@@ -245,19 +237,11 @@
     },
     "brixtravel-caddy": {
       "kind": "service",
-      "name": "BRIX Caddy Proxy",
-      "port_http": {
-        "port": "80/443",
-        "status": 308
-      }
+      "name": "BRIX Caddy Proxy"
     },
     "wapy-cron": {
       "kind": "service",
-      "name": "Wapy Cron",
-      "port_http": {
-        "port": "—",
-        "status": 0
-      }
+      "name": "Wapy Cron"
     },
     "wapy-db": {
       "kind": "service",
@@ -269,35 +253,19 @@
     },
     "wapy-backup-cron": {
       "kind": "service",
-      "name": "Wapy Backup",
-      "port_http": {
-        "port": "—",
-        "status": 0
-      }
+      "name": "Wapy Backup"
     },
     "wapy-cleanup-cron": {
       "kind": "service",
-      "name": "Wapy Cleanup",
-      "port_http": {
-        "port": "—",
-        "status": 0
-      }
+      "name": "Wapy Cleanup"
     },
     "tailscale-vpn": {
       "kind": "service",
-      "name": "Tailscale VPN",
-      "port_http": {
-        "port": "—",
-        "status": 0
-      }
+      "name": "Tailscale VPN"
     },
     "dr-muhsen-svc": {
       "kind": "service",
-      "name": "Dr. Muhsen Ledger Service",
-      "port_http": {
-        "port": "3500 (Tailscale فقط) → 3001 داخل الحاوية",
-        "status": 0
-      }
+      "name": "Dr. Muhsen Ledger Service"
     },
     "github": {
       "kind": "cloud",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T08:03:13.162Z",
+  "generated_at": "2026-07-14T01:48:02.569Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -41,10 +41,10 @@
       "_root": "2026-05-12"
     },
     "brix-travel-system": {
-      "links": "2026-05-12",
-      "links_desc": "2026-05-20",
-      "current_status": "2026-05-20",
-      "bot_features": "2026-05-20",
+      "links": "2026-06-28",
+      "links_desc": "2026-06-28",
+      "current_status": "2026-06-28",
+      "bot_features": "2026-06-28",
       "claude_session": "2026-07-02",
       "_root": "2026-07-02"
     },
@@ -63,8 +63,8 @@
     },
     "command-center": {
       "links": "2026-04-05",
-      "current_status": "2026-05-25",
-      "_root": "2026-06-14"
+      "current_status": "2026-07-14",
+      "_root": "2026-07-14"
     },
     "whatsapp-crm": {
       "links": "2026-05-05",
@@ -89,15 +89,15 @@
     },
     "western-office": {
       "links": "2026-04-13",
-      "current_status": "2026-05-23",
-      "_root": "2026-06-14"
+      "current_status": "2026-07-14",
+      "_root": "2026-07-14"
     },
     "adreem": {
       "links": "2026-06-07",
       "links_desc": "2026-06-07",
-      "current_status": "2026-06-07",
-      "claude_session": "2026-06-07",
-      "_root": "2026-06-14"
+      "current_status": "2026-07-14",
+      "claude_session": "2026-07-14",
+      "_root": "2026-07-14"
     },
     "libya": {
       "links": "2026-05-23",

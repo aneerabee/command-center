@@ -5,9 +5,9 @@
   "reachable": true,
   "metrics": {
     "disk_pct": 26,
-    "disk_free": "72G",
+    "disk_free": "74G",
     "wapy_backup_age_h": 0,
-    "docker_running": 3,
+    "docker_running": 5,
     "svc_failed": 0,
     "load_1m": "0.00"
   },

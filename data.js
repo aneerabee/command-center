@@ -807,7 +807,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "إضافة عرض المظلات (Umbrellas View) للتنقل بين الشركات",
     summary:
-      "لوحة تحكم موحّدة — 12 صفحة، 4 شركات، 12 مشروع، 5 موظفين. تحديث تلقائي كل 6 ساعات عبر launchd → GitHub Pages.",
+      "لوحة تحكم موحّدة — 14 مشروعًا، 12 خدمة، 6 بوتات، 18 أداة، 18 خدمة سحابية. تحديث تلقائي كل 6 ساعات عبر launchd → GitHub Pages.",
     local_path: "/Users/rabeeshaban/Developer/command-center",
     server_path: null,
     repo_url: "https://github.com/aneerabee/command-center",
@@ -837,11 +837,11 @@ const PRJ = [
       GitHub: "https://github.com/aneerabee/command-center",
     },
     current_status: {
-      updated: "2026-05-25",
+      updated: "2026-07-14",
       where:
-        "نشطة ومنشورة. شملت دفعة 11 مايو إضافة UMBRELLAS + DEPARTMENTS + TEAM + Rihlaty Travel + إصلاح مسارات + ربط هرمي بين الشركات والأقسام والموظفين. [تحديث 2026-05-25] نُقلت النسخة المحلية من ~/Documents/New project/command-center إلى ~/Developer/command-center لإخراجها من آي‑كلاود (المشكلة نفسها التي عُولجت لمشروع ليبيا — أرشفة ملفات تلقائيّة تعطّل git أحيانًا). جيت‑هَب https://github.com/aneerabee/command-center هو المصدر الأساسي. نسخة launchd الآلية للنشر تعيش منفصلة في ~/.local/share/command-center ولم تتأثّر بالنقل.",
+        "نشطة ومنشورة على GitHub Pages. فحص 2026-07-14 أكد الرابط الحي HTTP 200، والريبو الرسمي aneerabee/command-center، والمسار المحلي /Users/rabeeshaban/Developer/command-center. فحص runtime صار أوضح: 13/14 مشروع ok، 11/12 خدمة ok، 2/6 بوتات ok، والـ launchd الخاص بتحديث runtime محمل وآخر خروج له 0.",
       next_step:
-        "إضافة بحث Cmd+K موحّد، وضع داكن، KPIs لكل مشروع، استبيان لجمع بيانات الموظفين.",
+        "تحويل العناصر اليدوية والتحذيرات المتبقية إلى checkers مباشرة: Rihlaty، بوتات ADREEM/BRIX/LIBYA، وتحقق Tailscale من داخل بيئة تملك tailscale CLI.",
     },
   },
   {
@@ -1173,8 +1173,7 @@ const PRJ = [
     next_milestone: "ربطه بـ Money Manager لتغذية تقارير الصرافة",
     summary:
       "نظام تشغيل يومي لـEtranex — حوالات + زبائن + تسويات + إقفال + مطالبة أرباح. منفصل الآن عن دفتر محمد، 282 اختبار، Supabase + localStorage مزدوج، وضع مشاهدة آمن للزبائن.",
-    local_path:
-      "/Users/rabeeshaban/iCloud Drive (Archive)/Documents/New project/western-office",
+    local_path: null,
     server_path: null,
     repo_url: "https://github.com/aneerabee/western-office",
     deploy_url: "https://aneerabee.github.io/western-office/",
@@ -1229,7 +1228,7 @@ const PRJ = [
       "Rolling Snapshots",
       "GitHub Pages",
     ],
-    path: "/Users/rabeeshaban/iCloud Drive (Archive)/Documents/New project/western-office",
+    path: "github:aneerabee/western-office",
     links: {
       التطبيق: "https://aneerabee.github.io/western-office/",
       "مشاهدة مثال": "https://aneerabee.github.io/western-office/?viewer=1776004308716001",
@@ -1237,11 +1236,11 @@ const PRJ = [
       Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
     },
     current_status: {
-      updated: "2026-05-23",
+      updated: "2026-07-14",
       where:
-        "نظام تشغيل يومي حي لمكتب Etranex (السنتر) في أنطاليا. 88% مكتمل، 282 اختبار يمر في 12 ملف، 7 تبويبات تشغيلية + وضع مشاهدة آمن للزبائن. تم تنظيفه من ملفات ومسارات دفتر محمد ونشر commit 42cdddd بنجاح.",
+        "الرابط الحي يعمل HTTP 200 والريبو الرسمي aneerabee/western-office موجود على GitHub. لا توجد نسخة محلية Git مؤكدة في /Users/rabeeshaban/Developer؛ المجلد القديم في iCloud Archive يحتوي بقايا node_modules فقط ولا يصلح كمصدر تطوير. لذلك اللوحة تعتمد الآن على GitHub/GitHub Pages كمصدر موثوق لهذا المشروع.",
       next_step:
-        "ربطه بـMoney Manager لتغذية تقارير الصرافة الموحدة، تطوير بوت تليجرام للإشعارات، تقارير PDF شهرية، استبدال $ بـ₺ في الواجهة.",
+        "إذا سنطور Western Office مجددًا: اعمل clone جديد خارج iCloud إلى /Users/rabeeshaban/Developer/western-office ثم شغّل npm test/build قبل أي تعديل. بعدها يمكن ربطه بـMoney Manager أو بوت إشعارات.",
     },
   },
   {
@@ -1373,9 +1372,9 @@ const PRJ = [
       Telegram: "بوت ADREEM الحي على Contabo",
     },
     current_status: {
-      updated: "2026-06-08",
+      updated: "2026-07-14",
       where:
-        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. الرابط الحي يعمل، وAPI العام يعمل عبر https://www.brixtravel.com/adreem-api. محليًا نجح 146 اختبارًا، lint، build، وفحص Playwright للهاتف والكمبيوتر. السيرفر/البوت على Contabo محدّثان إلى commit f2674d1، والخدمتان active، وverify:runtime نجح. الويب في وضع API أصبح cloud-only ولا يقرأ/يحفظ بيانات دفتر من localStorage. صفحة إدارة المستخدمين تعمل عبر /api/admin/users بتوكن إداري hashed في env، وتنشئ مستخدمين بإيميل وكلمة مرور بدل روابط token. البوت لا ينشئ مستخدمين من /adduser الآن، بل يستهلك registry والصلاحيات التي تنشئها صفحة الإدارة.",
+        "ADREEM منشور على GitHub Pages من الريبو الرسمي aneerabee/adreem. فحص 2026-07-14 أكد: الرابط الحي HTTP 200، API health HTTP 200، المسار المحلي /Users/rabeeshaban/Developer/adreem Git remote صحيح، ومسار السيرفر /home/argaz/apps/adreem موجود. على Contabo خدمتا adreem-api.service وadreem-bot.service active/running. الويب يعمل cloud-only عبر ADREEM API، وإدارة المستخدمين بالإيميل وكلمة المرور من صفحة الإدارة.",
       next_step:
         "اختبار قبول عملي من جهازك والهاتف: إدخال حركة من الويب ثم مراجعتها في البوت، وإدخال حركة من البوت ثم ظهورها في الويب، ثم مراقبة أول 24 ساعة.",
       blockers: [],
@@ -1388,7 +1387,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر نقطة 2026-06-08: ADREEM محدّث في GitHub وعلى Contabo إلى commit f2674d1. الويب cloud-only في وضع API، صفحة إدارة المستخدمين تنشئ مستخدمين بإيميل وكلمة مرور، /adduser معطل عمدًا في البوت، وAPI الإدارة /api/admin/users يعمل بدون webUrl. adreem-api.service وadreem-bot.service يعملان. npm test نجح بـ146 اختبارًا، lint وbuild نجحا، وverify:runtime نجح.",
+      note: "آخر تحقق لوحة 2026-07-14: GitHub Pages يعمل، ADREEM API health يعمل، adreem-api.service وadreem-bot.service active/running على Contabo. للاستعمال اليومي ادخل من https://aneerabee.github.io/adreem/، ولإدارة المستخدمين افتح ?admin=users. لا تشغّل Claude telegram plugin بالتوازي مع البوت.",
     },
   },
   {
