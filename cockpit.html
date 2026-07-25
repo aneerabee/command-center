@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قمرة القيادة</title>
+<meta name="theme-color" content="#F7F6F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="cc-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="cockpit.css?v=5.0.1">
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">قمرة القيادة</span>
+  <span class="nav-links">
+    <a class="nav-link" href="#today"  data-nav="today">اليوم</a>
+    <a class="nav-link" href="#work"   data-nav="work">العمل</a>
+    <a class="nav-link" href="#ops"    data-nav="ops">التشغيل</a>
+    <a class="nav-link" href="#people" data-nav="people">الناس</a>
+  </span>
+  <span class="nav-spacer"></span>
+  <span class="statbar"></span>
+  <button class="nav-search" data-act="cmdk">بحث <kbd>⌘K</kbd></button>
+</nav>
+
+<main class="wrap">
+  <section class="page" id="pg-today"></section>
+  <section class="page" id="pg-work"></section>
+  <section class="page" id="pg-ops"></section>
+  <section class="page" id="pg-people"></section>
+</main>
+
+<nav class="tabbar">
+  <a class="tab" href="#today"  data-nav="today"><i>◉</i>اليوم</a>
+  <a class="tab" href="#work"   data-nav="work"><i>▣</i>العمل</a>
+  <a class="tab" href="#ops"    data-nav="ops"><i>▤</i>التشغيل</a>
+  <a class="tab" href="#people" data-nav="people"><i>◍</i>الناس</a>
+  <button class="tab" data-act="cmdk"><i>⌕</i>بحث</button>
+</nav>
+
+<div class="scrim" data-act="close"></div>
+<aside class="drawer" role="dialog" aria-modal="true" aria-label="تفاصيل">
+  <header class="dw-head"></header>
+  <div class="dw-body"></div>
+</aside>
+
+<div class="cmdk" data-act="cmdk-scrim">
+  <div class="cmdk-box">
+    <input class="cmdk-input" type="search" placeholder="ابحث في كل شيء — مشاريع، خدمات، بوتات، أدوات، أشخاص…" autocomplete="off">
+    <div class="cmdk-list"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="cockpit.js?v=5.0.1"></script>
+</body>
+</html>
