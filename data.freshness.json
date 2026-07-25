@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-14T02:28:10.849Z",
+  "generated_at": "2026-07-25T16:50:07.176Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -42,16 +42,16 @@
     },
     "brix-travel-system": {
       "links": "2026-06-28",
-      "links_desc": "2026-06-28",
-      "current_status": "2026-06-28",
-      "bot_features": "2026-06-28",
+      "links_desc": "2026-07-25",
+      "current_status": "2026-07-25",
+      "bot_features": "2026-07-25",
       "claude_session": "2026-07-02",
-      "_root": "2026-07-02"
+      "_root": "2026-07-25"
     },
     "rihlaty-travel": {
       "links": "2026-05-11",
-      "current_status": "2026-05-11",
-      "_root": "2026-06-14"
+      "current_status": "2026-07-25",
+      "_root": "2026-07-25"
     },
     "meta-mcp": {
       "current_status": "2026-05-11",
@@ -64,7 +64,7 @@
     "command-center": {
       "links": "2026-04-05",
       "current_status": "2026-07-14",
-      "_root": "2026-07-14"
+      "_root": "2026-07-25"
     },
     "whatsapp-crm": {
       "links": "2026-05-05",
@@ -74,8 +74,8 @@
       "_root": "2026-06-14"
     },
     "money-manager": {
-      "current_status": "2026-05-11",
-      "_root": "2026-06-14"
+      "current_status": "2026-07-25",
+      "_root": "2026-07-25"
     },
     "brix-travel-website": {
       "links": "2026-05-14",
@@ -85,27 +85,27 @@
     "chess-academy": {
       "links": "2026-04-05",
       "current_status": "2026-05-11",
-      "_root": "2026-05-20"
+      "_root": "2026-07-25"
     },
     "western-office": {
       "links": "2026-04-13",
       "current_status": "2026-07-14",
-      "_root": "2026-07-14"
+      "_root": "2026-07-25"
     },
     "adreem": {
       "links": "2026-06-07",
       "links_desc": "2026-06-07",
       "current_status": "2026-07-14",
       "claude_session": "2026-07-14",
-      "_root": "2026-07-14"
+      "_root": "2026-07-25"
     },
     "libya": {
       "links": "2026-05-23",
       "links_desc": "2026-05-22",
       "current_status": "2026-06-14",
-      "bot_features": "2026-06-14",
+      "bot_features": "2026-07-25",
       "claude_session": "2026-05-25",
-      "_root": "2026-06-14"
+      "_root": "2026-07-25"
     },
     "libya-web": {
       "_root": "2026-06-14"
@@ -132,7 +132,7 @@
       "_root": "2026-05-12"
     },
     "wapy-backup-cron": {
-      "_root": "2026-05-12"
+      "_root": "2026-07-25"
     },
     "wapy-cleanup-cron": {
       "_root": "2026-05-12"
@@ -150,7 +150,7 @@
       "_root": "2026-05-20"
     },
     "desktop-ci-build-test-auto-deploy": {
-      "_root": "2026-05-27"
+      "_root": "2026-07-25"
     },
     "tron-address-bot": {
       "_root": "2026-05-30"
@@ -163,22 +163,22 @@
     },
     "adreem-bot": {
       "links": "2026-05-31",
-      "current_status": "2026-06-07",
-      "_root": "2026-06-07"
+      "current_status": "2026-07-25",
+      "_root": "2026-07-25"
     },
     "brixprice-bot": {
       "links": "2026-05-12",
-      "_root": "2026-05-20"
+      "_root": "2026-07-25"
     },
     "libya-bot": {
       "links": "2026-05-22",
       "_root": "2026-06-14"
     },
     "codex-cli": {
-      "_root": "2026-06-14"
+      "_root": "2026-07-25"
     },
     "claude-code": {
-      "_root": "2026-06-14"
+      "_root": "2026-07-25"
     },
     "runtime-sync-system": {
       "_root": "2026-05-25"
@@ -253,13 +253,13 @@
       "_root": "2026-05-30"
     },
     "contabo-vps": {
-      "_root": "2026-06-14"
+      "_root": "2026-07-25"
     },
     "cloudflare": {
-      "_root": "2026-05-30"
+      "_root": "2026-07-25"
     },
     "hostinger": {
-      "_root": "2026-05-20"
+      "_root": "2026-07-25"
     },
     "icloud-drive": {
       "_root": "2026-06-14"
@@ -292,7 +292,7 @@
       "_root": "2026-04-05"
     },
     "brix-real-estate": {
-      "_root": "2026-05-12"
+      "_root": "2026-07-25"
     },
     "smart-media-indexer": {
       "_root": "2026-04-05"

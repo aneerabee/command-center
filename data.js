@@ -343,8 +343,8 @@ const PRJ = [
     monthly_revenue_usd: 0,
     users_count: 2,
     priority: "high",
-    next_milestone: "حسم ٨ قرارات مالك لبدء بناء دورة الحجز + المحاسبة (أهمّها توقيت الاعتراف بالإيراد وسياسة حدّ الائتمان) + دفع تصحيحات الوثيقة المرجعيّة + إصلاح فوترة GitHub (الحُرّاس متوقّفة منذ ٤ يونيو)",
-    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.2 + Supabase + 2,473 اختباراً موزّعة على 112 ملف. منشور حياً على Railway (verified 200) مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير. أحدث الميزات: نظام تحذيرات ٤ طبقات (excludedMarket + minGuestAge + releaseDays + askAndSale)، حاجز اليوم/الغد، توقيت إسطنبول، Land of Legends Kingdom + Nickelodeon (٩٦٩ مضاعف بدقّة ٤ خانات).",
+    next_milestone: "حسم ٨ قرارات مالك لبدء بناء دورة الحجز + المحاسبة (أهمّها توقيت الاعتراف بالإيراد وسياسة حدّ الائتمان) + دفع تصحيحات الوثيقة المرجعيّة + إصلاح فوترة GitHub (الحُرّاس متوقّفة منذ 2026-07-15)",
+    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.2 + Supabase + 2,868 اختباراً موزّعة على 141 ملفاً. منشور حياً على Railway (verified 200) مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير. أحدث الميزات: نظام تحذيرات ٤ طبقات (excludedMarket + minGuestAge + releaseDays + askAndSale)، حاجز اليوم/الغد، توقيت إسطنبول، Land of Legends Kingdom + Nickelodeon (٩٦٩ مضاعف بدقّة ٤ خانات).",
     local_path:
       "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
     server_path: null,
@@ -369,15 +369,15 @@ const PRJ = [
       "time-machine",
       "daily-backup",
     ],
-    related_services: ["telegram-bot @BrixPrice_bot"],
+    related_services: [],
     related_tools: [],
     related_cloud: ["GitHub", "Supabase", "Railway", "Telegram"],
     ops: [
-      "CI/CD: GitHub Actions يبني + يختبر (2473/2473) + يَنشر على Railway تلقائيّاً عند كل push على main (يعمل من 2026-05-20 بعد إصلاح npm→pnpm)",
+      "CI/CD: GitHub Actions يبني + يختبر (2868/2868) + يَنشر على Railway تلقائيّاً عند كل push على main (يعمل من 2026-05-20 بعد إصلاح npm→pnpm)",
       "Supabase هو مصدر الحقيقة الوحيد (v15.0+)",
       "النسخ الاحتياطي اليومي 03:00 UTC إلى مستودع brix-backups — paginated NDJSON + gzip + sha256 + canary + day-over-day compare. تنبيه تلجرام عند نقص > 10٪",
     ],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.2 + React 18 + TypeScript 5.9 + Tailwind 4\nSupabase (المصدر الوحيد للحقيقة منذ v15.0 — Airtable مُلغى) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n2,473 اختبار يمر، صفر ثغرات حرجة\nثماني خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (~١٠٣ ألف مضاعف إشغال، ١٠٠٧٢ سعراً أساسيّاً، ٤٠ جدولاً) — صفر تسريب مال عبر تدقيقات متعدّدة الوكلاء\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Supabase مباشرة (٤٠ جدولاً) ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Railway حي وشغّال (verified 200)، منشور حيّاً (الإصدار v15.5)، يطابق ١٠٠٪ ما يعرضه البوت. CI/CD تلقائيّ عبر GitHub Actions (إصلاح npm→pnpm في 2026-05-20). الـREADME يذكر vercel.app كخطة مستقبلية لكن لم يحدث الانتقال — لا يوجد vercel.json ولا deployment فعلي عليه.",
+    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.2 + React 18 + TypeScript 5.9 + Tailwind 4\nSupabase (المصدر الوحيد للحقيقة منذ v15.0 — Airtable مُلغى) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n2,868 اختبار يمر، صفر ثغرات حرجة\nثماني خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (~١٠٣ ألف مضاعف إشغال، ١٠٠٧٢ سعراً أساسيّاً، ٤٠ جدولاً) — صفر تسريب مال عبر تدقيقات متعدّدة الوكلاء\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Supabase مباشرة (٤٠ جدولاً) ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Railway حي وشغّال (verified 200)، منشور حيّاً (الإصدار v15.6.3)، يطابق ١٠٠٪ ما يعرضه البوت. CI/CD تلقائيّ عبر GitHub Actions (إصلاح npm→pnpm في 2026-05-20). الـREADME يذكر vercel.app كخطة مستقبلية لكن لم يحدث الانتقال — لا يوجد vercel.json ولا deployment فعلي عليه.",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -436,19 +436,19 @@ const PRJ = [
       Railway:
         "لوحة النشر الفعلية — اللوغات، المتغيرات، الفروع، إعادة التشغيل",
       GitHub:
-        "الكود المصدري — Next.js 16.2 و Supabase وبوت تلجرام و2,473 اختبار يمر",
+        "الكود المصدري — Next.js 16.2 و Supabase وبوت تلجرام و2,868 اختبار يمر",
       Supabase:
         "المصدر الوحيد للحقيقة منذ v15.0 — ٤٠ جدولاً يحوي كل بيانات العقود والفترات والأسعار والمضاعفات والخصومات",
     },
     current_status: {
       updated: "2026-06-28",
       where:
-        "النظام حيّ على Railway (الإصدار v15.5) + بوت @BrixPrice_bot. قفزة كبيرة هذا الشهر: صار ١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (صفر تسريب مال عبر تدقيقات سلوكيّة وحسابيّة وعقود متعدّدة الوكلاء)، ٢٤٧٣ اختباراً ناجحاً، ٤٠ جدولاً في Supabase. بُنِيت «الوثيقة المرجعيّة الجامعة» SYSTEM_MASTER_PLAN (مصدر الحقيقة الوحيد) + فحص شامل صادق (٧/١٠ أداة تسعير داخليّة، ٥/١٠ منصّة B2B) + إعادة تصميم لوحة المستخدمين Workbench + ستيكرز v2 + تحديث SPO ٣٤ فندقاً. وأحدث إنجاز: «مخطّط دورة الحجز والمحاسبة الكامل» (تصميم بـ٨ خبراء + تدقيق عدائيّ).",
+        "النظام حيّ على Railway (الإصدار v15.6.3) + بوت @BrixPrice_bot. قفزة كبيرة هذا الشهر: صار ١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (صفر تسريب مال عبر تدقيقات سلوكيّة وحسابيّة وعقود متعدّدة الوكلاء)، ٢٤٧٣ اختباراً ناجحاً، ٤٠ جدولاً في Supabase. بُنِيت «الوثيقة المرجعيّة الجامعة» SYSTEM_MASTER_PLAN (مصدر الحقيقة الوحيد) + فحص شامل صادق (٧/١٠ أداة تسعير داخليّة، ٥/١٠ منصّة B2B) + إعادة تصميم لوحة المستخدمين Workbench + ستيكرز v2 + تحديث SPO ٣٤ فندقاً. وأحدث إنجاز: «مخطّط دورة الحجز والمحاسبة الكامل» (تصميم بـ٨ خبراء + تدقيق عدائيّ).",
       next_step:
         "حسم ٨ قرارات مالك لبدء بناء دورة الحجز + المحاسبة B2B (أهمّها: متى نعترف بالإيراد؟ وهل نحظر أم نحذّر عند تجاوز حدّ الائتمان؟ — القسم ١٠ من مخطّط الحجز). ثمّ دفع تصحيحات الوثيقة المرجعيّة. ثمّ البدء بأقصى حذر خلف الحاجز الأخضر (tsc + ٢٤٧٣ اختباراً + بناء)، صفر مساس بمحرّك التسعير.",
       blockers: [
         {
-          text: "فوترة GitHub متوقّفة منذ ٤ يونيو — الحُرّاس (النسخ الاحتياطيّ + الفحوص + التنبيهات) معطّلة. الأعجل.",
+          text: "فوترة GitHub متوقّفة منذ 2026-07-15 (آخر نجاح 2026-07-14) — الحُرّاس (النسخ الاحتياطيّ + الفحوص + التنبيهات) معطّلة. الأعجل.",
           priority: "high",
         },
         {
@@ -529,7 +529,7 @@ const PRJ = [
         "توقيت إسطنبول لكل حسابات booking-window (يحلّ مشكلة 3 ساعات يومياً قبل منتصف UTC)",
       ],
       parity: "نفس النتيجة تماماً التي يعرضها /search في الويب — مختبر بـ20+ سيناريو حافة + 8 سيناريوهات حيّة على الإنتاج لتغطية release_days + booking-window + late-night UTC",
-      tests: { total: 2473, suites: 112 },
+      tests: { total: 2868, suites: 141 },
       recent_commits_14d: 114,
       stack: ["Node.js 22", "TypeScript 5.9", "Telegram Bot API (direct fetch — لا مكتبة)", "Supabase Client", "Zod 4"],
       milestones: [
@@ -663,7 +663,7 @@ const PRJ = [
         "إنشاء صفحات السوشيال (FB + IG) باسم Rihlaty Travel، تجهيز حملة Meta أولى، تحديد رقم واتساب رئيسي للحجوزات.",
       blockers: [
         {
-          text: "الصفحات الرسمية لـRihlaty على Facebook/Instagram لم تُنشأ بعد",
+          text: "✅ محلول: صفحة Rihlaty Travel قائمة (812233425526758) بـ38,417 متابعاً + 4 حملات إحداها نشطة — فُحص 2026-07-25",
           priority: "high",
         },
         {
@@ -829,7 +829,7 @@ const PRJ = [
     related_tools: [],
     related_cloud: ["GitHub"],
     ops: ["نشر ثابت عبر GitHub Pages", "صفحات متعددة مع render client-side"],
-    desc: "لوحة تحكم واحدة تجمع كل شيء\n\n📄 4 ملفات (HTML + CSS + JS + Data)\n10 صفحات بتصاميم مختلفة\n5 أنماط عرض تفصيلية فريدة\n📱 متجاوب + GitHub Pages",
+    desc: "لوحة تحكم واحدة تجمع كل شيء\n\n📄 24 ملفاً (5 صفحات + تنسيق + منطق + بيانات + سكربتات مزامنة)\n12 صفحة بتصاميم مختلفة\n5 أنماط عرض تفصيلية فريدة\n📱 متجاوب + GitHub Pages",
     tags: ["HTML", "CSS", "JS", "GitHub Pages"],
     path: "github:aneerabee/command-center",
     links: {
@@ -990,7 +990,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "إنعاش المشروع + إضافة Entities للشركات (Etranex, BRIX, SaaS)",
     summary:
-      "المركز المالي الموحد — FastAPI + Supabase. 39 endpoint جاهزة (حسابات، كيانات، أصول، إيجارات، استثمارات، dashboard). 60% مكتمل.",
+      "المركز المالي الموحد — FastAPI + Supabase. 41 endpoint جاهزة (حسابات، كيانات، أصول، إيجارات، استثمارات، dashboard). 60% مكتمل.",
     local_path: "/Users/rabeeshaban/Desktop/Projects/💰 Money-Manager",
     server_path: null,
     repo_url: "https://github.com/aneerabee/money-manager",
@@ -1010,10 +1010,10 @@ const PRJ = [
     related_tools: ["Claude Code"],
     related_cloud: ["GitHub", "Supabase", "CoinGecko"],
     ops: [
-      "متوقف حالياً لكنه قائم كقاعدة كود قوية (2,337 سطر، 39 endpoint)",
+      "متوقف حالياً لكنه قائم كقاعدة كود قوية (2,337 سطر، 41 endpoint)",
       "سيتم توسعته ليجمع بيانات Etranex + BRIX + SaaS تحت كيانات Entity موحدة",
     ],
-    desc: "المركز المالي الموحد — يجمع كل ما تملك\n\n📦 ما هو مبني فعلياً (60%):\n• 39 endpoint جاهز في main.py (2,337 سطر)\n• حسابات + معاملات (CRUD كامل)\n• كيانات (Entities) — أساس ربط الشركات\n• ديون + سداد\n• أصول + إيجارات\n• استثمارات + أداء\n• Dashboard + تقارير Cash Flow\n• أسعار كريبتو + أسهم + معادن لحظية\n\n🎯 خطة التوسعة (40% المتبقي):\n• Entity لكل مظلة: Etranex، BRIX TRAVEL، SaaS، شخصي\n• Etranex: تسجيل عمليات الصرافة، تقارير يومية/شهرية\n• BRIX: تتبع الحجوزات من البداية للنهاية، عمولات تلقائية، ROAS لكل حملة EasyBooking\n• Personal: كريبتو، أسهم، مصاريف شخصية\n• تقارير موحدة: صافي الثروة، إيرادات شهرية لكل مظلة، ROI لكل مشروع\n\n📂 ملف رئيسي: main.py (102 KB)\n🔧 التقنيات:\nFastAPI + Python + Supabase + CoinGecko + Alpha Vantage",
+    desc: "المركز المالي الموحد — يجمع كل ما تملك\n\n📦 ما هو مبني فعلياً (60%):\n• 41 endpoint جاهز في main.py (2,337 سطر)\n• حسابات + معاملات (CRUD كامل)\n• كيانات (Entities) — أساس ربط الشركات\n• ديون + سداد\n• أصول + إيجارات\n• استثمارات + أداء\n• Dashboard + تقارير Cash Flow\n• أسعار كريبتو + أسهم + معادن لحظية\n\n🎯 خطة التوسعة (40% المتبقي):\n• Entity لكل مظلة: Etranex، BRIX TRAVEL، SaaS، شخصي\n• Etranex: تسجيل عمليات الصرافة، تقارير يومية/شهرية\n• BRIX: تتبع الحجوزات من البداية للنهاية، عمولات تلقائية، ROAS لكل حملة EasyBooking\n• Personal: كريبتو، أسهم، مصاريف شخصية\n• تقارير موحدة: صافي الثروة، إيرادات شهرية لكل مظلة، ROI لكل مشروع\n\n📂 ملف رئيسي: main.py (102 KB)\n🔧 التقنيات:\nFastAPI + Python + Supabase + CoinGecko + Alpha Vantage",
     features_planned: [
       "Entity موحد للشركات: Etranex + BRIX TRAVEL + EasyBooking",
       "تسجيل عمليات الصرافة (السنتر) — أسعار صرف لحظية + تقارير",
@@ -1033,7 +1033,7 @@ const PRJ = [
     current_status: {
       updated: "2026-05-11",
       where:
-        "60% مبني — 39 endpoint جاهز (حسابات، معاملات، كيانات، ديون، أصول، إيجارات، استثمارات، dashboard). متوقف حالياً كقاعدة كود فعالة.",
+        "60% مبني — 41 endpoint جاهز (حسابات، معاملات، كيانات، ديون، أصول، إيجارات، استثمارات، dashboard). متوقف حالياً كقاعدة كود فعالة.",
       next_step:
         "إنعاش المشروع، إنشاء كيانات (Entities) لكل شركة (Etranex/BRIX/SaaS)، ربط بـWestern Office لتغذية الصرافة، ربط بـEasyBooking لتغذية ROAS.",
     },
@@ -1104,7 +1104,7 @@ const PRJ = [
     parent: "saas",
     parent_role: "product-validation",
     revenue_model: "one-time",
-    revenue_status: "pre-launch",
+    revenue_status: "live",
     monthly_revenue_usd: 0,
     users_count: 0,
     priority: "med",
@@ -1127,7 +1127,7 @@ const PRJ = [
     related_tools: [],
     related_cloud: ["GitHub"],
     ops: ["بيع Freemium", "نشر مباشر على GitHub Pages"],
-    desc: "دليل شطرنج تفاعلي — عربي + إنجليزي\n\n🔧 التقنيات:\nHTML + CSS + Vanilla JS\nتصميم داكن/ذهبي · بدون خادم\n\n📊 المحتوى:\n6 مراحل × لغتين (عربي + إنجليزي)\n30+ مفهوم وتكتيك\nاختبارات تفاعلية بعد كل مرحلة\nتمارين «فكّر معي» (Think-Along)\n\n🎮 نظام التقدم:\nXP لكل مفهوم واختبار\nسلسلة يومية 🔥\nشاشة إنجاز + شارات\n\n💰 نظام البيع (Freemium):\nمرحلتان مجانيتان + 4 مدفوعة بـ $19\nبوابة وصول SHA-256\nرمز: CHESSMIND2026\n\n🌍 الروابط:\nعربي: /app.html\nإنجليزي: /en.html\nصفحة هبوط EN: /en/\n\n🚀 النشر:\nGitHub Pages",
+    desc: "دليل شطرنج تفاعلي — عربي + إنجليزي\n\n🔧 التقنيات:\nHTML + CSS + Vanilla JS\nتصميم داكن/ذهبي · بدون خادم\n\n📊 المحتوى:\n6 مراحل × لغتين (عربي + إنجليزي)\n30+ مفهوم وتكتيك\nاختبارات تفاعلية بعد كل مرحلة\nتمارين «فكّر معي» (Think-Along)\n\n🎮 نظام التقدم:\nXP لكل مفهوم واختبار\nسلسلة يومية 🔥\nشاشة إنجاز + شارات\n\n💰 نظام البيع (Freemium):\nمرحلتان مجانيتان + 4 مدفوعة بـ $4\nبوابة وصول SHA-256 — ⚠️ عميليّة فقط: المستودع عام وملفّات المراحل المدفوعة (lessons-ar-part5/6.js) تُنزَّل مباشرة بلا دفع\nرمز الوصول مخزَّن كبصمة SHA-256 في js/app.js — الرمز CHESSMIND2026 لم يعد مطابقًا\n\n🌍 الروابط:\nعربي: /app.html\nإنجليزي: /en.html\nصفحة هبوط EN: /en/\n\n🚀 النشر:\nGitHub Pages",
     tags: [
       "HTML",
       "CSS",
@@ -1172,7 +1172,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "ربطه بـ Money Manager لتغذية تقارير الصرافة",
     summary:
-      "نظام تشغيل يومي لـEtranex — حوالات + زبائن + تسويات + إقفال + مطالبة أرباح. منفصل الآن عن دفتر محمد، 282 اختبار، Supabase + localStorage مزدوج، وضع مشاهدة آمن للزبائن.",
+      "نظام تشغيل يومي لـEtranex — حوالات + زبائن + تسويات + إقفال + مطالبة أرباح. منفصل الآن عن دفتر محمد، 280 اختبار، Supabase + localStorage مزدوج، وضع مشاهدة آمن للزبائن.",
     local_path: null,
     server_path: null,
     repo_url: "https://github.com/aneerabee/western-office",
@@ -1207,14 +1207,14 @@ const PRJ = [
       "تم حذف بقايا دفتر محمد من western-office في commit 42cdddd بتاريخ 2026-05-23",
       "تخزين مزدوج: Supabase (wo_* tables) + localStorage mirror كشبكة أمان",
       "مصدر حقيقة موحّد: قاعدة بيانات Supabase واحدة للإدارة ولروابط المشاهدة",
-      "282 اختبار Vitest (12 ملف) — كل شيء أخضر قبل أي دفعة",
+      "280 اختبار Vitest (12 ملف) — كل شيء أخضر قبل أي دفعة",
       "نسخة احتياطية تلقائية يومية تُنزّل JSON إلى جهاز المستخدم",
       "5 لقطات دوّارة في localStorage (واحدة كل ساعة) كشبكة أمان إضافية",
       "حماية متعدّدة التبويبات عبر BroadcastChannel — التبويب الأقدم يصبح للقراءة فقط",
       "زر تراجع لمدّة دقيقتين بعد أي عملية مدمّرة للبيانات",
       "تحديث تلقائي لرابط الزبون كل 15 ثانية + عند عودة التبويب للنشاط",
     ],
-    desc: "نظام تشغيل يومي لمكتب حوالات ويسترن بإدارة يد واحدة\n\n🔄 دورة الحوالة:\nوصلت → عند الموظف → مراجعة لاحقة / تم السحب / مشكلة\nتحقق ذكي: لا إرسال بدون مبالغ، لا سحب بدون مستلم\nنموذج إضافة مفرد أو دفعة متعدّدة لنفس الزبون\n\n💰 النظام المالي:\nمبلغ الحوالة (معلوماتي) + للزبون + المستلم من الموظف = الربح\nدفتر حسابات ledger حقيقي لكل زبون\nكشف حساب بأرصدة تراكمية\nتسوية: المحاسب يسلّم → المكتب يدفع للزبون → الربح يبقى\nمطالبة الأرباح (Claim) مع سجل زمني كامل\nبانر أخضر بارز فوق كل تبويب عند وجود ربح قابل للسحب\n\n📊 التبويبات (7):\nالحوالات — بطاقات مرتّبة بالأولوية الذكية + نموذج تعديل + سجل تاريخي لكل حوالة\nالزبائن — حوالات كل زبون + كشف حساب تراكمي + تسوية فردية\nالأشخاص — سجلّ عالمي للمرسلين والمستلمين بتلوين ذكي حسب التكرار\nالتسويات — عرض المعلّق + سجل تاريخي كامل قابل للبحث والتصفية\nالإقفال اليومي — 3 مستويات (زبائن تراكمي + مكتب يومي + محاسب تراكمي) + تقارير سابقة\nالمشاكل — تجميع حسب النوع + حلّ سريع\nالمحذوفات — استرجاع ناعم للحوالات والزبائن المحذوفين\n\n👁️ وضع المشاهدة للزبون التجاري:\nرابط خاص `?viewer=<customerId>` يعطي الزبون نافذة آمنة على بياناته هو فقط\nيرى: حوالاته، تسوياته، شريط ملخّص مالي (مستحق له + استلمت سابقاً)\nلا يرى: ربحك، كاش المحاسب، أي زبون آخر، أي نموذج إدارة\nالمرسلون/المستلمون بأعدادهم الحقيقية العالمية (بدون كشف لمن يخصّون)\nتحديث تلقائي حيّ كل 15 ثانية بدون إعادة تحميل\nكل معالجات التعديل محميّة بصرامة (blockIfReadOnly على 15 handler)\n\n🛡️ الحماية والاسترجاع:\nحذف ناعم (soft delete) لكل شيء — الأصل محفوظ للاسترجاع\nزر تراجع لدقيقتين بعد عمليات الإعادة التي تمسح البيانات\nتنبيه غنيّ قبل الإعادة: رقم الحوالة + الزبون + قائمة بكل ما سيُحذف\nسجل تاريخي (history) على كل حوالة بآخر 50 تغيير\n5 لقطات دوّارة في localStorage + نسخة احتياطية يومية تلقائية\nحماية مزدوجة التبويبات — الأحدث يسيطر والأقدم للقراءة\nكشف فشل localStorage ببانر أحمر فوري\n\n🗄️ التخزين:\nSupabase (wo_customers, wo_transfers, wo_ledger_entries, wo_claim_history, wo_daily_closings, wo_senders, wo_receivers) — JSONB\nlocalStorage v3 كشبكة أمان أوفلاين\nهجرة تلقائية من الصيغ القديمة (v2, v1)\nاستيراد/تصدير JSON كامل\nmergeLoadResults يحمي من مسح المرسلين/المستلمين إذا فقدت جداولهم مؤقتاً\n\n🧪 الجودة:\n282 اختبار Vitest في 12 ملف (verified 2026-05-23):\n- transferLogic, people, viewerMode, settlementHistory\n- snapshots, profitClaim, dailyClosing, dataIntegrity\n- persistence, attentionBoard, whatsappStatement, deletionSafety\nبناء Vite نظيف، وwestern-office لم يعد يحتوي ملفات أو مسارات دفتر محمد\n\n🛣️ خارطة التطوير:\n✅ نموذج بيانات + ledger + تسويات + إقفال يومي + مطالبة أرباح\n✅ سجل تسويات كامل مع فلترة وبحث\n✅ Supabase سحابي كامل مع جداول منفصلة\n✅ وضع مشاهدة صارم لكل زبون عبر رابط خاص\n✅ لقطات دوّارة + نسخة احتياطية يومية + زر تراجع\n✅ سجل تاريخي بصري لكل حوالة\n✅ بانر ربح قابل للسحب مرئي في كل التبويبات\n✅ فصل دفتر محمد في repo ومسار مستقلين وتنظيف western-office منه\n⏳ ربط Telegram Bot (إشعارات الحوالات الجديدة)\n⏳ تقارير PDF شهرية وسنوية\n⏳ RLS سياسات على مستوى قاعدة البيانات لحماية أقوى\n⏳ استبدال رمز $ بـ₺ (ليرة تركية)",
+    desc: "نظام تشغيل يومي لمكتب حوالات ويسترن بإدارة يد واحدة\n\n🔄 دورة الحوالة:\nوصلت → عند الموظف → مراجعة لاحقة / تم السحب / مشكلة\nتحقق ذكي: لا إرسال بدون مبالغ، لا سحب بدون مستلم\nنموذج إضافة مفرد أو دفعة متعدّدة لنفس الزبون\n\n💰 النظام المالي:\nمبلغ الحوالة (معلوماتي) + للزبون + المستلم من الموظف = الربح\nدفتر حسابات ledger حقيقي لكل زبون\nكشف حساب بأرصدة تراكمية\nتسوية: المحاسب يسلّم → المكتب يدفع للزبون → الربح يبقى\nمطالبة الأرباح (Claim) مع سجل زمني كامل\nبانر أخضر بارز فوق كل تبويب عند وجود ربح قابل للسحب\n\n📊 التبويبات (7):\nالحوالات — بطاقات مرتّبة بالأولوية الذكية + نموذج تعديل + سجل تاريخي لكل حوالة\nالزبائن — حوالات كل زبون + كشف حساب تراكمي + تسوية فردية\nالأشخاص — سجلّ عالمي للمرسلين والمستلمين بتلوين ذكي حسب التكرار\nالتسويات — عرض المعلّق + سجل تاريخي كامل قابل للبحث والتصفية\nالإقفال اليومي — 3 مستويات (زبائن تراكمي + مكتب يومي + محاسب تراكمي) + تقارير سابقة\nالمشاكل — تجميع حسب النوع + حلّ سريع\nالمحذوفات — استرجاع ناعم للحوالات والزبائن المحذوفين\n\n👁️ وضع المشاهدة للزبون التجاري:\nرابط خاص `?viewer=<customerId>` يعطي الزبون نافذة آمنة على بياناته هو فقط\nيرى: حوالاته، تسوياته، شريط ملخّص مالي (مستحق له + استلمت سابقاً)\nلا يرى: ربحك، كاش المحاسب، أي زبون آخر، أي نموذج إدارة\nالمرسلون/المستلمون بأعدادهم الحقيقية العالمية (بدون كشف لمن يخصّون)\nتحديث تلقائي حيّ كل 15 ثانية بدون إعادة تحميل\nكل معالجات التعديل محميّة بصرامة (blockIfReadOnly على 15 handler)\n\n🛡️ الحماية والاسترجاع:\nحذف ناعم (soft delete) لكل شيء — الأصل محفوظ للاسترجاع\nزر تراجع لدقيقتين بعد عمليات الإعادة التي تمسح البيانات\nتنبيه غنيّ قبل الإعادة: رقم الحوالة + الزبون + قائمة بكل ما سيُحذف\nسجل تاريخي (history) على كل حوالة بآخر 50 تغيير\n5 لقطات دوّارة في localStorage + نسخة احتياطية يومية تلقائية\nحماية مزدوجة التبويبات — الأحدث يسيطر والأقدم للقراءة\nكشف فشل localStorage ببانر أحمر فوري\n\n🗄️ التخزين:\nSupabase (wo_customers, wo_transfers, wo_ledger_entries, wo_claim_history, wo_daily_closings, wo_senders, wo_receivers) — JSONB\nlocalStorage v3 كشبكة أمان أوفلاين\nهجرة تلقائية من الصيغ القديمة (v2, v1)\nاستيراد/تصدير JSON كامل\nmergeLoadResults يحمي من مسح المرسلين/المستلمين إذا فقدت جداولهم مؤقتاً\n\n🧪 الجودة:\n280 اختبار Vitest في 12 ملف (verified 2026-05-23):\n- transferLogic, people, viewerMode, settlementHistory\n- snapshots, profitClaim, dailyClosing, dataIntegrity\n- persistence, attentionBoard, whatsappStatement, deletionSafety\nبناء Vite نظيف، وwestern-office لم يعد يحتوي ملفات أو مسارات دفتر محمد\n\n🛣️ خارطة التطوير:\n✅ نموذج بيانات + ledger + تسويات + إقفال يومي + مطالبة أرباح\n✅ سجل تسويات كامل مع فلترة وبحث\n✅ Supabase سحابي كامل مع جداول منفصلة\n✅ وضع مشاهدة صارم لكل زبون عبر رابط خاص\n✅ لقطات دوّارة + نسخة احتياطية يومية + زر تراجع\n✅ سجل تاريخي بصري لكل حوالة\n✅ بانر ربح قابل للسحب مرئي في كل التبويبات\n✅ فصل دفتر محمد في repo ومسار مستقلين وتنظيف western-office منه\n⏳ ربط Telegram Bot (إشعارات الحوالات الجديدة)\n⏳ تقارير PDF شهرية وسنوية\n⏳ RLS سياسات على مستوى قاعدة البيانات لحماية أقوى\n⏳ استبدال رمز $ بـ₺ (ليرة تركية)",
     tags: [
       "React 19",
       "Vite 8",
@@ -1322,7 +1322,7 @@ const PRJ = [
       "آخر تحقق قوي 2026-06-08: npm test نجح بـ146 اختبارًا، npm run lint نجح، npm run build نجح، وفحص السيرفر runtime نجح بعد تحميل adreem.env",
       "اختبار سيناريوهات منطقي بعد آخر تعديل نجح: 29 تحقق لمسارات التحويل والمصروف والدخل وبيع/شراء الدولار وفلاتر عملة الحسابات",
       "GitHub Pages منشور من الريبو الرسمي aneerabee/adreem، والرابط الحي هو https://aneerabee.github.io/adreem/",
-      "تشغيل Contabo مؤكد على commit f2674d1: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل عبر systemd user",
+      "تشغيل Contabo مؤكد على commit 080667c: adreem-api.service active و adreem-bot.service active بعد تحديث السيرفر وإعادة التشغيل عبر systemd user",
       "فحص runtime على السيرفر نجح بعد تحميل adreem.env بصيغة hashed web tokens: env صحيح، /health يعمل، و/api/ledger يقرأ الحالة عبر token صحيح بدون كشف أسرار",
       "تم تحويل ADREEM_WEB_LEDGER_TOKENS في السيرفر إلى تعليق، واعتماد ADREEM_WEB_LEDGER_TOKEN_HASHES مع ADREEM_RUNTIME_TEST_TOKEN للفحص الداخلي",
       "تم تفعيل ADREEM_ADMIN_TOKEN_HASHES وADREEM_TELEGRAM_USERS_FILE: إضافة المستخدمين أصبحت من صفحة إدارة الويب فقط، والتوكن الخام غير محفوظ في env",
@@ -1411,7 +1411,7 @@ const PRJ = [
     next_milestone: "ربط الدومين libya.rabee.dev بـCloudflare Tunnel + إعادة كتابة بوت تلقرام مُتزامن مع server actions",
     summary:
       "دفتر مالي للشراكة بين ربيع وأحمد — حيّ على Contabo. Next.js 15 + Supabase REST. CRUD كامل (إنشاء/تعديل/حذف) لكل الكيانات، صفقات ذكية بمؤشرات حية، ودجت رصيد شريك، ويزرد إغلاق نوعين من الصفقات (خارج 50/50، شخصية لشريك)، مزامنة تلقائية لحالة الصفقة بعد كل تعديل.",
-    local_path: null,
+    local_path: "/Users/rabeeshaban/Developer/libya",
     server_path: "/home/argaz/apps/libya",
     repo_url: "https://github.com/aneerabee/libya",
     deploy_url: "http://62.171.128.44:3001",
@@ -1554,7 +1554,7 @@ const PRJ = [
             "✅ نُشِر للخادم: actions.ts + queries.ts + كل صفحات الإصلاحات + تعديل 0014 + .next/ — Hash متطابق — 2026-05-23",
             "✅ نسخة احتياطية تلقائية على الخادم قبل النشر: ~/apps/libya.bak-20260523-175801",
             "✅ التحقّق الحيّ: كل الصفحات السبع ترجع HTTP 200 (/, /deals, /people, /movements, /debts, /hedges, /reports) — 2026-05-23",
-            "✅ النسخة المحلية محذوفة (~/Developer/libya) — جيت‑هَب والخادم يحويان نفس الكود — 2026-05-23",
+            "✅ النسخة المحلية قائمة في ~/Developer/libya ومتزامنة مع origin/main (~/Developer/libya) — جيت‑هَب والخادم يحويان نفس الكود — 2026-05-23",
             "✅ تطابق دقيق بين منطق العائلة ومنطق الربح بعد فحص سطريّ (٤ فجوات P2.1-P2.4 مُصلحة) — 2026-05-25",
             "✅ تعديل قاعدة البيانات 0015: close_family_deal يحفظ close_rate + last_synced_at؛ close_nonfamily_deal يحدّث last_user_edit_at — 2026-05-25",
             "✅ صفقات العائلة المغلقة تعرض «صفر للشراكة» بدل ربح وهمي مضلِّل (queries.ts + deals/page.tsx) — 2026-05-25",
@@ -1567,7 +1567,7 @@ const PRJ = [
             "✅ middleware مُفعّل: مصادقة محلّية (اسم مستخدم/كلمة سرّ) عبر جدول app_users، الدخول بـ rabee — الموقع محميّ بالكامل",
             "🔜 ربط دومين libya.rabee.dev عبر Cloudflare Tunnel أو Caddy + Let's Encrypt",
             "🔜 إعادة كتابة بوت تلقرام ليستهلك نفس server actions/validators (البوت الحالي معطّل لأنه يتجاوز كل التحقق)",
-            "🔜 نسخ احتياطية تلقائية: backup.sh موجود في deploy/ — يحتاج cron",
+            "✅ نسخ احتياطية تلقائية تعمل (cron يومي 03:30) — ⚠️ لكن الرفع خارج الخادم يفشل كل مرة: BACKUP_GPG_PASSPHRASE مفقود، فالنسخ محفوظة على نفس الخادم فقط",
             "🔜 تقارير شهرية + رسوم بيانية + بحث ذكي (مرحلة لاحقة)",
           ],
         },
@@ -1902,7 +1902,7 @@ const SVC = [
     port: "—",
     schedule: "يوميًا 3 صباحًا",
     dt: "0 3 * * *",
-    info: "pg/sql backup محفوظ داخل ‎.backup. ⚠️ verified 2026-05-13: ملف واحد فقط (آخر backup يدوي 2026-05-12 12:12)، وملف الـlog /home/argaz/logs/wapy-backup.log غير موجود — تحقّق من تشغيل cron الفعلي.",
+    info: "pg/sql backup محفوظ داخل ‎.backup. ✓ تحقُّق 2026-07-25: 31 نسخة يومية متتالية بلا انقطاع، آخرها wapy_backup_20260725_030001.sql، والـlog /home/argaz/logs/wapy-backup.log يسجّل نجاحاً كل يوم. cron يعمل بانتظام.",
   },
   {
     name: "Wapy Cleanup",
@@ -2138,9 +2138,9 @@ const AUTO = [
       {
         id: "desktop-ci-build-test-auto-deploy",
         name: "CI Build + Test + Auto-Deploy",
-        freq: "كل push على main",
-        on: true,
-        what: "pnpm install + build + vitest (2212/2212) → إن نجح يَنشر على Railway تلقائياً عبر railway up. أُصلح في 2026-05-20 من npm إلى pnpm (كان معطّلاً منذ 15 مايو).",
+        freq: "كل push على main — ⛔ لا يبدأ أصلاً",
+        on: false,
+        what: "⛔ متوقّف منذ 2026-07-14: الوظيفة لا تبدأ إطلاقاً بسبب فشل فوترة GitHub Actions (\"recent account payments have failed or your spending limit needs to be increased\"). النتيجة: الاختبارات لا تُنفَّذ والنشر التلقائيّ على Railway متوقّف. آخر نجاح 2026-07-14 11:45 UTC. الإصلاح: تسوية الفوترة في GitHub Billing — تُعيد تشغيل 10 مسارات عمل دفعة واحدة. (كان: pnpm install + build + vitest ثم railway up.)",
         prj: ["BRIX Travel System"],
         path: "ci.yml",
         kind: "deploy",
@@ -2148,9 +2148,9 @@ const AUTO = [
       {
         id: "desktop-daily-contract-backup",
         name: "Daily Contract Backup",
-        freq: "يوميًا 03:00 UTC (يتأخّر فعليّاً إلى ~06:00 بسبب طوابير GitHub)",
-        on: true,
-        what: "paginated لكل جداول Supabase (NDJSON + gzip + sha256 + canary + day-over-day diff). تنبيه تلجرام عند نقص > 10٪. يدفع إلى مستودع brix-backups + يفتح Issue تلقائياً عند الفشل. v2 (2026-05-23): دُعم input يدويّ reset_baseline=true لتجاوز المقارنة بعد تغييرات مقصودة + canary hotel ثابت في DB.",
+        freq: "يوميًا 03:00 UTC — ⛔ فاشل منذ 2026-07-14",
+        on: false,
+        what: "⛔ فاشل منذ 2026-07-14 بسبب فشل فوترة GitHub Actions — الوظيفة لا تبدأ، فلا تُؤخَذ نسخة احتياطية. وتنبيه الفشل نفسه معطّل لأنه يعمل بنفس المنظومة. آخر نجاح 2026-07-14 05:34 UTC. (التصميم الأصلي: paginated لكل جداول Supabase (NDJSON + gzip + sha256 + canary + day-over-day diff). تنبيه تلجرام عند نقص > 10٪. يدفع إلى مستودع brix-backups + يفتح Issue تلقائياً عند الفشل. v2 (2026-05-23): دُعم input يدويّ reset_baseline=true لتجاوز المقارنة بعد تغييرات مقصودة + canary hotel ثابت في DB.",
         prj: ["BRIX Travel System"],
         path: "daily-contract-backup.yml",
         kind: "backup",
@@ -2168,7 +2168,7 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-engine",
         name: "Scheduled Review — Engine",
-        freq: "٣×/يوم: 06:00 + 14:00 + 22:00 UTC (~09:00 + 17:00 + 01:00 إسطنبول)",
+        freq: "مرة يوميًا 06:19 UTC (~09:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
         on: true,
         what: "يستدعي /api/search بثلاث سيناريوهات حقيقيّة (Sueno، Rixos، Sueno+طفل)، يتأكّد Σ(period.subtotal) === offer.totalPrice في كلّ عرض، يرفض NaN/Infinity/قيم سالبة، يتأكّد offer.currency ليس فارغاً. صامت عند النجاح، يُرسل تلجرام + يفتح Issue عند الفشل. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
         prj: ["BRIX Travel System"],
@@ -2178,7 +2178,7 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-api",
         name: "Scheduled Review — API + Security",
-        freq: "٣×/يوم: 01:00 + 09:00 + 17:00 UTC (~04:00 + 12:00 + 20:00 إسطنبول)",
+        freq: "مرة يوميًا 09:19 UTC (~12:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
         on: true,
         what: "pnpm audit مع allowlist للثغرات المتوسّطة في التبعيّات غير المباشرة (postcss + ws)، يفحص ٥ مسارات محميّة (/api/schema، /api/cleanup، /api/sync-reset، /api/audit-logs، /api/admin/users) أنّها ترفض الطلبات غير المصادق عليها، يفحص ٤ مسارات عامّة أنّها تردّ 200، يفحص /api/telegram webhook secret يحجب الطلبات بدون توقيع. صامت عند النجاح. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
         prj: ["BRIX Travel System"],
@@ -2188,9 +2188,9 @@ const AUTO = [
       {
         id: "desktop-daily-heartbeat",
         name: "Daily Heartbeat — Scheduled Reviews Digest",
-        freq: "يوميًا 05:00 UTC (~08:00 إسطنبول)",
-        on: true,
-        what: "تقرير يوميّ موحَّد يلخّص آخر ٢٤ ساعة من المراجعات الثلاث (Engine + API + Frontend). يستعلم GitHub API ويُرسل تلجرام واحدة بمحصّلة كلّ نطاق + روابط الفشل (إن وُجد). الفلسفة: المراجعات صامتة على النجاح؛ هذا الـheartbeat يقطع لبس \"لم تأتني رسالة = لم تشتغل أم نجحت؟\". أُنشئ 2026-05-24.",
+        freq: "يوميًا 05:00 UTC — ❌ الملف غير موجود",
+        on: false,
+        what: "❌ daily-heartbeat.yml غير موجود في المستودع (يرجع 404) — لم يُنشأ قط أو أُزيل. (التصميم المقصود: تقرير يوميّ موحَّد يلخّص آخر ٢٤ ساعة من المراجعات الثلاث (Engine + API + Frontend). يستعلم GitHub API ويُرسل تلجرام واحدة بمحصّلة كلّ نطاق + روابط الفشل (إن وُجد). الفلسفة: المراجعات صامتة على النجاح؛ هذا الـheartbeat يقطع لبس \"لم تأتني رسالة = لم تشتغل أم نجحت؟\". أُنشئ 2026-05-24.",
         prj: ["BRIX Travel System"],
         path: "daily-heartbeat.yml + scripts/daily-heartbeat.mjs",
         kind: "notification",
@@ -2198,7 +2198,7 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-frontend",
         name: "Scheduled Review — Frontend + Deploy",
-        freq: "٣×/يوم: 04:00 + 12:00 + 20:00 UTC (~07:00 + 15:00 + 23:00 إسطنبول)",
+        freq: "مرة يوميًا 04:19 UTC (~07:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
         on: true,
         what: "يحمّل /results من الإنتاج، يستخرج رابط CSS bundle، يتأكّد أنّ الـbundle لا يزال يحوي طبقة BRIX CARD البصريّة (brix-card, brix-period, brix-total, brix-copy-btn, brixPriceLand keyframe). حارس ضدّ نشر يجرّد التصميم. يفحص أيضاً freshness على /api/version. صامت عند النجاح. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
         prj: ["BRIX Travel System"],
@@ -2307,7 +2307,7 @@ const BOT = [
     last_run: "active on Contabo",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service active على Contabo من commit f2674d1. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/registry مفعّلان. /adduser معطل عمدًا ويوجه إلى صفحة إدارة الويب؛ إنشاء المستخدمين يتم بإيميل وكلمة مرور عبر API محمي. البوت يستهلك ledgerId من registry ويستمر في إدخال/مراجعة الحركات ومطابقة الرصيد والتنبيهات الذكية وإلغاء الحركات الحديثة. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
+    check_note: "adreem-bot.service active على Contabo من commit 080667c. Telegram getMe سبق ونجح للبوت SystemAzol_bot، وallowlist/registry مفعّلان. /adduser معطل عمدًا ويوجه إلى صفحة إدارة الويب؛ إنشاء المستخدمين يتم بإيميل وكلمة مرور عبر API محمي. البوت يستهلك ledgerId من registry ويستمر في إدخال/مراجعة الحركات ومطابقة الرصيد والتنبيهات الذكية وإلغاء الحركات الحديثة. البوت القديم legacy mohammad-ledger-bot.service أصبح inactive لتجنب تضارب polling.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2317,7 +2317,7 @@ const BOT = [
     related_entities: ["ADREEM", "Supabase", "GitHub", "Contabo VPS"],
     summary:
       "بوت Telegram لـADREEM لإدخال الحركات ومراجعة الحسابات والسجل من الهاتف، ويستخدم نفس ملفات المنطق التي يستخدمها الويب.",
-    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user من commit f2674d1\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist/registry مفعّلان\nعزل المستخدم عبر ledgerId في registry أو env mapping\nإضافة المستخدمين ليست من التلقرام؛ /adduser معطل عمدًا ويوجه إلى صفحة إدارة الويب لإنشاء إيميل وكلمة مرور\nملف المستخدمين الديناميكي: /home/argaz/apps/adreem/adreem-telegram-users.json\nالبوت القديم legacy mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مشروع/أصل اختياري، مرفق اختياري، تكرار شهري اختياري، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nمطابقة رصيد فلوسي: حساب، عملة، رصيد فعلي، ملاحظة إلزامية، ملخص فرق، ثم حفظ reconciliation وتصحيح correction عند الحاجة\nتنبيهات ذكية من نفس buildLedgerAlerts: مراجعة، فلوس ناقصة، أدفع، تكرار مستحق، فروق مطابقة، حركات كبيرة، وتكرار محتمل\nقائمة رئيسية متناسقة مع Pocket Ledger: إدخال سريع، الأرصدة، السجل، مراجعة، حساب جديد، مطابقة رصيد، تنبيهات، بحث\nشاشات البوت تستخدم عناوين ADREEM · المنطقة مثل الأرصدة وسجل اليوم والسجل والمراجعة\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة أو المطابقة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nإنشاء المستخدمين يتم من صفحة إدارة الويب فقط بإيميل وكلمة مرور. أي مستخدم بوت جديد يحتاج Telegram ID اختياريًا داخل صفحة الإدارة.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
+    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الحركات الأساسية في الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحالي:\nadreem-bot.service active عبر systemd user من commit 080667c\nTelegram getMe ناجح للبوت SystemAzol_bot\nallowlist/registry مفعّلان\nعزل المستخدم عبر ledgerId في registry أو env mapping\nإضافة المستخدمين ليست من التلقرام؛ /adduser معطل عمدًا ويوجه إلى صفحة إدارة الويب لإنشاء إيميل وكلمة مرور\nملف المستخدمين الديناميكي: /home/argaz/apps/adreem/adreem-telegram-users.json\nالبوت القديم legacy mohammad-ledger-bot.service متوقف لمنع تضارب polling\n\n✅ المنجز:\nجلسات إدخال مؤقتة مع رجوع وإلغاء وتأكيد نهائي\nWizard للحركة: نوع، مبلغ، عملة/سعر، مصدر، وجهة، ملاحظة، مشروع/أصل اختياري، مرفق اختياري، تكرار شهري اختياري، مراجعة، تأكيد\nWizard للحساب الجديد بنفس تصنيفات الويب\nمطابقة رصيد فلوسي: حساب، عملة، رصيد فعلي، ملاحظة إلزامية، ملخص فرق، ثم حفظ reconciliation وتصحيح correction عند الحاجة\nتنبيهات ذكية من نفس buildLedgerAlerts: مراجعة، فلوس ناقصة، أدفع، تكرار مستحق، فروق مطابقة، حركات كبيرة، وتكرار محتمل\nقائمة رئيسية متناسقة مع Pocket Ledger: إدخال سريع، الأرصدة، السجل، مراجعة، حساب جديد، مطابقة رصيد، تنبيهات، بحث\nشاشات البوت تستخدم عناوين ADREEM · المنطقة مثل الأرصدة وسجل اليوم والسجل والمراجعة\nالعملة صفة للحركة والحساب وليست اسم حساب عشوائي\nالحفظ والمعاينة عبر نفس ledgerCore المستخدم في الموقع\nنفس قواعد التوافق: التحويل العادي يجب أن يكون بين نفس النوع والعملة\nمنع تكرار الحركة أو المطابقة عند ضغط التأكيد مرتين عبر idempotencyKey\nRepository آمن يقرأ ويحفظ ml_state في Supabase عبر service role على السيرفر\n\n📌 حدود معروفة:\nإنشاء المستخدمين يتم من صفحة إدارة الويب فقط بإيميل وكلمة مرور. أي مستخدم بوت جديد يحتاج Telegram ID اختياريًا داخل صفحة الإدارة.\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nاللوجات: /home/argaz/logs/adreem-bot.log و adreem-bot-error.log\nExecStart: npm run bot:adreem → node server/telegram/bot.js\n\n🔐 شروط الأمان:\nTELEGRAM_BOT_TOKEN وSUPABASE_SERVICE_ROLE_KEY محفوظة في adreem.env على السيرفر فقط\nadreem.env بصلاحية 600\nلا حفظ بدون تأكيد نهائي\nلا تشغّل Claude telegram plugin بالتوازي معه حتى لا تختلط رسائل Terminal مع البوت",
     tags: [
       "Telegram",
       "Node.js",
@@ -2351,7 +2351,7 @@ const BOT = [
     current_status: {
       updated: "2026-06-08",
       where:
-        "يعمل على Contabo في /home/argaz/apps/adreem من commit f2674d1. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-08، وverify:runtime نجح بعد تحميل adreem.env. إضافة المستخدمين انتقلت إلى صفحة إدارة الويب بإيميل وكلمة مرور، و/adduser في البوت معطل عمدًا ويعرض توجيهًا. البوت يستهلك registry ويستمر في الحركات والمراجعة والمطابقة والتنبيهات.",
+        "يعمل على Contabo في /home/argaz/apps/adreem من commit 080667c. adreem-bot.service active وadreem-api.service active حسب فحص سيرفر 2026-06-08، وverify:runtime نجح بعد تحميل adreem.env. إضافة المستخدمين انتقلت إلى صفحة إدارة الويب بإيميل وكلمة مرور، و/adduser في البوت معطل عمدًا ويعرض توجيهًا. البوت يستهلك registry ويستمر في الحركات والمراجعة والمطابقة والتنبيهات.",
       next_step:
         "اختبار قبول عملي: حركة من البوت تظهر في الويب وحركة من الويب تظهر في البوت، ثم مراقبة أول 24 ساعة ومراجعة أي تنبيه يظهر من شاشة التنبيهات.",
       use_guide:
@@ -2371,7 +2371,7 @@ const BOT = [
     channel: "Telegram @BrixPrice_bot",
     related_entities: ["BRIX Travel System", "Supabase", "Railway", "GitHub"],
     related_projects: ["BRIX Travel System"],
-    summary: "بوت حقيقي شغّال يطابق نتائج الموقع 100٪، بدعوات بالهاتف وحماية متعدّدة الطبقات.",
+    summary: "⛔ محذوف — أُزيل بالكامل من المستودع في 2026-06-05 (commit 81f2a6e7: \"remove the Telegram price-search bot entirely\"). النظام أصبح ويب فقط. لم يتبقَّ سوى 6 ملفات ترحيل يتيمة.",
     desc: "بوت Telegram لأسعار فنادق BRIX — @BrixPrice_bot\n\n🎯 الفكرة:\nيعطي أي زميل أو وكيل سعر فندق محدّد أو كل فنادق مدينة بضغطة أزرار من الموبايل. نفس محرّك التسعير الذي يستخدمه الموقع — لا فرق ولا تأخير.\n\n📱 رحلة الاستخدام (6 خطوات بأزرار فقط):\n1. اختر النمط: فندق محدد أو مدينة كاملة\n2. اختر الفندق أو المدينة + المنطقة (اختياري)\n3. تاريخ الدخول من تقويم تفاعلي\n4. تاريخ الخروج\n5. عدد البالغين + الأطفال + أعمارهم + أعمار البالغين (اختياري لخصم كبار السن)\n6. نوع الوجبة (RO/BB/HB/AI/UAI)\n→ النتائج بميداليات + تفاصيل قابلة للطي + تحذير اقتراب الحجز المبكر\n\n🌍 لغتان كاملتان: EN + AR (تقويم، أسماء، أشهر، أرقام)\n\n🔐 نظام الدعوات الجديد:\nأي مستخدم نشط يفتح الإعدادات → إدارة المستخدمين → إضافة، يدخل رقم الهاتف + الاسم + الدور (admin/agent/viewer)\nالزميل يفتح البوت → زر شارك رقمي → Telegram يرسل الرقم → تفعيل تلقائي\nيمكن تعطيل أي مستخدم بضغطة. ممنوع تعطيل النفس.\nالدعوات تنتهي تلقائياً بعد 30 يوماً.\nحماية ضد سرقة الهوية: contact.user_id يجب يطابق chat_id\n\n🛡️ حماية متعدّدة الطبقات:\nrate limit 50 طلب/دقيقة على webhook + 30/دقيقة على البحث\ndedup قوي يفشل مغلَقاً عند خطأ DB\noptimistic lock على كل تعديل (hotelVersion)\nHTML escape شامل في الترجمة\nPII لا يُسجَّل في audit\nsnapshot قبل وبعد كل عملية حساسة\nتنظيف تلقائي للجداول (pg_cron):\nالجلسات > ساعتين كل 30 دقيقة\nتحديثات معالَجة > 3 أيام كل ساعة\nسجلات > 90 يوم يومياً\n\n💾 جداول Supabase:\ntelegram_users, telegram_invites, telegram_sessions, telegram_audit, telegram_processed_updates, telegram_recent_hotels\n\n✨ تجربة الاستخدام:\nشريط حفظ سفلي موحَّد بدل 8 أزرار متفرقة\nCancel = تراجع للشاشة السابقة دائماً\nزر منفصل ابدأ من الصفر مع تأكيد\nرسائل منبثقة على ضغطات الأزرار غير الصالحة (تاريخ خاطئ، إقامة طويلة)\nاسترجاع تلقائي من تضارب النسخ 409\nإعادة محاولة عند فشل العرض\nشارة تحذير حمراء على الغرف الناقصة المضاعفات\nربط Time Machine في 3 مواقع (للـadmin فقط)\nصفحة 404 مخصَّصة\nSkip-to-content للوحة المفاتيح\nfocus trap على نافذة تسجيل الدخول\nsafe-area-inset لـiOS\n\n📊 الأرقام:\n2212 اختبار يمر، صفر ثغرات حرجة\n12+ commit في يومين على main\n7 إصلاحات أمنية مغلقة\n250 ثم 740 صف مضاعفات لسوينو حُفِظت بنجاح بعد إصلاح bug الحفظ الصامت\nCache invalidation: 30 ثانية أقصى تأخير بين تعديل الموقع وظهوره في البوت\n\n🔄 سير البيانات:\nالمشغّل يدخل/يعدّل العقد من شاشة تعديل العقد ← Supabase ← invalidateContractCache ← محرّك التسعير ← /api/search ← يرد البوت بنفس النتائج التي تظهر في الموقع 100٪\n\n🚀 النشر:\nRailway production: brix-hotel-web-app-production.up.railway.app\nيُنشَر تلقائياً من GitHub main عبر CI",
     tags: [
       "Telegram",
@@ -2386,7 +2386,7 @@ const BOT = [
       "Rate Limited",
       "Snapshots",
     ],
-    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/brix-bot/hotel-web-app/src/lib/telegram",
+    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     links: {
       Telegram: "https://t.me/BrixPrice_bot",
       GitHub: "https://github.com/aneerabee/brix-travel-system",
@@ -2446,9 +2446,9 @@ const TL = [
     used_in: ["Command Center", "BRIX Travel System", "EasyBooking"],
     summary:
       "بيئة GPT-5.5 الحالية مع تعليمات دائمة وPlugins مفعلة للمستودعات والتصميم.",
-    desc: "Codex يعمل هنا من ~/.codex\n\nالإعدادات المؤكدة من المصدر:\nmodel = gpt-5.5\nmodel_reasoning_effort = high\npersonality = pragmatic\nPlugins مفعلة: GitHub + Canva\nTrusted workspace: /Users/rabeeshaban/Developer\n\nالتخصيص الأهم:\nAGENTS.md يحمل معيار العمل الدائم الذي يحدد عدم الكسر والتنظيف وعدم الهلوسة قبل أي تنفيذ.",
+    desc: "Codex يعمل هنا من ~/.codex\n\nالإعدادات المؤكدة من المصدر:\nmodel = gpt-5.6-sol\nmodel_reasoning_effort = high\npersonality = pragmatic\nPlugins مفعلة: GitHub + Canva\nTrusted workspace: /Users/rabeeshaban/Developer\n\nالتخصيص الأهم:\nAGENTS.md يحمل معيار العمل الدائم الذي يحدد عدم الكسر والتنظيف وعدم الهلوسة قبل أي تنفيذ.",
     tags: [
-      "gpt-5.5",
+      "gpt-5.6-sol",
       "high reasoning",
       "GitHub plugin",
       "Canva plugin",
@@ -2460,7 +2460,7 @@ const TL = [
       "/Users/rabeeshaban/.codex/AGENTS.md",
     ],
     facts: [
-      "model: gpt-5.5",
+      "model: gpt-5.6-sol",
       "reasoning: high",
       "personality: pragmatic",
       "plugins: GitHub + Canva",
@@ -2511,7 +2511,7 @@ const TL = [
       "commands: 44",
       "skills: 46 local skills",
       "plugins: coderabbit + swift-lsp + telegram",
-      "effortLevel: high",
+      "effortLevel: xhigh",
       "statusline: ~/.claude/scripts/statusline.sh",
       "permissions allow list: 84+ entries",
     ],
@@ -2980,7 +2980,7 @@ const CLD = [
     active_note: "نشط: يستضيف Wapy.dev + ADREEM Bot/API + موقع Brixtravel (حي عبر Caddy + Let's Encrypt)",
     em: "🖥️",
     category: "infrastructure",
-    dt: "vmi3061403 · 62.171.128.44 · Ubuntu 24 · Tailscale 100.116.69.101 · 80GB متاح",
+    dt: "vmi3061403 · 62.171.128.44 · Ubuntu 24 · Tailscale 100.116.69.101 · 71G حرّ · استهلاك 27% (2026-07-25)",
     ip_note: "تأكّد الـ Public IP الفعلي = 62.171.128.44 (تم تشغيل curl ifconfig.me من داخل السيرفر عبر Tailscale يوم 2026-05-14). الـ IP السابق 46.202.172.151 كان عائداً لـ Hostinger وليس لـ Contabo — تم تصحيحه في Cloudflare DNS.",
     prj: "Wapy.dev + ADREEM + Brixtravel + LIBYA + Dr. Muhsen Ledger",
     related_entities: ["Wapy.dev", "ADREEM Bot", "BRIX Travel Website", "LIBYA", "Dr. Muhsen Ledger"],
@@ -2992,7 +2992,7 @@ const CLD = [
     ar: "كلاودفلير",
     id: "cloudflare",
     active: true,
-    active_note: "نشط: DNS + CDN + SSL + Tunnel لمشاريع BRIX/Tron/Claude Code Bot. Cloudflare Pages تستضيف ledger.rabee.dev (ADREEM) — راجع IDEAS rabee-online-empire.",
+    active_note: "نشط: DNS + CDN + SSL + Tunnel لمشاريع BRIX/Tron/Claude Code Bot. Cloudflare Pages متاحة وغير مستخدمة بعد — ledger.rabee.dev غير منشأ (NXDOMAIN، فُحص 2026-07-25) — راجع IDEAS rabee-online-empire.",
     em: "☁️",
     category: "infrastructure",
     dt: "DNS authority لـ brixtravel.com + rabee.dev · Proxy 🟠 على بعض السجلات · Tunnel للوصول الآمن إلى Contabo · Workers + Pages متاحة لكنّها قليلة الاستخدام حاليّاً",
@@ -3006,7 +3006,7 @@ const CLD = [
     ar: "هوستنجر",
     id: "hostinger",
     active: true,
-    active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و MX records تشير لـ mx1/mx2.hostinger.com. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
+    active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و البريد على Zoho Mail (mx.zoho.com / mx2 / mx3 + SPF include:zohomail.com) — ليس Hostinger. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
     em: "🌍",
     category: "domain-and-email",
     dt: "Domain Registrar (brixtravel.com حتى 2028-10-14) + MX records للبريد @brixtravel.com",
@@ -3173,7 +3173,7 @@ const ARC = [
     summary: "تصدير كامل لموقع عقاري مغلق.",
     next_step: "أرشيف فقط",
     related_projects: [],
-    desc: "موقع عقاري WordPress — تصدير كامل\n\n🔧 البنية:\nWordPress + Houzez Theme\nصفحات عقارية + مدونة\n\n📦 المحفوظ:\nتصدير كامل: wp-admin + wp-content + wp-includes\n1,576+ ملف\n\n📌 الحالة: موقع مغلق — أرشيف كامل (verified 2026-05-13: المصدر brixrealstate.wordpress.com يعيد HTTP 410 Gone — الموقع محذوف نهائياً، التصدير المحلي هو ما تبقّى).",
+    desc: "موقع عقاري WordPress — تصدير كامل\n\n🔧 البنية:\nWordPress + Houzez Theme\nصفحات عقارية + مدونة\n\n📦 المحفوظ:\nتصدير كامل: wp-admin + wp-content + wp-includes\n2,040 ملف\n\n📌 الحالة: موقع مغلق — أرشيف كامل (verified 2026-05-13: المصدر brixrealstate.wordpress.com يعيد HTTP 410 Gone — الموقع محذوف نهائياً، التصدير المحلي هو ما تبقّى).",
     tags: ["WordPress", "Houzez", "Real Estate"],
     path: "/Users/rabeeshaban/Desktop/Archive/brix-studio-export",
     links: {},
