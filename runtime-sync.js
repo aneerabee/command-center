@@ -715,6 +715,19 @@ function checkBots(bots, previous, serverSnapshot) {
         summary: fs.existsSync(targetPath) && allowed ? 'قناة Telegram وصلاحيتها موجودتان' : 'مسار القناة أو صلاحية plugin غير مؤكدة',
         facts: [`path: ${targetPath}`, `permission: ${allowed ? 'ok' : 'missing'}`]
       };
+    } else if (bot.systemd) {
+      const unit = systemdByUnit[bot.systemd];
+      const pathCheck = serverPathExists(bot.path);
+      const active = unit && unit.active === 'active';
+      patch = {
+        verification_status: active && pathCheck.ok ? 'ok' : 'warn',
+        checked_from: 'ssh + systemd',
+        summary: active && pathCheck.ok ? `${bot.systemd} نشطة ومسار التشغيل موجود` : 'الخدمة أو مسار التشغيل غير مؤكد',
+        facts: [
+          unit ? `unit: ${unit.active}/${unit.sub}` : `unit: ${bot.systemd} missing`,
+          ...pathCheck.facts,
+        ],
+      };
     }
 
     records[bot.id] = buildRecord('bot', bot.id, previousRecord, patch, '7d');

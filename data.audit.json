@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-14T02:24:58.329Z",
+  "generated_at": "2026-08-19T12:22:24.911Z",
   "entities": {
     "brix-travel-system": {
       "kind": "project",
@@ -181,6 +181,10 @@
         "status": 307,
         "ok": true
       },
+      "local_path": {
+        "value": "/Users/rabeeshaban/Developer/libya",
+        "exists": true
+      },
       "server_path": {
         "value": "/home/argaz/apps/libya",
         "exists": true
@@ -353,7 +357,11 @@
     },
     "adreem-bot": {
       "kind": "bot",
-      "name": "ADREEM Bot"
+      "name": "ADREEM Bot",
+      "systemd": {
+        "unit": "adreem-bot.service",
+        "status": "active"
+      }
     },
     "brixprice-bot": {
       "kind": "bot",
