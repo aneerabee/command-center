@@ -1253,7 +1253,7 @@ const PRJ = [
     cl: "#059669",
     cl_brand: "#059669",
     brand_note: "SaaS Green — منتج اشتراك",
-    pct: 92,
+    pct: 94,
     parent: "saas",
     parent_role: "product",
     revenue_model: "subscription",
@@ -1261,9 +1261,9 @@ const PRJ = [
     monthly_revenue_usd: 0,
     users_count: 2,
     priority: "med",
-    next_milestone: "إنشاء قاعدة ADREEM مستقلة ثم تجربة النقل والاسترجاع قبل تحويل الإنتاج",
+    next_milestone: "نقل دفتر الاختبار إلى قاعدة ADREEM المستقلة وتجربة النسخ والاسترجاع قبل تحويل الإنتاج",
     summary:
-      "ADREEM — دفتر مالي مستقل للويب وTelegram Bot. النسخة الحية تعمل بالبنية السابقة، وأساس v3 العلائقي متعدد المستخدمين منشور ككود ومختبر بانتظار قاعدة مستقلة وتحويل إنتاج آمن.",
+      "ADREEM — دفتر مالي مستقل للويب وTelegram Bot. قاعدة v3 المستقلة أُنشئت ومخططها العلائقي مطبق، بينما النسخة الحية باقية على البنية السابقة حتى نجاح نقل البيانات والنسخ والاسترجاع.",
     local_path:
       "/Users/rabeeshaban/Developer/adreem",
     server_path: "/home/argaz/apps/adreem",
@@ -1328,13 +1328,13 @@ const PRJ = [
       "الويب المنشور cloud-only: لا يقرأ دفترًا من localStorage ولا يحفظ دفترًا أو snapshots محلية في وضع API",
       "الحركات تمر عبر ledgerCore: validateMovement + previewMovement + postMovement",
       "Telegram Bot يستخدم نفس ledgerCore وSupabase، ويدعم عزل المستخدمين عبر ADREEM_TELEGRAM_LEDGER_IDS وسجل مستخدمين ديناميكي",
-      "أساس ADREEM v3 منشور في GitHub على commit aa4a1de: جداول منفصلة لكل سجل، owner_id وledger_id، عزل RLS إجباري، Supabase Auth، تحميل صفحات، وحالة بوت ثابتة",
-      "آخر تحقق قوي 2026-08-21: 751 اختبارًا نجحت، وفحص الأنواع والجودة والبناء والحزم نجح، وقاعدة PostgreSQL جديدة من الصفر اجتازت اختبارات العزل والذرية والمراجعة",
-      "GitHub Pages ما زال يعرض النسخة السابقة من commit 96ded9f؛ دفع aa4a1de لم يشغّل نشرًا تلقائيًا عمدًا",
+      "أساس ADREEM v3 منشور في GitHub على commit 3e689bc: جداول منفصلة لكل سجل، owner_id وledger_id، عزل RLS إجباري، Supabase Auth، تحميل صفحات، وحالة بوت ثابتة",
+      "آخر تحقق قوي 2026-08-21: 752 اختبارًا نجحت، وفحص الأنواع والجودة والبناء والحزم نجح، وقاعدة PostgreSQL جديدة من الصفر اجتازت اختبارات العزل والذرية والمراجعة",
+      "GitHub Pages ما زال يعرض النسخة السابقة من commit 96ded9f؛ دفع 3e689bc لم يشغّل نشرًا تلقائيًا عمدًا",
       "تشغيل Contabo مؤكد في 2026-08-21 على commit e55c32d: adreem-api.service و adreem-bot.service نشطتان عبر systemd user وNode 20.20.1",
       "فحص التشغيل العام نجح: /health و login و /api/ledger أعادت 200 عبر مستخدم مراقبة ودفتر runtime-health معزول عن دفاتر الأشخاص",
       "RLS لجدول ml_state الحالي مغلق، ومخزن adreem-attachments خاص بحد 10MB؛ v3 يضيف عزلًا داخل كل جدول ونسخًا خارجية مشفرة وأداة استرجاع إلى قاعدة فارغة",
-      "لم يُنشأ مشروع Supabase المستقل بعد، ولم تُنفذ تجربة استرجاع خارجية أو تحويل الإنتاج؛ النسخة الحية لم تتغير",
+      "أُنشئ مشروع Supabase مستقل باسم ADREEM في eu-central-1 وطُبق عليه سجل v3 كاملًا؛ ما زال فارغًا وغير موصول بالإنتاج حتى نجاح النقل والاسترجاع",
       "صفحة إدارة المستخدمين تنشئ إيميل وكلمة مرور لكل مستخدم، وتحفظ password hash فقط داخل registry",
       "إدارة المستخدمين محمية بحساب المالك نفسه، وتدعم الإضافة والتعديل والحذف دون رمز إدارة منفصل",
       "المستخدم يدخل من الرابط العام، وتبقى جلسة الدخول على الجهاز حتى تسجيل الخروج أو حذف بيانات الموقع، ثم يفتح ledgerId الخاص به فقط",
@@ -1348,7 +1348,7 @@ const PRJ = [
       "سجل البوت يدعم إلغاء الحركات المعتمدة الحديثة فقط خلال 24 ساعة مثل الويب، مع إبقاء الحركة في السجل بحالة voided وعدم حذفها نهائيًا",
       "واجهة البيانات تتحقق من سلامة الانتقال قبل كل حفظ وترفض أي أرصدة مالية مملوكة تصبح سالبة أو حركة تكسر تكامل الدفتر",
       "مراقبة دورة Telegram كاملة بعد النشر لم تسجل أي خطأ جديد، وgetWebhookInfo أكد polling بلا webhook وبلا رسائل معلقة",
-      "الإصدار الحي السابق v1.0.0 محفوظ؛ أساس v3 عند aa4a1de هو كود تجهيز وليس إصدار إنتاج",
+      "الإصدار الحي السابق v1.0.0 محفوظ؛ أساس v3 عند 3e689bc هو كود تجهيز وليس إصدار إنتاج",
       "لا تشغّل جلسة Claude telegram plugin بالتوازي مع بوت ADREEM كي لا تختلط ردود Terminal مع البوت",
     ],
     separation_status: "separate-github-repo-live-local-worktree",
@@ -1372,7 +1372,7 @@ const PRJ = [
       API: "https://www.brixtravel.com/adreem-api/health",
       "إدارة المستخدمين": "https://aneerabee.github.io/adreem/?admin=users",
       GitHub: "https://github.com/aneerabee/adreem",
-      Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
+      Supabase: "https://supabase.com/dashboard/project/buncrnhpsylotanawmey",
       Telegram: "https://t.me/SystemAzol_bot",
     },
     links_desc: {
@@ -1380,18 +1380,18 @@ const PRJ = [
       API: "فحص صحة ADREEM API العام خلف Caddy على Contabo",
       "إدارة المستخدمين": "صفحة إدارة مستخدمي ADREEM؛ تفتح بصلاحية حساب المالك نفسه",
       GitHub: "المستودع الرسمي المنفصل لـADREEM",
-      Supabase: "مشروع Supabase المشترك الذي يحتوي ml_state للإنتاج الحالي فقط؛ قاعدة v3 المستقلة لم تُنشأ بعد",
+      Supabase: "مشروع Supabase المستقل لـADREEM v3؛ مخططه مطبق وهو غير موصول بالإنتاج حتى اكتمال النقل والاسترجاع",
       Telegram: "بوت ADREEM الحي على Contabo",
     },
     current_status: {
       updated: "2026-08-21",
       where:
-        "الويب الحي يعمل من commit 96ded9f والخدمتان على Contabo نشطتان من commit e55c32d. أساس v3 منشور في GitHub عند aa4a1de دون نشر تلقائي: 751 اختبارًا ناجحًا، وقاعدة جديدة من الصفر اجتازت العزل ومنع الرصيد السالب وذرية الحفظ وثبات البوت.",
+        "الويب الحي يعمل من commit 96ded9f والخدمتان على Contabo نشطتان من commit e55c32d. أساس v3 منشور في GitHub عند 3e689bc دون نشر تلقائي: 752 اختبارًا ناجحًا، وقاعدة ADREEM المستقلة موجودة ومخططها مطبق وفارغ.",
       next_step:
-        "اعتماد المؤسسة RABEE والمنطقة eu-central-1 لإنشاء قاعدة ADREEM المستقلة، ثم تجربة النسخ والاسترجاع والنقل قبل أي تحويل للإنتاج.",
-      blockers: ["قاعدة Supabase مستقلة لم تُنشأ بعد، وتحويل v3 متوقف حتى اعتماد المؤسسة والتكلفة"],
+        "نقل دفتر الاختبار مع المقارنة، ثم تنفيذ نسخة خارجية وتجربة استرجاع قبل أي تحويل للإنتاج.",
+      blockers: ["نقل البيانات وتجربة النسخ والاسترجاع لم يُنفذا بعد؛ النسخة الحية لم تتحول إلى v3"],
       use_guide:
-        "النسخة الحية الحالية متاحة من https://aneerabee.github.io/adreem/ والبوت https://t.me/SystemAzol_bot. لا تعتبر aa4a1de منشورًا على الإنتاج. للتطوير استخدم /Users/rabeeshaban/Developer/adreem فقط، ثم pnpm typecheck وpnpm lint وpnpm test وpnpm build.",
+        "النسخة الحية الحالية متاحة من https://aneerabee.github.io/adreem/ والبوت https://t.me/SystemAzol_bot. لا تعتبر 3e689bc منشورًا على الإنتاج. للتطوير استخدم /Users/rabeeshaban/Developer/adreem فقط، ثم pnpm typecheck وpnpm lint وpnpm test وpnpm build.",
     },
     claude_session: {
       session_name: "[ADREEM telegram bot]",
@@ -1399,7 +1399,7 @@ const PRJ = [
       cwd: "/Users/rabeeshaban/Developer/adreem",
       command:
         "cd /Users/rabeeshaban/Developer/adreem && claude",
-      note: "آخر تحقق 2026-08-21: الويب الحي 96ded9f والخادم e55c32d، بينما أساس v3 عند aa4a1de في GitHub فقط. لا تنشر v3 قبل قاعدة مستقلة وتجربة نقل واسترجاع. لا تشغّل Claude telegram plugin بالتوازي مع البوت.",
+      note: "آخر تحقق 2026-08-21: الويب الحي 96ded9f والخادم e55c32d، بينما أساس v3 عند 3e689bc في GitHub وقاعدة ADREEM المستقلة موجودة. لا تنشر v3 قبل تجربة النقل والاسترجاع. لا تشغّل Claude telegram plugin بالتوازي مع البوت.",
     },
   },
   {
@@ -1763,7 +1763,7 @@ const SVC = [
     port: "Telegram polling",
     schedule: "systemd user service enabled على Contabo",
     dt: "adreem-bot.service · active · Telegram polling",
-    info: "ADREEM Bot يعمل 24/7 على Contabo من commit e55c32d بالبنية الحية السابقة. أساس v3 عند aa4a1de لم يُنشر بعد؛ عند التحويل سيستخدم حالة دائمة ومعالجة ذرية تمنع فقد التحديث أو تكراره.",
+    info: "ADREEM Bot يعمل 24/7 على Contabo من commit e55c32d بالبنية الحية السابقة. أساس v3 عند 3e689bc وقاعدته المستقلة جاهزان للنقل المتحقق منه؛ عند التحويل سيستخدم حالة دائمة ومعالجة ذرية تمنع فقد التحديث أو تكراره.",
     last_check: "2026-08-21 Contabo runtime",
     config_paths: [
       "server:/home/argaz/apps/adreem",
@@ -1790,7 +1790,7 @@ const SVC = [
     port: "8787",
     schedule: "دائم — Restart=always، RestartSec=5",
     dt: "adreem-api.service · active · port 8787",
-    info: "خدمة ADREEM API تعمل من commit e55c32d عبر Node 20.20.1 على المنفذ 8787، وفحص الصحة نجح في 2026-08-21. API v3 عند aa4a1de موجود في GitHub فقط وينتظر قاعدة مستقلة وتحويلًا متحققًا منه.",
+    info: "خدمة ADREEM API تعمل من commit e55c32d عبر Node 20.20.1 على المنفذ 8787، وفحص الصحة نجح في 2026-08-21. API v3 عند 3e689bc وقاعدته المستقلة جاهزان وينتظران نقلًا واسترجاعًا متحققًا منهما.",
     last_check: "2026-08-21 Contabo runtime",
     config_paths: [
       "server:/home/argaz/apps/adreem",
@@ -2319,7 +2319,7 @@ const BOT = [
     last_run: "active on Contabo · commit e55c32d",
     check_method: "SSH/systemd + Telegram getMe + ADREEM runtime verifier",
     uptime_status: "active",
-    check_note: "adreem-bot.service نشطة على Contabo من commit e55c32d. أساس البوت الدائم في v3 عند aa4a1de موجود في GitHub ولم يُنشر قبل القاعدة المستقلة.",
+    check_note: "adreem-bot.service نشطة على Contabo من commit e55c32d. أساس البوت الدائم في v3 عند 3e689bc وقاعدته المستقلة موجودان، ولم يتحول الإنتاج قبل اختبار النقل والاسترجاع.",
     runtime: "Node.js 20.20.1 / systemd user",
     memory_mb: 48,
     started_at: null,
@@ -2329,7 +2329,7 @@ const BOT = [
     related_entities: ["ADREEM", "Supabase", "GitHub", "Contabo VPS"],
     summary:
       "بوت Telegram لـADREEM لإدخال الحركات ومراجعة الحسابات والسجل من الهاتف، ويستخدم نفس ملفات المنطق التي يستخدمها الويب.",
-    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحي:\nadreem-bot.service نشطة عبر systemd user من commit e55c32d\nTelegram polling فقط بلا webhook\nكل مستخدم مرتبط بدفتر مستقل عبر registry/ledgerId\nإنشاء المستخدمين من صفحة إدارة الويب فقط\n\n🧱 أساس v3 غير المنشور:\ncommit aa4a1de يضيف جلسات بوت دائمة، مؤشر تحديث محفوظ، منع تنفيذ مزدوج، مراجعة صفحية ثابتة، وعزل owner_id/ledger_id داخل قاعدة البيانات\nلن يُنشر قبل إنشاء قاعدة ADREEM المستقلة وتجربة النقل والاسترجاع\n\n✅ الوظائف:\nإدخال الحركة خطوة بخطوة مع رجوع وإلغاء وملخص قبل الحفظ\nإنشاء الحساب بنفس تصنيفات الويب\nفلترة الحسابات حسب العملة والنوع\nمطابقة الرصيد والتنبيهات والتقارير والحركات الشهرية والسجل والمراجعة\nمرفق خاص وربط بمشروع أو أصل ومنع التأكيد المكرر\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nالتشغيل الحالي: /usr/bin/node server/telegram/bot.js\n\n🔐 الأمان:\nالمفاتيح في adreem.env على الخادم فقط\nلا حفظ بدون تأكيد نهائي\nلا تشغّل قناة Claude Telegram بالتوازي حتى لا تختلط الرسائل",
+    desc: "بوت ADREEM — يعمل سحابيًا على Contabo\n\n🎯 الهدف:\nإدخال الحسابات والحركات ومراجعة الأرصدة والسجل من Telegram، بنفس منطق الويب ونفس مصدر البيانات.\n\n✅ التشغيل الحي:\nadreem-bot.service نشطة عبر systemd user من commit e55c32d\nTelegram polling فقط بلا webhook\nكل مستخدم مرتبط بدفتر مستقل عبر registry/ledgerId\nإنشاء المستخدمين من صفحة إدارة الويب فقط\n\n🧱 أساس v3 غير المنشور:\ncommit 3e689bc يضيف جلسات بوت دائمة، مؤشر تحديث محفوظ، منع تنفيذ مزدوج، مراجعة صفحية ثابتة، وعزل owner_id/ledger_id داخل قاعدة البيانات\nقاعدة ADREEM المستقلة موجودة؛ لن يتحول الإنتاج قبل نجاح النقل والاسترجاع\n\n✅ الوظائف:\nإدخال الحركة خطوة بخطوة مع رجوع وإلغاء وملخص قبل الحفظ\nإنشاء الحساب بنفس تصنيفات الويب\nفلترة الحسابات حسب العملة والنوع\nمطابقة الرصيد والتنبيهات والتقارير والحركات الشهرية والسجل والمراجعة\nمرفق خاص وربط بمشروع أو أصل ومنع التأكيد المكرر\n\n📍 التشغيل:\nالمضيف: Contabo VPS vmi3061403\nالمسار: /home/argaz/apps/adreem\nالخدمة: adreem-bot.service\nالتشغيل الحالي: /usr/bin/node server/telegram/bot.js\n\n🔐 الأمان:\nالمفاتيح في adreem.env على الخادم فقط\nلا حفظ بدون تأكيد نهائي\nلا تشغّل قناة Claude Telegram بالتوازي حتى لا تختلط الرسائل",
     tags: [
       "Telegram",
       "Node.js",
@@ -2359,14 +2359,14 @@ const BOT = [
       GitHub: "https://github.com/aneerabee/adreem",
       "ADREEM API": "https://www.brixtravel.com/adreem-api/health",
       "Telegram Bot API": "https://core.telegram.org/bots",
-      Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
+      Supabase: "https://supabase.com/dashboard/project/buncrnhpsylotanawmey",
     },
     current_status: {
       updated: "2026-08-21",
       where:
-        "البوت الحي يعمل على Contabo من commit e55c32d. أساس v3 للبوت عند aa4a1de منشور ككود فقط، واختبارات الثبات ومنع التكرار والمراجعة الصفحية ناجحة، لكنه لم يُنشر قبل القاعدة المستقلة.",
+        "البوت الحي يعمل على Contabo من commit e55c32d. أساس v3 للبوت عند 3e689bc وقاعدته المستقلة جاهزان، واختبارات الثبات ومنع التكرار والمراجعة الصفحية ناجحة، لكنه لم يتحول قبل اختبار النقل والاسترجاع.",
       next_step:
-        "بعد اعتماد قاعدة ADREEM المستقلة: نقل دفتر اختبار، تجربة إعادة التشغيل والتكرار، ثم تحويل البوت ومراقبته.",
+        "نقل دفتر الاختبار، تجربة إعادة التشغيل ومنع التكرار، ثم تحويل البوت ومراقبته.",
       use_guide:
         "للفحص بعد التثبيت: ssh إلى Contabo ثم systemctl --user status adreem-bot.service. لإعادة التشغيل: systemctl --user restart adreem-bot.service. لا تشغل نسخة MacBook أو Claude telegram plugin بالتوازي.",
     },

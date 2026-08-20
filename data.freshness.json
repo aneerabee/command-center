@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T21:28:22.429Z",
+  "generated_at": "2026-08-20T22:27:12.719Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -93,7 +93,7 @@
       "_root": "2026-07-25"
     },
     "adreem": {
-      "links": "2026-06-07",
+      "links": "2026-08-20",
       "links_desc": "2026-08-20",
       "current_status": "2026-08-20",
       "claude_session": "2026-08-20",
@@ -162,7 +162,7 @@
       "_root": "2026-08-19"
     },
     "adreem-bot": {
-      "links": "2026-05-31",
+      "links": "2026-08-20",
       "current_status": "2026-08-20",
       "_root": "2026-08-20"
     },
