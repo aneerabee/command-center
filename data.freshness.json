@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T12:26:57.941Z",
+  "generated_at": "2026-08-20T21:28:22.429Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -94,10 +94,10 @@
     },
     "adreem": {
       "links": "2026-06-07",
-      "links_desc": "2026-08-19",
-      "current_status": "2026-08-19",
-      "claude_session": "2026-08-19",
-      "_root": "2026-08-19"
+      "links_desc": "2026-08-20",
+      "current_status": "2026-08-20",
+      "claude_session": "2026-08-20",
+      "_root": "2026-08-20"
     },
     "libya": {
       "links": "2026-05-23",
@@ -111,10 +111,10 @@
       "_root": "2026-06-14"
     },
     "adreem-bot-svc": {
-      "_root": "2026-08-19"
+      "_root": "2026-08-20"
     },
     "adreem-api": {
-      "_root": "2026-08-19"
+      "_root": "2026-08-20"
     },
     "cc-runtime-publish": {
       "_root": "2026-05-12"
@@ -163,8 +163,8 @@
     },
     "adreem-bot": {
       "links": "2026-05-31",
-      "current_status": "2026-08-19",
-      "_root": "2026-08-19"
+      "current_status": "2026-08-20",
+      "_root": "2026-08-20"
     },
     "brixprice-bot": {
       "links": "2026-05-12",
