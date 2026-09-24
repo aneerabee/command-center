@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T17:43:50.899Z",
+  "generated_at": "2026-09-24T18:34:02.399Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -96,8 +96,8 @@
       "links": "2026-08-20",
       "links_desc": "2026-08-20",
       "current_status": "2026-08-20",
-      "claude_session": "2026-08-20",
-      "_root": "2026-08-20"
+      "claude_session": "2026-09-24",
+      "_root": "2026-09-24"
     },
     "libya": {
       "links": "2026-05-23",
@@ -109,9 +109,6 @@
     },
     "libya-web": {
       "_root": "2026-06-14"
-    },
-    "adreem-bot-svc": {
-      "_root": "2026-08-20"
     },
     "adreem-api": {
       "_root": "2026-08-20"
@@ -159,12 +156,7 @@
       "_root": "2026-05-12"
     },
     "claude-code-bot": {
-      "_root": "2026-08-19"
-    },
-    "adreem-bot": {
-      "links": "2026-08-20",
-      "current_status": "2026-08-20",
-      "_root": "2026-08-20"
+      "_root": "2026-09-24"
     },
     "brixprice-bot": {
       "links": "2026-05-12",
@@ -250,10 +242,10 @@
       "_root": "2026-06-14"
     },
     "telegram": {
-      "_root": "2026-05-30"
+      "_root": "2026-09-24"
     },
     "contabo-vps": {
-      "_root": "2026-07-25"
+      "_root": "2026-09-24"
     },
     "cloudflare": {
       "_root": "2026-07-25"
@@ -301,8 +293,8 @@
       "_root": "2026-04-05"
     },
     "rabee-online-empire": {
-      "blueprint": "2026-06-14",
-      "_root": "2026-06-14"
+      "blueprint": "2026-09-24",
+      "_root": "2026-09-24"
     },
     "brix-website-v2": {
       "_root": "2026-05-11"

@@ -215,10 +215,6 @@
         "status": 307
       }
     },
-    "adreem-bot-svc": {
-      "kind": "service",
-      "name": "ADREEM Bot Service"
-    },
     "adreem-api": {
       "kind": "service",
       "name": "ADREEM API Service",
@@ -354,14 +350,6 @@
     "claude-code-bot": {
       "kind": "bot",
       "name": "Claude Code Bot"
-    },
-    "adreem-bot": {
-      "kind": "bot",
-      "name": "ADREEM Bot",
-      "systemd": {
-        "unit": "adreem-bot.service",
-        "status": "active"
-      }
     },
     "brixprice-bot": {
       "kind": "bot",
