@@ -13,6 +13,7 @@ const PRIVATE_REPOS = [
   "aneerabee/money-manager",
   "aneerabee/brix-backups",
   "aneerabee/libya",
+  "aneerabee/Obsidian",
 ];
 
 const PG = [
@@ -1718,6 +1719,76 @@ const PRJ = [
       note: "بُني 2026-06-07 من ملف ~/Desktop/dr muhsen 2023.numbers (43 حركة). محرك الحساب مُختبَر يطابق الأصل (665000/2012). نُشر سحابياً على Contabo داخل Docker، Tailscale خاص فقط. التالي: تسجيل دخول قبل أي فتح عام.",
     },
   },
+  {
+    name: "Obsidian Vault",
+    id: "obsidian-vault",
+    kind: "internal-tool",
+    ar: "خزنة المعرفة الشخصية",
+    st: "a",
+    em: "🧠",
+    cl: "#7C3AED",
+    pct: 60,
+    priority: "high",
+    next_milestone: "تشغيل Obsidian Hub على Contabo (CouchDB + bridge + agent) ثم ربط الماك ميني كجهاز أول ثم الآيفون ونقل ملاحظات Apple Notes",
+    summary: "خزنة Obsidian منظّمة (PARA) تتزامن فورياً بين الآيفون والماك عبر Self-hosted LiveSync على Contabo، مع نسخ تلقائي إلى GitHub كل 10 دقائق، ومهام بتواريخ وتنبيهات داخل الملاحظات، ومزامنة يومية لمشاريع وأفكار Command Center إلى ملاحظات.",
+    local_path: null,
+    server_path: "server:/opt/obsidian-hub",
+    repo_url: "https://github.com/aneerabee/Obsidian",
+    stack: [
+      "Obsidian",
+      "Self-hosted LiveSync",
+      "CouchDB",
+      "Docker",
+      "Python",
+      "Deno",
+      "GitHub Actions",
+      "ntfy"
+    ],
+    related_services: [
+      "Obsidian Hub"
+    ],
+    related_cloud: [
+      "GitHub",
+      "Contabo VPS",
+      "Tailscale"
+    ],
+    ops: [
+      "المزامنة: LiveSync مشفّر طرفياً (E2EE + path obfuscation) عبر CouchDB على Contabo",
+      "GitHub: الوكيل على السيرفر يعمل commit/merge/push كل 10 دقائق — الأجهزة تفوز عند التعارض",
+      "المهام: صيغة Tasks داخل الملاحظات (📅 تاريخ ⏰ وقت) والوكيل يرسل الإشعارات عبر ntfy (مجاني، مفتوح المصدر) + ملخص صباحي",
+      "Command Center → Obsidian: GitHub Action يومية تحدّث ملاحظة لكل مشروع وفكرة",
+      "صيانة أسبوعية: تقرير صحة الخزنة (روابط مكسورة، يتيمة، وارد قديم)"
+    ],
+    desc: "نظام المعرفة الشخصي\n\n🗂️ الهيكل:\n00 Inbox · 10 Daily · 20 Projects · 25 Ideas · 30 Areas · 40 Resources · 50 Archive · 60 Imports · 90 System\n\n🔄 المزامنة:\nالآيفون + الماك ↔ CouchDB (Contabo) ↔ livesync-bridge ↔ نسخة ملفات على السيرفر ↔ GitHub\n\n✅ المهام:\nداخل الملاحظات + تنبيهات على الآيفون والماك\n\n🧪 الجودة:\nاختبارات Python وNode + اختبار تكاملي حقيقي للمزامنة عبر CouchDB",
+    tags: [
+      "Obsidian",
+      "LiveSync",
+      "CouchDB",
+      "Docker"
+    ],
+    links: {
+      GitHub: "https://github.com/aneerabee/Obsidian",
+      "دليل السيرفر": "https://github.com/aneerabee/Obsidian/blob/main/.ops/server/README.md",
+      "الأتمتة (Actions)": "https://github.com/aneerabee/Obsidian/actions"
+    },
+    links_desc: {
+      GitHub: "المستودع الخاص = الخزنة نفسها + السكربتات + مكدّس السيرفر",
+      "دليل السيرفر": "خطوات تشغيل Obsidian Hub على Contabo من الصفر",
+      "الأتمتة (Actions)": "مزامنة Command Center اليومية + تقرير الصيانة الأسبوعي + الاختبارات"
+    },
+    current_status: {
+      updated: "2026-10-02",
+      where: "الهيكل والقوالب ولوحات التحكم ومكدّس السيرفر جاهزة ومختبرة (اختبار تكاملي للمزامنة + تشغيل Obsidian 1.13 فعلي للتحقق من اللوحات). الخزنة نُقلت إلى الماك ميني؛ المزامنة مع السيرفر لم تُشغَّل بعد.",
+      next_step: "تفعيل الإضافات على الماك ثم تشغيل setup.sh على Contabo وربط الماك بـ LiveSync كجهاز أول",
+      blockers: [
+        {
+          text: "تفعيل HTTPS Certificates في Tailscale (أو Cloudflare Tunnel بعد شراء rabee.dev)",
+          priority: "med"
+        }
+      ],
+      use_guide: "يومياً: الوارد + اليومية + لوحة Home + المهام. أسبوعياً: مراجعة الأسبوع. للتنظيم: جلسة Claude على المستودع."
+    }
+  },
 ];
 
 const SVC = [
@@ -1952,6 +2023,30 @@ const SVC = [
     ],
     why: "هذه الخدمة تجعل دفتر حساب الدكتور محسن متاحاً 24/7 من أجهزة ربيع عبر Tailscale، معزولاً تماماً في حاوية وقرص مستقلّين عن مشروع التسعير وبقية المشاريع.",
   },
+  {
+    name: "Obsidian Hub",
+    ar: "محور مزامنة Obsidian",
+    id: "obsidian-hub",
+    st: 0,
+    em: "🧠",
+    host: "Contabo VPS",
+    runtime: "Docker Compose (couchdb + livesync-bridge + agent + ntfy)",
+    service_type: "container",
+    prj: "Obsidian Vault",
+    owner: "Obsidian Vault",
+    owner_type: "project",
+    path: "server:/opt/obsidian-hub",
+    port: "5984 (127.0.0.1 فقط)",
+    schedule: "دائم",
+    dt: "obsidian-couchdb · obsidian-bridge · obsidian-agent · obsidian-ntfy",
+    info: "مزامنة LiveSync مشفّرة + نسخة ملفات على السيرفر + git push كل 10 دقائق + إشعارات المهام عبر ntfy. CouchDB على 127.0.0.1 فقط.",
+    config_paths: [
+      "server:/opt/obsidian-hub/.ops/server/docker-compose.yml",
+      "server:/opt/obsidian-hub/.ops/server/.env",
+      "server:/opt/obsidian-hub-data"
+    ],
+    why: "تجعل الملاحظات متاحة ومتزامنة 24/7 بين الآيفون والماك حتى لو كان الماك مطفأً، وتنسخها إلى GitHub."
+  },
 ];
 
 const AUTO = [
@@ -2027,6 +2122,30 @@ const AUTO = [
     loc: "cron + systemd",
     host: "server",
     tasks: [
+      {
+        id: "obsidian-git-sync",
+        name: "نسخ خزنة Obsidian إلى GitHub",
+        freq: "كل 10 دقائق",
+        on: false,
+        what: "الوكيل يعمل commit + merge + push للخزنة",
+        prj: [
+          "Obsidian Vault"
+        ],
+        path: "server:/opt/obsidian-hub (obsidian-agent)",
+        kind: "backup"
+      },
+      {
+        id: "obsidian-backup",
+        name: "نسخة احتياطية لـ Obsidian Hub",
+        freq: "يومياً 03:30",
+        on: false,
+        what: "CouchDB + المفاتيح + إعداد الجسر، احتفاظ 14 يوماً",
+        prj: [
+          "Obsidian Vault"
+        ],
+        path: "server:/opt/obsidian-hub/.ops/server/scripts/backup.sh",
+        kind: "backup"
+      },
       {
         id: "server-wapy",
         name: "نسخ احتياطي قاعدة Wapy",
