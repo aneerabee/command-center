@@ -88,22 +88,23 @@ const WorkspaceModel = (() => {
       lookupIndexes.set(rows,index);
     }
     const matches = lookupIndexes.get(rows).get(normalize(value)) || [];
-    return matches.find(row => row.page === page) || matches[0] || null;
+    return (page ? matches.find(row => row.page === page) : matches[0]) || null;
   }
   function references(item) {
     return [...new Set([
       ...['related_entities','related_services','related_tools','related_cloud','related_projects','assigned_projects'].flatMap(key => item[key] || []),
       ...(Array.isArray(item.prj) ? item.prj : []), ...(item.parent_project ? [item.parent_project] : []),
+      ...(item.service_type && typeof item.prj === 'string' ? [item.prj] : []),
     ])];
   }
   function related(rows, row) {
     const targets = item => [
       ...Object.entries({related_entities:null,related_services:'server',related_tools:'tools',related_cloud:'cloud',related_projects:'projects',assigned_projects:'projects'}).flatMap(([key,page]) => (item[key] || []).map(name => resolve(rows,name,page))),
-      ...(Array.isArray(item.prj) ? item.prj : []).map(name => resolve(rows,name,'projects')),
+      ...(Array.isArray(item.prj) ? item.prj : item.service_type && typeof item.prj === 'string' ? [item.prj] : []).map(name => resolve(rows,name,'projects')),
       ...(item.parent_project ? [resolve(rows,item.parent_project,'projects')] : []),
     ].filter(Boolean);
     const direct = targets(row.item);
-    const inverse = rows.filter(other => targets(other.item).some(target => target.key === row.key) || other.kind === 'service' && other.item.prj === row.arg);
+    const inverse = rows.filter(other => targets(other.item).some(target => target.key === row.key));
     return [...new Map([...direct,...inverse].filter(other => other && other.key !== row.key).map(other => [other.key,other])).values()];
   }
   return Object.freeze({ LOCALE, latinDigits, route, resolve, references, related, MAX_CHECK_AGE, HEALTH_MAX_AGE, STATES, status, registry, counts, normalize, matches, safeUrl, primaryLink, health });

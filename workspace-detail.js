@@ -20,10 +20,12 @@ function wsRememberView() {
   const focus = document.activeElement?.closest('[data-ws-open]')?.getAttribute('data-ws-open');
   const attribute = ['data-ws-pin','data-ws-copy','data-ws-back'].find(name => document.activeElement?.hasAttribute(name));
   const control = attribute ? {attribute,value:document.activeElement.getAttribute(attribute)} : null;
-  wsPositions.set(wsActiveRoute, { y:window.scrollY, focus, control });
+  const expanded = [...document.querySelectorAll('#detail-view details[open]')].map(el=>el.closest('section')?.id);
+  wsPositions.set(wsActiveRoute, { y:window.scrollY, focus, control, expanded });
 }
 function wsRestoreView(route) {
   requestAnimationFrame(() => {
+    if(wsActiveRoute !== route) return;
     const saved = wsPositions.get(route);
     window.scrollTo({ top:saved?.y || 0, behavior:'instant' });
     const trigger = saved?.focus && [...document.querySelectorAll('[data-ws-open]')].find(el => el.dataset.wsOpen === saved.focus && el.getClientRects().length);
@@ -69,7 +71,8 @@ function wsOperation(row) {
   const rows = row.kind === 'automation' ? [
     ['مكان المهمة',row.group],['الجدول المسجّل',item.freq],['حالة السجل',item.on ? 'مفعلة في السجل' : 'معطلة في السجل'],
   ] : [['مكان التشغيل المسجّل',item.host],['طريقة التشغيل',item.runtime || item.type],['المنفذ المسجّل',item.port],['القناة',item.channel]];
-  return wsDetailSection('operation',row.kind === 'automation' ? 'جدول المهمة' : 'بيانات التشغيل المسجّلة',wsDefinition(rows));
+  const purpose = ['automation','service'].includes(row.kind) && wsSummary(row) ? `<p class="ws-detail-lead">${E(WorkspaceModel.latinDigits(wsSummary(row)))}</p>` : '';
+  return wsDetailSection('operation',row.kind === 'automation' ? 'المهمة وجدولها' : 'بيانات التشغيل المسجّلة',purpose + wsDefinition(rows));
 }
 function wsProfile(row) {
   const item = row.item;
@@ -123,6 +126,7 @@ function wsShowDetail(row, {restore = false} = {}) {
     `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${row.kind === 'team' ? E(nameInitial(row.title)) : wsIcon(WS_PAGES[row.page].icon)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>` +
     `<div class="ws-detail-content">${wsEntityContent(row)}</div>`;
   document.getElementById('app').appendChild(root);
+  if(restore) for(const id of wsPositions.get(route)?.expanded || []) root.querySelector(`#${id} details`)?.setAttribute('open','');
   wsUpdateShell();
   document.title = `${row.title} · مركز التحكم`;
   const crumb = document.querySelector('.ws-breadcrumb');
@@ -157,6 +161,7 @@ closeDetail = function() {
 
 function wsFollowLocation() {
   wsRememberView();
+  wsCloseOverlay();
   closeDetail();
   const [rawPage,rawName] = _hashParts();
   const page = _validPages.has(rawPage) ? rawPage : 'home';
@@ -168,6 +173,7 @@ function wsFollowLocation() {
   if(row) wsShowDetail(row,{restore:true});
   else {
     if(rawName) ccToast('هذا العنصر غير موجود في السجل الحالي','warn');
+    if(rawName || rawPage !== page) history.replaceState(history.state,'',`#${page}`);
     wsActiveRoute = page;
     wsRestoreView(page);
   }

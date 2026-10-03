@@ -604,7 +604,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "إطلاق عام بعد اكتمال صفحات الاشتراك",
     summary:
-      "Wapy.dev — منصة إدارة اشتراكات. 3 حاويات Docker على Contabo، Tailscale-only، نسخ احتياطي يومي 3 صباحاً.",
+      "منصة لإدارة الاشتراكات، مع تطبيق وقاعدة بيانات ومهام دورية على الخادم. رابط الاستخدام المسجّل ضمن الشبكة الخاصة.",
     local_path: null,
     server_path: "/opt/wapy",
     repo_url: null,
@@ -848,7 +848,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "إنعاش المشروع + إضافة Entities للشركات (Etranex, BRIX, SaaS)",
     summary:
-      "مشروع لإدارة الحسابات والأصول والإيجارات والاستثمارات. اكتمال الوظائف يحتاج مراجعة داخل المشروع.",
+      "مشروع مسجّل لإدارة الحسابات والأصول. في فحص 2026-10-03 لم يوجد المسار المحلي المسجّل، وتعذر الوصول إلى المستودع بالحساب الحالي؛ يحتاج تحديد مكانه قبل استخدامه.",
     local_path: "/Users/rabeeshaban/Desktop/Projects/💰 Money-Manager",
     server_path: null,
     repo_url: "https://github.com/aneerabee/money-manager",
@@ -1630,6 +1630,7 @@ const AUTO = [
       },
       {
         id: "desktop-cc-health-monitor",
+        summary: "فحص دوري لحالة الخادم والخدمات. وقت آخر نتيجة ظاهر في اللوحة؛ وجود الجدولة وحده لا يثبت نجاح آخر دورة.",
         name: "Command Center Health Monitor",
         freq: "كل 15 دقيقة (StartInterval=900)",
         on: true,
@@ -1640,6 +1641,7 @@ const AUTO = [
       },
       {
         id: "desktop-mohammad-ledger-bot-local",
+        summary: "مهمة بوت محلي قديمة ومعطلة في السجل. لا يثبت هذا السجل وجود بوت إنتاجي حالي؛ لا تُعتمد ملاحظات التشغيل القديمة كحالة مباشرة.",
         name: "Mohammad Ledger Bot (محلي — معطّل فعليًّا)",
         freq: "KeepAlive (لكن spawn فاشل)",
         on: false,
@@ -1806,6 +1808,7 @@ const AUTO = [
       },
       {
         id: "desktop-brix-contract-study",
+        summary: "مرجع لدراسة عقود أُوقفت في 2026-05-26. الأعداد والخطة التفصيلية في الوصف تاريخية، ولا تعني وجود مهمة تعمل الآن.",
         name: "دراسة عقود BRIX — مرونة النظام (launchd مستقلّ — مُوقَفة 2026-05-26)",
         freq: "كانت 7×/يوم — أُوقفت 2026-05-26 (الملف الآن com.rabeeshaban.brix-contract-study.plist.disabled-2026-05-26)",
         on: false,
@@ -1858,7 +1861,7 @@ const BOT = [
     runtime: "Python",
     channel: "Telegram",
     related_entities: ["Heroku"],
-    summary: "بوت OCR لتحليل كشوف البنك، متوقف حاليًا.",
+    summary: "بوت لتحليل كشوف البنك، مؤرشف في السجل. وجود الكود لا يثبت تشغيله حاليًا.",
     desc: "بوت Telegram لتحليل كشوف البنك تلقائياً\n\n📸 كيف يعمل:\nأرسل صورة كشف الحساب\nيستخرج البيانات بتقنية OCR\nيحلل التحويلات والأرصدة\n\n📊 التصدير:\nCSV + Excel\nتقارير مفصلة\n\n🔧 التقنيات:\nPython + pytesseract + pandas\nمنشور على Heroku (متوقف حالياً)",
     tags: ["Python", "OCR", "Heroku", "pandas"],
     path: "/Users/rabeeshaban/Desktop/Archive/bank-bot",
@@ -2445,7 +2448,7 @@ const CLD = [
     active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و البريد على Zoho Mail (mx.zoho.com / mx2 / mx3 + SPF include:zohomail.com) — ليس Hostinger. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
     em: "🌍",
     category: "domain-and-email",
-    dt: "إدارة النطاق والبريد وفق الإعدادات المسجّلة",
+    dt: "حساب مسجّل لإدارة النطاق؛ بريد brixtravel.com يشير إلى Zoho وفق فحص 2026-10-03",
     prj: "BRIX Travel Website (نطاق + بريد فقط)",
     used_in: ["BRIX Travel Website"],
   },

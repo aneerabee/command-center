@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T14:33:40.061Z",
+  "generated_at": "2026-10-03T16:00:22.022Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -57,7 +57,7 @@
     },
     "wapy-dev": {
       "current_status": "2026-05-11",
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "command-center": {
       "links": "2026-04-05",
@@ -125,7 +125,7 @@
       "_root": "2026-05-12"
     },
     "desktop-github": {
-      "_root": "2026-05-31"
+      "_root": "2026-10-03"
     },
     "server-wapy": {
       "_root": "2026-10-03"
@@ -140,7 +140,7 @@
       "_root": "2026-05-30"
     },
     "bank-bot": {
-      "_root": "2026-05-12"
+      "_root": "2026-10-03"
     },
     "claude-code-bot": {
       "_root": "2026-09-24"

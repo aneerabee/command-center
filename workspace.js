@@ -26,6 +26,7 @@ let wsRefreshing = false;
 let wsSearchFocus = null;
 let wsReviewExpanded = false;
 let wsOverlay = null;
+let wsFreshnessSignature = '';
 
 function wsReadPreferences() {
   try {
@@ -53,6 +54,13 @@ function wsBadge(row) {
   return `<span class="ws-badge ${state.state}" title="${E(row.record?.summary || state.label)}">${wsIcon(state.icon)}${state.label}</span>`;
 }
 function wsDate(value) { return value && Number.isFinite(Date.parse(value)) ? relTime(value) : 'لا يوجد فحص'; }
+function wsRelativeTime(value) { return `<span${value ? ` data-live-time="${E(value)}"` : ''}>${E(wsDate(value))}</span>`; }
+function wsRefreshFreshness() {
+  const signature = wsRegistry().map(row=>`${row.key}:${wsMeta(row).state}`).join('|') + WorkspaceModel.health(HEALTH_STATE).state;
+  if(signature === wsFreshnessSignature) return;
+  wsFreshnessSignature = signature;
+  if(wsDetailKey) wsRefreshEvidence(); else wsRender();
+}
 function wsCompany(item) { return UMBRELLAS.find(group => group.id === item.parent)?.name || ''; }
 function wsGroup(row) {
   if (row.kind === 'team') return DEPARTMENTS.find(group=>group.id===row.item.department)?.name || wsCompany(row.item);
@@ -81,7 +89,7 @@ function wsSectionTitle(title, action = '') { return `<div class="ws-section-tit
 function wsGo(page, text) { return `<button class="ws-text-button" data-action="goPage" data-arg="${page}">${E(text)}${wsIcon('arrow-left')}</button>`; }
 
 function wsSidebar() {
-  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-icon.svg?v=20261003b" width="36" height="36" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
+  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-icon.svg?v=20261003c" width="36" height="36" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
     `<nav class="ws-navigation" aria-label="أقسام اللوحة">${WS_GROUPS.map(group => `<div class="ws-nav-group"><div class="ws-nav-label">${group.label}</div>${group.pages.map(id => `<a href="#${id}" class="nav-item${cur === id ? ' active' : ''}" data-page="${id}" data-action="goPage" data-arg="${id}" ${cur === id ? 'aria-current="page"' : ''}>${wsIcon(WS_PAGES[id].icon)}<span>${WS_PAGES[id].title}</span>${id === 'projects' ? `<small>${wsNumber(PRJ.length)}</small>` : ''}</a>`).join('')}</div>`).join('')}</nav>` +
     `<div class="ws-sidebar-footer"><span class="ws-owner">ر</span><div><strong>ربيع</strong><small>إدارة المشاريع</small></div><button class="ws-icon-button" data-action="openSearch" aria-label="بحث في اللوحة" title="بحث">${wsIcon('search')}</button></div>`;
 }
@@ -94,7 +102,7 @@ function wsMore() {
 }
 function wsUpdateShell() {
   const host = document.getElementById('workspace-topbar');
-  if (host) host.innerHTML = `<a href="#home" class="ws-mobile-brand" data-action="goPage" data-arg="home" aria-label="مركز التحكم"><img src="cc-icon.svg?v=20261003b" width="28" height="28" alt=""></a><div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
+  if (host) host.innerHTML = `<a href="#home" class="ws-mobile-brand" data-action="goPage" data-arg="home" aria-label="مركز التحكم"><img src="cc-icon.svg?v=20261003c" width="28" height="28" alt=""></a><div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
   document.title = `${WS_PAGES[cur]?.title || 'مركز التحكم'} · مركز التحكم`;
   if(wsDetailKey) {
     const row=wsRegistry().find(row=>row.key===wsDetailKey);
@@ -133,7 +141,7 @@ function wsListRow(row, card = false) {
   const checked = row.record?.verified_at;
   return `<article class="ws-entity${card ? ' ws-entity-card' : ''}" data-entity-key="${E(row.key)}">` +
     wsOpenButton(row, `<span class="ws-entity-icon">${wsIcon(icon)}</span><span class="ws-entity-copy"><strong>${E(row.title)}</strong><span>${E(wsSummary(row))}</span></span>`, 'ws-entity-main') +
-    `<div class="ws-entity-group">${E(group || '—')}</div><div class="ws-entity-check"><span>${wsBadge(row)}</span><small>${['team','idea'].includes(row.kind) ? E(group) : E(wsDate(checked))}</small></div>` +
+    `<div class="ws-entity-group">${E(group || '—')}</div><div class="ws-entity-check"><span>${wsBadge(row)}</span><small>${['team','idea'].includes(row.kind) ? E(group) : wsRelativeTime(checked)}</small></div>` +
     `<div class="ws-row-actions">${wsStar(row)}${link ? wsExternal(link.url, `${link.label}: ${row.title}`, true) : wsOpenButton(row, wsIcon('arrow-left'), 'ws-icon-button ws-details-button')}</div></article>`;
 }
 function wsEmpty(text = 'لا توجد نتائج مطابقة') {
@@ -224,14 +232,13 @@ R.map = wsMap;
 for (const page of Object.keys(WS_PAGES).filter(page=>WS_PAGES[page].kind)) R[page] = () => wsCatalog(page);
 for (const page of Object.keys(WS_PAGES)) _RUNTIME_BOUND_PAGES.add(page);
 ccActions.closeMore = closeMore;
-const wsBaseSearchIndex = _buildSearchIndex;
 _buildSearchIndex = function () {
-  return [...wsBaseSearchIndex(), ...TEAM.map(member=>({ id:`team:${member.id}`,kind:'team',page:'team',
-    title:member.full_name||member.name,subtitle:member.role||'', tokens:WorkspaceModel.normalize([member.name,member.full_name,member.role].join(' ')),
-    action:()=>{ go('team'); openTeamDetail(member.name); } }))];
+  return wsRegistry().map(row=>({id:row.key,kind:row.kind,page:row.page,title:row.title,
+    subtitle:wsSummary(row),route:WorkspaceModel.route(row),
+    tokens:WorkspaceModel.normalize([row.title,row.arg,wsSummary(row),row.item.desc,row.item.role,row.item.host,
+      row.item.local_path,row.item.server_path,row.item.path,row.item.repo_url,...(row.item.tags||[])].join(' ')),
+    action:()=>wsShowDetail(row)}));
 };
-const wsBaseSelectSearchResult = selectSearchResult;
-selectSearchResult = function(id) { wsBaseSelectSearchResult(id); };
 
 function wsOpenOverlay(id) {
   const root = document.getElementById(id);
@@ -254,7 +261,7 @@ function wsCloseOverlay() {
     if(hidden===null) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden',hidden);
   });
   document.documentElement.classList.remove('ws-modal-open');
-  if(previous.focus?.isConnected) previous.focus.focus();
+  if(previous.focus?.isConnected) previous.focus.focus({preventScroll:true});
 }
 document.addEventListener('keydown',event=>{
   if(!wsOverlay) return;
@@ -306,7 +313,13 @@ document.addEventListener('click', async event => {
     catch { ccToast('تعذر النسخ','warn'); }
   } else if (target.hasAttribute('data-ws-refresh') && !wsRefreshing) {
     wsRefreshing=true; wsUpdateShell();
-    try { const loaded=await _loadRuntimeData(); await _loadHealthData(); wsRender(); ccToast(loaded?'تم جلب أحدث البيانات المحفوظة':'تعذر جلب البيانات؛ تُعرض آخر نسخة متاحة',loaded?'ok':'warn'); }
+    try {
+      const loaded=await _loadRuntimeData();
+      const healthLoaded=await _loadHealthData();
+      wsRender();
+      const complete=loaded && healthLoaded;
+      ccToast(complete?'تم جلب أحدث البيانات المحفوظة':loaded || healthLoaded?'تحدث جزء من البيانات؛ تعذر جلب الجزء الآخر':'تعذر جلب البيانات؛ تُعرض آخر نسخة متاحة',complete?'ok':'warn');
+    }
     finally { wsRefreshing=false; wsUpdateShell(); }
   }
 });

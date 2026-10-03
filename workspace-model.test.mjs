@@ -117,6 +117,15 @@ describe('every entity has a page and valid relationships',()=>{
       expect(related.some(x=>x.key===row.key)).toBe(false);
     }
   });
+  it('every relationship is visible from either endpoint',()=>{
+    for(const row of rows) for(const other of model.related(rows,row)) {
+      expect(model.related(rows,other).some(item=>item.key===row.key),`${row.key} <-> ${other.key}`).toBe(true);
+    }
+  });
+  it('does not resolve a wrong-section link to an unrelated page',()=>{
+    expect(model.resolve(rows,'GitHub','team')).toBeNull();
+    expect(model.resolve(rows,'cloud:supabase','tools')).toBeNull();
+  });
   it('does not label the removed bot as active',()=>expect(inventory.BOT.find(x=>x.id==='brixprice-bot').st).not.toBe('a'));
 });
 

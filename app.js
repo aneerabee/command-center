@@ -153,6 +153,7 @@ document.addEventListener("click", function (e) {
   const action = t.getAttribute("data-action");
   const fn = ccActions[action];
   if (!fn) return;
+  if (t.matches('a[href]') && (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) return;
   e.preventDefault();
   e.stopPropagation();
   const arg = t.getAttribute("data-arg") || "";
@@ -406,6 +407,7 @@ function _startLiveTicks() {
     document.querySelectorAll("[data-live-time]").forEach((el) => {
       el.textContent = relTime(el.dataset.liveTime);
     });
+    wsRefreshFreshness();
   }, 60_000);
 }
 
@@ -806,7 +808,8 @@ async function _loadRuntimeData() {
     });
     if (!response.ok) return false;
     const payload = await response.json();
-    if (payload && typeof payload === "object") {
+    if (payload && typeof payload === "object" && !Array.isArray(payload) && Number.isFinite(Date.parse(payload.generated_at)) &&
+        ['project','service','tool','cloud','bot','archive','automation'].every(key=>payload[key] && typeof payload[key] === 'object' && !Array.isArray(payload[key]))) {
       RUNTIME_STATE = {
         generated_at: payload.generated_at || null,
         checker: payload.checker || null,
@@ -834,17 +837,16 @@ async function _loadHealthData() {
     const response = await fetch(`health-status.json?v=${Date.now()}`, {
       cache: "no-store",
     });
-    if (!response.ok) return;
-    HEALTH_STATE = await response.json();
-    // refresh home if visible
-    if (cur === "home" && document.getElementById("page-home")) {
-      const home = document.getElementById("page-home");
-      smartRender(home, R.home());
-      requestAnimationFrame(_processIcons);
-    }
+    if (!response.ok) return false;
+    const payload = await response.json();
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload) || !Number.isFinite(Date.parse(payload.checked_at))) return false;
+    HEALTH_STATE = payload;
+    if (!wsDetailKey && ['home','server'].includes(cur)) wsRender();
+    return true;
   } catch (err) {
     console.warn("[CC] health fetch failed:", err.message);
   }
+  return false;
 }
 
 function _refreshRuntimeBoundViews() {
@@ -1551,7 +1553,7 @@ function _activatePage(id, syncHash) {
 function go(id) {
   if (!_validPages.has(id)) return;
   wsRememberView();
-  closeMore();
+  wsCloseOverlay();
   closeDetail(true);
   _activatePage(id, true);
 }
@@ -5558,6 +5560,7 @@ function _searchKindLabel(kind) {
     tool: "أداة",
     cloud: "سحابي",
     idea: "فكرة",
+    archive: "مرجع",
     "archived-project": "أرشيف",
     "archived-brand": "أرشيف",
     "archived-client-work": "أرشيف",
@@ -5597,7 +5600,7 @@ function _renderSearchResults(query) {
   resultsEl.innerHTML = rows
     .map(
       (r) =>
-        `<button class="search-result" onclick="selectSearchResult('${EJ(r.id)}')">` +
+        `<a class="search-result" href="#${E(r.route)}" data-ws-open="${E(r.id)}">` +
         `<span class="search-result-kind">${E(_searchKindLabel(r.kind))}</span>` +
         `<div class="search-result-body">` +
         `<strong class="search-result-title">${E(r.title)}</strong>` +
@@ -5605,8 +5608,8 @@ function _renderSearchResults(query) {
           ? `<span class="search-result-sub">${E(r.subtitle)}</span>`
           : "") +
         `</div>` +
-        `<span class="search-result-page">${E(PG.find((p) => p.id === r.page)?.n || r.page)}</span>` +
-        `</button>`,
+        `<span class="search-result-page">${E(WS_PAGES[r.page]?.title || r.page)}</span>` +
+        `</a>`,
     )
     .join("");
   requestAnimationFrame(_processIcons);
@@ -5622,7 +5625,7 @@ function openSearch() {
   if (input) {
     input.value = "";
     _renderSearchResults("");
-    setTimeout(() => input.focus(), 60);
+    input.focus();
   }
 }
 
@@ -5650,13 +5653,13 @@ function selectSearchResult(id) {
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
-    closeDetail();
     closeMore();
     closeSearch();
   }
   if (
     (e.key === "/" &&
-      !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) ||
+      !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName) &&
+      !document.activeElement?.isContentEditable) ||
     ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")
   ) {
     e.preventDefault();
