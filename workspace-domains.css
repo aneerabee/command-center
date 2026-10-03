@@ -93,10 +93,10 @@
 .context-launchpad { padding-bottom:28px; border-bottom:1px solid var(--ws-line); }
 .context-launchpad>div:not(.ws-section-title) { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; }
 .context-launchpad article { display:flex; flex-direction:column; gap:14px; min-width:0; }
-.context-launch-title { display:flex; flex-direction:column; align-items:start; gap:10px; }
+.context-launch-title { display:flex; flex-direction:column; align-items:start; gap:10px; min-height:112px; }
 .context-launch-title strong { font-size:13px; font-weight:500; overflow-wrap:anywhere; }
 .context-launch-title .ws-project-mark { min-height:40px; }
-.context-launchpad article>div { display:flex; align-items:center; gap:10px; }
+.context-launchpad article>div { display:flex; align-items:center; gap:10px; margin-top:auto; }
 .context-launchpad .ws-button { padding:4px 0; background:none; }
 .context-home-columns { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:42px; padding-block:30px; }
 .context-review-link { display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--ws-line); padding:13px 0; }
