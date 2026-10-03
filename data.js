@@ -158,7 +158,7 @@ const DEPARTMENTS = [
     ar: "ذراع B2C — صفحة EasyBooking",
     em: "📢",
     cl: "#2563EB",
-    summary: "صفحة إعلانية وبيع B2C للمستهلك مباشرة عبر EasyBooking.",
+    summary: "قناة بيع وتسويق سياحي للمستهلك، مرتبطة بمشاريع إدارة العملاء والحجوزات.",
     projects: ["easybooking"],
   },
   {
@@ -324,8 +324,9 @@ const TEAM = [
 const PRJ = [
   {
     name: "BRIX Travel System",
+    content_reviewed_at: "2026-10-03",
     id: "brix-travel-system",
-    custom_page: "brix.html",
+    custom_page: null,
     kind: "product",
     ar: "نظام حجز الفنادق",
     st: "a",
@@ -333,7 +334,7 @@ const PRJ = [
     cl: "#E8453C",
     cl_brand: "#E8453C",
     brand_note: "BRIX Red — هوية الشركة الأم",
-    pct: 94,
+    pct: null,
     parent: "brix",
     parent_role: "b2b-core",
     department: "brix-b2b",
@@ -342,10 +343,10 @@ const PRJ = [
     monthly_revenue_usd: 0,
     users_count: 2,
     priority: "high",
-    next_milestone: "حسم ٨ قرارات مالك لبدء بناء دورة الحجز + المحاسبة (أهمّها توقيت الاعتراف بالإيراد وسياسة حدّ الائتمان) + دفع تصحيحات الوثيقة المرجعيّة + إصلاح فوترة GitHub (الحُرّاس متوقّفة منذ 2026-07-15)",
-    summary: "محرك حجوزات BRIX الأساسي — Next.js 16.2 + Supabase + 2,868 اختباراً موزّعة على 141 ملفاً. منشور حياً على Railway (verified 200) مع بوت تلجرام (@BrixPrice_bot) ثنائي اللغة عربي/إنجليزي مرتبط بنفس محرك التسعير. أحدث الميزات: نظام تحذيرات ٤ طبقات (excludedMarket + minGuestAge + releaseDays + askAndSale)، حاجز اليوم/الغد، توقيت إسطنبول، Land of Legends Kingdom + Nickelodeon (٩٦٩ مضاعف بدقّة ٤ خانات).",
+    next_milestone: "مراجعة أحدث نتائج التشغيل والمهام المفتوحة في مستودع المشروع.",
+    summary: "نظام BRIX لإدارة عقود الفنادق والبحث عن الأسعار، مع إدارة الحصص والحجوزات. واجهة الويب هي مسار الاستخدام؛ بوت البحث القديم أزيل من المستودع.",
     local_path:
-      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
+      "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     server_path: null,
     repo_url: "https://github.com/aneerabee/brix-travel-system",
     deploy_url: "https://brix-hotel-web-app-production.up.railway.app",
@@ -358,25 +359,24 @@ const PRJ = [
       "Tailwind 4",
     ],
     subsystems: [
-      "pricing-engine",
-      "contract-wizard",
-      "contract-edit",
-      "results-ui",
-      "api-layer",
-      "alerts-dashboard",
-      "telegram-bot",
-      "time-machine",
-      "daily-backup",
-    ],
+  "pricing-engine",
+  "contract-wizard",
+  "contract-edit",
+  "results-ui",
+  "api-layer",
+  "alerts-dashboard",
+  "allotments",
+  "time-machine",
+  "daily-backup"
+],
     related_services: [],
     related_tools: [],
     related_cloud: ["GitHub", "Supabase", "Railway", "Telegram"],
     ops: [
-      "CI/CD: GitHub Actions يبني + يختبر (2868/2868) + يَنشر على Railway تلقائيّاً عند كل push على main (يعمل من 2026-05-20 بعد إصلاح npm→pnpm)",
-      "Supabase هو مصدر الحقيقة الوحيد (v15.0+)",
-      "النسخ الاحتياطي اليومي 03:00 UTC إلى مستودع brix-backups — paginated NDJSON + gzip + sha256 + canary + day-over-day compare. تنبيه تلجرام عند نقص > 10٪",
-    ],
-    desc: "المشروع الرئيسي — نظام إدارة عقود الفنادق وحساب الأسعار، مع بوت تلجرام @BrixPrice_bot مرتبط بنفس محرك التسعير.\n\nالتقنيات:\nNext.js 16.2 + React 18 + TypeScript 5.9 + Tailwind 4\nSupabase (المصدر الوحيد للحقيقة منذ v15.0 — Airtable مُلغى) + Zod 4 + Vitest + Playwright\n\nالأرقام:\n2,868 اختبار يمر، صفر ثغرات حرجة\nثماني خطوات لإدخال عقد جديد\nست خطوات في تدفّق البوت\nثنائي اللغة (عربي / إنجليزي) كامل\n١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (~١٠٣ ألف مضاعف إشغال، ١٠٠٧٢ سعراً أساسيّاً، ٤٠ جدولاً) — صفر تسريب مال عبر تدقيقات متعدّدة الوكلاء\n\nسير البيانات:\nالعقد يُدخل من شاشة إدخال العقود ← Supabase مباشرة (٤٠ جدولاً) ← محرك التسعير ← يرد على البوت أو على صفحة البحث في الموقع.\n\nالنشر: Railway حي وشغّال (verified 200)، منشور حيّاً (الإصدار v15.6.3)، يطابق ١٠٠٪ ما يعرضه البوت. CI/CD تلقائيّ عبر GitHub Actions (إصلاح npm→pnpm في 2026-05-20). الـREADME يذكر vercel.app كخطة مستقبلية لكن لم يحدث الانتقال — لا يوجد vercel.json ولا deployment فعلي عليه.",
+  "الفحص والنشر مرتبطان بمسار ci.yml. نتيجة كل تشغيل تُراجع في سجل التنفيذ.",
+  "النسخ الاحتياطي مسجل في daily-contract-backup.yml. أحدث النتائج تظهر في صفحة المهام."
+],
+    desc: "نظام إدارة عقود الفنادق والبحث عن الأسعار. توجد في المصدر صفحات لإدخال العقود وإدارتها وإدارة المستخدمين والحصص والحجوزات. لا يُعتمد عدد ثابت للفنادق أو الاختبارات أو الجداول لأنه يتغير.\n\nالتحقق بتاريخ 2026-10-03:\nفُحص المصدر المحلي ومسارات الصفحات وسجل التشغيل في GitHub، دون تعديل المشروع أو محرك التسعير. بوت البحث القديم غير موجود في مسارات المصدر الحالية. نجاح الوصول إلى الموقع لا يثبت صحة كل الأسعار أو اكتمال كل الوظائف.",
     tags: [
       "Next.js 16",
       "Supabase",
@@ -385,167 +385,26 @@ const PRJ = [
       "Playwright",
       "TypeScript",
     ],
-    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel",
+    path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     links: {
-      "🚀 لوحة BRIX الكاملة":
-        "https://aneerabee.github.io/command-center/brix.html",
-      "النظام الحي":
-        "https://brix-hotel-web-app-production.up.railway.app",
-      "البحث عن أسعار":
-        "https://brix-hotel-web-app-production.up.railway.app/search",
-      "إدخال عقد جديد":
-        "https://brix-hotel-web-app-production.up.railway.app/contract-wizard",
-      "قائمة العقود":
-        "https://brix-hotel-web-app-production.up.railway.app/contracts",
-      "بوت تلجرام":
-        "https://t.me/BrixPrice_bot",
-      "النسخ الاحتياطي اليومي":
-        "https://github.com/aneerabee/brix-backups",
-      "آخر تشغيل نسخ":
-        "https://github.com/aneerabee/brix-travel-system/actions/workflows/daily-contract-backup.yml",
-      Railway: "https://railway.com/project/2af4cb7e-f4ef-4de0-b86c-b4957fac185f",
-      GitHub: "https://github.com/aneerabee/brix-travel-system",
-      Supabase: "https://supabase.com/dashboard/project/fiancnwrfehyrkvfjwfq",
-      "الخطّة المرجعيّة الجامعة":
-        "https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/SYSTEM_MASTER_PLAN.md",
-      "مخطّط الحجز والمحاسبة":
-        "https://htmlpreview.github.io/?https://github.com/aneerabee/brix-travel-system/blob/main/hotel-web-app/docs/reports/booking_accounting_blueprint_jun28.html",
-    },
-    links_desc: {
-      "🚀 لوحة BRIX الكاملة":
-        "اللوحة المخصّصة الكاملة لهذا المشروع — التتبّع وكلّ الخطّة والتاريخ ودورة الحجز والمحاسبة في مكان واحد بهوية مستقلّة. ابدأ من هنا.",
-      "الخطّة المرجعيّة الجامعة":
-        "مصدر الحقيقة الوحيد — كلّ ما في النظام + التاريخ + الخطّة الـ٨ خطوات + الدروس + فهرس أين يعيش كلّ شيء. اقرأها أوّلاً.",
-      "مخطّط الحجز والمحاسبة":
-        "التصميم التفصيليّ الكامل لدورة الحجز + المحاسبة B2B (تصميم فقط، لم يُبنَ) — فيه ٨ قرارات تنتظر حسمك في القسم ١٠.",
-      "النظام الحي":
-        "الواجهة الرئيسية للنظام (تحوّل تلقائياً إلى صفحة البحث)",
-      "البحث عن أسعار":
-        "محرك البحث — ابحث بفندق وتاريخ وعدد ضيوف لتحصل على السعر",
-      "إدخال عقد جديد":
-        "شاشة إدخال عقد فندق بعشر خطوات، يطلب تسجيل الدخول",
-      "قائمة العقود":
-        "كل العقود المحفوظة، للمراجعة والتعديل والحذف، يطلب تسجيل الدخول",
-      "بوت تلجرام":
-        "بوت بحث الأسعار للوكلاء عبر دعوة بالهاتف، يعطي نفس النتيجة بالضبط التي يعطيها الويب. ست خطوات بالأزرار، ثنائي اللغة عربي/إنجليزي، تقويم تفاعلي، 114 commit في آخر أسبوعَين، آخر تحسينات: ترتيب الأسعار (الليلة أبرز من الإجمالي)، تحذير release_days كبطاقة حمراء، توقيت إسطنبول، تقويم يرفض اليوم ويلوّن الغد، زر إعادة المحاولة بعد فشل مؤقّت.",
-      "النسخ الاحتياطي اليومي":
-        "مستودع خاص فيه نسخة كاملة من كل جداول العقود ليوم. تحقق منه أسبوعياً — يجب أن ترى مجلد ديلي بتاريخ كل يوم.",
-      "آخر تشغيل نسخ":
-        "صفحة سجل تشغيلات النسخ اليومي. اللون الأخضر يعني نجح، الأحمر يعني فشل — لو فشل افتحه واطّلع على السبب.",
-      Railway:
-        "لوحة النشر الفعلية — اللوغات، المتغيرات، الفروع، إعادة التشغيل",
-      GitHub:
-        "الكود المصدري — Next.js 16.2 و Supabase وبوت تلجرام و2,868 اختبار يمر",
-      Supabase:
-        "المصدر الوحيد للحقيقة منذ v15.0 — ٤٠ جدولاً يحوي كل بيانات العقود والفترات والأسعار والمضاعفات والخصومات",
-    },
+  "النظام": "https://brix-hotel-web-app-production.up.railway.app",
+  "البحث عن الأسعار": "https://brix-hotel-web-app-production.up.railway.app/search",
+  "إدخال عقد": "https://brix-hotel-web-app-production.up.railway.app/contract-wizard",
+  "العقود": "https://brix-hotel-web-app-production.up.railway.app/contracts",
+  "الحصص والحجوزات": "https://brix-hotel-web-app-production.up.railway.app/allotments",
+  "المستودع": "https://github.com/aneerabee/brix-travel-system",
+  "سجل التشغيل": "https://github.com/aneerabee/brix-travel-system/actions",
+  "النسخ الاحتياطية": "https://github.com/aneerabee/brix-backups"
+},
+    links_desc: {},
     current_status: {
-      updated: "2026-06-28",
-      where:
-        "النظام حيّ على Railway (الإصدار v15.6.3) + بوت @BrixPrice_bot. قفزة كبيرة هذا الشهر: صار ١٣٩ فندقاً مُدخَلاً ومتحقَّقاً بالقرش (صفر تسريب مال عبر تدقيقات سلوكيّة وحسابيّة وعقود متعدّدة الوكلاء)، ٢٤٧٣ اختباراً ناجحاً، ٤٠ جدولاً في Supabase. بُنِيت «الوثيقة المرجعيّة الجامعة» SYSTEM_MASTER_PLAN (مصدر الحقيقة الوحيد) + فحص شامل صادق (٧/١٠ أداة تسعير داخليّة، ٥/١٠ منصّة B2B) + إعادة تصميم لوحة المستخدمين Workbench + ستيكرز v2 + تحديث SPO ٣٤ فندقاً. وأحدث إنجاز: «مخطّط دورة الحجز والمحاسبة الكامل» (تصميم بـ٨ خبراء + تدقيق عدائيّ).",
-      next_step:
-        "حسم ٨ قرارات مالك لبدء بناء دورة الحجز + المحاسبة B2B (أهمّها: متى نعترف بالإيراد؟ وهل نحظر أم نحذّر عند تجاوز حدّ الائتمان؟ — القسم ١٠ من مخطّط الحجز). ثمّ دفع تصحيحات الوثيقة المرجعيّة. ثمّ البدء بأقصى حذر خلف الحاجز الأخضر (tsc + ٢٤٧٣ اختباراً + بناء)، صفر مساس بمحرّك التسعير.",
-      blockers: [
-        {
-          text: "فوترة GitHub متوقّفة منذ 2026-07-15 (آخر نجاح 2026-07-14) — الحُرّاس (النسخ الاحتياطيّ + الفحوص + التنبيهات) معطّلة. الأعجل.",
-          priority: "high",
-        },
-        {
-          text: "٨ قرارات مالك معلّقة قبل بناء الحجز + المحاسبة (توقيت الاعتراف بالإيراد، حدّ الائتمان، سياسة الإلغاء، العملات، البريد...). كلّها في القسم ١٠ من المخطّط.",
-          priority: "high",
-        },
-        {
-          text: "لا دورة حجز ولا مخزون/إتاحة ولا ماليّة بعد — أكبر فجوة بنيويّة للتحوّل إلى منصّة B2B (مصمَّمة في المخطّط، تنتظر البناء).",
-          priority: "med",
-        },
-        {
-          text: "تصحيحات الوثيقة المرجعيّة (٨ تصحيحات دقّة) لم تُدفَع بعد للمستودع — تنتظر إذن الدفع.",
-          priority: "med",
-        },
-      ],
-      use_guide:
-        "للاستخدام اليوميّ: ابحث من البوت أو صفحة البحث (الاثنان يعطيان السعر الدقيق نفسه). للخطّة والتاريخ وكلّ سياق النظام: اقرأ SYSTEM_MASTER_PLAN (مصدر الحقيقة الوحيد). لبناء الحجز + المحاسبة: افتح «مخطّط الحجز والمحاسبة» واحسم قرارات القسم ١٠. للحماية: تابع نسخ brix-backups اليوميّة وآلة الزمن في الموقع.",
-    },
-    bot_features: {
-      handle: "@BrixPrice_bot",
-      url: "https://t.me/BrixPrice_bot",
-      tagline: "بوت تسعير الفنادق للوكلاء — ست خطوات بالأزرار، ثنائي اللغة، نتائج فورية",
-      languages: ["عربي", "English"],
-      flow_steps: [
-        "اختر المدينة",
-        "اختر الفندق",
-        "اختر تاريخ الدخول (تقويم تفاعلي)",
-        "اختر تاريخ الخروج",
-        "اختر عدد الضيوف وأعمار الأطفال",
-        "النتيجة — أفضل الأسعار مع ميداليات + تفاصيل قابلة للتوسيع",
-      ],
-      access_model: "دعوة بالهاتف — المستخدم يبدأ بـ/start ويرسل رقمه، المدير يوافق من القائمة، النظام يربط الـtelegram_user بالرقم",
-      modules: [
-        { f: "api.ts",            d: "نقطة دخول البوت من webhook، توجيه للأوامر والكولباكات" },
-        { f: "auth.ts",           d: "تحقق من allowlist + invite عبر الهاتف" },
-        { f: "calendar.ts",       d: "تقويم تفاعلي مع تثبيت ماضي + i18n + خلفيات ملوّنة" },
-        { f: "i18n.ts",           d: "ثنائي اللغة EN/AR، قائمة Settings للتبديل" },
-        { f: "invites.ts",        d: "إدارة دعوات الهاتف عبر جدول telegram_invites" },
-        { f: "menus.ts",          d: "كل القوائم بنظام لون موحّد + dots التقدم" },
-        { f: "formatter.ts",      d: "بطاقات blockquote للنتائج + ميداليات للترتيب" },
-        { f: "sessions.ts",       d: "حفظ حالة المحادثة لكل مستخدم، منع تضارب tabs" },
-        { f: "user-admin.ts",     d: "إدارة المستخدمين من داخل البوت (قائمة بالكاملة)" },
-        { f: "hotel-resolver.ts", d: "تحويل اسم الفندق إلى UUID مع تحقق Zod" },
-      ],
-      security: [
-        "إغلاق HTML injection في كل المخرجات",
-        "حماية ضد انتحال جهات الاتصال (contact spoofing)",
-        "إصلاح race conditions في الجلسات",
-        "منع تسرّب PII في الأخطاء",
-        "Rate limit على كل callback",
-        "تحقق UUID على schema للـhotelId/cityId/areaId",
-      ],
-      ux_recent: [
-        "🚸 min_guest_age soft-warn — الفندق يَظهر مع بنر بدل أن يختفي (v15.14 — نظام ٤ طبقات تحذيرات: excludedMarket / minGuestAge / releaseDays / askAndSale)",
-        "ترتيب جديد للأسعار: 🌙 سعر الليلة كبير bold ثم 💰 الإجمالي italic أصغر (v15.8)",
-        "لافتة 🔴 release_days فوق النتائج + سطر تحذير في كل عرض داخل الـblockquote",
-        "تقويم يرفض اليوم ويلوّن الغد بإطار تحذيري برتقالي",
-        "تعريب أسماء الأشهر: 'Aug 10' بالعربية تصبح '10 أغسطس'",
-        "مؤشّر الكتابة يستمر طوال البحث (typing keepalive كل 4 ثوان)",
-        "زر إعادة المحاولة بعد فشل مؤقّت + toast 'جارٍ إعادة المحاولة'",
-        "ميداليات 🏆🥈🥉 + بطاقات blockquote للنتائج",
-        "تقويم بخلفيات ملوّنة في الخطوات الأولى",
-        "نظام لون موحّد للأزرار في كل التدفّق",
-        "بطاقة ملخّص + dots تقدم على كل خطوة",
-        "Repeat-search + shift-dates + quick-edit",
-        "Detail expandable لكل عرض سعر",
-        "Recent hotels + common ages auto-fill",
-        "Cancel semantics + Start-Over مع تأكيد",
-        "Cleanup jobs لجلسات قديمة",
-      ],
-      reliability: [
-        "Dedup للـwebhooks المعادة من Telegram",
-        "تعافي من partial-failure",
-        "معالجة stale callbacks + double-tap",
-        "Crash handling بدون فقدان جلسة",
-        "Pagination للقوائم الطويلة",
-        "Env validation عند البدء",
-        "توقيت إسطنبول لكل حسابات booking-window (يحلّ مشكلة 3 ساعات يومياً قبل منتصف UTC)",
-      ],
-      parity: "نفس النتيجة تماماً التي يعرضها /search في الويب — مختبر بـ20+ سيناريو حافة + 8 سيناريوهات حيّة على الإنتاج لتغطية release_days + booking-window + late-night UTC",
-      tests: { total: 2868, suites: 141 },
-      recent_commits_14d: 114,
-      stack: ["Node.js 22", "TypeScript 5.9", "Telegram Bot API (direct fetch — لا مكتبة)", "Supabase Client", "Zod 4"],
-      milestones: [
-        { date: "2026-05-20", text: "إعادة تشغيل GitHub→Railway auto-deploy + إصلاح CI من npm إلى pnpm (كان معطّلاً ٤ أيّام) + إصلاح backup workflow (peer-deps + permissions)" },
-        { date: "2026-05-19", text: "P5: نسخ احتياطي يوميّ paginated (NDJSON + gzip + sha256 + canary + day-over-day + Telegram alerts، 40 اختبار جديد). v15.14: تحذير عمر الطفل soft-warn 4 طبقات في web + bot" },
-        { date: "2026-05-18", text: "Land of Legends Kingdom + Nickelodeon مُدخَلان (٩٦٩ مضاعف بدقّة 4 خانات)، Rixos Downtown discount fixes، multiplier precision (5,2)→(7,4)" },
-        { date: "2026-05-15", text: "تصميم بطاقات v15.8: سعر الليلة كأبرز رقم + حذف /person + لافتة release_days داخل البطاقة نفسها" },
-        { date: "2026-05-15", text: "إصلاح توقيت booking-window: anchored to Europe/Istanbul بدل UTC" },
-        { date: "2026-05-14", text: "تحويل release_days من رفض كامل إلى تحذير أحمر (engine + web + bot)" },
-        { date: "2026-05-14", text: "booking-window: today blocked, tomorrow flagged orange + release_days reason في diagnostics" },
-        { date: "2026-05-14", text: "تحسينات بوت 3×: typing keepalive + Arabic months + retry button" },
-        { date: "2026-05-13", text: "13 cross-flow state-tangle bug closed في البوت + الويب + الويزرد" },
-        { date: "2026-05-12", text: "infant/child age limits exposed في Info tab + Time Machine entry points" },
-        { date: "2026-05-11", text: "Atomic Save All + sueno-pattern protection ضد wipe" },
-        { date: "2026-05-10", text: "Phone-based invite + in-bot user management + Security audit (HTML injection + spoofing + PII closed)" },
-      ],
-    },
+  "updated": "2026-10-03",
+  "where": "المشروع منشور على Railway. المصدر المحلي يحتوي إدارة الحصص والحجوزات إضافة إلى البحث والعقود. لم تُجرَ اختبارات شاملة للمشروع ضمن هذا الفحص.",
+  "next_step": "متابعة نتائج التشغيل الحالية في قسم المهام.",
+  "blockers": [],
+  "use_guide": "افتح واجهة الويب للبحث والعمل اليومي. راجع سجل التشغيل لمعرفة نتائج الفحص والنشر."
+},
+    bot_features: null,
     claude_session: {
       session_name: "[brix system]",
       terminal: "iTerm2",
@@ -554,7 +413,7 @@ const PRJ = [
         "cd \"/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel\" && claude",
       memory_file:
         "~/.claude/projects/-Users-rabeeshaban-Desktop-Projects----BRIX-Travel/memory/MEMORY.md",
-      note: "بعد فتح كلود اكتب /resume واختر الجلسة المسماة بريكس سيستم. آخر نقطة (2026-06-28): اكتمل «مخطّط دورة الحجز والمحاسبة الكامل» وتنتظر ٨ قرارات مالك للبناء + دفع تصحيحات الوثيقة المرجعيّة. ابدأ من SYSTEM_MASTER_PLAN ثمّ مخطّط الحجز. ملف الذاكرة يحوي كلّ الخيوط (~٥٠ مشروعاً).",
+      note: "بعد فتح كلود اكتب /resume واختر الجلسة المسماة بريكس سيستم. آخر نقطة (2026-06-28): اكتمل «مخطّط دورة الحجز والمحاسبة الكامل» وتنتظر 8 قرارات مالك للبناء + دفع تصحيحات الوثيقة المرجعيّة. ابدأ من SYSTEM_MASTER_PLAN ثمّ مخطّط الحجز. ملف الذاكرة يحوي كلّ الخيوط (~50 مشروعاً).",
     },
   },
   {
@@ -579,7 +438,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "إطلاق حملات Meta المرتبطة بـ BRIX Travel System",
     summary:
-      "ذراع B2C الأولى — صفحة بيع وحملات Meta + CRM واتساب. 3 موظفين (رباب، تسنيم، وسام). حساب إعلانات: act_840190289038740.",
+      "قناة بيع وتسويق سياحي للمستهلك، مرتبطة بمشاريع إدارة العملاء والحجوزات.",
     local_path: "/Users/rabeeshaban/Desktop/Projects/📢 EasyBooking",
     server_path: null,
     repo_url: null,
@@ -592,7 +451,7 @@ const PRJ = [
       "docs",
       "sueno-scripts",
     ],
-    related_services: ["Chrome Headless"],
+    related_services: [],
     related_tools: ["Meta MCP"],
     related_cloud: ["Meta Business", "Railway", "GitHub", "iCloud Drive"],
     ops: ["إدارة حملات متعددة الأسواق", "أصول وصور ومحتوى محفوظة على iCloud"],
@@ -632,7 +491,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "تجهيز صفحات السوشيال وحملات Meta المخصصة لرحلتي",
     summary:
-      "ذراع B2C الثانية — هوية مستقلة عن EasyBooking، تتقاسم محرك الحجز. 2 موظفين (حنان، محمد). الصفحات الرسمية قيد الإنشاء.",
+      "قناة بيع وتسويق سياحي بهوية مستقلة. أعضاء الفريق المسجّلون يظهرون ضمن الارتباطات.",
     local_path: null,
     server_path: null,
     repo_url: null,
@@ -692,7 +551,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "ربطه بحملات EasyBooking لتشغيل آلي للإعلانات",
     summary:
-      "خادم MCP داخلي يتيح تشغيل إعلانات Meta من الترمينال. 37 أداة (قراءة + إنشاء حملات + استهداف + تحويلات + نسخ).",
+      "خادم أدوات داخلي للعمل مع إعلانات Meta من بيئة المساعد.",
     local_path: "/Users/rabeeshaban/Developer/meta-mcp",
     server_path: null,
     repo_url: "https://github.com/aneerabee/meta-mcp",
@@ -989,7 +848,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "إنعاش المشروع + إضافة Entities للشركات (Etranex, BRIX, SaaS)",
     summary:
-      "المركز المالي الموحد — FastAPI + Supabase. 41 endpoint جاهزة (حسابات، كيانات، أصول، إيجارات، استثمارات، dashboard). 60% مكتمل.",
+      "مشروع لإدارة الحسابات والأصول والإيجارات والاستثمارات. اكتمال الوظائف يحتاج مراجعة داخل المشروع.",
     local_path: "/Users/rabeeshaban/Desktop/Projects/💰 Money-Manager",
     server_path: null,
     repo_url: "https://github.com/aneerabee/money-manager",
@@ -1055,7 +914,7 @@ const PRJ = [
     users_count: 1,
     priority: "med",
     next_milestone: "إعادة تفعيل Cloudflare Proxy (برتقالي) + SSL Mode → Full strict بعد التحقق البصري من الموقع",
-    summary: "موقع HTML ثابت حي على Contabo VPS عبر Caddy، بدون WordPress ولا قاعدة بيانات. الملفات من repo aneerabee/brixtravel. SSL تلقائي عبر Let's Encrypt. النطاق على Cloudflare DNS، البريد يبقى على Hostinger MX.",
+    summary: "موقع BRIX التعريفي مستضاف على Contabo عبر Caddy. إدارة النطاق على Cloudflare، وسجلات البريد تشير إلى Zoho وفق فحص 2026-10-03.",
     local_path: "/Users/rabeeshaban/Desktop/Projects/🌐 brixtravelwebsite",
     server_path: "/opt/brixtravel/site",
     repo_url: "https://github.com/aneerabee/brixtravel",
@@ -1070,7 +929,7 @@ const PRJ = [
       "حاوية واحدة (Caddy 2-alpine) تحجز 80/443 وتصدر شهادة Let's Encrypt تلقائياً للنطاقين",
       "استهلاك RAM ~15 MB · CPU 0% · إجمالي حجم الموقع 71 MB",
       "نسخة احتياطية يومية 03:30 إلى /opt/brixtravel/backups (tar.gz للـ site)، يُحتفظ بـ 14 يوم",
-      "البريد @brixtravel.com على Hostinger MX — لا يُمَس",
+      "سجلات البريد تشير إلى mx.zoho.com وmx2.zoho.com وmx3.zoho.com وفق فحص 2026-10-03؛ لا تغييرات على إعدادات البريد ضمن هذه اللوحة.",
       "Caddyfile يخدم apex وwww معاً، apex يعيد توجيه إلى www",
     ],
     desc: "الموقع الرسمي لشركة BRIX TRAVEL — حي على Contabo VPS\n\n🌍 عربي + إنجليزي · اكتشاف تلقائي للغة\n📱 تصميم متجاوب · Google Maps مدمج\nWhatsApp + Instagram + Facebook\n\n🔧 التقنيات:\nHTML + CSS + JavaScript ثابت (لا backend، لا قاعدة بيانات)\nCaddy 2 file_server + Let's Encrypt SSL تلقائي\nDocker Compose · حاوية واحدة\n\n📡 الوضع الحالي:\nحي على https://www.brixtravel.com (verified HTTP/2 200)\nمسار السيرفر: /opt/brixtravel/site\nالملفات من repo aneerabee/brixtravel (نُسخت عبر git clone + rsync)\nIP لـ Contabo: 62.171.128.44\nCloudflare DNS: A brixtravel.com + A ftp + CNAME www → 62.171.128.44 (DNS only حالياً)\n\n🎨 الهوية البصرية:\nBrix Travel.ai + .eps (شعار كامل في repo)\n\n🛠️ المتبقي:\n- إعادة تفعيل Cloudflare Proxy إلى برتقالي + SSL Full strict\n- تحديث المحتوى عند الحاجة عبر git push على repo brixtravel",
@@ -1109,7 +968,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "إطلاق حملة سوشيال ميديا للتحقق من السوق",
     summary:
-      "منتج تعليمي ثنائي اللغة — 95% مكتمل. نظام XP + اختبارات + تتبع تقدم. حالياً في مرحلة التحقق التسويقي قبل البيع.",
+      "مشروع تعليمي للشطرنج يتضمن دروسًا واختبارات ومتابعة التقدم.",
     local_path: null,
     server_path: null,
     repo_url: "https://github.com/aneerabee/chess-academy",
@@ -1171,7 +1030,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "ربطه بـ Money Manager لتغذية تقارير الصرافة",
     summary:
-      "نظام تشغيل يومي لـEtranex — حوالات + زبائن + تسويات + إقفال + مطالبة أرباح. منفصل الآن عن دفتر محمد، 280 اختبار، Supabase + localStorage مزدوج، وضع مشاهدة آمن للزبائن.",
+      "نظام لمتابعة الحوالات والعملاء والتسويات والإقفال في Etranex.",
     local_path: null,
     server_path: null,
     repo_url: "https://github.com/aneerabee/western-office",
@@ -1262,7 +1121,7 @@ const PRJ = [
     priority: "med",
     next_milestone: "نقل دفتر الاختبار إلى قاعدة ADREEM المستقلة وتجربة النسخ والاسترجاع قبل تحويل الإنتاج",
     summary:
-      "ADREEM — دفتر مالي مستقل للويب وTelegram Bot. قاعدة v3 المستقلة أُنشئت ومخططها العلائقي مطبق، بينما النسخة الحية باقية على البنية السابقة حتى نجاح نقل البيانات والنسخ والاسترجاع.",
+      "دفتر مالي مستقل لمتابعة الحسابات والحركات والاستثمارات. حالة النشر والملفات تظهر في نتائج التحقق.",
     local_path:
       "/Users/rabeeshaban/Developer/adreem",
     server_path: "/home/argaz/apps/adreem",
@@ -1424,7 +1283,7 @@ const PRJ = [
     next_milestone:
       "إضافة تسجيل دخول (auth) قبل أي فتح عام + لاحقاً تقارير شهرية ورسم بياني للرصيد عبر الزمن",
     summary:
-      "دفتر حساب رقمي للدكتور محسن وحده — حيّ على Contabo داخل حاوية Docker، الوصول عبر Tailscale فقط (خاص). React + Vite + Express + SQLite مدمج. ثلاثة أنواع حركات، رصيد محسوب تلقائياً لكل عملة، وكشف حساب PDF احترافي. مُرحّل من ملف Apple Numbers (43 حركة).",
+      "دفتر حساب للدكتور محسن لمتابعة الحركات والأرصدة حسب العملة. رابط الاستخدام المسجّل ضمن الشبكة الخاصة.",
     local_path: "/Users/rabeeshaban/Developer/dr-muhsen",
     server_path: "/home/argaz/dr-muhsen",
     repo_url: null,
@@ -1451,9 +1310,16 @@ const PRJ = [
       "tailscale-private-access",
       "no-auth-yet",
     ],
-    related_services: ["dr-muhsen container"],
-    related_tools: ["Claude Code", "Docker"],
-    related_cloud: ["Contabo VPS", "Tailscale", "Docker"],
+    related_services: [
+  "Dr. Muhsen Ledger Service"
+],
+    related_tools: [
+  "Claude Code"
+],
+    related_cloud: [
+  "Contabo VPS",
+  "Tailscale"
+],
     ops: [
       "حاوية Docker مستقلة (dr-muhsen) + قرص بيانات dr-muhsen-data، restart=unless-stopped",
       "مربوطة بعنوان Tailscale فقط (100.116.69.101:3500) — غير معروضة للإنترنت العام (تأكّد curl العام = رفض)",
@@ -1536,7 +1402,7 @@ const SVC = [
     port: "8787",
     schedule: "دائم — Restart=always، RestartSec=5",
     dt: "adreem-api.service · active · port 8787",
-    info: "خدمة ADREEM API تعمل من commit e55c32d عبر Node 20.20.1 على المنفذ 8787، وفحص الصحة نجح في 2026-08-21. API v3 عند 3e689bc وقاعدته المستقلة جاهزان وينتظران نقلًا واسترجاعًا متحققًا منهما.",
+    info: "خدمة التطبيق المالي ADREEM على الخادم. حالة التشغيل الحالية تظهر في نتيجة الفحص؛ لا يُستنتج إصدارها من وصف قديم.",
     last_check: "2026-08-21 Contabo runtime",
     config_paths: [
       "server:/home/argaz/apps/adreem",
@@ -1660,7 +1526,7 @@ const SVC = [
     port: "—",
     schedule: "يوميًا 3 صباحًا",
     dt: "0 3 * * *",
-    info: "pg/sql backup محفوظ داخل ‎.backup. ✓ تحقُّق 2026-07-25: 31 نسخة يومية متتالية بلا انقطاع، آخرها wapy_backup_20260725_030001.sql، والـlog /home/argaz/logs/wapy-backup.log يسجّل نجاحاً كل يوم. cron يعمل بانتظام.",
+    info: "مهمة نسخ احتياطي لبيانات Wapy. وجود الجدولة لا يثبت نجاح النسخة الأخيرة أو إمكانية استرجاعها.",
   },
   {
     name: "Wapy Cleanup",
@@ -1714,7 +1580,7 @@ const SVC = [
     port: "3500 (Tailscale فقط) → 3001 داخل الحاوية",
     schedule: "دائم — Docker restart=unless-stopped",
     dt: "container dr-muhsen · node:22-slim · volume dr-muhsen-data",
-    info: "نُشر 2026-06-07 كحاوية Docker مستقلة على Contabo. مربوطة بعنوان Tailscale فقط (100.116.69.101:3500) — غير معروضة للإنترنت العام (تأكّد curl العام = رفض). Express يقدّم الواجهة المبنية + /api على منفذ واحد، قرص dr-muhsen-data دائم. زُرعت 43 حركة تلقائياً، الأرصدة 665,000 دولار + 2,012 دينار. لا تسجيل دخول بعد لذا تبقى خاصة.",
+    info: "خدمة دفتر حساب الدكتور محسن على الخادم، مع رابط مسجّل للشبكة الخاصة. لا تُعرض أرصدة الحساب أو أعداد الحركات كبيانات تشغيل ثابتة.",
     last_check: "2026-06-07 Contabo runtime",
     config_paths: [
       "server:/home/argaz/dr-muhsen",
@@ -1865,21 +1731,25 @@ const AUTO = [
     host: "github",
     tasks: [
       {
-        id: "desktop-ci-build-test-auto-deploy",
+        workflow: "ci.yml",
+    repository: "aneerabee/brix-travel-system",
+    id: "desktop-ci-build-test-auto-deploy",
         name: "CI Build + Test + Auto-Deploy",
-        freq: "كل push على main — ⛔ لا يبدأ أصلاً",
-        on: false,
-        what: "⛔ متوقّف منذ 2026-07-14: الوظيفة لا تبدأ إطلاقاً بسبب فشل فوترة GitHub Actions (\"recent account payments have failed or your spending limit needs to be increased\"). النتيجة: الاختبارات لا تُنفَّذ والنشر التلقائيّ على Railway متوقّف. آخر نجاح 2026-07-14 11:45 UTC. الإصلاح: تسوية الفوترة في GitHub Billing — تُعيد تشغيل 10 مسارات عمل دفعة واحدة. (كان: pnpm install + build + vitest ثم railway up.)",
+        freq: "عند تحديث الكود بحسب شروط المسار",
+        on: true,
+        what: "يفحص التغييرات ويشغّل البناء والاختبارات والنشر وفق شروط المسار. آخر نتيجة تنفيذ تُجلب من المستودع؛ لا تعني جدولة المسار أن آخر تشغيل نجح.",
         prj: ["BRIX Travel System"],
         path: "ci.yml",
         kind: "deploy",
       },
       {
-        id: "desktop-daily-contract-backup",
+        workflow: "daily-contract-backup.yml",
+    repository: "aneerabee/brix-travel-system",
+    id: "desktop-daily-contract-backup",
         name: "Daily Contract Backup",
-        freq: "يوميًا 03:00 UTC — ⛔ فاشل منذ 2026-07-14",
-        on: false,
-        what: "⛔ فاشل منذ 2026-07-14 بسبب فشل فوترة GitHub Actions — الوظيفة لا تبدأ، فلا تُؤخَذ نسخة احتياطية. وتنبيه الفشل نفسه معطّل لأنه يعمل بنفس المنظومة. آخر نجاح 2026-07-14 05:34 UTC. (التصميم الأصلي: paginated لكل جداول Supabase (NDJSON + gzip + sha256 + canary + day-over-day diff). تنبيه تلجرام عند نقص > 10٪. يدفع إلى مستودع brix-backups + يفتح Issue تلقائياً عند الفشل. v2 (2026-05-23): دُعم input يدويّ reset_baseline=true لتجاوز المقارنة بعد تغييرات مقصودة + canary hotel ثابت في DB.",
+        freq: "يوميًا 03:00 بالتوقيت العالمي، وقد يتأخر البدء",
+        on: true,
+        what: "نسخ احتياطي للعقود وفق مسار المستودع. نتيجة التشغيل وتوقيته تظهران في الفحص الحالي.",
         prj: ["BRIX Travel System"],
         path: "daily-contract-backup.yml",
         kind: "backup",
@@ -1887,9 +1757,9 @@ const AUTO = [
       {
         id: "desktop-telegram-notifier-on-claude-pr",
         name: "Telegram Notifier on Claude PR",
-        freq: "عند PR من فرع claude/*",
-        on: true,
-        what: "إرسال تقرير عربيّ مع عدد الملفّات + الإضافات/الحذف + رابط الـPR إلى محادثة تلجرام للمراجعة.",
+        freq: "لا توجد جدولة مؤكدة حاليًا",
+        on: false,
+        what: "مرجع لتنبيه قديم. الوظيفة telegram-notify غير موجودة في ci.yml الحالي؛ لا تُعرض كمهمة تعمل.",
         prj: ["BRIX Travel System"],
         path: "ci.yml (job: telegram-notify)",
         kind: "notification",
@@ -1897,9 +1767,9 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-engine",
         name: "Scheduled Review — Engine",
-        freq: "مرة يوميًا 06:19 UTC (~09:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
-        on: true,
-        what: "يستدعي /api/search بثلاث سيناريوهات حقيقيّة (Sueno، Rixos، Sueno+طفل)، يتأكّد Σ(period.subtotal) === offer.totalPrice في كلّ عرض، يرفض NaN/Infinity/قيم سالبة، يتأكّد offer.currency ليس فارغاً. صامت عند النجاح، يُرسل تلجرام + يفتح Issue عند الفشل. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
+        freq: "ملف المهمة غير موجود في المستودع الحالي",
+        on: false,
+        what: "مرجع لمراجعة قديمة لمحرك التسعير؛ ملف scheduled-review-engine.yml غير موجود في جرد المسارات بتاريخ 2026-10-03.",
         prj: ["BRIX Travel System"],
         path: "scheduled-review-engine.yml + scripts/review-engine.mjs",
         kind: "review",
@@ -1907,9 +1777,9 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-api",
         name: "Scheduled Review — API + Security",
-        freq: "مرة يوميًا 09:19 UTC (~12:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
-        on: true,
-        what: "pnpm audit مع allowlist للثغرات المتوسّطة في التبعيّات غير المباشرة (postcss + ws)، يفحص ٥ مسارات محميّة (/api/schema، /api/cleanup، /api/sync-reset، /api/audit-logs، /api/admin/users) أنّها ترفض الطلبات غير المصادق عليها، يفحص ٤ مسارات عامّة أنّها تردّ 200، يفحص /api/telegram webhook secret يحجب الطلبات بدون توقيع. صامت عند النجاح. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
+        freq: "ملف المهمة غير موجود في المستودع الحالي",
+        on: false,
+        what: "مرجع لفحص قديم للواجهات؛ ملف scheduled-review-api.yml غير موجود في جرد المسارات بتاريخ 2026-10-03.",
         prj: ["BRIX Travel System"],
         path: "scheduled-review-api.yml + scripts/review-api.mjs",
         kind: "review",
@@ -1917,9 +1787,9 @@ const AUTO = [
       {
         id: "desktop-daily-heartbeat",
         name: "Daily Heartbeat — Scheduled Reviews Digest",
-        freq: "يوميًا 05:00 UTC — ❌ الملف غير موجود",
+        freq: "غير موجود ضمن المسارات الحالية",
         on: false,
-        what: "❌ daily-heartbeat.yml غير موجود في المستودع (يرجع 404) — لم يُنشأ قط أو أُزيل. (التصميم المقصود: تقرير يوميّ موحَّد يلخّص آخر ٢٤ ساعة من المراجعات الثلاث (Engine + API + Frontend). يستعلم GitHub API ويُرسل تلجرام واحدة بمحصّلة كلّ نطاق + روابط الفشل (إن وُجد). الفلسفة: المراجعات صامتة على النجاح؛ هذا الـheartbeat يقطع لبس \"لم تأتني رسالة = لم تشتغل أم نجحت؟\". أُنشئ 2026-05-24.",
+        what: "مقترح سابق لتقرير يومي موحّد. لا يوجد ملف daily-heartbeat.yml ضمن الجرد الحالي.",
         prj: ["BRIX Travel System"],
         path: "daily-heartbeat.yml + scripts/daily-heartbeat.mjs",
         kind: "notification",
@@ -1927,9 +1797,9 @@ const AUTO = [
       {
         id: "desktop-scheduled-review-frontend",
         name: "Scheduled Review — Frontend + Deploy",
-        freq: "مرة يوميًا 04:19 UTC (~07:19 إسطنبول) — قُلّصت من ٣× إلى ١×",
-        on: true,
-        what: "يحمّل /results من الإنتاج، يستخرج رابط CSS bundle، يتأكّد أنّ الـbundle لا يزال يحوي طبقة BRIX CARD البصريّة (brix-card, brix-period, brix-total, brix-copy-btn, brixPriceLand keyframe). حارس ضدّ نشر يجرّد التصميم. يفحص أيضاً freshness على /api/version. صامت عند النجاح. مكثّف ٣×/يوم لمرحلة الاستقرار — سيُقلّص إلى ١×/يوم بعد ١٢ شهراً. أُنشئ 2026-05-23.",
+        freq: "ملف المهمة غير موجود في المستودع الحالي",
+        on: false,
+        what: "مرجع لفحص قديم للواجهة؛ ملف scheduled-review-frontend.yml غير موجود في جرد المسارات بتاريخ 2026-10-03.",
         prj: ["BRIX Travel System"],
         path: "scheduled-review-frontend.yml + scripts/review-frontend.mjs",
         kind: "review",
@@ -1937,9 +1807,9 @@ const AUTO = [
       {
         id: "desktop-brix-contract-study",
         name: "دراسة عقود BRIX — مرونة النظام (launchd مستقلّ — مُوقَفة 2026-05-26)",
-        freq: "كانت ٧×/يوم — أُوقفت 2026-05-26 (الملف الآن com.rabeeshaban.brix-contract-study.plist.disabled-2026-05-26)",
+        freq: "كانت 7×/يوم — أُوقفت 2026-05-26 (الملف الآن com.rabeeshaban.brix-contract-study.plist.disabled-2026-05-26)",
         on: false,
-        what: "مهمّة استكشاف طويلة (أُنشِئَت 2026-05-24، تَنتهي 2026-06-05). تَعمل مستقلّةً عبر launchd على macOS — لا تَحتاج جلسة Claude Code مفتوحة. كلّ دورة تَختار ١٠ مجموعات فندقيّة الأقدم تَحديثاً من docs/عقود (نحو ٥٨ مجموعة)، تُحلّلها بـclaude headless (claude --print) أربع مراحل لكلّ مجموعة (استخراج، مطابقة، ثغرات، شكوكيّة)، تَكتب JSON النتيجة، تُعيد بناء docs/contract-study/index.html (الذي يَجمع تلقائيّاً الثغرات المتكرّرة في فندقَين أو أكثر تحت قسم «نقاط مشتركة» مرّة واحدة بدل التكرار)، وتُرسل الملفّ لتلغرام عبر curl + bot token. الوكلاء يَستعملون عَناوين موحَّدة من قاموس في SYSTEM_CAPABILITIES.md لتَحسين دمج النقاط المشتركة. cycle.sh يَفحص التاريخ ويُعطّل نَفسه بعد 2026-06-05 تلقائيّاً. المخرَجات: docs/contract-study/index.html + results/*.json + cycle.log. الهدف: قياس مرونة نظام BRIX قبل توقيع عقود جديدة، بدون أيّ تَعديل على الكود. بعد ٥ يونيو: مراجعة بشريّة ثمّ قرار بإيقاف المهمّة أو تَحويلها إلى دوريّة أخفّ. تَنبيه: لا تُعِد تشغيلها بشكل آخر بعد 2026-06-05 دون قرار صريح. لإيقافها يدويّاً: launchctl unload ~/Library/LaunchAgents/com.rabeeshaban.brix-contract-study.plist",
+        what: "مهمّة استكشاف طويلة (أُنشِئَت 2026-05-24، تَنتهي 2026-06-05). تَعمل مستقلّةً عبر launchd على macOS — لا تَحتاج جلسة Claude Code مفتوحة. كلّ دورة تَختار 10 مجموعات فندقيّة الأقدم تَحديثاً من docs/عقود (نحو 58 مجموعة)، تُحلّلها بـclaude headless (claude --print) أربع مراحل لكلّ مجموعة (استخراج، مطابقة، ثغرات، شكوكيّة)، تَكتب JSON النتيجة، تُعيد بناء docs/contract-study/index.html (الذي يَجمع تلقائيّاً الثغرات المتكرّرة في فندقَين أو أكثر تحت قسم «نقاط مشتركة» مرّة واحدة بدل التكرار)، وتُرسل الملفّ لتلغرام عبر curl + bot token. الوكلاء يَستعملون عَناوين موحَّدة من قاموس في SYSTEM_CAPABILITIES.md لتَحسين دمج النقاط المشتركة. cycle.sh يَفحص التاريخ ويُعطّل نَفسه بعد 2026-06-05 تلقائيّاً. المخرَجات: docs/contract-study/index.html + results/*.json + cycle.log. الهدف: قياس مرونة نظام BRIX قبل توقيع عقود جديدة، بدون أيّ تَعديل على الكود. بعد 5 يونيو: مراجعة بشريّة ثمّ قرار بإيقاف المهمّة أو تَحويلها إلى دوريّة أخفّ. تَنبيه: لا تُعِد تشغيلها بشكل آخر بعد 2026-06-05 دون قرار صريح. لإيقافها يدويّاً: launchctl unload ~/Library/LaunchAgents/com.rabeeshaban.brix-contract-study.plist",
         prj: ["BRIX Travel System"],
         path: "~/Library/LaunchAgents/com.rabeeshaban.brix-contract-study.plist + docs/contract-study/cycle.sh + hotels-map.json + build.mjs + SYSTEM_CAPABILITIES.md",
         kind: "study",
@@ -2025,38 +1895,28 @@ const BOT = [
   },
   {
     name: "BrixPrice Bot",
+    content_reviewed_at: "2026-10-03",
     id: "brixprice-bot",
     kind: "telegram-bot",
     ar: "بوت أسعار بريكس",
-    st: "a",
+    st: "r",
     em: "🏨",
     cl: "#0088CC",
     host: "Railway",
     runtime: "Next.js 16 + TypeScript 5.9",
     channel: "Telegram @BrixPrice_bot",
-    related_entities: ["BRIX Travel System", "Supabase", "Railway", "GitHub"],
+    related_entities: ["BRIX Travel System","cloud:supabase","cloud:railway","cloud:github"],
     related_projects: ["BRIX Travel System"],
-    summary: "⛔ محذوف — أُزيل بالكامل من المستودع في 2026-06-05 (commit 81f2a6e7: \"remove the Telegram price-search bot entirely\"). النظام أصبح ويب فقط. لم يتبقَّ سوى 6 ملفات ترحيل يتيمة.",
-    desc: "بوت Telegram لأسعار فنادق BRIX — @BrixPrice_bot\n\n🎯 الفكرة:\nيعطي أي زميل أو وكيل سعر فندق محدّد أو كل فنادق مدينة بضغطة أزرار من الموبايل. نفس محرّك التسعير الذي يستخدمه الموقع — لا فرق ولا تأخير.\n\n📱 رحلة الاستخدام (6 خطوات بأزرار فقط):\n1. اختر النمط: فندق محدد أو مدينة كاملة\n2. اختر الفندق أو المدينة + المنطقة (اختياري)\n3. تاريخ الدخول من تقويم تفاعلي\n4. تاريخ الخروج\n5. عدد البالغين + الأطفال + أعمارهم + أعمار البالغين (اختياري لخصم كبار السن)\n6. نوع الوجبة (RO/BB/HB/AI/UAI)\n→ النتائج بميداليات + تفاصيل قابلة للطي + تحذير اقتراب الحجز المبكر\n\n🌍 لغتان كاملتان: EN + AR (تقويم، أسماء، أشهر، أرقام)\n\n🔐 نظام الدعوات الجديد:\nأي مستخدم نشط يفتح الإعدادات → إدارة المستخدمين → إضافة، يدخل رقم الهاتف + الاسم + الدور (admin/agent/viewer)\nالزميل يفتح البوت → زر شارك رقمي → Telegram يرسل الرقم → تفعيل تلقائي\nيمكن تعطيل أي مستخدم بضغطة. ممنوع تعطيل النفس.\nالدعوات تنتهي تلقائياً بعد 30 يوماً.\nحماية ضد سرقة الهوية: contact.user_id يجب يطابق chat_id\n\n🛡️ حماية متعدّدة الطبقات:\nrate limit 50 طلب/دقيقة على webhook + 30/دقيقة على البحث\ndedup قوي يفشل مغلَقاً عند خطأ DB\noptimistic lock على كل تعديل (hotelVersion)\nHTML escape شامل في الترجمة\nPII لا يُسجَّل في audit\nsnapshot قبل وبعد كل عملية حساسة\nتنظيف تلقائي للجداول (pg_cron):\nالجلسات > ساعتين كل 30 دقيقة\nتحديثات معالَجة > 3 أيام كل ساعة\nسجلات > 90 يوم يومياً\n\n💾 جداول Supabase:\ntelegram_users, telegram_invites, telegram_sessions, telegram_audit, telegram_processed_updates, telegram_recent_hotels\n\n✨ تجربة الاستخدام:\nشريط حفظ سفلي موحَّد بدل 8 أزرار متفرقة\nCancel = تراجع للشاشة السابقة دائماً\nزر منفصل ابدأ من الصفر مع تأكيد\nرسائل منبثقة على ضغطات الأزرار غير الصالحة (تاريخ خاطئ، إقامة طويلة)\nاسترجاع تلقائي من تضارب النسخ 409\nإعادة محاولة عند فشل العرض\nشارة تحذير حمراء على الغرف الناقصة المضاعفات\nربط Time Machine في 3 مواقع (للـadmin فقط)\nصفحة 404 مخصَّصة\nSkip-to-content للوحة المفاتيح\nfocus trap على نافذة تسجيل الدخول\nsafe-area-inset لـiOS\n\n📊 الأرقام:\n2212 اختبار يمر، صفر ثغرات حرجة\n12+ commit في يومين على main\n7 إصلاحات أمنية مغلقة\n250 ثم 740 صف مضاعفات لسوينو حُفِظت بنجاح بعد إصلاح bug الحفظ الصامت\nCache invalidation: 30 ثانية أقصى تأخير بين تعديل الموقع وظهوره في البوت\n\n🔄 سير البيانات:\nالمشغّل يدخل/يعدّل العقد من شاشة تعديل العقد ← Supabase ← invalidateContractCache ← محرّك التسعير ← /api/search ← يرد البوت بنفس النتائج التي تظهر في الموقع 100٪\n\n🚀 النشر:\nRailway production: brix-hotel-web-app-production.up.railway.app\nيُنشَر تلقائياً من GitHub main عبر CI",
+    summary: "بوت بحث الأسعار القديم أزيل من مصدر BRIX. هذا سجل تاريخي، وليس قناة تشغيل حالية.",
+    desc: "كان البوت يتيح البحث عن أسعار الفنادق عبر Telegram. مسار الاستخدام الحالي هو موقع BRIX. تم التحقق من غياب مسارات البوت في المصدر المحلي بتاريخ 2026-10-03.",
     tags: [
-      "Telegram",
-      "Next.js 16",
-      "TypeScript",
-      "Supabase",
-      "Railway",
-      "Phone Invites",
-      "EN+AR i18n",
-      "2212 tests",
-      "Production",
-      "Rate Limited",
-      "Snapshots",
-    ],
+  "أزيل من المصدر"
+],
     path: "/Users/rabeeshaban/Desktop/Projects/🏨 BRIX-Travel/hotel-web-app",
     links: {
-      Telegram: "https://t.me/BrixPrice_bot",
-      GitHub: "https://github.com/aneerabee/brix-travel-system",
-      Railway: "https://brix-hotel-web-app-production.up.railway.app",
-    },
+  "مشروع BRIX": "https://brix-hotel-web-app-production.up.railway.app",
+  "المستودع": "https://github.com/aneerabee/brix-travel-system"
+},
   },
 
 ];
@@ -2072,7 +1932,7 @@ const TL = [
     category: "developer-env",
     used_in: ["Command Center", "BRIX Travel System", "EasyBooking"],
     summary:
-      "بيئة GPT-5.5 الحالية مع تعليمات دائمة وPlugins مفعلة للمستودعات والتصميم.",
+      "بيئة Codex للعمل على المشاريع؛ الإعدادات والنموذج المختار قد يختلفان بين الجلسات.",
     desc: "Codex يعمل هنا من ~/.codex\n\nالإعدادات المؤكدة من المصدر:\nmodel = gpt-5.6-sol\nmodel_reasoning_effort = high\npersonality = pragmatic\nPlugins مفعلة: GitHub + Canva\nTrusted workspace: /Users/rabeeshaban/Developer\n\nالتخصيص الأهم:\nAGENTS.md يحمل معيار العمل الدائم الذي يحدد عدم الكسر والتنظيف وعدم الهلوسة قبل أي تنفيذ.",
     tags: [
       "gpt-5.6-sol",
@@ -2122,7 +1982,7 @@ const TL = [
     category: "developer-env",
     used_in: ["Command Center", "BRIX Travel System", "EasyBooking"],
     summary:
-      "بيئة Claude Code الحالية مع Agents وCommands وHooks وPlugins متصلة فعليًا.",
+      "بيئة Claude Code للعمل على المشاريع. حالة ملفات الإعداد والصلاحيات تظهر في الفحص.",
     desc: "Claude Code يعمل من ~/.claude\n\nالإعدادات المؤكدة من المصدر:\n14 agent files\n44 commands\n46 مهارة محلية في ~/.agents/skills\n3 plugins مفعلة عبر enabledPlugins: coderabbit + swift-lsp + telegram\neffortLevel الحالي: high\nstatusLine مخصص من ~/.claude/scripts/statusline.sh\n\nالتخصيصات المؤكدة:\n3 قواعد PreToolUse\n2 قواعد PostToolUse\nقاعدة Stop لتشغيل صوت النظام\nتنبيه عند وجود console.log\nHook بعد تعديل JS لتشغيل prettier",
     tags: ["14 Agents", "44 Commands", "46 Local Skills", "3 Plugins", "Hooks"],
     path: "/Users/rabeeshaban/.claude/",
@@ -2280,7 +2140,7 @@ const TL = [
   {
     name: "Notion",
     id: "notion-mcp",
-    ar: "Notion متصل",
+    ar: "ربط Notion",
     st: "a",
     cl: "#FFF",
     type: "مستخدمة",
@@ -2384,7 +2244,7 @@ const TL = [
   {
     name: "Vercel",
     id: "vercel-mcp",
-    ar: "إدارة النشر",
+    ar: "إدارة النشر في Vercel",
     st: "a",
     cl: "#000",
     type: "مستخدمة",
@@ -2397,7 +2257,7 @@ const TL = [
   {
     name: "Railway",
     id: "railway-mcp",
-    ar: "إدارة النشر",
+    ar: "إدارة النشر في Railway",
     st: "a",
     cl: "#0B0D0E",
     type: "مستخدمة",
@@ -2433,20 +2293,10 @@ const CLD = [
     active_note: "نشط: 12 repos، runtime sync ينشر يومياً",
     em: "🐙",
     category: "platform",
-    dt: "11 repos في الكتالوج الحالي",
+    dt: "منصة المستودعات وسجل التغييرات والتشغيل الآلي",
     lk: "https://github.com/aneerabee",
     prj: "Command Center",
-    related_entities: [
-      "Command Center",
-      "BRIX Travel System",
-      "Chess Academy",
-      "Meta MCP",
-      "Money Manager",
-      "BRIX Travel Website",
-      "WhatsApp CRM",
-      "ADREEM",
-
-    ],
+    related_entities: ["Command Center","BRIX Travel System","Chess Academy","project:meta-mcp","Money Manager","BRIX Travel Website","WhatsApp CRM","ADREEM"],
     used_in: [
       "Command Center",
       "BRIX Travel System",
@@ -2468,7 +2318,7 @@ const CLD = [
     active_note: "نشط: قاعدة BRIX + Money Manager + ADREEM",
     em: "⚡",
     category: "database-platform",
-    dt: "PostgreSQL متعدد المشاريع — مصدر حقيقة لـ4 منظومات",
+    dt: "قواعد بيانات وخدمات مرتبطة بالمشاريع",
     lk: "https://supabase.com/dashboard",
     prj: "BRIX Travel System",
     related_entities: ["BRIX Travel System", "Money Manager", "ADREEM", "Western Office"],
@@ -2483,7 +2333,7 @@ const CLD = [
     active_note: "غير مستخدم حالياً — Railway هو سيرفر النشر",
     em: "▲",
     category: "deployment",
-    dt: "BRIX auto-deploy",
+    dt: "منصة نشر مسجّلة؛ نشر BRIX الحالي مرتبط بـRailway",
     lk: "https://vercel.com",
     prj: "BRIX Travel System",
     used_in: ["BRIX Travel System"],
@@ -2539,7 +2389,7 @@ const CLD = [
     active_note: "مُلغى منذ v15.0: انتقلت بيانات BRIX إلى Supabase (المصدر الوحيد الآن). محفوظ كأرشيف.",
     em: "📊",
     category: "data-platform",
-    dt: "11 جدول · BRIX SOT (مؤرشف — Supabase هو المصدر)",
+    dt: "مرجع لقاعدة BRIX السابقة؛ النظام الحالي يستخدم Supabase",
     lk: "https://airtable.com",
     prj: "BRIX Travel System",
     used_in: ["BRIX Travel System"],
@@ -2553,7 +2403,7 @@ const CLD = [
     active_note: "نشط: Bot API لكل البوتات",
     em: "✈️",
     category: "communication",
-    dt: "قنوات وبوتات نشطة",
+    dt: "قنوات وبوتات مرتبطة بالمشاريع؛ تشغيل كل بوت يُراجع مستقلًا",
     related_entities: ["Claude Code Bot", "Tron Address Bot"],
     used_in: ["Claude Code Bot", "Tron Address Bot"],
   },
@@ -2566,7 +2416,7 @@ const CLD = [
     active_note: "نشط: يستضيف Wapy.dev + ADREEM API + موقع Brixtravel (حي عبر Caddy + Let's Encrypt)",
     em: "🖥️",
     category: "infrastructure",
-    dt: "vmi3061403 · 62.171.128.44 · Ubuntu 24 · Tailscale 100.116.69.101 · 71G حرّ · استهلاك 27% (2026-07-25)",
+    dt: "الخادم المستضيف للخدمات؛ المساحة والحالة تُقرأ من آخر فحص",
     ip_note: "تأكّد الـ Public IP الفعلي = 62.171.128.44 (تم تشغيل curl ifconfig.me من داخل السيرفر عبر Tailscale يوم 2026-05-14). الـ IP السابق 46.202.172.151 كان عائداً لـ Hostinger وليس لـ Contabo — تم تصحيحه في Cloudflare DNS.",
     prj: "Wapy.dev + ADREEM + Brixtravel + Dr. Muhsen Ledger",
     related_entities: ["Wapy.dev", "ADREEM", "BRIX Travel Website", "Dr. Muhsen Ledger"],
@@ -2581,7 +2431,7 @@ const CLD = [
     active_note: "نشط: DNS + CDN + SSL + Tunnel لمشاريع BRIX/Tron/Claude Code Bot. Cloudflare Pages متاحة وغير مستخدمة بعد — ledger.rabee.dev غير منشأ (NXDOMAIN، فُحص 2026-07-25) — راجع IDEAS rabee-online-empire.",
     em: "☁️",
     category: "infrastructure",
-    dt: "DNS authority لـ brixtravel.com + rabee.dev · Proxy 🟠 على بعض السجلات · Tunnel للوصول الآمن إلى Contabo · Workers + Pages متاحة لكنّها قليلة الاستخدام حاليّاً",
+    dt: "إدارة أسماء النطاقات والاتصال والخدمات المرتبطة بها",
     prj: "BRIX Travel Website + ADREEM (نطاق) + Tron Address Bot (tunnel)",
     related_entities: ["BRIX Travel Website", "ADREEM", "Tron Address Bot", "Claude Code Bot"],
     used_in: ["BRIX Travel Website", "ADREEM", "Tron Address Bot", "Claude Code Bot"],
@@ -2595,7 +2445,7 @@ const CLD = [
     active_note: "نشط للنطاق + البريد فقط: brixtravel.com مسجّل عبر Hostinger (Registrar) و البريد على Zoho Mail (mx.zoho.com / mx2 / mx3 + SPF include:zohomail.com) — ليس Hostinger. الاستضافة منتهية (انتقل الموقع إلى Contabo).",
     em: "🌍",
     category: "domain-and-email",
-    dt: "Domain Registrar (brixtravel.com حتى 2028-10-14) + MX records للبريد @brixtravel.com",
+    dt: "إدارة النطاق والبريد وفق الإعدادات المسجّلة",
     prj: "BRIX Travel Website (نطاق + بريد فقط)",
     used_in: ["BRIX Travel Website"],
   },
@@ -2608,7 +2458,7 @@ const CLD = [
     active_note: "نشط: نسخ احتياطي + ملفات حساسة (vault)",
     em: "☁️",
     category: "storage",
-    dt: "آلاف الملفات المنظمة المرتبطة بالمشاريع والحملات",
+    dt: "مجلدات سحابية مرتبطة بالملفات والمشاريع",
     prj: "EasyBooking",
     related_entities: ["EasyBooking"],
     used_in: ["EasyBooking"],
@@ -2664,7 +2514,7 @@ const CLD = [
     active_note: "نشط: VPN خاص (100.116.69.101) — وصول لـContabo و4 منظومات تعمل عليه",
     em: "🔒",
     category: "network",
-    dt: "VPN · 3 أجهزة · حماية الوصول لـWapy + ADREEM + Western Office",
+    dt: "شبكة خاصة للوصول إلى الخدمات الداخلية",
     prj: "Wapy.dev",
     related_entities: ["Wapy.dev", "Command Center", "ADREEM"],
     used_in: ["Wapy.dev", "Command Center", "ADREEM"],
@@ -2820,10 +2670,10 @@ const IDEAS = [
       "BRIX Travel System",
       "WhatsApp CRM",
     ],
-    related_entities: ["Cloudflare", "Contabo VPS", "Railway", "GitHub", "Supabase"],
+    related_entities: ["Cloudflare","Contabo VPS","cloud:railway","cloud:github","cloud:supabase"],
     next_step: "اشترِ rabee.dev → Cloudflare DNS → ابدأ بـtunnel لـWapy",
     summary:
-      "9 مشاريع تحت نطاق واحد rabee.dev بـ$6 شهرياً — بدون لمس أي شيء يعمل. حل المشاكل الـ3 الفعلية فقط: نشر Money Manager، إخراج Wapy للعالم، ضمّ Mohammad Bot للسحابة.",
+      "مقترح قديم لتجميع روابط المشاريع تحت نطاق واحد. عدد المشاريع والتكلفة يحتاجان تقديرًا جديدًا قبل التنفيذ.",
 
     /* ── مكوّنات الفكرة المنظّمة كأقسام بصرية ── */
     blueprint: {

@@ -331,7 +331,7 @@ function smartGreeting() {
 
 /* تاريخ اليوم بصيغة عربية */
 function todayLong() {
-  return new Date().toLocaleDateString("ar-EG", {
+  return new Date().toLocaleDateString("ar-EG-u-nu-latn", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -848,15 +848,8 @@ async function _loadHealthData() {
 }
 
 function _refreshRuntimeBoundViews() {
-  const parts = _hashParts();
-  const page = parts[0];
-  const itemName = parts[1] ? decodeURIComponent(parts[1]) : null;
-  if (
-    itemName &&
-    _entityLookup(itemName) &&
-    document.getElementById("detail-view")
-  ) {
-    // Keep the selected detail tab and scroll position during background refresh.
+  if (document.getElementById("detail-view")) {
+    wsRefreshEvidence();
     return;
   }
   // Re-render pages whose content depends on runtime state.
@@ -944,7 +937,7 @@ function _runtimeStatusMeta(status) {
 function _fmtRuntimeDate(iso) {
   if (!iso) return "—";
   try {
-    return new Date(iso).toLocaleString("ar-EG", {
+    return new Date(iso).toLocaleString("ar-EG-u-nu-latn", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -1425,7 +1418,7 @@ function _setHashSilently(nextHash) {
   _suppressHash = true;
   if (history.pushState) {
     try {
-      history.pushState(history.state, "", normalized);
+      history.pushState({ccFrom:wsActiveRoute || cur}, "", normalized);
       _suppressHash = false; // no hashchange will fire, clear immediately
       return;
     } catch (e) { /* fall through to legacy path */ }
@@ -1497,14 +1490,7 @@ function init() {
 
   const hashParts = _hashParts();
   if (hashParts[1]) {
-    const itemName = decodeURIComponent(hashParts[1]);
-    if (_entityLookup(itemName)) {
-      // PHASE-5B: was setTimeout(300) — caused visible page-then-drawer
-      // flash on shared links. requestAnimationFrame waits exactly one
-      // paint frame, so the page lays out once and the drawer opens
-      // immediately on top, no visible flicker.
-      requestAnimationFrame(() => openDetailSmart(itemName, hashParts[0]));
-    }
+    requestAnimationFrame(wsFollowLocation);
   }
 
   const input = document.getElementById("search-input");
@@ -1529,8 +1515,9 @@ const _RUNTIME_BOUND_PAGES = new Set(["home", "tools", "cloud"]);
 
 function _activatePage(id, syncHash) {
   if (!_validPages.has(id)) return;
-  cur = id;
   if (syncHash) _setHashSilently(id);
+  cur = id;
+  wsActiveRoute = id;
   document
     .querySelectorAll(".page")
     .forEach((el) => el.classList.remove("active"));
@@ -1554,7 +1541,7 @@ function _activatePage(id, syncHash) {
   document
     .querySelectorAll(".bar-item")
     .forEach((el) => el.classList.toggle("active", el.dataset.page === id));
-  window.scrollTo(0, 0);
+  window.scrollTo({top:0,behavior:'instant'});
   requestAnimationFrame(_processIcons);
   wsUpdateShell();
   // ✨ تطبيق إضاءة Bridge بعد render الصفحة
@@ -1563,13 +1550,13 @@ function _activatePage(id, syncHash) {
 
 function go(id) {
   if (!_validPages.has(id)) return;
+  wsRememberView();
   closeMore();
   closeDetail(true);
   _activatePage(id, true);
 }
 
 function openMore() {
-  closeDetail(true);
   wsOpenOverlay('more-sheet');
 }
 
@@ -1614,7 +1601,7 @@ function _sectionHero({
 /* ── HOME — Executive Briefing Board ── */
 R.home = function () {
   const now = new Date();
-  const dateStr = now.toLocaleDateString("ar-EG", {
+  const dateStr = now.toLocaleDateString("ar-EG-u-nu-latn", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -5627,7 +5614,6 @@ function _renderSearchResults(query) {
 
 function openSearch() {
   closeMore();
-  closeDetail(true);
   const el = document.getElementById("global-search");
   if (!el) return;
   wsSearchFocus = document.activeElement;
@@ -5756,19 +5742,7 @@ window.addEventListener("hashchange", function () {
     _suppressHash = false;
     return;
   }
-  const parts = _hashParts();
-  const page = parts[0];
-  if (_validPages.has(page) && page !== cur) _activatePage(page, false);
-  if (!parts[1] && document.getElementById("detail-view")) closeDetail(true);
-  if (parts[1]) {
-    const itemName = decodeURIComponent(parts[1]);
-    if (_entityLookup(itemName)) {
-      setTimeout(() => {
-        if (document.getElementById("detail-view")) closeDetail(true);
-        openDetailSmart(itemName, page);
-      }, 200);
-    }
-  }
+  wsFollowLocation();
 });
 
 /* ══════════════════════════════════════════════════════════════════════════

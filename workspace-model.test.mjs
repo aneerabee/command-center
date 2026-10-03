@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const model = require('./workspace-model.js');
 const now = Date.parse('2026-10-03T12:00:00Z');
 const recent = { verification_status:'ok', verified_at:'2026-10-03T11:00:00Z' };
-const inventory = vm.runInNewContext(readFileSync(new URL('./data.js',import.meta.url),'utf8') + '\n({PG,PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO})');
+const inventory = vm.runInNewContext(readFileSync(new URL('./data.js',import.meta.url),'utf8') + '\n({PG,PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO,UMBRELLAS,DEPARTMENTS})');
 
 describe('verification is evidence-based',()=>{
   it('does not invent an available status without a check',()=>expect(model.status(null,now).state).toBe('unknown'));
@@ -74,4 +74,79 @@ describe('server snapshot freshness',()=>{
   it('reports recent available evidence',()=>expect(model.health({checked_at:'2026-10-03T11:59:00Z',ok:true,reachable:true},now).state).toBe('ok'));
   it('does not show old green results as current availability',()=>expect(model.health({checked_at:'2026-10-03T11:00:00Z',ok:true,reachable:true},now).state).toBe('stale'));
   it('requires both reachability and successful checks',()=>expect(model.health({checked_at:'2026-10-03T11:59:00Z',ok:true,reachable:false},now).state).toBe('warn'));
+});
+
+describe('Western digits on every surface',()=>{
+  it.each(['٠١٢٣٤٥٦٧٨٩','۰۱۲۳۴۵۶۷۸۹','0123456789'])('normalizes %s without losing zero',value=>expect(model.latinDigits(value)).toBe('0123456789'));
+  it('formats Arabic dates and quantities with Western digits',()=>{
+    const number=new Intl.NumberFormat(model.LOCALE).format(1345.67);
+    const date=new Intl.DateTimeFormat(model.LOCALE,{year:'numeric',day:'numeric',month:'long',timeZone:'Europe/Istanbul'}).format(now);
+    expect(number+date).not.toMatch(/[\u0660-\u0669\u06f0-\u06f9]/);
+    expect(number).toContain('1'); expect(date).toContain('2026');
+  });
+  it('keeps search compatible with either numeral input',()=>expect(model.normalize('مهمة ١٢')).toBe(model.normalize('مهمة 12')));
+  it('uses Western digits throughout the current inventory',()=>expect(JSON.stringify(inventory)).not.toMatch(/[\u0660-\u0669\u06f0-\u06f9]/));
+});
+
+describe('every entity has a page and valid relationships',()=>{
+  const rows=model.registry(inventory);
+  it.each(rows.map(row=>[row.key,row]))('round-trips the page for %s',(_key,row)=>{
+    const [page,encoded]=model.route(row).split('/');
+    expect(model.resolve(rows,decodeURIComponent(encoded),page)?.key).toBe(row.key);
+  });
+  it('finds every declared relationship, company and department',()=>{
+    for(const row of rows) {
+      for(const name of model.references(row.item)) expect(model.resolve(rows,name),`${row.key}: ${name}`).toBeTruthy();
+      if(row.item.parent) expect(inventory.UMBRELLAS.some(x=>x.id===row.item.parent),row.key).toBe(true);
+      if(row.item.department) expect(inventory.DEPARTMENTS.some(x=>x.id===row.item.department),row.key).toBe(true);
+    }
+  });
+  it('distinguishes a platform from a same-named tool',()=>{
+    expect(model.resolve(rows,'cloud:supabase')?.key).toBe('cloud:supabase');
+    expect(model.resolve(rows,'tool:supabase-mcp')?.key).toBe('tool:supabase-mcp');
+    const brix=rows.find(row=>row.id==='brix-travel-system');
+    const related=model.related(rows,brix);
+    expect(related.some(row=>row.key==='cloud:github')).toBe(true);
+    expect(related.some(row=>row.key==='cloud:supabase')).toBe(true);
+    expect(model.related(rows,rows.find(row=>row.key==='cloud:supabase')).some(row=>row.key===brix.key)).toBe(true);
+  });
+  it('has no self links or duplicated related items',()=>{
+    for(const row of rows) {
+      const related=model.related(rows,row);
+      expect(new Set(related.map(x=>x.key)).size).toBe(related.length);
+      expect(related.some(x=>x.key===row.key)).toBe(false);
+    }
+  });
+  it('does not label the removed bot as active',()=>expect(inventory.BOT.find(x=>x.id==='brixprice-bot').st).not.toBe('a'));
+});
+
+describe('operational checks do not overclaim',()=>{
+  const runtime=require('./runtime-sync.js');
+  it.each(['failure','cancelled','timed_out','skipped',null])('does not call a %s execution successful',conclusion=>expect(runtime.workflowResult({status:'completed',conclusion}).verification_status).not.toBe('ok'));
+  it('distinguishes running work from passed work',()=>expect(runtime.workflowResult({status:'in_progress',conclusion:null}).verification_status).toBe('warn'));
+  it('reports the actual successful run and its time',()=>expect(runtime.workflowResult({status:'completed',conclusion:'success',createdAt:'2026-10-03',url:'https://github.com/example/run'})).toMatchObject({verification_status:'ok',facts:['run: https://github.com/example/run','started: 2026-10-03','result: success']}));
+  it('does not invent a run when no result is returned',()=>expect(runtime.workflowResult(null).verification_status).toBe('manual'));
+});
+
+describe('staff form produces valid review data, not a saved employee',()=>{
+  const survey=require('./survey-model.js');
+  const input={name:'ربيع "اختبار"',phone:'+٩٠ ٥٣٥ ١٢٣ ٤٥٦٧',department:'easybooking',role:'مبيعات'};
+  it('retains Arabic names and quotes in valid serialized data',()=>{
+    const result=survey.member(input,'test-id');
+    expect(JSON.parse(JSON.stringify(result)).name).toBe(input.name);
+    expect(result.id).toBe('member-test-id');
+  });
+  it('normalizes phone digits before removing punctuation',()=>{
+    const result=survey.member(input,'test-id');
+    expect(result.phone).toBe('+905351234567');expect(result.whatsapp).toBe('905351234567');
+  });
+  it.each(['brix-b2b','easybooking','rihlaty'])('maps department %s to current projects',department=>{
+    const result=survey.member({...input,department},'test-id');
+    expect(inventory.DEPARTMENTS.some(d=>d.id===result.department)).toBe(true);
+    expect(result.assigned_projects.every(id=>inventory.PRJ.some(p=>p.id===id))).toBe(true);
+  });
+  it('rejects unknown departments and invalid phones',()=>{
+    expect(()=>survey.member({...input,department:'missing'},'test-id')).toThrow();
+    expect(()=>survey.member({...input,phone:'١٢'},'test-id')).toThrow();
+  });
 });

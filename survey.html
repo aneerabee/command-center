@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>استبيان بيانات الموظف — BRIX TRAVEL / Etranex</title>
+<link rel="icon" href="cc-favicon.svg?v=20261003b">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -11,10 +12,10 @@
   --card: #fff;
   --t1: #0f172a;
   --t2: #475569;
-  --t3: #94a3b8;
+  --t3: #65716b;
   --border: rgba(15, 23, 42, 0.08);
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
+  --primary: #22604a;
+  --primary-dark: #194936;
   --success: #10b981;
   --danger: #ef4444;
 }
@@ -50,7 +51,7 @@ body {
 .section {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 20px 18px;
   margin-bottom: 14px;
 }
@@ -216,7 +217,9 @@ textarea {
   font-weight: 600;
   transition: all 0.15s;
 }
-.contract-opt input { display: none; }
+.contract-opt input { display:inline-block; width:auto; accent-color:var(--primary); }
+.contract-opt:focus-within { outline:2px solid var(--primary); outline-offset:2px; }
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; transition:none!important; } }
 .contract-opt.selected {
   background: var(--primary);
   color: #fff;
@@ -231,8 +234,9 @@ textarea {
 <div class="container">
 
   <div class="header">
-    <h1>📋 استبيان بيانات الموظف</h1>
-    <p>أهلاً بك في فريق <strong>BRIX TRAVEL</strong> / <strong>Etranex</strong>. املأ هذه الاستمارة (5 دقائق) لتحديث ملفك في النظام.</p>
+    <a href="index.html#team" style="color:var(--primary)">العودة إلى الفريق</a>
+    <h1>استبيان بيانات الموظف</h1>
+    <p>بيانات فريق BRIX. ينتج هذا النموذج نصًا للمراجعة، ولا يحفظ ملف الموظف في اللوحة تلقائيًا.</p>
   </div>
 
   <div class="success-msg" id="success">
@@ -370,84 +374,38 @@ textarea {
   </form>
 </div>
 
+<script src="survey-model.js?v=20261003b"></script>
 <script>
-// تفعيل خيارات التعاقد
-document.querySelectorAll(".contract-opt").forEach((opt) => {
-  opt.addEventListener("click", () => {
-    document.querySelectorAll(".contract-opt").forEach((o) => o.classList.remove("selected"));
-    opt.classList.add("selected");
-    opt.querySelector("input").checked = true;
-  });
+document.querySelectorAll('.field').forEach(field => {
+  const input=field.querySelector('input:not([type="radio"]):not([type="checkbox"]),select,textarea'),label=field.querySelector('.field-label');
+  if(input && label) { input.id='field-'+input.name; label.htmlFor=input.id; }
 });
-
-// توليد JSON من النموذج
-document.getElementById("surveyForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const fd = new FormData(e.target);
-  const data = {};
-  for (const [key, val] of fd.entries()) {
-    if (key === "languages") {
-      data.languages = data.languages || [];
-      data.languages.push(val);
-    } else if (val) {
-      data[key] = val;
-    }
-  }
-  // افتراضات منطقية
-  data.parent = "brix";
-  data.status = "active";
-  if (!data.whatsapp && data.phone) {
-    data.whatsapp = data.phone.replace(/\D/g, "");
-  }
-  // قالب جاهز للصق في data.js
-  const id = (data.name_en || data.name || "new")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
-  const cl = data.department === "rihlaty" ? "#10B981" : "#2563EB";
-  const template = `  {
-    id: "${id}",
-    name: "${data.name || ""}",
-    name_en: ${data.name_en ? `"${data.name_en}"` : "null"},
-    full_name: ${data.full_name ? `"${data.full_name}"` : "null"},
-    nationality: ${data.nationality ? `"${data.nationality}"` : "null"},
-    languages: ${JSON.stringify(data.languages || [])},
-    phone: "${data.phone || ""}",
-    phone_local: "${(data.phone || "").replace(/^\+/, "00").replace(/\s/g, "")}",
-    whatsapp: "${(data.whatsapp || data.phone || "").replace(/\D/g, "")}",
-    whatsapp_display_name: ${data.whatsapp_display_name ? `"${data.whatsapp_display_name}"` : "null"},
-    email_work: ${data.email_work ? `"${data.email_work}"` : "null"},
-    telegram: ${data.telegram ? `"${data.telegram}"` : "null"},
-    location_office: ${data.location_office ? `"${data.location_office}"` : "null"},
-    department: "${data.department || ""}",
-    parent: "brix",
-    role: "${data.role || ""}",
-    manager: ${data.manager ? `"${data.manager}"` : "null"},
-    hire_date: ${data.hire_date ? `"${data.hire_date}"` : "null"},
-    contract_type: ${data.contract_type ? `"${data.contract_type}"` : "null"},
-    working_hours: ${data.working_hours ? `"${data.working_hours}"` : "null"},
-    assigned_projects: [${data.department === "easybooking" ? '"easybooking"' : data.department === "rihlaty" ? '"rihlaty-travel"' : ""}],
-    salary_usd: null,
-    status: "active",
-    em: "👤",
-    cl: "${cl}",
-  },`;
-  const out = document.getElementById("output");
-  out.textContent = template;
-  out.classList.add("show");
-  document.getElementById("success").classList.add("show");
-  // نسخ للحافظة تلقائياً
-  navigator.clipboard.writeText(template).then(() => {
-    document.getElementById("success").innerHTML = "✓ تم نسخ البيانات للحافظة! أرسلها للإدارة.";
-  });
-  out.scrollIntoView({ behavior: "smooth", block: "start" });
+document.querySelectorAll('.contract-opt input').forEach(input => input.addEventListener('change',() => {
+  document.querySelectorAll('.contract-opt').forEach(option => option.classList.toggle('selected',option.querySelector('input').checked));
+}));
+document.getElementById('surveyForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  const form=new FormData(event.target);
+  const data={...Object.fromEntries(form.entries()),languages:form.getAll('languages')};
+  const message=document.getElementById('success');
+  try {
+    const result=SurveyModel.member(data,crypto.randomUUID());
+    const text=JSON.stringify(result,null,2);
+    const output=document.getElementById('output');
+    output.textContent=text;
+    output.classList.add('show');
+    message.classList.add('show');
+    try { await navigator.clipboard.writeText(text); message.textContent='تم نسخ البيانات. لم تُرسل أو تُحفظ في اللوحة.'; }
+    catch { message.textContent='البيانات جاهزة أدناه، لكن تعذر نسخها تلقائيًا. لم تُرسل أو تُحفظ في اللوحة.'; }
+    output.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+  } catch(error) { message.textContent=error.message; message.classList.add('show'); }
 });
-
 function resetForm() {
-  document.getElementById("surveyForm").reset();
-  document.querySelectorAll(".contract-opt").forEach((o) => o.classList.remove("selected"));
-  document.getElementById("output").classList.remove("show");
-  document.getElementById("success").classList.remove("show");
+  document.getElementById('surveyForm').reset();
+  document.querySelectorAll('.contract-opt').forEach(option => option.classList.remove('selected'));
+  document.getElementById('output').textContent='';
+  document.getElementById('output').classList.remove('show');
+  document.getElementById('success').classList.remove('show');
 }
 </script>
 

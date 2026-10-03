@@ -5,7 +5,8 @@
 ## ما الذي يحدث
 
 - النظام يشغّل السكربت:
-  - `/tmp/cc-push/runtime-sync-publish.sh`
+  - `/Users/rabeeshaban/.local/bin/cc-runtime-sync.sh`
+  - يعمل من `/Users/rabeeshaban/.local/share/command-center`، ويجلب آخر نسخة قبل الفحص.
 - هذا السكربت يقوم بالتسلسل التالي:
   1. تشغيل `node runtime-sync.js`
   2. تحديث `data.runtime.json`
@@ -61,21 +62,21 @@
 ## الملفات المهمة
 
 - التعريف اليدوي:
-  - `/tmp/cc-push/data.js`
+  - `data.js` داخل نسخة العمل
 - نتائج آخر فحص:
-  - `/tmp/cc-push/data.runtime.json`
+  - `data.runtime.json` داخل نسخة العمل
 - منطق الفحص:
-  - `/tmp/cc-push/runtime-sync.js`
+  - `runtime-sync.js` داخل نسخة العمل
 - منطق النشر التلقائي:
-  - `/tmp/cc-push/runtime-sync-publish.sh`
+  - `/Users/rabeeshaban/.local/bin/cc-runtime-sync.sh`
 
 ## التشغيل اليدوي فقط للتشخيص
 
 إذا احتجت اختبارًا يدويًا أو debugging:
 
 ```bash
-cd /tmp/cc-push
-./runtime-sync-publish.sh
+cd /Users/rabeeshaban/Developer/command-center
+node runtime-sync.js
 ```
 
-لكن في الوضع الطبيعي لا حاجة لذلك لأن `launchd` يتولى التشغيل الدوري.
+هذا الأمر يفحص ويحدّث ملف النتائج فقط، ولا ينشر أو يعيد تشغيل أي مشروع. الجدولة تتولى النشر الدوري من نسخة العمل المستقلة.

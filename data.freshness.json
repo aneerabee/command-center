@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T13:17:33.205Z",
+  "generated_at": "2026-10-03T14:32:14.918Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -18,7 +18,7 @@
       "_root": "2026-05-12"
     },
     "easybooking": {
-      "_root": "2026-06-14",
+      "_root": "2026-10-03",
       "links": "2026-04-05",
       "current_status": "2026-05-11"
     },
@@ -41,21 +41,19 @@
       "_root": "2026-05-12"
     },
     "brix-travel-system": {
-      "links": "2026-06-28",
-      "links_desc": "2026-07-25",
-      "current_status": "2026-07-25",
-      "bot_features": "2026-07-25",
-      "claude_session": "2026-07-02",
-      "_root": "2026-07-25"
+      "links": "2026-10-03",
+      "current_status": "2026-10-03",
+      "claude_session": "2026-10-03",
+      "_root": "2026-10-03"
     },
     "rihlaty-travel": {
       "links": "2026-05-11",
       "current_status": "2026-07-25",
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "meta-mcp": {
       "current_status": "2026-05-11",
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "wapy-dev": {
       "current_status": "2026-05-11",
@@ -75,32 +73,32 @@
     },
     "money-manager": {
       "current_status": "2026-07-25",
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "brix-travel-website": {
       "links": "2026-05-14",
       "current_status": "2026-05-15",
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "chess-academy": {
       "links": "2026-04-05",
       "current_status": "2026-05-11",
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "western-office": {
       "links": "2026-04-13",
       "current_status": "2026-07-14",
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "adreem": {
       "links": "2026-08-20",
       "links_desc": "2026-08-20",
       "current_status": "2026-08-20",
       "claude_session": "2026-09-24",
-      "_root": "2026-09-24"
+      "_root": "2026-10-03"
     },
     "adreem-api": {
-      "_root": "2026-08-20"
+      "_root": "2026-10-03"
     },
     "cc-runtime-publish": {
       "_root": "2026-05-12"
@@ -118,7 +116,7 @@
       "_root": "2026-05-12"
     },
     "wapy-backup-cron": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "wapy-cleanup-cron": {
       "_root": "2026-05-12"
@@ -136,7 +134,7 @@
       "_root": "2026-05-20"
     },
     "desktop-ci-build-test-auto-deploy": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "tron-address-bot": {
       "_root": "2026-05-30"
@@ -148,14 +146,14 @@
       "_root": "2026-09-24"
     },
     "brixprice-bot": {
-      "links": "2026-05-12",
-      "_root": "2026-07-25"
+      "links": "2026-10-03",
+      "_root": "2026-10-03"
     },
     "codex-cli": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "claude-code": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "runtime-sync-system": {
       "_root": "2026-05-25"
@@ -170,7 +168,7 @@
       "_root": "2026-05-12"
     },
     "notion-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "perplexity-mcp": {
       "_root": "2026-04-05"
@@ -194,10 +192,10 @@
       "_root": "2026-04-05"
     },
     "vercel-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "railway-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "testsprite-mcp": {
       "_root": "2026-04-05"
@@ -209,7 +207,7 @@
       "_root": "2026-10-03"
     },
     "vercel": {
-      "_root": "2026-05-20"
+      "_root": "2026-10-03"
     },
     "railway": {
       "_root": "2026-05-20"
@@ -221,22 +219,22 @@
       "_root": "2026-05-20"
     },
     "airtable": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "telegram": {
-      "_root": "2026-09-24"
+      "_root": "2026-10-03"
     },
     "contabo-vps": {
       "_root": "2026-10-03"
     },
     "cloudflare": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "hostinger": {
-      "_root": "2026-07-25"
+      "_root": "2026-10-03"
     },
     "icloud-drive": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "perplexity": {
       "_root": "2026-05-20"
@@ -276,7 +274,7 @@
     },
     "rabee-online-empire": {
       "blueprint": "2026-09-24",
-      "_root": "2026-09-24"
+      "_root": "2026-10-03"
     },
     "brix-website-v2": {
       "_root": "2026-05-11"

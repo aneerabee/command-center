@@ -333,7 +333,7 @@ function checkServices(services, previous, serverSnapshot) {
 
   for (const service of services) {
     const previousRecord = previous?.service?.[service.id];
-    const patch = serverSnapshot.ok && matchers[service.id]
+    const patch = (serverSnapshot.ok || ['cc-runtime-publish','tailscale-vpn'].includes(service.id)) && matchers[service.id]
       ? matchers[service.id]()
       : {verification_status: 'warn', checked_from: 'ssh', summary: serverSnapshot.error || 'تعذر تشغيل server snapshot', facts: ['فشل checker لا يعني فشل الخدمة نفسها']};
     records[service.id] = buildRecord('service', service.id, previousRecord, patch, `${STALE_DAYS.service}d`);
@@ -485,7 +485,7 @@ function checkTools(tools, projects, previous, tailscale) {
         facts: [
           `path: ${fs.existsSync(expandHome(tool.path)) ? 'ok' : 'missing'}`,
           `config paths: ${configPaths.length - missing.length}/${configPaths.length}`,
-          codexConfig.ok && codexConfig.stdout.includes('model = "gpt-5.4"') ? 'model: gpt-5.4 confirmed' : 'model: not confirmed'
+          codexConfig.ok ? 'configuration file: readable; session model not checked' : 'configuration file: unreadable'
         ]
       };
     } else if (tool.id === 'claude-code') {
@@ -622,11 +622,13 @@ function checkCloud(cloudItems, previous, serverSnapshot, tailscale, projects) {
         facts: tailscale.facts
       };
     } else if (cloud.id === 'telegram') {
+      const channelExists = fs.existsSync(telegramChannel);
+      const allowed = hasClaudePermission(claudeSettings, 'mcp__plugin_telegram_telegram__');
       patch = {
-        verification_status: fs.existsSync(telegramChannel) && hasClaudePermission(claudeSettings, 'mcp__plugin_telegram_telegram__') ? 'ok' : 'warn',
+        verification_status: channelExists && allowed ? 'ok' : 'warn',
         checked_from: 'filesystem + claude settings',
-        summary: fs.existsSync(telegramChannel) ? 'قناة Telegram المحلية وصلاحية Claude مؤكدة' : 'المسار المحلي لقناة Telegram غير مؤكد',
-        facts: fs.existsSync(telegramChannel) ? [`path: ${telegramChannel}`,'permission: mcp__plugin_telegram_telegram__'] : ['channel path missing']
+        summary: channelExists && allowed ? 'مجلد القناة والصلاحية موجودان؛ لم يُختبر استقبال الرسائل' : 'لم يتأكد وجود المجلد والصلاحية معًا',
+        facts: [`channel path: ${channelExists ? 'exists' : 'missing'}`, `permission: ${allowed ? 'allowed' : 'not found'}`]
       };
     } else if (linkedCloudPermissionMap[cloud.id]) {
       const allowed = hasClaudePermission(claudeSettings, linkedCloudPermissionMap[cloud.id]);
@@ -641,8 +643,8 @@ function checkCloud(cloudItems, previous, serverSnapshot, tailscale, projects) {
       let status = 'warn';
       let summary = reach.error || 'probe غير حاسم';
       if (reach.ok) {
-        status = cloud.active === false ? 'warn' : 'ok';
-        summary = `HTTP ${reach.status}`;
+        status = 'ok';
+        summary = `استجاب رابط المنصة (${reach.status})؛ لم يُختبر الحساب أو خدماته`;
       } else if (reach.status) {
         status = 'warn';
         summary = `HTTP ${reach.status}`;
@@ -689,9 +691,9 @@ function checkBots(bots, previous, serverSnapshot) {
     } else if (bot.id === 'bank-bot') {
       const targetPath = expandHome(bot.path);
       patch = {
-        verification_status: fs.existsSync(targetPath) ? 'warn' : 'manual',
+        verification_status: 'manual',
         checked_from: fs.existsSync(targetPath) ? 'filesystem' : 'manual',
-        summary: fs.existsSync(targetPath) ? 'الكود المؤرشف موجود محليًا لكن التشغيل نفسه متوقف' : 'العنصر مؤرشف ويحتاج مراجعة يدوية',
+        summary: fs.existsSync(targetPath) ? 'الكود المؤرشف موجود محليًا؛ التشغيل لم يُختبر' : 'العنصر مؤرشف ويحتاج مراجعة يدوية',
         facts: fs.existsSync(targetPath) ? [`path: ${targetPath}`] : []
       };
     } else if (bot.id === 'argaz-bot') {
@@ -771,6 +773,15 @@ function checkArchive(archives, previous) {
   return records;
 }
 
+function workflowResult(run) {
+  if (!run) return {verification_status:'manual',checked_from:'github',summary:'لم يُعثر على نتيجة تشغيل',facts:[]};
+  return {
+    verification_status:run.status === 'completed' && run.conclusion === 'success' ? 'ok' : 'warn',
+    checked_from:'github',
+    summary:run.status !== 'completed' ? 'التشغيل الأخير لم يكتمل بعد' : run.conclusion === 'success' ? 'نجح التشغيل الأخير المسجّل' : 'التشغيل الأخير لم ينجح',
+    facts:[`run: ${run.url}`,`started: ${run.createdAt}`,`result: ${run.conclusion || run.status}`],
+  };
+}
 function checkAutomations(autoGroups, previous, serverSnapshot) {
   const records = {};
   for (const group of autoGroups || []) {
@@ -778,11 +789,15 @@ function checkAutomations(autoGroups, previous, serverSnapshot) {
       const id = `${group.host}::${task.name}`;
       const previousRecord = previous?.automation?.[id];
       let patch;
-      if (!task.on) {
+      if (task.workflow && task.repository) {
+        const result = safeExec(`gh run list --repo ${JSON.stringify(task.repository)} --workflow ${JSON.stringify(task.workflow)} --limit 1 --json status,conclusion,createdAt,url`, {timeout:12000});
+        try { patch = result.ok ? workflowResult(JSON.parse(result.stdout)[0]) : {verification_status:'warn',checked_from:'github',summary:'تعذر جلب نتيجة التشغيل من المستودع',facts:[]}; }
+        catch { patch = {verification_status:'warn',checked_from:'github',summary:'تعذر قراءة نتيجة التشغيل',facts:[]}; }
+      } else if (!task.on) {
         patch = {
-          verification_status: 'warn',
+          verification_status: 'manual',
           checked_from: 'manual',
-          summary: task.what?.startsWith('⚠') ? task.what.split('—')[0].trim() : 'مهمة معطّلة عمدًا',
+          summary: 'معطلة في السجل؛ لا يُستنتج تشغيلها من هذا الوصف',
           facts: [`on: false`, `freq: ${task.freq || '—'}`]
         };
       } else if (group.host === 'desktop') {
@@ -887,4 +902,5 @@ function main() {
   process.stdout.write(JSON.stringify(payload.coverage, null, 2) + '\n');
 }
 
-main();
+if (require.main === module) main();
+module.exports = {workflowResult,checkServices,buildRecord,normalizeGitHubRemote};

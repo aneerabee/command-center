@@ -19,7 +19,7 @@ const WS_GROUPS = [
   { label:'المراجع', pages:['tools','map','ideas','archive'] },
 ];
 const WS_STORAGE = 'cc.workspace.v1';
-const WS_NUMBER = new Intl.NumberFormat('ar-EG');
+const WS_NUMBER = new Intl.NumberFormat(WorkspaceModel.LOCALE);
 let wsPreferences = wsReadPreferences();
 let wsPageState = {};
 let wsRefreshing = false;
@@ -47,7 +47,7 @@ function wsNumber(n) { return WS_NUMBER.format(n); }
 function wsState(page) { return { query:'', scope:'all', group:'all', sort:'default', ...(wsPageState[page] || {}) }; }
 function wsMeta(row) { return WorkspaceModel.status(row.record); }
 function wsBadge(row) {
-  if (row.kind === 'team') return `<span class="ws-badge neutral">${row.item.status === 'active' ? 'عضو نشط' : 'عضو الفريق'}</span>`;
+  if (row.kind === 'team') return `<span class="ws-badge neutral">عضو الفريق</span>`;
   if (row.kind === 'idea') return `<span class="ws-badge neutral">${E(row.item.st || 'فكرة')}</span>`;
   const state = wsMeta(row);
   return `<span class="ws-badge ${state.state}" title="${E(row.record?.summary || state.label)}">${wsIcon(state.icon)}${state.label}</span>`;
@@ -64,7 +64,7 @@ function wsGroup(row) {
 }
 function wsSummary(row) { return row.item.summary || row.item.what || row.item.info || row.item.dt || row.item.role || ''; }
 function wsOpenButton(row, content, klass = '') {
-  return `<button type="button" class="${klass}" data-ws-open="${E(row.key)}" aria-label="تفاصيل ${E(row.title)}" title="تفاصيل ${E(row.title)}">${content}</button>`;
+  return `<a href="#${E(WorkspaceModel.route(row))}" class="${klass}" data-ws-open="${E(row.key)}" aria-label="تفاصيل ${E(row.title)}" title="تفاصيل ${E(row.title)}">${content}</a>`;
 }
 function wsStar(row) {
   const pinned = wsPreferences.pinned.includes(row.key);
@@ -81,7 +81,7 @@ function wsSectionTitle(title, action = '') { return `<div class="ws-section-tit
 function wsGo(page, text) { return `<button class="ws-text-button" data-action="goPage" data-arg="${page}">${E(text)}${wsIcon('arrow-left')}</button>`; }
 
 function wsSidebar() {
-  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-favicon.svg" width="30" height="30" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
+  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-icon.svg?v=20261003b" width="36" height="36" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
     `<nav class="ws-navigation" aria-label="أقسام اللوحة">${WS_GROUPS.map(group => `<div class="ws-nav-group"><div class="ws-nav-label">${group.label}</div>${group.pages.map(id => `<a href="#${id}" class="nav-item${cur === id ? ' active' : ''}" data-page="${id}" data-action="goPage" data-arg="${id}" ${cur === id ? 'aria-current="page"' : ''}>${wsIcon(WS_PAGES[id].icon)}<span>${WS_PAGES[id].title}</span>${id === 'projects' ? `<small>${wsNumber(PRJ.length)}</small>` : ''}</a>`).join('')}</div>`).join('')}</nav>` +
     `<div class="ws-sidebar-footer"><span class="ws-owner">ر</span><div><strong>ربيع</strong><small>إدارة المشاريع</small></div><button class="ws-icon-button" data-action="openSearch" aria-label="بحث في اللوحة" title="بحث">${wsIcon('search')}</button></div>`;
 }
@@ -94,11 +94,22 @@ function wsMore() {
 }
 function wsUpdateShell() {
   const host = document.getElementById('workspace-topbar');
-  if (host) host.innerHTML = `<div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
+  if (host) host.innerHTML = `<a href="#home" class="ws-mobile-brand" data-action="goPage" data-arg="home" aria-label="مركز التحكم"><img src="cc-icon.svg?v=20261003b" width="28" height="28" alt=""></a><div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
   document.title = `${WS_PAGES[cur]?.title || 'مركز التحكم'} · مركز التحكم`;
+  if(wsDetailKey) {
+    const row=wsRegistry().find(row=>row.key===wsDetailKey);
+    if(row) {
+      document.title=`${row.title} · مركز التحكم`;
+      host.querySelector('.ws-breadcrumb').innerHTML=`<a href="#${row.page}" data-action="goPage" data-arg="${row.page}">${E(WS_PAGES[row.page].title)}</a>${wsIcon('chevron-left')}<strong>${E(row.title)}</strong>`;
+    }
+  }
   requestAnimationFrame(_processIcons);
 }
 function wsRender(page = cur) {
+  if(wsDetailKey) {
+    const row=wsRegistry().find(row=>row.key===wsDetailKey);
+    if(row) { wsRememberView(); wsShowDetail(row,{restore:true}); return; }
+  }
   const target = document.getElementById(`page-${page}`);
   const focused = document.activeElement;
   const query = focused instanceof HTMLInputElement ? focused.dataset.wsQuery : null;
@@ -175,7 +186,7 @@ function wsHome() {
   const quick = pinned.length ? pinned : projects.filter(row=>WorkspaceModel.primaryLink(row)).slice(0,4);
   const allIssues = [...tracked].filter(row=>['fail','warn','stale'].includes(wsMeta(row).state)).sort((a,b)=>wsMeta(a).rank-wsMeta(b).rank);
   const issues = wsReviewExpanded ? allIssues : allIssues.slice(0,5);
-  const date = new Intl.DateTimeFormat('ar-EG',{ weekday:'long',day:'numeric',month:'long',timeZone:'Europe/Istanbul' }).format(new Date());
+  const date = new Intl.DateTimeFormat(WorkspaceModel.LOCALE,{ weekday:'long',day:'numeric',month:'long',timeZone:'Europe/Istanbul' }).format(new Date());
   return wsHeader('home',`<div class="ws-date">${wsIcon('calendar-days')}${date}</div>`) +
     `<section class="ws-stat-band" aria-label="ملخص اللوحة">${[
       ['projects','folder-kanban',PRJ.length,'مشروع','ضمن '+wsNumber(UMBRELLAS.length)+' مجموعات'],
@@ -220,7 +231,7 @@ _buildSearchIndex = function () {
     action:()=>{ go('team'); openTeamDetail(member.name); } }))];
 };
 const wsBaseSelectSearchResult = selectSearchResult;
-selectSearchResult = function(id) { closeDetail(true); wsBaseSelectSearchResult(id); };
+selectSearchResult = function(id) { wsBaseSelectSearchResult(id); };
 
 function wsOpenOverlay(id) {
   const root = document.getElementById(id);
@@ -267,6 +278,8 @@ document.addEventListener('click', async event => {
   const target = event.target instanceof Element ? event.target.closest('[data-ws-open],[data-ws-pin],[data-ws-layout],[data-ws-scope],[data-ws-reset],[data-ws-refresh],[data-ws-company],[data-ws-stat],[data-ws-copy],[data-ws-review]') : null;
   if (!target) return;
   if (target.hasAttribute('data-ws-open')) {
+    if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
     const row=wsRegistry().find(row=>row.key===target.dataset.wsOpen);
     if(row) ccActions[row.action](row.arg);
   } else if (target.hasAttribute('data-ws-review')) {
@@ -286,11 +299,11 @@ document.addEventListener('click', async event => {
     const company=UMBRELLAS.find(u=>u.id===target.dataset.wsCompany);
     wsPageState={...wsPageState,projects:{...wsState('projects'),group:company?.name||'all'}}; go('projects');
   } else if (target.hasAttribute('data-ws-stat')) {
-    if(target.dataset.wsStat==='review') document.getElementById('ws-review')?.scrollIntoView({behavior:'smooth',block:'start'});
+    if(target.dataset.wsStat==='review') document.getElementById('ws-review')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
     else go(target.dataset.wsStat);
   } else if (target.hasAttribute('data-ws-copy')) {
-    try { await navigator.clipboard.writeText(target.dataset.wsCopy); ccToast('تم نسخ المسار','ok'); }
-    catch { ccToast('تعذر نسخ المسار','warn'); }
+    try { await navigator.clipboard.writeText(target.dataset.wsCopy); ccToast('تم النسخ','ok'); }
+    catch { ccToast('تعذر النسخ','warn'); }
   } else if (target.hasAttribute('data-ws-refresh') && !wsRefreshing) {
     wsRefreshing=true; wsUpdateShell();
     try { const loaded=await _loadRuntimeData(); await _loadHealthData(); wsRender(); ccToast(loaded?'تم جلب أحدث البيانات المحفوظة':'تعذر جلب البيانات؛ تُعرض آخر نسخة متاحة',loaded?'ok':'warn'); }

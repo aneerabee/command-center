@@ -1,6 +1,6 @@
 /* ============================================================
    Command Center — قمرة القيادة (v5)
-   ١٢ صفحة → ٤ · بطاقة واحدة · درج بلا تبويبات · بحث يفهرس كل شيء
+   12 صفحة → 4 · بطاقة واحدة · درج بلا تبويبات · بحث يفهرس كل شيء
    يقرأ نفس data.js — لا يغيّر أي حقل ولا أي معرّف.
    ============================================================ */
 (() => {
@@ -218,7 +218,7 @@
       : `<div class="empty">${E(opts.empty || "لا يوجد")}</div>`;
   };
 
-  // ── الصفحة ١ · اليوم ─────────────────────────────────────
+  // ── الصفحة 1 · اليوم ─────────────────────────────────────
   function renderToday() {
     const broken = ROWS.ops.filter((r) => r.status === S.down);
     const resume = ROWS.work
@@ -229,7 +229,7 @@
     const stale = ROWS.work.filter((r) => r.kind === "project" && ageDays(r.updated) > 45);
 
     const d = new Date();
-    const date = d.toLocaleDateString("ar", { weekday: "long", day: "numeric", month: "long" });
+    const date = d.toLocaleDateString("ar-EG-u-nu-latn", { weekday: "long", day: "numeric", month: "long" });
 
     return `
       <div class="page-head">
@@ -255,7 +255,7 @@
     `;
   }
 
-  // ── الصفحات ٢-٤ · قوائم بشريط أدوات ─────────────────────
+  // ── الصفحات 2-4 · قوائم بشريط أدوات ─────────────────────
   const FILTERS = {
     work: [
       { k: "all", t: "الكل" }, { k: "project", t: "مشاريع" }, { k: "umbrella", t: "شركات" },
