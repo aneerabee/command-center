@@ -1,6 +1,6 @@
 /* Entity pages share navigation primitives, not a modal or a single detail template. */
 const WS_DETAIL_SECTIONS = {
-  project: ['purpose','evidence','resources','connections','notes'],
+  project: ['scope','followup','evidence','resources','connections'],
   service: ['evidence','operation','connections','resources','notes'],
   automation: ['operation','evidence','connections','resources','notes'],
   bot: ['purpose','evidence','operation','connections','resources','notes'],

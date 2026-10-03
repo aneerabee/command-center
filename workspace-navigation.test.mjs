@@ -76,6 +76,7 @@ describe('independent presentation system',()=>{
     expect(run("wsRegistry().filter(row=>row.kind==='project').length")).toBe(13);
     expect(run("new Set(Object.values(WorkspaceContent.projects).map(p=>p.theme)).size")).toBe(13);
     expect(run("wsRegistry().filter(row=>row.kind==='project').every(row=>{const p=WorkspaceContent.profile(row); return p.source && p.next && p.caution && p.areas.length && p.steps.length && typeof WS_PROJECT_SCENES[p.theme]==='function';})")).toBe(true);
+    expect(run("wsRegistry().filter(row=>row.kind==='project').every(row=>{const html=wsProjectContent(row);return html.indexOf('id=\"detail-resources\"')<html.indexOf('id=\"detail-connections\"');})")).toBe(true);
   });
   it('renders complete detail contents for every recorded entity without changing source data',()=>{
     const {run}=workspace();

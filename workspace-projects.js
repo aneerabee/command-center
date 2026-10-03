@@ -30,10 +30,10 @@ function wsProjectHeader(row) {
 }
 function wsProjectContent(row) {
   const p=WorkspaceContent.profile(row);
-  return `<nav class="project-sections" aria-label="أقسام المشروع">${[['scope','نطاق العمل'],['followup','المتابعة'],['evidence','التحقق'],['connections','الارتباطات'],['resources','الروابط']].map(([id,label])=>`<button data-project-jump="detail-${id}">${E(label)}</button>`).join('')}</nav>`+
+  return `<nav class="project-sections" aria-label="أقسام المشروع">${[['scope','نطاق العمل'],['followup','المتابعة'],['evidence','التحقق'],['resources','الروابط'],['connections','الارتباطات']].map(([id,label])=>`<button data-project-jump="detail-${id}">${E(label)}</button>`).join('')}</nav>`+
     wsDetailSection('scope',p.label,`<div class="project-scenario" data-project-motion>${WS_PROJECT_SCENES[p.theme](p)}</div>${wsProjectTopics(p)}`,'project-scope')+
     wsDetailSection('followup','المتابعة',`<div class="project-followup"><div>${wsIcon('arrow-up-right')}<h3>الخطوة التالية</h3><p>${E(p.next)}</p></div><aside>${wsIcon('info')}<h3>حدود المعلومات</h3><p>${E(p.caution)}</p></aside></div><p class="project-source">${E(p.source)} · مراجعة الوصف ${WorkspaceContent.reviewedAt}</p>`)+
-    wsEvidence(row)+wsConnections(row)+wsResources(row);
+    wsEvidence(row)+wsResources(row)+wsConnections(row);
 }
 function wsProjectCatalog(rows,grid) {
   return rows.map(row=>{
