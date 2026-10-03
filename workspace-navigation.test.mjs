@@ -15,7 +15,7 @@ function workspace() {
     console, URL, Intl, Date, Element,
     setTimeout:vi.fn(), setInterval:vi.fn(), clearInterval:vi.fn(),
     requestAnimationFrame:fn=>frames.push(fn),
-    location:{hash:'#home'}, history:{replaceState:vi.fn()},
+    location:{hash:'#home',href:'http://localhost/#home'}, history:{replaceState:vi.fn()},
     localStorage:{getItem:()=>null, removeItem:vi.fn()},
     document:{
       documentElement:{removeAttribute:vi.fn(),classList:{add:vi.fn(),remove:vi.fn()}},
@@ -27,7 +27,7 @@ function workspace() {
     MutationObserver:class { observe() {} },
   };
   vm.createContext(context);
-  for(const file of ['data.js','workspace-model.js','relationship-view.js','app.js','workspace.js','workspace-relations.js','workspace-catalogs.js','workspace-detail.js']) {
+  for(const file of ['data.js','workspace-model.js','workspace-content.js','relationship-view.js','app.js','workspace.js','workspace-relations.js','workspace-projects.js','workspace-catalogs.js','workspace-detail.js']) {
     vm.runInContext(readFileSync(new URL(file,import.meta.url),'utf8'),context,{filename:file});
   }
   return { context, handlers, frames, run:code=>vm.runInContext(code,context) };
@@ -71,6 +71,33 @@ describe('real workspace event handlers',()=>{
 });
 
 describe('independent presentation system',()=>{
+  it('has a distinct complete composition for all 13 reviewed projects',()=>{
+    const {run}=workspace();
+    expect(run("wsRegistry().filter(row=>row.kind==='project').length")).toBe(13);
+    expect(run("new Set(Object.values(WorkspaceContent.projects).map(p=>p.theme)).size")).toBe(13);
+    expect(run("wsRegistry().filter(row=>row.kind==='project').every(row=>{const p=WorkspaceContent.profile(row); return p.source && p.next && p.caution && p.areas.length && p.steps.length && typeof WS_PROJECT_SCENES[p.theme]==='function';})")).toBe(true);
+  });
+  it('renders complete detail contents for every recorded entity without changing source data',()=>{
+    const {run}=workspace();
+    const before=run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])');
+    expect(run("wsRegistry().every(row=>{const html=wsEntityContent(row);return html.includes('ws-detail-section')&&!html.includes('undefined')&&!html.includes('[object Object]');})")).toBe(true);
+    expect(run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])')).toBe(before);
+  });
+  it('keeps unknown projects readable without pretending their descriptions were reviewed',()=>{
+    const {run}=workspace();
+    expect(run("wsProjectContent({kind:'project',id:'future',key:'project:future',item:{},title:'مشروع جديد'}).includes('لم يُراجع هذا الوصف')")).toBe(true);
+  });
+  it('reviews every tool, platform, bot, archive and proposal individually',()=>{
+    const {run}=workspace();
+    expect(run("wsRegistry().filter(row=>['tool','cloud','bot','archive'].includes(row.kind)).every(row=>WorkspaceContent.note(row)?.length===2)")).toBe(true);
+    expect(run("wsRegistry().filter(row=>row.kind==='idea').every(row=>WorkspaceContent.proposal(row)?.sections.length>0)")).toBe(true);
+  });
+  it('does not render raw historic claims in notes or search',()=>{
+    const {run}=workspace();
+    run("PRJ[0].desc='UNVERIFIED_HISTORIC_ASSERTION'; TL[0].desc='UNVERIFIED_HISTORIC_ASSERTION'; IDEAS[0].desc='UNVERIFIED_HISTORIC_ASSERTION'");
+    expect(run("wsRegistry().map(wsEntityContent).join('').includes('UNVERIFIED_HISTORIC_ASSERTION')")).toBe(false);
+    expect(run("_buildSearchIndex().some(row=>row.tokens.includes('unverified_historic_assertion'))")).toBe(false);
+  });
   it('defines presentation for every existing section',()=>{
     const {run}=workspace();
     expect(run('Object.keys(WS_PAGES).every(page=>WS_PRESENTATION[page]?.tone && WS_PRESENTATION[page]?.label)')).toBe(true);

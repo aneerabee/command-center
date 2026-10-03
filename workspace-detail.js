@@ -42,7 +42,7 @@ function wsDefinition(rows) {
 function wsEvidence(row) {
   const record = row.record;
   const state = wsMeta(row);
-  const sources = {filesystem:'وجود ملفات محلية',git:'بيانات المستودع',http:'استجابة عنوان ويب',ssh:'قراءة من الخادم',launchd:'المهام المجدولة على الجهاز',command:'أمر تحقق',github:'سجل التشغيل في المنصة',manual:'مراجعة يدوية', 'ssh via tailscale':'قراءة عبر الشبكة الخاصة','claude settings permissions':'أذونات مسجّلة للأداة','claude settings':'إعدادات مسجّلة للأداة'};
+  const sources = {filesystem:'وجود ملفات محلية',git:'بيانات المستودع',http:'استجابة عنوان ويب',ssh:'قراءة من الخادم',launchd:'المهام المجدولة على الجهاز',command:'أمر تحقق',github:'سجل التشغيل في المنصة',manual:'مراجعة يدوية', 'ssh via tailscale':'قراءة عبر الشبكة الخاصة','claude settings permissions':'أذونات مسجّلة للأداة','claude settings':'إعدادات مسجّلة للأداة','tool configuration':'إعداد الأداة وحالة تفعيلها','network status':'حالة الشبكة الخاصة'};
   const scope = String(record?.checked_from || '').split(' + ').map(source=>sources[source] || 'مصدر فحص غير مصنّف').join(' · ');
   return wsDetailSection('evidence','نتيجة التحقق', `<div class="ws-evidence ${state.state}"><div>${wsBadge(row)}<time>${E(_fmtRuntimeDate(record?.verified_at))}</time></div><p>${E(record?.summary || 'لا توجد نتيجة فحص آلي لهذا العنصر.')}</p>${record ? `<span class="ws-evidence-scope">نطاق الفحص: ${E(scope)}. النتيجة لا تؤكد كل الوظائف أو صحة الوصف والعلاقات المسجّلة.</span>` : ''}</div>${record?.facts?.length ? `<ul class="ws-evidence-facts">${record.facts.map(fact => `<li><bdi>${E(WorkspaceModel.latinDigits(fact))}</bdi></li>`).join('')}</ul>` : ''}`);
 }
@@ -84,12 +84,14 @@ function wsProfile(row) {
 }
 function wsDocumentedNotes(row) {
   const item = row.item;
-  const date = item.current_status?.updated || item.last_check;
-  const content = [item.desc,item.current_status?.where, ...(item.ops || [])].filter(Boolean);
-  if(!content.length) return '';
-  return wsDetailSection('notes','سجل الوصف والملاحظات',`<details class="ws-documentation"><summary>عرض الملاحظات المسجّلة${date ? ` · ${E(date)}` : ''}${wsIcon('chevron-down')}</summary><p class="ws-documentation-notice">ملاحظات مرجعية قد تتضمن معلومات قديمة؛ الأرقام ونتائج الاختبارات الواردة فيها ليست تحققًا حاليًا. الحالة الأحدث في قسم «نتيجة التحقق».</p>${content.map(text => `<p class="ws-document-text">${E(WorkspaceModel.latinDigits(text))}</p>`).join('')}</details>`);
+  const note = WorkspaceContent.note(row);
+  if(note) return wsDetailSection('notes',note[0],`<p class="ws-reviewed-note">${E(note[1])}</p><span class="ws-caption">مراجعة الوصف ${WorkspaceContent.reviewedAt} · نتيجة التشغيل مستقلة</span>`);
+  if(row.kind==='service') return wsDetailSection('notes','حدود المتابعة','<p class="ws-reviewed-note">حالة التشغيل تُقرأ من آخر فحص. وجود الخدمة لا يثبت سلامة بياناتها أو نجاح كل طلب داخل المشروع.</p>');
+  if(row.kind==='automation') return wsDetailSection('notes','ما الذي تؤكده النتيجة؟',`<p class="ws-reviewed-note">${item.workflow ? 'نتيجة التشغيل تخص المهمة والإصدار المذكورين في سجل التنفيذ؛ لا تساوي حالة الموقع المنشور.' : item.on ? 'تفعيل المهمة في السجل أو وجود ملفها لا يثبت نجاح آخر تنفيذ لها.' : 'هذه مهمة غير مفعلة في السجل؛ وصفها محفوظ كمرجع وليس عملًا يجري الآن.'}</p>`);
+  return '';
 }
 function wsEntityContent(row) {
+  if(row.kind==='project') return wsProjectContent(row);
   const item = row.item;
   const purpose = wsDetailSection('purpose',row.kind === 'idea' ? 'الفكرة المقترحة' : row.kind === 'archive' ? 'المرجع المحفوظ' : 'عن هذا العنصر',`<p class="ws-detail-lead">${E(WorkspaceModel.latinDigits(wsSummary(row)))}</p><span class="ws-caption">وصف مسجّل${item.content_reviewed_at ? ` · روجع ${E(item.content_reviewed_at)}` : ''}</span>`);
   const blocks = {
@@ -100,7 +102,10 @@ function wsEntityContent(row) {
     resources: () => wsResources(row),
     notes: () => wsDocumentedNotes(row),
     profile: () => wsProfile(row),
-    proposal: () => wsDetailSection('proposal','تفاصيل المقترح',`<p class="ws-documentation-notice">مقترح، وليس وصفًا لنظام منفّذ أو تكلفة مؤكدة حاليًا.</p><p class="ws-document-text">${E(WorkspaceModel.latinDigits(item.desc || item.dt || 'لا توجد تفاصيل إضافية مسجلة.'))}</p>`),
+    proposal: () => {
+      const proposal=WorkspaceContent.proposal(row);
+      return wsDetailSection('proposal',proposal?.question || 'تفاصيل المقترح',proposal ? wsDefinition(proposal.sections)+`<p class="ws-documentation-notice">${E(proposal.caution)}</p>` : '<p>لم تُراجع تفاصيل هذا المقترح بعد.</p>');
+    },
   };
   return WS_DETAIL_SECTIONS[row.kind].map(id => typeof blocks[id] === 'function' ? blocks[id]() : blocks[id]).join('');
 }
@@ -124,9 +129,11 @@ function wsShowDetail(row, {restore = false} = {}) {
   root.className = `ws-detail-page ws-detail-${row.kind}`;
   root.dataset.entityKey = row.key;
   root.dataset.tone = wsTone(row);
+  const project = WorkspaceContent.profile(row);
+  if(project) { root.dataset.project=project.theme; root.style.setProperty('--project-accent',project.accent); }
   const link = WorkspaceModel.primaryLink(row);
   root.innerHTML = `<div class="ws-detail-navigation"><button class="ws-text-button" data-ws-back>${wsIcon('arrow-right')}رجوع</button><a href="#${row.page}" data-action="goPage" data-arg="${row.page}">${E(WS_PAGES[row.page].title)}</a></div>` +
-    `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${wsGlyph(row)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>` +
+    (project ? wsProjectHeader(row) : `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${wsGlyph(row)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>`) +
     `<div class="ws-detail-content">${wsEntityContent(row)}</div>`;
   document.getElementById('app').appendChild(root);
   if(restore) for(const id of wsPositions.get(route)?.expanded || []) root.querySelector(`#${id} details`)?.setAttribute('open','');

@@ -9,5 +9,5 @@
     "moduleResolution": "NodeNext",
     "skipLibCheck": true
   },
-  "include": ["app.js", "data.js", "workspace-model.js", "workspace.js", "workspace-catalogs.js", "workspace-detail.js", "workspace-relations.js", "relationship-view.js", "relationship-motion.js", "relationships.js", "survey-model.js", "runtime-sync.js"]
+  "include": ["app.js", "data.js", "workspace-model.js", "workspace-content.js", "workspace-projects.js", "workspace.js", "workspace-catalogs.js", "workspace-detail.js", "workspace-relations.js", "relationship-view.js", "relationship-motion.js", "relationships.js", "survey-model.js", "runtime-sync.js", "runtime-evidence.js"]
 }

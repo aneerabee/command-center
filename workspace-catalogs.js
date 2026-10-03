@@ -46,7 +46,7 @@ function wsArchiveCatalog(rows) {
   return `<div class="ws-archive-index">${rows.map(row=>`<article class="ws-archive-file" data-tone="graphite" data-entity-key="${E(row.key)}">${wsOpenButton(row,`<span class="ws-file-spine">${wsIcon('file-archive')}</span><span class="ws-file-title"><small>${E(wsGroup(row))}</small><strong>${E(row.title)}</strong></span>`,'ws-archive-cover')}<p>${E(wsSummary(row))}</p><footer>${wsCatalogEvidence(row)}${wsCatalogActions(row)}</footer></article>`).join('')}</div>`;
 }
 const WS_CATALOG_RENDERERS = {
-  projects:(rows,grid)=>rows.map(row=>wsListRow(row,grid)).join(''),
+  projects:wsProjectCatalog,
   team:wsPeopleCatalog, server:wsServiceCatalog, auto:wsScheduleCatalog,
   bots:wsBotCatalog, cloud:wsPlatformCatalog, tools:wsToolsCatalog,
   ideas:wsIdeasCatalog, archive:wsArchiveCatalog,

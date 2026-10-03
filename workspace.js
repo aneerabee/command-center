@@ -96,7 +96,7 @@ function wsGroup(row) {
   if (row.kind === 'cloud') return _cloudCategoryLabel(row.item.category);
   return row.item.host || (row.kind === 'archive' ? _archiveKindLabel(row.item) : '') || '';
 }
-function wsSummary(row) { return row.item.summary || row.item.what || row.item.info || row.item.dt || row.item.role || ''; }
+function wsSummary(row) { return WorkspaceContent.profile(row)?.lead || row.item.summary || row.item.what || row.item.info || row.item.dt || row.item.role || ''; }
 function wsOpenButton(row, content, klass = '') {
   return `<a href="#${E(WorkspaceModel.route(row))}" class="${klass}" data-ws-open="${E(row.key)}" aria-label="تفاصيل ${E(row.title)}" title="تفاصيل ${E(row.title)}">${content}</a>`;
 }
@@ -261,7 +261,7 @@ ccActions.closeMore = closeMore;
 _buildSearchIndex = function () {
   return wsRegistry().map(row=>({id:row.key,kind:row.kind,page:row.page,title:row.title,
     subtitle:wsSummary(row),route:WorkspaceModel.route(row),
-    tokens:WorkspaceModel.normalize([row.title,row.arg,wsSummary(row),row.item.desc,row.item.role,row.item.host,
+    tokens:WorkspaceModel.normalize([row.title,row.arg,wsSummary(row),WorkspaceContent.note(row)?.join(' '),WorkspaceContent.profile(row)?.areas.flat().join(' '),row.item.role,row.item.host,
       row.item.local_path,row.item.server_path,row.item.path,row.item.repo_url,...(row.item.tags||[])].join(' ')),
     action:()=>wsShowDetail(row)}));
 };
