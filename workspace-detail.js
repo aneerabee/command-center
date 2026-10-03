@@ -63,7 +63,7 @@ function wsResources(row) {
 }
 function wsConnections(row) {
   const related = WorkspaceModel.related(wsRegistry(),row);
-  const content = related.length ? `<div class="ws-connected-list">${related.map(other => wsOpenButton(other,`<span class="ws-entity-icon">${wsIcon(WS_PAGES[other.page].icon)}</span><span><strong>${E(other.title)}</strong><small>${E(WS_PAGES[other.page].title)}</small></span>${wsIcon('arrow-left')}`,'ws-connected-item')).join('')}</div>` : `<p class="ws-muted">لا توجد ارتباطات مسجلة.</p>`;
+  const content = related.length ? `<div class="ws-connected-list">${related.map(other => wsOpenButton(other,`<span class="ws-entity-icon" data-tone="${wsTone(other)}">${wsGlyph(other)}</span><span><strong>${E(other.title)}</strong><small>${E(WS_PAGES[other.page].title)}</small></span>${wsIcon('arrow-left')}`,'ws-connected-item')).join('')}</div>` : `<p class="ws-muted">لا توجد ارتباطات مسجلة.</p>`;
   return wsDetailSection('connections',row.kind === 'team' ? 'المشاريع المسندة' : 'الارتباطات',content);
 }
 function wsOperation(row) {
@@ -121,9 +121,10 @@ function wsShowDetail(row, {restore = false} = {}) {
   root.id = 'detail-view';
   root.className = `ws-detail-page ws-detail-${row.kind}`;
   root.dataset.entityKey = row.key;
+  root.dataset.tone = wsTone(row);
   const link = WorkspaceModel.primaryLink(row);
   root.innerHTML = `<div class="ws-detail-navigation"><button class="ws-text-button" data-ws-back>${wsIcon('arrow-right')}رجوع</button><a href="#${row.page}" data-action="goPage" data-arg="${row.page}">${E(WS_PAGES[row.page].title)}</a></div>` +
-    `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${row.kind === 'team' ? E(nameInitial(row.title)) : wsIcon(WS_PAGES[row.page].icon)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>` +
+    `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${wsGlyph(row)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>` +
     `<div class="ws-detail-content">${wsEntityContent(row)}</div>`;
   document.getElementById('app').appendChild(root);
   if(restore) for(const id of wsPositions.get(route)?.expanded || []) root.querySelector(`#${id} details`)?.setAttribute('open','');

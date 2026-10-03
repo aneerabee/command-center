@@ -27,7 +27,7 @@ function workspace() {
     MutationObserver:class { observe() {} },
   };
   vm.createContext(context);
-  for(const file of ['data.js','workspace-model.js','app.js','workspace.js','workspace-detail.js']) {
+  for(const file of ['data.js','workspace-model.js','app.js','workspace.js','workspace-catalogs.js','workspace-detail.js']) {
     vm.runInContext(readFileSync(new URL(file,import.meta.url),'utf8'),context,{filename:file});
   }
   return { context, handlers, frames, run:code=>vm.runInContext(code,context) };
@@ -67,6 +67,66 @@ describe('real workspace event handlers',()=>{
     context.document.activeElement={tagName:'DIV',isContentEditable:true};
     handlers.keydown.forEach(fn=>fn({key:'/',preventDefault:vi.fn()}));
     expect(context.openSearch).not.toHaveBeenCalled();
+  });
+});
+
+describe('independent presentation system',()=>{
+  it('defines presentation for every existing section',()=>{
+    const {run}=workspace();
+    expect(run('Object.keys(WS_PAGES).every(page=>WS_PRESENTATION[page]?.tone && WS_PRESENTATION[page]?.label)')).toBe(true);
+  });
+  it('uses distinct defaults for products and operational records',()=>{
+    const {run}=workspace();
+    expect(run("wsLayout('projects')")).toBe('grid');
+    expect(run("wsLayout('team')")).toBe('grid');
+    expect(run("wsLayout('server')")).toBe('list');
+    expect(run("wsLayout('auto')")).toBe('list');
+  });
+  it('preserves saved user layout choices',()=>{
+    const {run}=workspace();
+    run("wsPreferences={pinned:[],layouts:{projects:'list',server:'grid'}}");
+    expect(run("wsLayout('projects')")).toBe('list');
+    expect(run("wsLayout('server')")).toBe('grid');
+  });
+  it('renders every entity in both modes with the same canonical link',()=>{
+    const {run}=workspace();
+    expect(run("wsRegistry().every(row=>[false,true].every(card=>wsListRow(row,card).includes('href=\"#'+E(WorkspaceModel.route(row))+'\"')))")).toBe(true);
+  });
+  it('uses only declared colors and keeps source records immutable',()=>{
+    const {run}=workspace();
+    const before=run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])');
+    expect(run("wsRegistry().every(row=>['blue','teal','green','violet','rose','coral','orange','amber','graphite'].includes(wsTone(row)))")).toBe(true);
+    run('wsRegistry().forEach(row=>wsListRow(row,true))');
+    expect(run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])')).toBe(before);
+  });
+  it('does not load the conflicting legacy stylesheet',()=>{
+    const html=readFileSync(new URL('index.html',import.meta.url),'utf8');
+    expect(html).not.toMatch(/href="style\.css/);
+    expect(html).toMatch(/href="workspace\.css/);
+  });
+  it('uses a separate renderer for each catalog section',()=>{
+    const {run}=workspace();
+    expect(run('new Set(Object.values(WS_CATALOG_RENDERERS)).size')).toBe(9);
+    expect(run("Object.keys(WS_PAGES).filter(page=>WS_PAGES[page].kind).every(page=>typeof WS_CATALOG_RENDERERS[page]==='function')")).toBe(true);
+  });
+  it('retains every canonical entity link in its domain composition',()=>{
+    const {run}=workspace();
+    expect(run("Object.keys(WS_CATALOG_RENDERERS).every(page=>{const rows=wsRegistry().filter(row=>row.page===page); const html=wsCatalogBody(page,rows,false);return rows.every(row=>html.includes('data-entity-key=\"'+E(row.key)+'\"')&&html.includes('href=\"#'+E(WorkspaceModel.route(row))+'\"'));})")).toBe(true);
+  });
+  it('only offers layout controls where two layouts are implemented',()=>{
+    const {run}=workspace();
+    expect(run("Object.keys(WS_CATALOG_RENDERERS).every(page=>wsToolbar(page,wsRegistry().filter(row=>row.page===page)).includes('data-ws-layout')===(page==='projects'))")).toBe(true);
+  });
+  it('keeps domain rendering immutable and preserves filtered membership',()=>{
+    const {run}=workspace();
+    const before=run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])');
+    expect(run("Object.keys(WS_CATALOG_RENDERERS).every(page=>{const rows=wsRegistry().filter(row=>row.page===page).slice(0,1);const html=wsCatalogBody(page,rows,false);return (html.match(/data-entity-key=/g)||[]).length===rows.length;})")).toBe(true);
+    expect(run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])')).toBe(before);
+  });
+  it('provides empty states and retains every company project link',()=>{
+    const {run}=workspace();
+    expect(run("Object.keys(WS_CATALOG_RENDERERS).every(page=>{wsPageState[page]={query:'unmatched-000-not-a-record'};return wsCatalog(page).includes('data-ws-reset');})")).toBe(true);
+    expect(run("wsRegistry().filter(row=>row.kind==='project').every(row=>wsCompanies().includes('href=\"#'+E(WorkspaceModel.route(row))+'\"'))")).toBe(true);
   });
 });
 
