@@ -684,6 +684,7 @@ let RUNTIME_STATE = {
 
 /* Aggregate runtime coverage across all entity kinds → {ok,warn,fail,manual,total} */
 function _runtimeAggregate() {
+  if (typeof wsRegistry === 'function') return WorkspaceModel.counts(wsRegistry().filter(row => !['team','idea'].includes(row.kind)));
   const cov = RUNTIME_STATE.coverage || {};
   const sum = { ok: 0, warn: 0, fail: 0, manual: 0, total: 0 };
   Object.values(cov).forEach((v) => {
@@ -803,7 +804,7 @@ async function _loadRuntimeData() {
     const response = await fetch(`data.runtime.json?v=${Date.now()}`, {
       cache: "no-store",
     });
-    if (!response.ok) return;
+    if (!response.ok) return false;
     const payload = await response.json();
     if (payload && typeof payload === "object") {
       RUNTIME_STATE = {
@@ -818,10 +819,12 @@ async function _loadRuntimeData() {
         archive: payload.archive || {},
         automation: payload.automation || {},
       };
+      return true;
     }
   } catch (err) {
     console.warn("[CC] runtime fetch failed:", err.message);
   }
+  return false;
 }
 
 /* ──── HEALTH MONITOR — يقرأ health-status.json كل تحميل ──── */
@@ -836,7 +839,7 @@ async function _loadHealthData() {
     // refresh home if visible
     if (cur === "home" && document.getElementById("page-home")) {
       const home = document.getElementById("page-home");
-      home.innerHTML = R.home();
+      smartRender(home, R.home());
       requestAnimationFrame(_processIcons);
     }
   } catch (err) {
@@ -853,8 +856,7 @@ function _refreshRuntimeBoundViews() {
     _entityLookup(itemName) &&
     document.getElementById("detail-view")
   ) {
-    closeDetail(true);
-    openDetailSmart(itemName, page);
+    // Keep the selected detail tab and scroll position during background refresh.
     return;
   }
   // Re-render pages whose content depends on runtime state.
@@ -895,6 +897,8 @@ function _entityLookup(name) {
     ARC.find((x) => x.name === name || x.ar === name) ||
     IDEAS.find((x) => x.name === name) ||
     SVC.find((x) => x.name === name) ||
+    TEAM.find((x) => x.name === name || x.full_name === name) ||
+    AUTO.flatMap(g => (g.tasks || []).map(t => ({ ...t, route: g.host + '::' + t.name }))).find(t => t.route === name) ||
     null
   );
   if (hit) return hit;
@@ -931,6 +935,7 @@ function _runtimeStatusMeta(status) {
       warn: { label: "يحتاج انتباهًا", color: "#D97706" },
       fail: { label: "فشل التحقق", color: "#DC2626" },
       manual: { label: "مراجعة يدوية", color: "#6B7280" },
+      stale: { label: "فحص قديم", color: "#936015" },
       unknown: { label: "غير معروف", color: "#6B7280" },
     }[status] || { label: status || "غير معروف", color: "#6B7280" }
   );
@@ -1110,7 +1115,7 @@ function _entityTrustBox(item, kind) {
   const meta = _entityMeta(item, kind);
   const runtime = _runtimeRecord(kind, item);
   const runtimeMeta = runtime
-    ? _runtimeStatusMeta(runtime.verification_status)
+    ? _runtimeStatusMeta(WorkspaceModel.status(runtime).state)
     : null;
   if (
     !meta ||
@@ -1143,7 +1148,7 @@ function _entityTrustBox(item, kind) {
           ? `<div class="trust-item"><span>من أين تم التحقق</span><strong>${E(runtime.checked_from)}</strong></div>`
           : "") +
         (runtime?.summary
-          ? `<div class="trust-item trust-item-wide"><span>النتيجة الحالية</span><strong>${E(runtime.summary)}</strong>${runtime.facts?.length ? `<div class="runtime-facts">${runtime.facts.map((f) => `<span class="runtime-fact">${E(f)}</span>`).join("")}</div>` : ""}</div>`
+          ? `<div class="trust-item trust-item-wide"><span>النتيجة المحفوظة</span><strong>${E(runtime.summary)}</strong>${runtime.facts?.length ? `<div class="runtime-facts">${runtime.facts.map((f) => `<span class="runtime-fact">${E(f)}</span>`).join("")}</div>` : ""}</div>`
           : "") +
         `</div></div>`
       : "") +
@@ -1416,14 +1421,11 @@ function _setHashSilently(nextHash) {
     _suppressHash = false;
     return;
   }
-  // Use replaceState so we don't pollute browser history with duplicate
-  // entries (was causing back-button to need 2 presses to leave a drawer).
-  // history.replaceState doesn't fire hashchange, so no need for _suppressHash
-  // flag — but keep it set for the legacy fallback below.
+  // Preserve browser Back navigation without emitting a duplicate hashchange.
   _suppressHash = true;
-  if (history.replaceState) {
+  if (history.pushState) {
     try {
-      history.replaceState(history.state, "", normalized);
+      history.pushState(history.state, "", normalized);
       _suppressHash = false; // no hashchange will fire, clear immediately
       return;
     } catch (e) { /* fall through to legacy path */ }
@@ -1446,51 +1448,17 @@ function init() {
   SEARCH_INDEX = _buildSearchIndex();
 
   if (sidebar) {
-    sidebar.innerHTML =
-      '<div class="sidebar-brand"><span class="brand-icon"><img src="cc-favicon.svg" alt="" width="24" height="24" style="display:block"/></span><span class="brand-text">مركز التحكم</span></div>' +
-      '<button class="search-trigger" data-action="openSearch" aria-label="بحث">' +
-      _ic("🔍", 16) +
-      "<span>بحث</span></button>" +
-      `<div id="cc-health-slot">${_healthClusterHTML()}</div>` +
-      '<nav class="sidebar-nav">' +
-      PG.map(
-        (p) =>
-          `<a class="nav-item${cur === p.id ? " active" : ""}" data-page="${p.id}" data-action="goPage" data-arg="${E(p.id)}">` +
-          `<span class="nav-icon">${p.ic}</span><span class="nav-label">${E(p.n)}</span></a>`,
-      ).join("") +
-      "</nav>";
+    sidebar.innerHTML = wsSidebar();
   }
 
   if (bottomBar) {
-    const mobilePages = PG.filter((p) => MOBILE_ITEMS.includes(p.id));
-    const morePage = PG.filter((p) => !MOBILE_ITEMS.includes(p.id));
-    bottomBar.innerHTML =
-      mobilePages
-        .map(
-          (p) =>
-            `<a class="bar-item${cur === p.id ? " active" : ""}" data-page="${p.id}" data-action="goPage" data-arg="${E(p.id)}">` +
-            `<span class="bar-icon">${p.ic}</span><span class="bar-label">${E(p.n)}</span></a>`,
-        )
-        .join("") +
-      `<a class="bar-item" data-action="openSearch"><span class="bar-icon">⌕</span><span class="bar-label">بحث</span></a>` +
-      `<a class="bar-item" data-action="openMore"><span class="bar-icon">⋯</span><span class="bar-label">المزيد</span></a>`;
+    bottomBar.innerHTML = wsMobile();
 
     if (!document.getElementById("more-sheet")) {
       const sheet = document.createElement("div");
       sheet.id = "more-sheet";
       sheet.className = "more-sheet";
-      sheet.innerHTML =
-        '<div class="more-sheet-overlay" onclick="closeMore()"></div>' +
-        '<div class="more-sheet-content">' +
-        '<div class="more-sheet-handle"></div>' +
-        morePage
-          .map(
-            (p) =>
-              `<a class="more-item" data-page="${p.id}" onclick="go('${p.id}');closeMore()">` +
-              `<span class="more-icon">${p.ic}</span><span class="more-label">${E(p.n)}</span></a>`,
-          )
-          .join("") +
-        "</div>";
+      sheet.innerHTML = wsMore();
       document.body.appendChild(sheet);
     }
   }
@@ -1501,7 +1469,7 @@ function init() {
     search.className = "global-search";
     search.innerHTML =
       '<div class="search-overlay" data-action="closeSearch"></div>' +
-      '<div class="search-panel">' +
+      '<div class="search-panel" role="dialog" aria-modal="true" aria-label="البحث في اللوحة">' +
       '<div class="search-head">' +
       `<span class="search-icon">${_ic("🔍", 18)}</span>` +
       '<input id="search-input" class="search-input" type="search" dir="rtl" aria-label="بحث شامل في كل الكيانات" placeholder="ابحث في المشاريع، الخدمات، الأتمتة، البوتات، الأدوات، السحابة، الأرشيف..." autocomplete="off" />' +
@@ -1525,6 +1493,7 @@ function init() {
   _countdownTimer = setInterval(_updateCountdown, 60000);
   requestAnimationFrame(_processIcons);
   _renderSearchResults("");
+  wsUpdateShell();
 
   const hashParts = _hashParts();
   if (hashParts[1]) {
@@ -1569,7 +1538,7 @@ function _activatePage(id, syncHash) {
   if (target) {
     // Re-render runtime-bound pages so health filters / widgets reflect
     // the latest runtime state (loaded async after the first paint).
-    if (_RUNTIME_BOUND_PAGES.has(id) && RUNTIME_STATE.generated_at && R[id]) {
+    if (_RUNTIME_BOUND_PAGES.has(id) && R[id]) {
       target.innerHTML = R[id]();
     }
     target.classList.add("active");
@@ -1577,30 +1546,35 @@ function _activatePage(id, syncHash) {
   }
   document
     .querySelectorAll(".nav-item")
-    .forEach((el) => el.classList.toggle("active", el.dataset.page === id));
+    .forEach((el) => {
+      el.classList.toggle("active", el.dataset.page === id);
+      if (el.dataset.page === id) el.setAttribute('aria-current','page');
+      else el.removeAttribute('aria-current');
+    });
   document
     .querySelectorAll(".bar-item")
     .forEach((el) => el.classList.toggle("active", el.dataset.page === id));
   window.scrollTo(0, 0);
   requestAnimationFrame(_processIcons);
+  wsUpdateShell();
   // ✨ تطبيق إضاءة Bridge بعد render الصفحة
   setTimeout(_applyBridgeHighlight, 100);
 }
 
 function go(id) {
   if (!_validPages.has(id)) return;
+  closeMore();
   closeDetail(true);
   _activatePage(id, true);
 }
 
 function openMore() {
-  const s = document.getElementById("more-sheet");
-  if (s) s.classList.add("open");
+  closeDetail(true);
+  wsOpenOverlay('more-sheet');
 }
 
 function closeMore() {
-  const s = document.getElementById("more-sheet");
-  if (s) s.classList.remove("open");
+  if (wsOverlay?.root.id === 'more-sheet') wsCloseOverlay();
 }
 
 /* popstate removed — hashchange handles all navigation */
@@ -4519,7 +4493,7 @@ function openProjectDetail(name) {
 function openBotDetail(name) {
   const item = BOT.find((b) => b.name === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const { headline, sections } = _parseDesc(item);
   const stats = BSTATS[item.name] || [];
   const cl = item.cl || "#6C3AED";
@@ -4581,7 +4555,7 @@ function openBotDetail(name) {
 function openToolDetail(name) {
   const item = TL.find((t) => t.name === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const { headline, sections } = _parseDesc(item);
   const cl = item.cl || "#6C3AED";
   const tags = item.tags || [];
@@ -4712,7 +4686,7 @@ R.server = function () {
 function openServiceDetail(name) {
   const item = SVC.find((s) => s.name === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const owner = item.owner || item.prj || "";
   const cl = _prjColor(owner || item.name) || "#0EA5E9";
   const typeLabel = item.service_type ? _serviceTypeLabel(item.service_type) : "";
@@ -4765,7 +4739,7 @@ function openServiceDetail(name) {
 function openCloudDetail(name) {
   const item = CLD.find((c) => c.nm === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const cl = _entityColor(item.prj || item.nm, "#0EA5E9");
   const catLabel = item.category ? _cloudCategoryLabel(item.category) : "";
   const isActive = item.active !== false;
@@ -4957,7 +4931,7 @@ function _ideaBlueprintCard(item) {
 function openIdeaDetail(name) {
   const item = IDEAS.find((i) => i.name === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const { headline, sections } = _parseDesc(item);
   const prLabels = { 1: "عاجل", 2: "قريب", 3: "يوماً ما" };
   const prColors = { 1: "#EF4444", 2: "#F59E0B", 3: "#6366F1" };
@@ -5009,7 +4983,7 @@ function openIdeaDetail(name) {
 function openArchiveDetail(name) {
   const item = ARC.find((a) => a.name === name);
   if (!item) return;
-  closeDetail();
+  closeDetail(true);
   const { headline, sections } = _parseDesc(item);
   const cl = item.cl || "#F59E0B";
   const stamp = _archiveStamp(item);
@@ -5093,6 +5067,7 @@ function openAutoDetail(taskKey) {
 
   _codexShell({
     item: { name: task.name, ar: task.name, em: task.on ? "🟢" : "⚪" },
+    routeKey: taskKey,
     kind: "automation",
     cl,
     kicker: `أتمتة · ${group.group}`,
@@ -5195,7 +5170,7 @@ function _codexShell(opts) {
     .map((k, i) => {
       const v = tabs[k];
       const count = (v && typeof v === "object" && v.count != null) ? v.count : null;
-      return `<button class="cx-tab${i === 0 ? " is-active" : ""}" data-cx-tab="${k}">${tabLabels[k]}${count != null ? `<span class="cx-tab-count">${count}</span>` : ""}</button>`;
+      return `<button role="tab" tabindex="${i === 0 ? '0' : '-1'}" aria-selected="${i === 0}" aria-controls="cx-pane-${k}" id="cx-tab-${k}" class="cx-tab${i === 0 ? " is-active" : ""}" data-cx-tab="${k}">${tabLabels[k]}${count != null ? `<span class="cx-tab-count">${count}</span>` : ""}</button>`;
     })
     .join("");
 
@@ -5203,7 +5178,7 @@ function _codexShell(opts) {
     .map((k, i) => {
       const v = tabs[k];
       const html = typeof v === "string" ? v : (v.html || "");
-      return `<div class="cx-pane${i === 0 ? " is-active" : ""}" data-cx-pane="${k}">${html}</div>`;
+      return `<div role="tabpanel" aria-labelledby="${present.length>1 ? 'cx-tab-'+k : 'cx-title'}" id="cx-pane-${k}" class="cx-pane${i === 0 ? " is-active" : ""}" data-cx-pane="${k}">${html}</div>`;
     })
     .join("");
 
@@ -5229,8 +5204,8 @@ function _codexShell(opts) {
   // First tab gets summary + facts auto-prepended (only for "overview")
   const firstPane = present[0];
   const augmentedPanes = panes.replace(
-    `<div class="cx-pane is-active" data-cx-pane="${firstPane}">`,
-    `<div class="cx-pane is-active" data-cx-pane="${firstPane}">${summaryHTML}${factsHTML}`
+    `data-cx-pane="${firstPane}">`,
+    `data-cx-pane="${firstPane}">${summaryHTML}${factsHTML}`
   );
 
   const root = document.createElement("div");
@@ -5277,9 +5252,21 @@ function _codexShell(opts) {
     btn.addEventListener("click", () => {
       const k = btn.getAttribute("data-cx-tab");
       root.querySelectorAll(".cx-tab").forEach((t) => t.classList.toggle("is-active", t === btn));
+      root.querySelectorAll('.cx-tab').forEach(t => {
+        t.setAttribute('aria-selected',String(t === btn));
+        t.tabIndex=t===btn?0:-1;
+      });
       root.querySelectorAll(".cx-pane").forEach((p) =>
         p.classList.toggle("is-active", p.getAttribute("data-cx-pane") === k),
       );
+    });
+    btn.addEventListener('keydown',event=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      const buttons=[...root.querySelectorAll('.cx-tab')];
+      const current=buttons.indexOf(btn);
+      const next=event.key==='Home'?0:event.key==='End'?buttons.length-1:(current+(event.key==='ArrowLeft'?1:-1)+buttons.length)%buttons.length;
+      buttons[next].click(); buttons[next].focus();
     });
   });
 
@@ -5291,7 +5278,7 @@ function _codexShell(opts) {
   root._cxEscHandler = esc;
 
   if (item.name || item.nm) {
-    _setHashSilently(cur + "/" + encodeURIComponent(item.name || item.nm));
+    _setHashSilently(cur + "/" + encodeURIComponent(opts.routeKey || item.name || item.nm));
   }
   document.documentElement.classList.add("cx-locked");
 
@@ -5316,9 +5303,9 @@ function _codexShell(opts) {
   // Focus trap — keep Tab inside the drawer
   root._cxTrap = (e) => {
     if (e.key !== "Tab") return;
-    const focusables = root.querySelectorAll(
+    const focusables = [...root.querySelectorAll(
       'button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
+    )].filter(el => el.getClientRects().length && el.tabIndex >= 0);
     if (!focusables.length) return;
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
@@ -5465,28 +5452,23 @@ function closeDetail(instant) {
   });
   if (d._cxTrap) document.removeEventListener("keydown", d._cxTrap);
   // ESC handler attached at drawer open — remove explicitly (was leaking before)
-  const root = d.querySelector(".cx-panel");
-  if (root && root._cxEscHandler) document.removeEventListener("keydown", root._cxEscHandler);
+  if (d._cxEscHandler) document.removeEventListener("keydown", d._cxEscHandler);
   const lastFocus = d._cxLastFocus;
   if (lastFocus && typeof lastFocus.focus === "function") {
     setTimeout(() => lastFocus.focus(), 0);
   }
 
-  if (instant) {
-    d.remove();
-    return;
-  }
-  d.classList.remove("open");
-  d.classList.remove("is-open");
-  d.addEventListener("transitionend", () => d.remove(), { once: true });
-  setTimeout(() => {
-    if (document.getElementById("detail-view")) d.remove();
-  }, 600);
-  if (location.hash.includes("/")) _setHashSilently(cur);
+  // Remove the scrim immediately so the next navigation click is not swallowed.
+  d.remove();
+  if (!instant && location.hash.includes("/")) _setHashSilently(cur);
 }
 
 /* ── فتح ذكي حسب نوع العنصر (للتنقل بالهاش) ── */
 function openDetailSmart(name, pageHint) {
+  if (TEAM.some(member => member.name === name || member.full_name === name)) return openTeamDetail(name);
+  if (AUTO.some(group => (group.tasks || []).some(task => group.host + '::' + task.name === name))) return openAutoDetail(name);
+  const canonical = _entityLookup(name);
+  if (canonical) name = canonical.name || canonical.nm || name;
   const openByPage = {
     projects: () => {
       if (PRJ.find((p) => p.name === name)) {
@@ -5582,6 +5564,7 @@ function filterIdeas(pr) {
 function _searchKindLabel(kind) {
   const labels = {
     project: "مشروع",
+    team: "فريق",
     service: "خدمة",
     automation: "أتمتة",
     bot: "بوت",
@@ -5612,11 +5595,11 @@ function _searchEmpty(query) {
 function _renderSearchResults(query) {
   const resultsEl = document.getElementById("search-results");
   if (!resultsEl) return;
-  const q = (query || "").trim().toLowerCase();
+  const q = WorkspaceModel.normalize(query).trim();
   let rows = SEARCH_INDEX;
   if (q) {
     const parts = q.split(/\s+/).filter(Boolean);
-    rows = SEARCH_INDEX.filter((r) => parts.every((p) => r.tokens.includes(p)));
+    rows = SEARCH_INDEX.filter((r) => parts.every((p) => WorkspaceModel.normalize(r.tokens).includes(p)));
   }
   rows = rows.slice(0, 18);
   if (!rows.length) {
@@ -5644,9 +5627,11 @@ function _renderSearchResults(query) {
 
 function openSearch() {
   closeMore();
+  closeDetail(true);
   const el = document.getElementById("global-search");
   if (!el) return;
-  el.classList.add("open");
+  wsSearchFocus = document.activeElement;
+  wsOpenOverlay('global-search');
   const input = document.getElementById("search-input");
   if (input) {
     input.value = "";
@@ -5657,7 +5642,10 @@ function openSearch() {
 
 function closeSearch() {
   const el = document.getElementById("global-search");
-  if (el) el.classList.remove("open");
+  if (el?.classList.contains('open')) {
+    wsCloseOverlay();
+    if (wsSearchFocus?.isConnected) wsSearchFocus.focus();
+  }
 }
 
 function selectSearchResult(id) {
@@ -5753,16 +5741,15 @@ async function bootstrap() {
   normalizeAllEntities();
   init();
   _startLiveTicks();
-  _loadRuntimeData().then(() => {
-    _refreshHealthCluster();
-    if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
-  });
+  await _loadRuntimeData();
+  _refreshHealthCluster();
+  if (RUNTIME_STATE.generated_at) _refreshRuntimeBoundViews();
   _loadHealthData();
   // إعادة فحص صحة كل 5 دقائق
   setInterval(_loadHealthData, 5 * 60 * 1000);
 }
 
-bootstrap();
+document.addEventListener('DOMContentLoaded', bootstrap, { once:true });
 
 window.addEventListener("hashchange", function () {
   if (_suppressHash) {

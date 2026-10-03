@@ -806,7 +806,7 @@ const PRJ = [
     priority: "high",
     next_milestone: "إضافة عرض المظلات (Umbrellas View) للتنقل بين الشركات",
     summary:
-      "لوحة تحكم موحّدة — 14 مشروعًا، 12 خدمة، 6 بوتات، 18 أداة، 18 خدمة سحابية. تحديث تلقائي كل 6 ساعات عبر launchd → GitHub Pages.",
+      "مساحة موحّدة للمشاريع والخدمات والفريق. بحث شامل، وصول سريع للعناصر المثبتة، ونتائج فحص مرتبطة بوقت التحقق.",
     local_path: "/Users/rabeeshaban/Developer/command-center",
     server_path: null,
     repo_url: "https://github.com/aneerabee/command-center",
