@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T18:34:02.399Z",
+  "generated_at": "2026-10-03T12:07:30.134Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -12,7 +12,7 @@
       "_root": "2026-05-25"
     },
     "infra": {
-      "_root": "2026-05-15"
+      "_root": "2026-10-03"
     },
     "brix-b2b": {
       "_root": "2026-05-12"
@@ -63,8 +63,8 @@
     },
     "command-center": {
       "links": "2026-04-05",
-      "current_status": "2026-07-14",
-      "_root": "2026-07-25"
+      "current_status": "2026-10-03",
+      "_root": "2026-10-03"
     },
     "whatsapp-crm": {
       "links": "2026-05-05",
@@ -99,17 +99,6 @@
       "claude_session": "2026-09-24",
       "_root": "2026-09-24"
     },
-    "libya": {
-      "links": "2026-05-23",
-      "links_desc": "2026-05-22",
-      "current_status": "2026-06-14",
-      "bot_features": "2026-07-25",
-      "claude_session": "2026-05-25",
-      "_root": "2026-07-25"
-    },
-    "libya-web": {
-      "_root": "2026-06-14"
-    },
     "adreem-api": {
       "_root": "2026-08-20"
     },
@@ -141,7 +130,7 @@
       "_root": "2026-05-31"
     },
     "server-wapy": {
-      "_root": "2026-05-27"
+      "_root": "2026-10-03"
     },
     "desktop-pretooluse": {
       "_root": "2026-05-20"
@@ -162,10 +151,6 @@
       "links": "2026-05-12",
       "_root": "2026-07-25"
     },
-    "libya-bot": {
-      "links": "2026-05-22",
-      "_root": "2026-06-14"
-    },
     "codex-cli": {
       "_root": "2026-07-25"
     },
@@ -179,7 +164,7 @@
       "_root": "2026-04-16"
     },
     "github-tool": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "tailscale-tool": {
       "_root": "2026-05-12"
@@ -217,14 +202,11 @@
     "testsprite-mcp": {
       "_root": "2026-04-05"
     },
-    "drizzle-orm": {
-      "_root": "2026-06-14"
-    },
     "github": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "supabase": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "vercel": {
       "_root": "2026-05-20"
@@ -245,7 +227,7 @@
       "_root": "2026-09-24"
     },
     "contabo-vps": {
-      "_root": "2026-09-24"
+      "_root": "2026-10-03"
     },
     "cloudflare": {
       "_root": "2026-07-25"
@@ -266,7 +248,7 @@
       "_root": "2026-05-20"
     },
     "tailscale": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "trongrid": {
       "_root": "2026-06-14"

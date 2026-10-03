@@ -274,7 +274,6 @@ function checkServices(services, previous, serverSnapshot) {
   };
 
   const matchers = {
-    'libya-web': () => systemdStatus('libya-web.service'),
     'adreem-api': () => systemdStatus('adreem-api.service'),
     'cc-runtime-publish': () => launchdStatus('com.rabeeshaban.command-center-runtime-publish'),
     'wapy-app': () => {

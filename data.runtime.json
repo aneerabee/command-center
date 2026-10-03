@@ -173,22 +173,6 @@
       "source_hash": "1be8a8bb177ef16640697987ab2d208750bd2369",
       "last_change_detected": "2026-09-09T03:04:00.960Z"
     },
-    "libya": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "ok",
-      "checked_from": "filesystem + ssh + git + http",
-      "stale": false,
-      "stale_at": "2026-10-16T13:52:07.414Z",
-      "summary": "المساران المحلي والسيرفري مؤكدان",
-      "facts": [
-        "local path: ok",
-        "server path: ok",
-        "repo remote: ok",
-        "deploy: HTTP 200"
-      ],
-      "source_hash": "1be8a8bb177ef16640697987ab2d208750bd2369",
-      "last_change_detected": "2026-09-08T21:02:22.729Z"
-    },
     "dr-muhsen": {
       "verified_at": "2026-10-02T13:51:46.791Z",
       "verification_status": "ok",
@@ -206,20 +190,6 @@
     }
   },
   "service": {
-    "libya-web": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "ok",
-      "checked_from": "ssh",
-      "stale": false,
-      "stale_at": "2026-10-05T13:52:07.738Z",
-      "summary": "unit: active/running",
-      "facts": [
-        "unit: libya-web.service",
-        "description: LIBYA"
-      ],
-      "source_hash": "46fd03cd6005846699f5cb761935a9051b8d7b82",
-      "last_change_detected": "2026-07-14T01:47:21.174Z"
-    },
     "adreem-api": {
       "verified_at": "2026-10-02T13:51:46.791Z",
       "verification_status": "ok",
@@ -582,19 +552,6 @@
       "facts": [],
       "source_hash": "af0100461763b8bdf8512f4f658a11b2ee5f4870",
       "last_change_detected": "2026-07-14T01:47:21.174Z"
-    },
-    "drizzle-orm": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "manual",
-      "checked_from": "link",
-      "stale": true,
-      "stale_at": "2026-10-09T13:52:07.970Z",
-      "summary": "يوجد رابط معروف لكن لم يُربط checker خاص بعد",
-      "facts": [
-        "links: 1"
-      ],
-      "source_hash": "9b956f524c006fd5e7bec890c5c7aea50460b737",
-      "last_change_detected": "2026-07-14T01:47:21.174Z"
     }
   },
   "cloud": {
@@ -887,17 +844,6 @@
       "facts": [],
       "source_hash": "f313cdd8831bd82f5ecd3e505d6378760a2e9779",
       "last_change_detected": "2026-07-14T01:47:21.174Z"
-    },
-    "libya-bot": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "manual",
-      "checked_from": "manual",
-      "stale": true,
-      "stale_at": "2026-10-09T13:52:13.588Z",
-      "summary": "لا يوجد checker آلي مباشر لهذا البوت بعد",
-      "facts": [],
-      "source_hash": "f313cdd8831bd82f5ecd3e505d6378760a2e9779",
-      "last_change_detected": "2026-07-14T01:47:21.174Z"
     }
   },
   "archive": {
@@ -1091,48 +1037,6 @@
         "freq: يوميًا 4 صباحًا"
       ],
       "source_hash": "9a16852db2371e0857525f3405d47740771810bf",
-      "last_change_detected": "2026-09-14T03:12:40.864Z"
-    },
-    "server::LIBYA Web (Next.js)": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "ok",
-      "checked_from": "ssh",
-      "stale": false,
-      "stale_at": "2026-10-09T13:52:17.231Z",
-      "summary": "المسار موجود على السيرفر",
-      "facts": [
-        "path: $HOME/.config/systemd/user/libya-web.service",
-        "freq: دائم (systemd user)"
-      ],
-      "source_hash": "bba177e3c225eea4f052478da82412bacf2d34b0",
-      "last_change_detected": "2026-09-14T03:12:40.864Z"
-    },
-    "server::LIBYA Bot (Telegram)": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "warn",
-      "checked_from": "manual",
-      "stale": false,
-      "stale_at": "2026-10-09T13:52:17.231Z",
-      "summary": "مهمة معطّلة عمدًا",
-      "facts": [
-        "on: false",
-        "freq: —"
-      ],
-      "source_hash": "b6fd1a9ca224f429383bdd5acad8eb7483fad26a",
-      "last_change_detected": "2026-07-14T01:47:21.174Z"
-    },
-    "server::نسخ احتياطي LIBYA يوميًا": {
-      "verified_at": "2026-10-02T13:51:46.791Z",
-      "verification_status": "ok",
-      "checked_from": "ssh",
-      "stale": false,
-      "stale_at": "2026-10-09T13:52:18.304Z",
-      "summary": "المسار موجود على السيرفر",
-      "facts": [
-        "path: /home/argaz/apps/libya/deploy/backup.sh",
-        "freq: يوميًا 03:30"
-      ],
-      "source_hash": "6d52a50fc10381e69817ee27cfc0479fb0c981ec",
       "last_change_detected": "2026-09-14T03:12:40.864Z"
     },
     "desktop::PreToolUse": {

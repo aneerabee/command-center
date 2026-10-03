@@ -169,27 +169,6 @@
         "exists": true
       }
     },
-    "libya": {
-      "kind": "project",
-      "name": "LIBYA",
-      "repo_url": {
-        "value": "https://github.com/aneerabee/libya",
-        "exists": true
-      },
-      "deploy_url": {
-        "value": "http://62.171.128.44:3001",
-        "status": 307,
-        "ok": true
-      },
-      "local_path": {
-        "value": "/Users/rabeeshaban/Developer/libya",
-        "exists": true
-      },
-      "server_path": {
-        "value": "/home/argaz/apps/libya",
-        "exists": true
-      }
-    },
     "dr-muhsen": {
       "kind": "project",
       "name": "Dr. Muhsen Ledger",
@@ -205,14 +184,6 @@
       "server_path": {
         "value": "/home/argaz/dr-muhsen",
         "exists": true
-      }
-    },
-    "libya-web": {
-      "kind": "service",
-      "name": "LIBYA Web Service",
-      "port_http": {
-        "port": "3001",
-        "status": 307
       }
     },
     "adreem-api": {
@@ -355,10 +326,6 @@
       "kind": "bot",
       "name": "BrixPrice Bot"
     },
-    "libya-bot": {
-      "kind": "bot",
-      "name": "LIBYA Bot"
-    },
     "desktop-github": {
       "kind": "automation",
       "name": "نسخ المشاريع لـGitHub",
@@ -397,21 +364,6 @@
     "server-wapy-cleanup": {
       "kind": "automation",
       "name": "تنظيف نسخ Wapy القديمة",
-      "group": "Contabo VPS"
-    },
-    "server-libya-web-next-js": {
-      "kind": "automation",
-      "name": "LIBYA Web (Next.js)",
-      "group": "Contabo VPS"
-    },
-    "server-libya-bot-telegram": {
-      "kind": "automation",
-      "name": "LIBYA Bot (Telegram)",
-      "group": "Contabo VPS"
-    },
-    "server-libya": {
-      "kind": "automation",
-      "name": "نسخ احتياطي LIBYA يوميًا",
       "group": "Contabo VPS"
     },
     "desktop-pretooluse": {

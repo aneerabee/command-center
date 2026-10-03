@@ -116,7 +116,7 @@ function smartRender(el, html) {
 /* ccActions — central dispatch table for data-action delegated events.
  * Replaces inline onclick="..." patterns. Renderers that opt in just emit:
  *
- *   <button data-action="openProject" data-arg="LIBYA">…</button>
+ *   <button data-action="openProject" data-arg="Command Center">…</button>
  *
  * The single document-level click handler at bottom of file looks up
  * data-action in ccActions and calls the function with data-arg + element.
@@ -899,7 +899,7 @@ function _entityLookup(name) {
   );
   if (hit) return hit;
   // PHASE-5B: fall back to case-insensitive — shared links like
-  // #projects/libya (lowercased by user) used to silently fail.
+  // Lowercase project deep links used to silently fail.
   const lc = name.toLowerCase();
   const ci = (arr, ...keys) => arr.find((x) => keys.some((k) => (x[k] || "").toLowerCase() === lc));
   return (

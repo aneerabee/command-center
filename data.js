@@ -3,7 +3,6 @@
    لتحديث المحتوى: عدّل هذا الملف فقط
    ══════════════════════════════════════════════ */
 
-
 /* قائمة المستودعات الخاصة (private GitHub) — يستخدمها الـrenderer لإضافة 🔒 */
 const PRIVATE_REPOS = [
   "aneerabee/brix-travel-system",
@@ -12,7 +11,7 @@ const PRIVATE_REPOS = [
   "aneerabee/meta-mcp",
   "aneerabee/money-manager",
   "aneerabee/brix-backups",
-  "aneerabee/libya",
+
 ];
 
 const PG = [
@@ -134,7 +133,7 @@ const UMBRELLAS = [
     cl_dark: "#6D28D9",
     cl_light: "#C4B5FD",
     summary: "أدوات شخصية تخدمك في إدارة وتشغيل كل شركاتك ومشاريعك.",
-    desc: "البنية التحتية الشخصية:\n\n🛠️ Command Center — لوحة التحكم\n🧠 Meta MCP — محرك تشغيل ادوات AI من الترمينال\n💰 Money Manager — المركز المالي الموحد لكل شركاتك واستثماراتك\n✦ LIBYA — دفتر الشراكة بين ربيع وأحمد (صرافة عملات في ليبيا)",
+    desc: "البنية التحتية الشخصية:\n\n🛠️ Command Center — لوحة التحكم\n🧠 Meta MCP — محرك تشغيل ادوات AI من الترمينال\n💰 Money Manager — المركز المالي الموحد لكل شركاتك واستثماراتك",
   },
 ];
 
@@ -841,7 +840,7 @@ const PRJ = [
       where:
         "نشطة ومنشورة على GitHub Pages. فحص 2026-07-14 أكد الرابط الحي HTTP 200، والريبو الرسمي aneerabee/command-center، والمسار المحلي /Users/rabeeshaban/Developer/command-center. فحص runtime صار أوضح: 13/14 مشروع ok، 11/12 خدمة ok، 2/6 بوتات ok، والـ launchd الخاص بتحديث runtime محمل وآخر خروج له 0.",
       next_step:
-        "تحويل العناصر اليدوية والتحذيرات المتبقية إلى checkers مباشرة: Rihlaty، بوتات ADREEM/BRIX/LIBYA، وتحقق Tailscale من داخل بيئة تملك tailscale CLI.",
+        "تحويل العناصر اليدوية والتحذيرات المتبقية إلى checkers مباشرة: Rihlaty، بوتات ADREEM/BRIX، وتحقق Tailscale من داخل بيئة تملك tailscale CLI.",
     },
   },
   {
@@ -1403,208 +1402,7 @@ const PRJ = [
       note: "آخر تحقق 2026-08-21: الويب الحي 96ded9f والخادم e55c32d، بينما أساس v3 عند 3e689bc في GitHub وقاعدة ADREEM المستقلة موجودة. لا تنشر v3 قبل تجربة النقل والاسترجاع. لا تشغّل Claude telegram plugin بالتوازي مع البوت.",
     },
   },
-  {
-    name: "LIBYA",
-    id: "libya",
-    kind: "financial-ledger",
-    ar: "ليبيا — دفتر الشراكة",
-    st: "a",
-    em: "✦",
-    cl: "#4A8856",
-    cl_brand: "#4A8856",
-    brand_note: "Espresso & Sage v2 — هوية بصرية حصرية بألوان أجرأ",
-    pct: 98,
-    parent: "infra",
-    parent_role: "personal-finance",
-    revenue_model: "internal",
-    revenue_status: "internal",
-    monthly_revenue_usd: 0,
-    users_count: 2,
-    priority: "high",
-    next_milestone: "ربط الدومين libya.rabee.dev بـCloudflare Tunnel + إعادة كتابة بوت تلقرام مُتزامن مع server actions",
-    summary:
-      "دفتر مالي للشراكة بين ربيع وأحمد — حيّ على Contabo. Next.js 15 + Supabase REST. CRUD كامل (إنشاء/تعديل/حذف) لكل الكيانات، صفقات ذكية بمؤشرات حية، ودجت رصيد شريك، ويزرد إغلاق نوعين من الصفقات (خارج 50/50، شخصية لشريك)، مزامنة تلقائية لحالة الصفقة بعد كل تعديل.",
-    local_path: "/Users/rabeeshaban/Developer/libya",
-    server_path: "/home/argaz/apps/libya",
-    repo_url: "https://github.com/aneerabee/libya",
-    deploy_url: "http://62.171.128.44:3001",
-    stack: [
-      "Next.js 15",
-      "React 19",
-      "TypeScript 5.9",
-      "Tailwind v4",
-      "Drizzle ORM",
-      "Supabase (Postgres + Auth)",
-      "Auth محلّي (اسم مستخدم/كلمة سرّ)",
-      "Cairo + Fraunces",
-    ],
-    subsystems: [
-      "schema-5-tables",
-      "movements-15-types",
-      "computed-balances-sign-aware",
-      "context-aware-movement-picker",
-      "smart-deals-tracker",
-      "partner-equity-widget",
-      "manual-closing-wizard-2-deal-types",
-      "deal-state-auto-sync",
-      "overdraft-guard",
-      "full-crud-edit-delete",
-      "double-confirm-delete",
-      "mobile-responsive",
-      "espresso-sage-design-system",
-      "username-password-auth",
-    ],
-    related_services: [],
-    related_tools: ["Drizzle ORM", "Claude Code"],
-    related_cloud: ["GitHub", "Supabase", "Contabo VPS", "Tailscale"],
-    ops: [
-      "5 جداول جوهرية: currencies, people, locations, deals, movements",
-      "14 نوع حركة يغطي كل سيناريو الصرافة والتمويل والسلفات",
-      "كل حركة تُسجَّل يدويًا — النظام يقترح، أنت تؤكّد كل خطوة",
-      "الأرصدة كلها مشتقّة من movements بـSQL على الطاير (لا تخزين مكرر)",
-      "Seed محمّل بقصة ربيع الحقيقية: 18 حركة، 6 صفقات مفتوحة، 18 شخص، 12 موقع",
-      "اللوحة الرئيسية مربوطة بدوال queries حية: getOpenDeals + getActiveLocations + getRecentMovements",
-      "نشر مخطط: Contabo VPS كخدمة systemd user مع subdomain libya.rabee.dev عبر Cloudflare Tunnel (مرحلة 4)",
-    ],
-    desc: "LIBYA — منظومة الدفتر المالي للشراكة بين ربيع وأحمد\n\n🎯 الهدف:\nمكان واحد جميل أفتحه فأرى كل ما لي وعليّ، كل صناديقي وحساباتي بكل العملات، وكل معاملة موثّقة بدقة. تصميم يجعلني أرغب في فتحه يوميًا.\n\n💰 الفلسفة:\n- ثلاثة جداول صارمة في القلب (parties, transactions, balances) ومرونة JSONB في الأطراف\n- كل حركة لها أثرها الفوري على الرصيد، لا توجد عمليات معلّقة\n- كل قطعة بيانات مرتبطة بطرفين على الأقل\n- لا أتمتة آلية — كل حركة تُسجَّل يدويًا بمرونة كاملة\n\n🏗️ البنية:\n- 5 جداول: currencies, people, locations, deals, movements\n- 14 نوع حركة: capital-in/out, loan-in/repay, transfer, fx, deal-funding/receipt/recovery, profit-delivery, advance, settlement, commission, profit-share, adjustment\n- 6 enums: person_type, location_type, deal_type, deal_channel, deal_status, movement_type\n- مشتقّات آلية: balances per person/location, partner capital, deal P&L, net worth\n\n👥 المستخدمون:\nربيع + أحمد فقط (allowlist عبر مصادقة محلّية (اسم مستخدم + كلمة سرّ))، صلاحيات متساوية، لا خصوصية بينهما\n\n🎨 الهوية البصرية:\nEspresso & Sage v2 — بيج محمص #F2E8D2 + بني إسبريسو #1F1108 + أخضر ميرمية #4A8856 + برتقالي فخّاري #D85A20 + ذهبي عنبري #C8881A\nخطوط: Cairo (نص عربي 500-800) + Fraunces (عناوين 700-800)\nشعور: مقهى متخصص + ورشة حرفي، دافئ جدًا، لا يبدو تطبيق محاسبة\n\n⚙️ التشغيل:\nNext.js 15 + Turbopack + Drizzle + Supabase + مصادقة محلّية (اسم مستخدم + كلمة سرّ)\nنشر مخطط على Contabo VPS كخدمة systemd user\nبوت تيليجرام في المرحلة الرابعة (بعد استقرار الويب)",
-    tags: [
-      "Next.js 15",
-      "React 19",
-      "Drizzle ORM",
-      "Supabase",
-      "PostgreSQL",
-      "Tailwind v4",
-      "مصادقة محلّية",
-      "RTL Arabic",
-      "Financial Ledger",
-      "Espresso & Sage",
-    ],
-    path: null,
-    links: {
-      "نموذج اليوم (HTML)": "https://github.com/aneerabee/libya/blob/main/mockups/v2-app-01-today.html",
-      "نموذج إغلاق صفقة": "https://github.com/aneerabee/libya/blob/main/mockups/app-02-close-deal.html",
-      "نموذج صفحة شخص": "https://github.com/aneerabee/libya/blob/main/mockups/app-03-person.html",
-      "فهرس النماذج": "https://github.com/aneerabee/libya/blob/main/mockups/app-index.html",
-      GitHub: "https://github.com/aneerabee/libya",
-    },
-    links_desc: {
-      "نموذج اليوم (HTML)": "اللوحة الرئيسية بهوية v2 الجديدة (Espresso & Sage بألوان أجرأ + خطوط Cairo + Fraunces)",
-      "نموذج إغلاق صفقة": "شاشة الإغلاق بالحساب الذكي على معاملة عمتي عايشة كمثال — لكن البناء الفعلي سيكون يدويًا بمرونة كاملة",
-      "نموذج صفحة شخص": "صفحة عمتي عايشة الكاملة — أرصدة، صفقات، خط زمني، صلات عائلية",
-      "فهرس النماذج": "صفحة فهرس تعرض الثلاثة جنبًا إلى جنب",
-      GitHub: "المستودع الخاص على جيت‑هَب — المصدر الأساسي للمشروع",
-    },
-    current_status: {
-      updated: "2026-05-25",
-      where:
-        "حيّ على Contabo VPS عبر http://62.171.128.44:3001 (systemd user service: libya-web). Supabase REST API كقاعدة (libya schema + public views). كل المراحل 1-3 مكتملة وأكثر: CRUD كامل لكل الكيانات، صفحة صفقات ذكية بمؤشرات حية ومراحل، ودجت رصيد شريك مع ملاحظة سلفة منفصلة، ويزرد إغلاق يدعم نوعين من الصفقات (خارج 50/50 + شخصية لشريك)، مزامنة تلقائية لـreceived_usd وstatus بعد كل تعديل/حذف، حماية من السحب على المكشوف، تصميم متجاوب للهاتف. محميّ بمصادقة (middleware مُفعّل، الدخول يتطلب تسجيل). [تحديث 2026-05-22] دُمج منطق صفقات العائلة بالكامل مع نظام البيع والتغطية (١٢ إصلاحًا)، وطُبّق تعديل قاعدة البيانات 0014، والبناء يمرّ نظيفًا. المشروع الآن على جيت‑هَب كمستودع خاص — وجيت‑هَب هو المصدر الأساسي للمشروع. ونُقل محليًا إلى ~/Developer/libya خارج آي‑كلاود لإيقاف أرشفة ملفات الاعتماديات. [تحديث 2026-05-23] نُشِرت الإصلاحات الـ١٢ + تعديل 0014 على الخادم الحيّ بنجاح، وكل الصفحات السبع (/, /deals, /people, /movements, /debts, /hedges, /reports) ترجع HTTP 200. بُنيت نسخة احتياطية تلقائية على الخادم قبل النشر (~/apps/libya.bak-20260523-175801) ولم يُحذف أي ملف. النسخة المحلية حُذفت بعد التحقّق من اكتمال جيت‑هَب والخادم — جيت‑هَب صار النسخة الكاملة الأساسية الوحيدة محليًا. أي استنساخ مستقبلي يجب أن يكون خارج آي‑كلاود (~/Developer مثلًا، لا داخل ~/Documents ولا ~/Desktop). [تحديث 2026-05-25] فحص أعمق سطريّ كشف ٤ فجوات دقيقة بين منطق العائلة ومنطق الخارج (P2.1 إلى P2.4): صفقات العائلة المغلقة كانت تعرض حصّة العائلة كأنّها ربح للشراكة، و close_family_deal لم يكن يحدّث last_synced_at ولا يحفظ close_rate، و close_nonfamily_deal لم يكن يحدّث last_user_edit_at. أُصلحت كلّها في تعديل قاعدة البيانات 0015 (مُطبَّق على Supabase ومنشور على الخادم) وفي queries.ts و deals/page.tsx. التحقّق بصمات SHA متطابقة على المستويات الأربعة (محلي، جيت‑هَب، خادم، Supabase).",
-      next_step:
-        "ربط نطاق مخصّص + إعادة كتابة البوت لاحقًا: ربط دومين libya.rabee.dev عبر Cloudflare Tunnel أو Caddy + Let's Encrypt. ثم إعادة كتابة بوت تلقرام ليستخدم نفس server actions/validators (البوت الحالي معطّل لأنه كان يتجاوز كل قواعد التحقق).",
-      blockers: [
-        {
-          text: "بوت تلقرام معطّل — كان يتجاوز كل قواعد التحقق (MOVEMENT_RULES + balance guard + deal sync). يحتاج إعادة كتابة قبل التفعيل.",
-          priority: "low",
-        },
-      ],
-      use_guide:
-        "للتطوير محليًا (المسار يجب أن يكون خارج آي‑كلاود — لا داخل ~/Documents أو ~/Desktop): gh repo clone aneerabee/libya ~/Developer/libya && cd ~/Developer/libya/app && pnpm install && cp ~/Developer/.libya-env-local-backup-* .env.local && pnpm dev → http://localhost:3000.\n\nللنشر على Contabo: cd ~/Developer/libya/app && ./deploy/deploy.sh (يبني محليًا ثم rsync مع استثناء node_modules و.next/cache وكل ملفات .env*). للنشر الحذِر (بدون أي حذف): rsync -avz بدون --delete مع نفس الاستثناءات، ثم systemctl --user restart libya-web على الخادم.\n\nتعديل المخطط: التعديلات تُطبَّق مباشرة على Supabase عبر SQL editor، ثم يُحفَظ ملف 0xxx.sql في drizzle/migrations/ ويُرفع لجيت‑هَب ثم rsync للخادم.\n\nاسترجاع طارئ: نسخة احتياطية للخادم محفوظة في ~/apps/libya.bak-20260523-175801 — نسخة احتياطية للأسرار في ~/Developer/.libya-env-local-backup-20260523-180414 (صلاحية 600).",
-    },
-    bot_features: {
-      summary: "منظومة Next.js + Drizzle + Supabase تتعامل مع 5 جداول و14 نوع حركة، تحسب كل الأرصدة بـSQL على الطاير، وتعرضها بهوية بصرية مخصصة.",
-      sections: [
-        {
-          title: "الجداول الخمسة",
-          items: [
-            "currencies — العملات (LYD, USD, EUR, TRY) قابلة للإضافة والحذف",
-            "people — 6 أنواع: شريك، عائلة، مُقرض، وسيط، بنك، خارج",
-            "locations — مواقع القيم: حساب بنكي، كاش، فيزا، ويسترن منتظر، أخرى",
-            "deals — صفقات بنوعين: خارج (50/50)، شخصية لشريك",
-            "movements — مصدر الحقيقة الوحيد، 14 نوع حركة، كل حركة تربط بصفقة وشخصين وموقعين",
-          ],
-        },
-        {
-          title: "الـ14 نوع حركة",
-          items: [
-            "capital-in / capital-out — إضافة/سحب من رأس مال شريك",
-            "loan-in / loan-repay — استلاف وتسديد قرض",
-            "transfer — تحويل بنفس العملة بين موقعين",
-            "fx — صرف عملة بسعر محدد",
-            "deal-funding — تمويل إيداع صفقة",
-            "deal-receipt — استلام دولار من صفقة (فيزا/ويسترن/كاش)",
-            "deal-recovery — استرداد رأس مال الشراكة عند الإغلاق",
-            "profit-delivery — تسليم ربح للعميل",
-            "advance — سلفة شخصية (تخلق دين تلقائيًا)",
-            "settlement — تسوية دين/سلفة",
-            "commission — عمولة (فيزا/ويسترن/صراف)",
-            "profit-share — توزيع ربح بين الشركاء (للخارج فقط)",
-            "adjustment — تصحيح يدوي بملاحظة",
-          ],
-        },
-        {
-          title: "ما اكتمل (المراحل 1-3 + ميزات إضافية)",
-          items: [
-            "✅ Next.js 15 + Tailwind v4 + RTL Cairo/Fraunces + Espresso & Sage",
-            "✅ Supabase REST كقاعدة (libya schema + libya_* views للوصول)",
-            "✅ 5 جداول + 6 enums + 15 نوع حركة (تمت إضافة profit-share كنوع متعلق بصفقة)",
-            "✅ CRUD كامل لكل الكيانات: حركات، صفقات، أشخاص، مواقع — إنشاء/تعديل/حذف بتأكيد مزدوج",
-            "✅ حماية مرجعية: لا حذف لشخص/موقع/صفقة لو لها ارتباطات",
-            "✅ MOVEMENT_RULES بـvalidation سياقية: requiresDeal, needsFromLocation, needsRate, sameCurrency",
-            "✅ فلترة أنواع الحركات حسب السياق: GENERAL_GROUPS بدون صفقة، DEAL_GROUPS داخل صفقة",
-            "✅ syncDealFromMovements بعد كل CRUD: يُعيد حساب received_usd + status من الحركات الفعلية",
-            "✅ ويزرد إغلاق يدوي بخطوات مرنة لنوعين من الصفقات (خارج 50/50، شخصية لشريك)",
-            "✅ منع السحب على المكشوف لمواقع cash/visa/wu (bank-account مسموح بالعجز)",
-            "✅ صفحة الصفقات الذكية: بطاقة لكل صفقة بـrcapital + USD + سعر + ربح متوقع/محقّق + شريط تقدم",
-            "✅ ودجت رصيد الشريك في لوحة اليوم: مساهمة صافية + ملاحظة سلفة منفصلة",
-            "✅ صفحة الشخص بأرصدة منفصلة (سلفة، قرض، رأس مال) + مواقع يحتفظ بها + صفقات كصاحب/كمصرف",
-            "✅ إجراءات التغيير الحالة اليدوية لكل صفقة (override للأتمتة)",
-            "✅ widget صافي ثروة الشراكة (أصول + ذمم − التزامات)",
-            "✅ نشر على Contabo VPS: systemd user service libya-web على port 3001",
-            "✅ تصميم متجاوب للهاتف (mobile-first overrides)",
-            "✅ إيصال صفقة قابل للطباعة",
-            "✅ منطق صفقات العائلة مدمَج كاملًا مع نظام البيع/التغطية — ١٢ إصلاحًا (F1→F12) — 2026-05-23",
-            "✅ تعديل قاعدة البيانات 0014: حارس التغطية الإلزامي عند إغلاق صفقات العائلة — مُطبَّق على Supabase وعلى الخادم — 2026-05-23",
-            "✅ المشروع على جيت‑هَب كمستودع خاص (المصدر الأساسي): aneerabee/libya — 106 ملفات، 20 تعديل قاعدة (حتى 0019) — 2026-05-22",
-            "✅ نُشِر للخادم: actions.ts + queries.ts + كل صفحات الإصلاحات + تعديل 0014 + .next/ — Hash متطابق — 2026-05-23",
-            "✅ نسخة احتياطية تلقائية على الخادم قبل النشر: ~/apps/libya.bak-20260523-175801",
-            "✅ التحقّق الحيّ: كل الصفحات السبع ترجع HTTP 200 (/, /deals, /people, /movements, /debts, /hedges, /reports) — 2026-05-23",
-            "✅ النسخة المحلية قائمة في ~/Developer/libya ومتزامنة مع origin/main (~/Developer/libya) — جيت‑هَب والخادم يحويان نفس الكود — 2026-05-23",
-            "✅ تطابق دقيق بين منطق العائلة ومنطق الربح بعد فحص سطريّ (٤ فجوات P2.1-P2.4 مُصلحة) — 2026-05-25",
-            "✅ تعديل قاعدة البيانات 0015: close_family_deal يحفظ close_rate + last_synced_at؛ close_nonfamily_deal يحدّث last_user_edit_at — 2026-05-25",
-            "✅ صفقات العائلة المغلقة تعرض «صفر للشراكة» بدل ربح وهمي مضلِّل (queries.ts + deals/page.tsx) — 2026-05-25",
-            "✅ التحقّق بصمات SHA متطابقة على ٤ مستويات: محلي، جيت‑هَب، خادم، Supabase — 2026-05-25",
-          ],
-        },
-        {
-          title: "ما تبقّى",
-          items: [
-            "✅ middleware مُفعّل: مصادقة محلّية (اسم مستخدم/كلمة سرّ) عبر جدول app_users، الدخول بـ rabee — الموقع محميّ بالكامل",
-            "🔜 ربط دومين libya.rabee.dev عبر Cloudflare Tunnel أو Caddy + Let's Encrypt",
-            "🔜 إعادة كتابة بوت تلقرام ليستهلك نفس server actions/validators (البوت الحالي معطّل لأنه يتجاوز كل التحقق)",
-            "✅ نسخ احتياطية تلقائية تعمل (cron يومي 03:30) — ⚠️ لكن الرفع خارج الخادم يفشل كل مرة: BACKUP_GPG_PASSPHRASE مفقود، فالنسخ محفوظة على نفس الخادم فقط",
-            "🔜 تقارير شهرية + رسوم بيانية + بحث ذكي (مرحلة لاحقة)",
-          ],
-        },
-        {
-          title: "ملاحظات ترابط مهمة",
-          items: [
-            "deal status auto-sync: حذف deal-funding يُعيد الصفقة لـplanned تلقائيًا",
-            "received_usd يُعاد حسابه من مجموع deal-receipt كل CRUD — لا تخزين متقادم",
-            "manual override للحالة محترَم: لا تتراجع عن closed تلقائيًا",
-            "guardSourceBalance يستثني الحركة نفسها عند التعديل (لا fail false-positive)",
-            "personal-partner: نفس تدفق العائلة لكن الربح يخصم من رصيد الشريك في الـwidget",
-          ],
-        },
-      ],
-    },
-    claude_session: {
-      session_name: "[libya]",
-      terminal: "Codex / Core Shell",
-      cwd: null,
-      command:
-        "[ -d ~/Developer/libya ] || gh repo clone aneerabee/libya ~/Developer/libya; cd ~/Developer/libya/app && claude",
-      note: "آخر نقطة (2026-05-25): اكتمل التطابق الدقيق بين منطق صفقات العائلة ومنطق صفقات الربح (الخارج) بعد فحص سطريّ عميق. ٤ فجوات دقيقة (P2.1-P2.4) أُصلحت ونُشِرت: صفقة العائلة المغلقة الآن تُظهر «صفر للشراكة» بدل ربح وهمي، و close_family_deal يحفظ close_rate ويحدّث last_synced_at، و close_nonfamily_deal يحدّث last_user_edit_at. تعديل قاعدة البيانات 0015 على Supabase + commit 786cd54 على جيت‑هَب + نشر متطابق SHA على Contabo + كل الصفحات السبع HTTP 200. للعمل لاحقًا: gh repo clone aneerabee/libya ~/Developer/libya (خارج آي‑كلاود). التالي: تفعيل المصادقة + ربط دومين libya.rabee.dev + إعادة بناء بوت تلقرام.",
-    },
-  },
+
 {
     name: "Dr. Muhsen Ledger",
     id: "dr-muhsen",
@@ -1721,33 +1519,7 @@ const PRJ = [
 ];
 
 const SVC = [
-  {
-    name: "LIBYA Web Service",
-    ar: "خدمة موقع ليبيا",
-    id: "libya-web",
-    st: 1,
-    em: "📒",
-    host: "Contabo VPS",
-    runtime: "Node.js 20.20.1 / systemd user / Next.js 15.5.18",
-    service_type: "web-app",
-    prj: "LIBYA",
-    owner: "LIBYA",
-    owner_type: "project",
-    path: "server:/home/argaz/apps/libya",
-    port: "3001",
-    schedule: "دائم (active منذ تاريخ آخر redeploy)",
-    dt: "libya-web.service · vmi3061403 · PID 132644 · 85MB",
-    info: "verified live 2026-05-15: active (running)، PID 132644، Memory 85M، Next.js standalone. يربط بـSupabase REST (libya schema). متاح عبر http://62.171.128.44:3001 (محميّ بمصادقة محلّية — middleware مُفعّل).",
-    last_check: "2026-05-15",
-    config_paths: [
-      "server:/home/argaz/apps/libya",
-      "server:/home/argaz/apps/libya/.env.production",
-      "server:/home/argaz/.config/systemd/user/libya-web.service",
-      "server:/home/argaz/logs/libya-web.log",
-      "server:/home/argaz/logs/libya-web-error.log",
-    ],
-    why: "هذه الخدمة تجعل دفتر الشراكة بين ربيع وأحمد متاحًا 24/7 من أي جهاز. Next.js يستخدم نفس قاعدة Supabase. كل CRUD، أرصدة الأشخاص، تتبع الصفقات، ودجت الشركاء، صفحة الديون — كلها هنا.",
-  },
+
   {
     name: "ADREEM API Service",
     ar: "خدمة ADREEM API",
@@ -2047,36 +1819,7 @@ const AUTO = [
         path: "server:/opt/wapy/.backup",
         kind: "cleanup",
       },
-      {
-        id: "server-libya-web-next-js",
-        name: "LIBYA Web (Next.js)",
-        freq: "دائم (systemd user)",
-        on: true,
-        what: "تطبيق LIBYA الكامل على المنفذ 3001، autostart عند الإقلاع. PID 132644، Memory 85MB",
-        prj: ["LIBYA"],
-        path: "server:~/.config/systemd/user/libya-web.service",
-        kind: "app",
-      },
-      {
-        id: "server-libya-bot-telegram",
-        name: "LIBYA Bot (Telegram)",
-        freq: "—",
-        on: false,
-        what: "⛔ معطّل عمدًا — في تدقيق 2026-05-27 وُجد الـ unit مُثبّتًا وفي crash loop (127,901 محاولة). نُفّذ `systemctl --user stop libya-bot && disable libya-bot`. الحالة الآن: inactive · disabled. يبقى معطّلًا حتى يُعاد كتابته ليستخدم server actions ويحترم MOVEMENT_RULES.",
-        prj: ["LIBYA"],
-        path: "server:~/.config/systemd/user/libya-bot.service (disabled)",
-        kind: "bot",
-      },
-      {
-        id: "server-libya",
-        name: "نسخ احتياطي LIBYA يوميًا",
-        freq: "يوميًا 03:30",
-        on: true,
-        what: "✓ مُجدول في crontab argaz: `30 3 * * * /home/argaz/apps/libya/deploy/backup.sh`. يكتب اللوغ إلى /home/argaz/logs/libya-backup.log",
-        prj: ["LIBYA"],
-        path: "server:/home/argaz/apps/libya/deploy/backup.sh",
-        kind: "backup",
-      },
+
     ],
   },
   {
@@ -2315,45 +2058,7 @@ const BOT = [
       Railway: "https://brix-hotel-web-app-production.up.railway.app",
     },
   },
-  {
-    name: "LIBYA Bot",
-    id: "libya-bot",
-    kind: "telegram-bot",
-    ar: "بوت LIBYA — إدخال سريع للدفتر",
-    st: "p",
-    em: "✦",
-    cl: "#8A7660",
-    host: "Contabo VPS (الكود فقط، الخدمة معطّلة)",
-    last_check: "2026-05-27",
-    last_run: "2026-05-27 — أُوقف ومُعطّل بعد اكتشاف crash loop (127,901 محاولة)",
-    check_method: "ssh + systemctl --user status libya-bot",
-    uptime_status: "intentionally-disabled",
-    check_note: "⛔ معطّل عمدًا — في تدقيق 2026-05-27 وُجد الـ unit مُفعّلًا في systemd مع crash loop (127,901 محاولة، كل 5 ث) رغم أن السلوك المطلوب هو التعطيل. نُفّذ `systemctl --user stop libya-bot && disable libya-bot`. الحالة الآن: inactive · disabled. يبقى معطّلًا حتى يُعاد كتابته ليستخدم server actions ويحترم MOVEMENT_RULES.",
-    runtime: "Node.js 20 + grammy + tsx (الكود فقط)",
-    channel: "Telegram",
-    related_entities: ["LIBYA", "Supabase", "Contabo VPS"],
-    summary:
-      "⛔ بوت معطّل — كان مخطّطًا لإدخال الحركات السريع لكن الكود الحالي يتجاوز كل قواعد التحقق. الانتظار حتى تُعاد كتابته ليستهلك server actions.",
-    desc: "بوت LIBYA — مساعد الإدخال السريع للجوال\n\n🎯 الهدف:\nبدل ما تفتح اللابتوب لإدخال حركة بسيطة (سلفة، استلاف، تحويل)، تكتب أمرًا في تيليجرام وينحفظ مباشرةً في القاعدة.\n\n🤖 الأوامر:\n/start — ملخّص + قائمة الأوامر\n/balance — صافي الأرصدة بكل العملات\n/debts — ديون عليك + ديون لك (تفصيلي بالأسماء)\n/deals — الصفقات المفتوحة\n/add — إضافة حركة عبر inline keyboards (نوع → مبلغ → عملة → ملاحظة → تأكيد)\n/web — رابط الموقع الكامل\n/cancel — إلغاء أي عملية جارية\n\n🔐 الأمان:\nallowlist بـTelegram user_id (env: ALLOWED_TG_USERS)\nيرفض أي شخص ليس في القائمة\nanon محجوب بعد تشديد الأمان (migration 0016)؛ التطبيق يستخدم service_role خادميًّا\n\n⚠️ البوت معطّل حاليًا — يحتاج إعادة كتابة قبل التفعيل\n\n⚙️ التشغيل:\nيعمل كخدمة systemd user على Contabo (libya-bot.service)\nautostart عند الإقلاع، restart تلقائي عند التعطّل\nاللوغات: /home/argaz/logs/libya-bot.log + libya-bot-error.log\n\n📍 المسار:\n/Users/rabeeshaban/Developer/libya/app/bot/bot.ts\nالنشر: rsync إلى /home/argaz/apps/libya/bot/",
-    tags: [
-      "Telegram",
-      "Node.js 20",
-      "grammy",
-      "Supabase",
-      "tsx",
-      "systemd",
-      "Allowlist",
-    ],
-    path: "/Users/rabeeshaban/Developer/libya/app/bot/bot.ts",
-    server_path: "server:/home/argaz/apps/libya/bot/bot.ts",
-    config_paths: [
-      "server:/home/argaz/apps/libya/.env.production",
-      "server:/home/argaz/.config/systemd/user/libya-bot.service",
-    ],
-    links: {
-      "كود البوت": "file:///Users/rabeeshaban/Developer/libya/app/bot/bot.ts",
-    },
-  },
+
 ];
 
 const TL = [
@@ -2555,7 +2260,7 @@ const TL = [
       "Chess Academy",
     ],
     summary: "المنصة المركزية للمستودعات والنشر والتاريخ",
-    desc: "حساب: aneerabee — 12 repos في الكتالوج الحالي، منها 6 مؤكدة محليًا من هذا الجهاز\n\nالكتالوج الحالي:\ncommand-center — لوحة التحكم\nchess-academy — أكاديمية الشطرنج\nbrix-travel-system — نظام الحجز\neasybooking-whatsapp-crm — CRM واتساب\nmoney-manager — إدارة مالية\nmeta-mcp — خادم MCP للإعلانات\nbrixtravel — موقع بريكس\nadreem — دفتر أدريم\nlibya — دفتر شراكة ليبيا\nwestern-office — المكتب الغربي\nbrix-design-preview — معاينة تصميم بريكس\nbrix-backups — نسخ احتياطية بريكس",
+    desc: "حساب: aneerabee — 11 repos في الكتالوج الحالي، منها 6 مؤكدة محليًا من هذا الجهاز\n\nالكتالوج الحالي:\ncommand-center — لوحة التحكم\nchess-academy — أكاديمية الشطرنج\nbrix-travel-system — نظام الحجز\neasybooking-whatsapp-crm — CRM واتساب\nmoney-manager — إدارة مالية\nmeta-mcp — خادم MCP للإعلانات\nbrixtravel — موقع بريكس\nadreem — دفتر أدريم\nwestern-office — المكتب الغربي\nbrix-design-preview — معاينة تصميم بريكس\nbrix-backups — نسخ احتياطية بريكس",
     tags: ["12 Repos", "Source Control", "Deploy History"],
     links: { GitHub: "https://github.com/aneerabee" },
   },
@@ -2715,48 +2420,7 @@ const TL = [
     desc: "MCP Server للاختبارات الآلية\nتشغيل ومراقبة الاختبارات",
     tags: ["MCP", "Testing"],
   },
-  {
-    name: "Drizzle ORM",
-    id: "drizzle-orm",
-    ar: "محرك قاعدة البيانات Drizzle",
-    em: "🌧️",
-    st: "a",
-    cl: "#C5F74F",
-    type: "مكتبة",
-    category: "internal-tool",
-    used_in: ["LIBYA"],
-    summary: "ORM خفيف وسريع لـTypeScript + Postgres — أبسط من Prisma وأسرع.",
-    desc: "Drizzle ORM — مكتبة لكتابة كود قواعد البيانات بـTypeScript بشكل آمن وسريع.\n\n📐 لماذا Drizzle بدل Prisma؟\n- لا يحتاج build step (Prisma يحتاج generate كل مرة)\n- type-safe بالكامل\n- SQL-like syntax تقدر تفهمه فورًا\n- bundle أصغر بكثير\n- migrations تُولّد من الـschema تلقائيًا\n\n🔧 الإعدادات في LIBYA:\n- المخطط: src/lib/db/schema.ts (9 جداول، 7 enums)\n- الإعداد: drizzle.config.ts\n- Migrations: drizzle/migrations/*.sql\n- Seed: drizzle/seed.ts\n- Client: src/lib/db/client.ts (postgres-js driver)\n\n⚙️ Scripts:\n- pnpm db:generate — توليد SQL من schema\n- pnpm db:migrate — تطبيق migrations\n- pnpm db:seed — إدخال البيانات الأولية\n- pnpm db:studio — واجهة تصفح القاعدة",
-    facts: [
-      "الإصدار: 0.36.4",
-      "Driver: postgres-js (الأسرع لـSupabase)",
-      "Schema location: src/lib/db/schema.ts",
-      "9 جداول · 7 enums · علاقات كاملة بين الجداول",
-    ],
-    capabilities: [
-      "Type-safe queries بدون أي codegen",
-      "Migrations تلقائية من schema changes",
-      "Drizzle Studio لتصفح القاعدة من الواجهة",
-      "Relations API للـjoins المعقدة",
-    ],
-    customizations: [
-      "PG enums للـ7 أنواع (person_type, location_type, deal_type, deal_channel, deal_status, movement_type, hedge_status)",
-      "indexes على كل العلاقات لأداء فوري",
-      "numeric(18,4) للمبالغ المالية (دقة عالية)",
-      "numeric(18,6) لأسعار الصرف (6 خانات عشرية)",
-    ],
-    structure: [
-      "9 جداول: currencies, people, locations, deals, movements, banks, hedge_batches, deal_cost_lines, deal_hedge_allocations",
-      "movements هو مصدر الحقيقة — كل الأرصدة محسوبة منه",
-      "علاقات: deals → customer/bank/locations · movements → deal/people/locations",
-    ],
-    config_paths: [
-      "/Users/rabeeshaban/Developer/libya/app/drizzle.config.ts",
-      "/Users/rabeeshaban/Developer/libya/app/src/lib/db/schema.ts",
-    ],
-    tags: ["TypeScript", "Postgres", "ORM", "Type-safe", "Migrations"],
-    links: { Docs: "https://orm.drizzle.team" },
-  },
+
 ];
 
 const CLD = [
@@ -2769,7 +2433,7 @@ const CLD = [
     active_note: "نشط: 12 repos، runtime sync ينشر يومياً",
     em: "🐙",
     category: "platform",
-    dt: "12 repos في الكتالوج الحالي (مع LIBYA الجديد)",
+    dt: "11 repos في الكتالوج الحالي",
     lk: "https://github.com/aneerabee",
     prj: "Command Center",
     related_entities: [
@@ -2781,7 +2445,7 @@ const CLD = [
       "BRIX Travel Website",
       "WhatsApp CRM",
       "ADREEM",
-      "LIBYA",
+
     ],
     used_in: [
       "Command Center",
@@ -2792,7 +2456,7 @@ const CLD = [
       "BRIX Travel Website",
       "WhatsApp CRM",
       "ADREEM",
-      "LIBYA",
+
     ],
   },
   {
@@ -2801,14 +2465,14 @@ const CLD = [
     ar: "سوبابيس",
     id: "supabase",
     active: true,
-    active_note: "نشط: قاعدة BRIX + Money Manager + ADREEM + LIBYA (قيد الإعداد)",
+    active_note: "نشط: قاعدة BRIX + Money Manager + ADREEM",
     em: "⚡",
     category: "database-platform",
-    dt: "PostgreSQL متعدد المشاريع — مصدر حقيقة لـ5 منظومات + مصادقة محلّية لـLIBYA",
+    dt: "PostgreSQL متعدد المشاريع — مصدر حقيقة لـ4 منظومات",
     lk: "https://supabase.com/dashboard",
     prj: "BRIX Travel System",
-    related_entities: ["BRIX Travel System", "Money Manager", "ADREEM", "LIBYA", "Western Office"],
-    used_in: ["BRIX Travel System", "Money Manager", "ADREEM", "LIBYA", "Western Office"],
+    related_entities: ["BRIX Travel System", "Money Manager", "ADREEM", "Western Office"],
+    used_in: ["BRIX Travel System", "Money Manager", "ADREEM", "Western Office"],
   },
   {
     nm: "Vercel",
@@ -2904,9 +2568,9 @@ const CLD = [
     category: "infrastructure",
     dt: "vmi3061403 · 62.171.128.44 · Ubuntu 24 · Tailscale 100.116.69.101 · 71G حرّ · استهلاك 27% (2026-07-25)",
     ip_note: "تأكّد الـ Public IP الفعلي = 62.171.128.44 (تم تشغيل curl ifconfig.me من داخل السيرفر عبر Tailscale يوم 2026-05-14). الـ IP السابق 46.202.172.151 كان عائداً لـ Hostinger وليس لـ Contabo — تم تصحيحه في Cloudflare DNS.",
-    prj: "Wapy.dev + ADREEM + Brixtravel + LIBYA + Dr. Muhsen Ledger",
-    related_entities: ["Wapy.dev", "ADREEM", "BRIX Travel Website", "LIBYA", "Dr. Muhsen Ledger"],
-    used_in: ["Wapy.dev", "ADREEM", "BRIX Travel Website", "LIBYA", "Dr. Muhsen Ledger"],
+    prj: "Wapy.dev + ADREEM + Brixtravel + Dr. Muhsen Ledger",
+    related_entities: ["Wapy.dev", "ADREEM", "BRIX Travel Website", "Dr. Muhsen Ledger"],
+    used_in: ["Wapy.dev", "ADREEM", "BRIX Travel Website", "Dr. Muhsen Ledger"],
   },
   {
     nm: "Cloudflare",
@@ -3000,10 +2664,10 @@ const CLD = [
     active_note: "نشط: VPN خاص (100.116.69.101) — وصول لـContabo و4 منظومات تعمل عليه",
     em: "🔒",
     category: "network",
-    dt: "VPN · 3 أجهزة · حماية الوصول لـWapy + ADREEM + Western Office + LIBYA",
+    dt: "VPN · 3 أجهزة · حماية الوصول لـWapy + ADREEM + Western Office",
     prj: "Wapy.dev",
-    related_entities: ["Wapy.dev", "Command Center", "ADREEM", "LIBYA"],
-    used_in: ["Wapy.dev", "Command Center", "ADREEM", "LIBYA"],
+    related_entities: ["Wapy.dev", "Command Center", "ADREEM"],
+    used_in: ["Wapy.dev", "Command Center", "ADREEM"],
   },
   {
     nm: "TronGrid",

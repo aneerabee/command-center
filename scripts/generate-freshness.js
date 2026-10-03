@@ -12,7 +12,7 @@
  *
  * Output shape:
  *   {
- *     "libya": {
+ *     "example-project": {
  *       "_root":          "2026-05-25",
  *       "current_status": "2026-05-25",
  *       "bot_features":   "2026-05-23",
