@@ -115,7 +115,7 @@ function wsSectionTitle(title, action = '') { return `<div class="ws-section-tit
 function wsGo(page, text) { return `<button class="ws-text-button" data-action="goPage" data-arg="${page}">${E(text)}${wsIcon('arrow-left')}</button>`; }
 
 function wsSidebar() {
-  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-icon.svg?v=20261003d" width="36" height="36" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
+  return `<a class="ws-brand" href="#home" data-action="goPage" data-arg="home"><img src="cc-icon.svg?v=20261003e" width="36" height="36" alt=""><span>مركز التحكم<small>مساحة ربيع</small></span></a>` +
     `<nav class="ws-navigation" aria-label="أقسام اللوحة">${WS_GROUPS.map(group => `<div class="ws-nav-group"><div class="ws-nav-label">${group.label}</div>${group.pages.map(id => `<a href="#${id}" class="nav-item${cur === id ? ' active' : ''}" data-tone="${WS_PRESENTATION[id].tone}" data-page="${id}" data-action="goPage" data-arg="${id}" ${cur === id ? 'aria-current="page"' : ''}><span class="ws-nav-icon">${wsIcon(WS_PAGES[id].icon)}</span><span>${WS_PAGES[id].title}</span>${id === 'projects' ? `<small>${wsNumber(PRJ.length)}</small>` : ''}</a>`).join('')}</div>`).join('')}</nav>` +
     `<div class="ws-sidebar-footer"><span class="ws-owner">ر</span><div><strong>ربيع</strong><small>إدارة المشاريع</small></div><button class="ws-icon-button" data-action="openSearch" aria-label="بحث في اللوحة" title="بحث">${wsIcon('search')}</button></div>`;
 }
@@ -128,7 +128,7 @@ function wsMore() {
 }
 function wsUpdateShell() {
   const host = document.getElementById('workspace-topbar');
-  if (host) host.innerHTML = `<a href="#home" class="ws-mobile-brand" data-action="goPage" data-arg="home" aria-label="مركز التحكم"><img src="cc-icon.svg?v=20261003d" width="28" height="28" alt=""></a><div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
+  if (host) host.innerHTML = `<a href="#home" class="ws-mobile-brand" data-action="goPage" data-arg="home" aria-label="مركز التحكم"><img src="cc-icon.svg?v=20261003e" width="28" height="28" alt=""></a><div class="ws-breadcrumb"><span>مساحة ربيع</span>${wsIcon('chevron-left')}<strong>${E(WS_PAGES[cur]?.title || '')}</strong></div><div class="ws-top-actions"><button class="ws-search-trigger" data-action="openSearch" aria-label="بحث في كل شيء">${wsIcon('search')}<span>بحث في كل شيء</span></button><button class="ws-icon-button${wsRefreshing ? ' ws-loading' : ''}" data-ws-refresh ${wsRefreshing ? 'disabled' : ''} aria-label="تحديث بيانات اللوحة" title="تحديث بيانات اللوحة">${wsIcon('refresh-cw')}</button></div>`;
   document.title = `${WS_PAGES[cur]?.title || 'مركز التحكم'} · مركز التحكم`;
   if(wsDetailKey) {
     const row=wsRegistry().find(row=>row.key===wsDetailKey);
@@ -168,7 +168,7 @@ function wsListRow(row, card = false) {
   return `<article class="ws-entity${card ? ' ws-entity-card' : ''}" data-kind="${row.kind}" data-tone="${wsTone(row)}" data-entity-key="${E(row.key)}">` +
     wsOpenButton(row, `<span class="ws-entity-icon">${wsGlyph(row)}</span><span class="ws-entity-copy"><strong>${E(row.title)}</strong><span>${E(wsSummary(row))}</span></span>`, 'ws-entity-main') +
     `<div class="ws-entity-group">${E(context || '—')}</div><div class="ws-entity-check"><span>${wsBadge(row)}</span><small>${['team','idea'].includes(row.kind) ? E(group) : wsRelativeTime(checked)}</small></div>` +
-    `<div class="ws-row-actions">${wsStar(row)}${link ? wsExternal(link.url, `${link.label}: ${row.title}`, true) : wsOpenButton(row, wsIcon('arrow-left'), 'ws-icon-button ws-details-button')}</div></article>`;
+    `<div class="ws-row-actions">${wsStar(row)}${link ? wsExternal(link.url, `${link.label}: ${row.title}`, true) : wsOpenButton(row, wsIcon('arrow-left'), 'ws-icon-button ws-details-button')}</div><div class="ws-entity-relations">${wsRelationHint(row)}</div></article>`;
 }
 function wsEmpty(text = 'لا توجد نتائج مطابقة') {
   return `<div class="ws-empty">${wsIcon('search-x')}<h3>${E(text)}</h3><button class="ws-button" data-ws-reset>إظهار الكل</button></div>`;
@@ -201,7 +201,7 @@ function wsCatalog(page) {
   const filtered = wsFiltered(rows,page);
   const grid = wsLayout(page) === 'grid';
   const extra = page === 'team' ? `<a class="ws-button" href="survey.html" target="_blank" rel="noopener">${wsIcon('clipboard-list')}استبيان الفريق</a>` : `<span class="ws-count">${wsNumber(rows.length)} عنصر</span>`;
-  return wsHeader(page,extra) + (page === 'server' ? wsServerSummary() : '') + wsToolbar(page,rows) +
+  return wsHeader(page,extra) + wsSectionEvidence(page,rows) + (page === 'server' ? wsServerSummary() : '') + wsToolbar(page,rows) +
     `<div class="ws-result-count" role="status">${wsNumber(filtered.length)} من ${wsNumber(rows.length)}</div>` +
     `<div class="ws-entity-list ws-catalog-${page}${grid && page === 'projects' ? ' ws-card-grid' : ''}" data-presentation="${page}">${filtered.length ? wsCatalogBody(page,filtered,grid) : wsEmpty()}</div>`;
 }
@@ -229,7 +229,7 @@ function wsHome() {
       ['review','clock-3',counts.stale,'نتيجة قديمة','تحتاج إعادة تحقق'],
     ].map(([page,icon,num,label,note])=>`<button class="ws-stat" data-ws-stat="${page}"><span class="ws-stat-label">${wsIcon(icon)}${label}</span><strong>${wsNumber(num)}</strong><span class="ws-stat-note">${note}</span></button>`).join('')}</section>` +
     `<section class="ws-quick-section">${wsSectionTitle(pinned.length ? 'العناصر المثبتة' : 'الوصول السريع',wsGo('projects','كل المشاريع'))}<div class="ws-quick-grid">${quick.map(row=>`<article class="ws-quick-item" data-tone="${wsTone(row)}"><div class="ws-quick-top">${wsOpenButton(row,`<span class="ws-entity-icon">${wsGlyph(row)}</span><strong>${E(row.title)}</strong>`,'ws-quick-name')}${wsStar(row)}</div><div class="ws-quick-bottom"><span>${E(wsGroup(row)||WS_PAGES[row.page].title)}</span>${WorkspaceModel.primaryLink(row) ? wsExternal(WorkspaceModel.primaryLink(row).url,WorkspaceModel.primaryLink(row).label) : wsOpenButton(row,'التفاصيل','ws-button')}</div></article>`).join('')}</div></section>` +
-    `<div class="ws-home-columns"><div class="ws-home-main"><section>${wsSectionTitle('مشاريعك',wsGo('projects','عرض الكل'))}<div class="ws-entity-list ws-home-projects">${projects.slice(0,6).map(row=>wsListRow(row)).join('')}</div></section>` +
+    wsHomeRelations() + `<div class="ws-home-columns"><div class="ws-home-main"><section>${wsSectionTitle('مشاريعك',wsGo('projects','عرض الكل'))}<div class="ws-entity-list ws-home-projects">${projects.slice(0,6).map(row=>wsListRow(row)).join('')}</div></section>` +
     `<section class="ws-review-section" id="ws-review">${wsSectionTitle('قائمة المراجعة',`<span class="ws-count">${wsNumber(allIssues.length)} عنصر</span>`)}${issues.length ? `<div class="ws-review-list">${issues.map(row=>wsOpenButton(row,`<span class="ws-review-icon ${wsMeta(row).state}">${wsIcon(wsMeta(row).icon)}</span><span><strong>${E(row.title)}</strong><small>${E(wsMeta(row).label)} · ${E(wsDate(row.record?.verified_at))}</small></span>${wsIcon('chevron-left')}`,'ws-review-item')).join('')}</div>${allIssues.length > 5 ? `<button class="ws-text-button" data-ws-review aria-expanded="${wsReviewExpanded}">${wsReviewExpanded ? 'عرض أقل' : 'عرض القائمة كاملة'}${wsIcon(wsReviewExpanded ? 'chevron-up' : 'chevron-down')}</button>` : ''}` : `<div class="ws-quiet-state">${wsIcon('circle-check')}لا توجد تنبيهات في نتائج الفحص المتاحة</div>`}</section></div>` +
     `<aside class="ws-home-aside"><section>${wsSectionTitle('الخادم')}${wsServerSummary()}${wsGo('server','تفاصيل التشغيل')}</section>` +
     `<section>${wsSectionTitle('الشركات والمجموعات')}${UMBRELLAS.map(u=>`<button class="ws-company-line" data-ws-company="${E(u.id)}"><span class="ws-company-mark">${E(nameInitial(u.name))}</span><span><strong>${E(u.name)}</strong><small>${wsNumber(PRJ.filter(p=>p.parent===u.id).length)} مشاريع</small></span>${wsIcon('chevron-left')}</button>`).join('')}</section>` +
@@ -237,7 +237,7 @@ function wsHome() {
 }
 function wsCompanies() {
   const projects = wsRegistry().filter(row=>row.kind==='project');
-  return wsHeader('umbrellas',`<span class="ws-count">${wsNumber(UMBRELLAS.length)} مجموعات</span>`) + UMBRELLAS.map(u=> {
+  return wsHeader('umbrellas',`<span class="ws-count">${wsNumber(UMBRELLAS.length)} مجموعات</span>`) + '<p class="rel-note">التفرعات تبيّن التبعية للشركة في السجل. إسناد العمل إلى شخص يظهر في ملفه؛ وجوده في الشركة لا يعني مسؤوليته عن كل مشاريعها.</p>' + UMBRELLAS.map(u=> {
     const rows = projects.filter(row=>row.item.parent===u.id);
     const members = TEAM.filter(member=>member.parent===u.id);
     return `<section class="ws-company-section" data-tone="${WS_COMPANY_TONES[u.id] || 'graphite'}"><header><div class="ws-company-mark">${E(nameInitial(u.name))}</div><div><h2>${E(u.name)}</h2><p>${E(u.specialty || u.summary || '')}</p></div><div class="ws-company-counts"><span>${wsNumber(rows.length)} مشاريع</span><span>${wsNumber(members.length)} أعضاء</span></div></header><div class="ws-company-branches"><div class="ws-company-projects"><h3>المشاريع</h3>${rows.map(row=>wsOpenButton(row,`${wsIcon('folder')}<strong>${E(row.title)}</strong>${wsIcon('chevron-left')}`,'ws-company-project')).join('') || '<p class="ws-muted">لا توجد مشاريع مسجلة.</p>'}</div><div class="ws-company-team"><h3>الفريق</h3>${members.length ? members.map(member=>`<button data-action="openTeam" data-arg="${E(member.name)}">${wsIcon('user-round')}<strong>${E(member.full_name||member.name)}</strong><span>${E(member.role||'')}</span></button>`).join('') : '<p class="ws-muted">لا يوجد أعضاء مسجلون.</p>'}</div></div></section>`;
@@ -247,7 +247,7 @@ function wsMap() {
   const rows = wsRegistry().filter(row=>row.item.local_path || row.item.server_path || row.item.path || row.item.repo_url);
   const state = wsState('map');
   const filtered = rows.filter(row=>WorkspaceModel.matches(row,state.query));
-  return wsHeader('map',`<span class="ws-count">${wsNumber(rows.length)} مرجع</span>`) +
+  return wsHeader('map',`<span class="ws-count">${wsNumber(rows.length)} مرجع</span>`) + '<p class="rel-note">كل مسار تابع للعنصر المكتوب فوقه، وليس رابطًا بين خدمتين. وجود الملف لا يثبت تشغيل المشروع؛ افتح صفحته لنتيجة التحقق وعلاقاته.</p>' +
     `<div class="ws-toolbar"><label class="ws-inline-search">${wsIcon('search')}<input type="search" data-ws-query="map" aria-label="البحث في المسارات" placeholder="بحث عن مشروع أو مسار…" value="${E(state.query)}"></label><a class="ws-button" href="graph.html" target="_blank" rel="noopener">${wsIcon('network')}خريطة العلاقات</a></div>` +
     `<div class="ws-path-list">${filtered.map(row=>`<article class="ws-path-item">${wsOpenButton(row,`<strong>${E(row.title)}</strong>${wsIcon('arrow-up-left')}`,'ws-path-title')}${[['على جهازك',row.item.local_path],['على الخادم',row.item.server_path],['المسار',row.item.path],['المستودع',row.item.repo_url]].filter(([,v],i,a)=>v && a.findIndex(([,x])=>x===v)===i).map(([label,value])=>`<div class="ws-path-row"><span>${label}</span><code dir="ltr">${E(value)}</code><button class="ws-icon-button" data-ws-copy="${E(value)}" aria-label="نسخ ${E(label)}" title="نسخ">${wsIcon('copy')}</button></div>`).join('')}</article>`).join('') || wsEmpty()}</div>`;
 }

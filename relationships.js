@@ -3,9 +3,12 @@ const relationSelect = document.getElementById('relation-entity');
 const relationQuery = document.getElementById('relation-query');
 const relationResults = document.getElementById('relation-results');
 const relationKinds = {project:'مشروع',service:'خدمة',bot:'بوت',tool:'أداة',cloud:'منصة',archive:'مرجع محفوظ',idea:'فكرة',team:'عضو',automation:'مهمة'};
+const relationGraph = WorkspaceModel.relationshipGraph(relationRows);
+const relationParams = new URLSearchParams(location.search);
+const relationPage = relationParams.get('page');
 function relationOptions() {
   const selected = relationSelect.value;
-  const rows = relationRows.filter(row=>WorkspaceModel.matches(row,relationQuery.value));
+  const rows = relationRows.filter(row=>(!relationPage || row.page===relationPage) && WorkspaceModel.matches(row,relationQuery.value));
   relationSelect.replaceChildren(new Option(rows.length ? 'اختر عنصرًا' : 'لا توجد نتائج',''),...rows.map(row=>new Option(`${row.title} · ${relationKinds[row.kind]}`,row.key)));
   if(rows.some(row=>row.key===selected)) relationSelect.value=selected;
   relationDetails();
@@ -17,16 +20,19 @@ function relationDetails() {
   if(!row) return;
   const title=document.createElement('h2');title.textContent=row.title;
   const link=document.createElement('a');link.className='ws-button';link.href=`index.html#${WorkspaceModel.route(row)}`;link.textContent='فتح الصفحة';
-  const connected=WorkspaceModel.related(relationRows,row);
-  const count=document.createElement('p');count.className='relation-caption';count.textContent=connected.length ? `${connected.length} ارتباطات مسجّلة، تشمل الروابط الواردة والصادرة` : 'لا توجد ارتباطات مسجّلة.';
-  const list=document.createElement('div');list.className='ws-connected-list';
-  for(const other of connected) {
-    const a=document.createElement('a');a.className='ws-connected-item';a.href=`index.html#${WorkspaceModel.route(other)}`;
-    const span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');
-    strong.textContent=other.title;small.textContent=relationKinds[other.kind];span.append(strong,small);a.append(span);list.append(a);
-  }
+  const connected=RelationshipView.groups(relationRows,row,relationGraph);
+  const count=document.createElement('p');count.className='relation-caption';count.textContent=`العناصر المرتبطة: ${connected.length}. الاتجاه يظهر للاستخدام والإسناد والتبعية فقط؛ الخط بلا سهم يعني ارتباطًا دون اتجاه مسجّل.`;
+  const list=document.createElement('div');
+  list.innerHTML=RelationshipView.render(relationRows,row,{prefix:'index.html#',graph:relationGraph});
   relationResults.append(title,link,count,list);
+  const params=new URLSearchParams(location.search);
+  params.set('entity',row.key);
+  history.replaceState(null,'',`${location.pathname}?${params}`);
 }
 relationQuery.addEventListener('input',relationOptions);
 relationSelect.addEventListener('change',relationDetails);
 relationOptions();
+const initial=relationParams.get('entity');
+if([...relationSelect.options].some(option=>option.value===initial)) relationSelect.value=initial;
+else if(relationSelect.options.length>1) relationSelect.selectedIndex=1;
+relationDetails();

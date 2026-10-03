@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T17:01:55.558Z",
+  "generated_at": "2026-10-03T18:46:55.069Z",
   "source": "data.js + git blame",
   "entities": {
     "etranex": {
@@ -171,22 +171,22 @@
       "_root": "2026-10-03"
     },
     "perplexity-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "filesystem-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "memory-mcp": {
-      "_root": "2026-05-12"
+      "_root": "2026-10-03"
     },
     "sequential-thinking-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "firecrawl-mcp": {
       "_root": "2026-04-05"
     },
     "magic-mcp": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "supabase-mcp": {
       "_root": "2026-04-05"
@@ -252,7 +252,7 @@
       "_root": "2026-06-14"
     },
     "coingecko": {
-      "_root": "2026-06-14"
+      "_root": "2026-10-03"
     },
     "exchanger": {
       "_root": "2026-04-05"
@@ -270,7 +270,7 @@
       "_root": "2026-04-05"
     },
     "vault": {
-      "_root": "2026-04-05"
+      "_root": "2026-10-03"
     },
     "rabee-online-empire": {
       "blueprint": "2026-09-24",

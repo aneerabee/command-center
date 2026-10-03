@@ -6,6 +6,7 @@ const os = require('os');
 const vm = require('vm');
 const crypto = require('crypto');
 const {execSync} = require('child_process');
+const evidence = require('./runtime-evidence.js');
 
 const ROOT = __dirname;
 const DATA_FILE = path.join(ROOT, 'data.js');
@@ -34,7 +35,7 @@ function readPreviousRuntime() {
 }
 
 function writeRuntime(payload) {
-  fs.writeFileSync(RUNTIME_FILE, JSON.stringify(payload, null, 2) + '\n');
+  fs.writeFileSync(RUNTIME_FILE, JSON.stringify(evidence.redact(payload), null, 2) + '\n');
 }
 
 function expandHome(inputPath) {
@@ -81,6 +82,9 @@ function confirmedGitHubProjects(projects) {
 function tailscaleReachable() {
   const result = safeExec(`ssh -i ${JSON.stringify(SSH_KEY)} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=6 ${TAILSCALE_SSH_HOST} 'hostname'`, {timeout: 12000});
   if (!result.ok || !result.stdout) {
+    if (/additional check|login\.tailscale\.com\/a\//i.test(result.stderr + result.stdout)) {
+      return {ok:false,summary:'الدخول الإداري ينتظر تأكيد الهوية؛ ليس فشلًا للشبكة',facts:['وصل الطلب إلى خدمة الدخول الخاصة، وهي تطلب تأكيدًا إضافيًا. رابط التأكيد لا يُحفظ في اللوحة.']};
+    }
     return {ok: false, summary: 'تعذر تأكيد الوصول عبر عنوان Tailscale', facts: [result.stderr || result.stdout || 'ssh via Tailscale failed']};
   }
   return {ok: true, summary: `Tailscale SSH reachable on ${String(result.stdout).trim()}`, facts: [`host: ${String(result.stdout).trim()}`]};
@@ -132,12 +136,12 @@ function parseStaleDays(value) {
 }
 
 function buildRecord(kind, id, previous, patch, staleAfter) {
-  const basePayload = {
+  const basePayload = evidence.redact({
     verification_status: patch.verification_status || 'unknown',
     checked_from: patch.checked_from || 'manual',
     summary: patch.summary || '',
     facts: patch.facts || []
-  };
+  });
   const sourceHash = hashPayload(basePayload);
   const changed = !previous || previous.source_hash !== sourceHash;
   const staleDays = parseStaleDays(staleAfter) || STALE_DAYS[kind] || 14;
@@ -238,7 +242,7 @@ function checkServices(services, previous, serverSnapshot) {
   const dockerByName = Object.fromEntries(((serverSnapshot.data || {}).docker || []).map(x => [x.name, x]));
   const systemdByUnit = Object.fromEntries(((serverSnapshot.data || {}).systemd_user || []).map(x => [x.unit, x]));
   const crontab = ((serverSnapshot.data || {}).crontab || []).join('\n');
-  const tailscale = safeExec('command -v tailscale >/dev/null 2>&1 && tailscale ip -4');
+  const tailscale = evidence.tailscaleStatus(safeExec);
   const dockerStatus = (name) => {
     const row = dockerByName[name];
     if (!row) return {verification_status: 'fail', checked_from: 'ssh', summary: `حاوية ${name} غير ظاهرة`, facts: [`container: ${name}`]};
@@ -323,12 +327,7 @@ function checkServices(services, previous, serverSnapshot) {
       const status = ['active', 'activating'].includes(unit.active) ? 'ok' : 'warn';
       return {verification_status: status, checked_from: 'ssh', summary: `unit: ${unit.active}/${unit.sub}`, facts: [`unit: ${unit.unit}`, 'health التفصيلي يُفهم من Argaz Gateway runtime لتجنب التكرار']};
     },
-    'tailscale-vpn': () => {
-      if (!tailscale.ok) {
-        return {verification_status: 'warn', checked_from: 'command', summary: 'tailscale CLI غير متاح في هذه الجلسة؛ تعذر تشغيل التحقق الآلي للـ VPN', facts: ['الحالة ليست فشل شبكة مؤكدًا بل تعذر في بيئة الفحص المحلية']};
-      }
-      return {verification_status: 'ok', checked_from: 'command', summary: 'tailscale CLI متاح ويعيد عناوين محلية', facts: tailscale.stdout.split('\n').filter(Boolean).slice(0, 2).map(x => `ip: ${x}`)};
-    }
+    'tailscale-vpn': () => tailscale
   };
 
   for (const service of services) {
@@ -350,6 +349,15 @@ function checkProjects(projects, previous, serverPathSnapshot) {
     let status = 'manual';
     let summary = 'لا يوجد تحقق آلي كافٍ لهذا المشروع بعد';
     let checkedFrom = 'manual';
+
+    if (project.storage_state === 'cloud-only') {
+      const exists = fs.existsSync(project.local_path);
+      records[project.id] = buildRecord('project',project.id,previousRecord,{
+        verification_status:exists ? 'manual' : 'warn',checked_from:'filesystem',
+        summary:exists ? 'المجلد السحابي موجود؛ اكتمال المحتوى والتشغيل غير مفحوصين' : 'المجلد السحابي المسجّل غير متاح',
+        facts:['لم يُنزّل المحتوى أو يُشغّل المشروع أثناء الفحص','مكان المستودع البعيد يحتاج تأكيدًا مستقلًا']},'7d');
+      continue;
+    }
 
     if (project.local_path) {
       checkedFrom = 'filesystem';
@@ -456,6 +464,7 @@ function checkTools(tools, projects, previous, tailscale) {
   const records = {};
   const settingsText = safeExec(`cat ${JSON.stringify(path.join(os.homedir(), '.claude', 'settings.json'))}`);
   const claudeSettings = readClaudeSettings();
+  const inventory = evidence.toolInventory(safeExec,ROOT);
   const codexConfig = safeExec(`cat ${JSON.stringify(path.join(os.homedir(), '.codex', 'config.toml'))}`);
   const githubConfirmed = confirmedGitHubProjects(projects);
   if (tailscale === undefined) tailscale = tailscaleReachable();
@@ -561,12 +570,7 @@ function checkTools(tools, projects, previous, tailscale) {
       };
     } else if (mcpPermissionMap[tool.id]) {
       const allowed = hasClaudePermission(claudeSettings, mcpPermissionMap[tool.id]);
-      patch = {
-        verification_status: allowed ? 'ok' : 'warn',
-        checked_from: 'claude settings permissions',
-        summary: allowed ? 'تم تأكيد صلاحية MCP في إعدادات Claude الحالية' : 'لم يتم العثور على صلاحية MCP داخل settings.json',
-        facts: [`permission pattern: ${mcpPermissionMap[tool.id]}`]
-      };
+      patch = evidence.toolEvidence(tool.id.replace(/-mcp$/,''),inventory,allowed);
     } else if ((tool.links && Object.values(tool.links).length)) {
       patch = {
         verification_status: 'manual',
@@ -615,12 +619,14 @@ function checkCloud(cloudItems, previous, serverSnapshot, tailscale, projects) {
         facts: [`path: ${iCloudRoot}`]
       };
     } else if (cloud.id === 'tailscale') {
-      patch = {
-        verification_status: tailscale.ok ? 'ok' : 'warn',
-        checked_from: 'ssh via tailscale',
-        summary: tailscale.summary,
-        facts: tailscale.facts
-      };
+      patch = evidence.tailscaleStatus(safeExec);
+    } else if (cloud.id === 'coingecko') {
+      const result = safeExec('curl -fsS --connect-timeout 3 --max-time 6 https://api.coingecko.com/api/v3/ping',{timeout:8000});
+      let valid = false;
+      try { valid = result.ok && typeof JSON.parse(result.stdout).gecko_says === 'string'; } catch {}
+      patch = {verification_status:valid ? 'ok' : 'warn',checked_from:'http',
+        summary:valid ? 'عنوان خدمة البيانات استجاب؛ ربط المشروع والحساب غير مفحوصين' : 'تعذر تأكيد استجابة خدمة البيانات',
+        facts:['الفحص لخدمة البيانات، وليس صفحة الموقع','لا يثبت هذا الفحص أن المشروع المالي يعمل أو يجلب الأسعار']};
     } else if (cloud.id === 'telegram') {
       const channelExists = fs.existsSync(telegramChannel);
       const allowed = hasClaudePermission(claudeSettings, 'mcp__plugin_telegram_telegram__');
@@ -633,10 +639,10 @@ function checkCloud(cloudItems, previous, serverSnapshot, tailscale, projects) {
     } else if (linkedCloudPermissionMap[cloud.id]) {
       const allowed = hasClaudePermission(claudeSettings, linkedCloudPermissionMap[cloud.id]);
       patch = {
-        verification_status: allowed ? 'ok' : 'warn',
+        verification_status: 'manual',
         checked_from: 'claude settings permissions',
-        summary: allowed ? 'تم تأكيد ربط هذا العنصر عبر صلاحيات Claude الحالية' : 'لم يتم العثور على صلاحية الربط في settings.json',
-        facts: [`permission pattern: ${linkedCloudPermissionMap[cloud.id]}`]
+        summary: 'حالة الحساب والاستخدام الفعلي تحتاج مراجعة مستقلة',
+        facts: [allowed ? 'يوجد إذن محلي؛ لا يثبت سلامة الحساب أو الاتصال' : 'لم يظهر إذن محلي؛ لا يثبت تعطل المنصة']
       };
     } else if (cloud.lk && networkCheckIds.has(cloud.id)) {
       const reach = headReachable(cloud.lk);

@@ -42,7 +42,9 @@ function wsDefinition(rows) {
 function wsEvidence(row) {
   const record = row.record;
   const state = wsMeta(row);
-  return wsDetailSection('evidence','نتيجة التحقق', `<div class="ws-evidence ${state.state}"><div>${wsBadge(row)}<time>${E(_fmtRuntimeDate(record?.verified_at))}</time></div><p>${E(record?.summary || 'لا توجد نتيجة فحص آلي لهذا العنصر.')}</p>${record ? `<span class="ws-evidence-scope">هذه النتيجة تخص الفحوص المذكورة فقط، وليست اختبارًا لكل وظائف العنصر.</span>` : ''}</div>${record?.facts?.length ? `<ul class="ws-evidence-facts">${record.facts.map(fact => `<li><bdi>${E(WorkspaceModel.latinDigits(fact))}</bdi></li>`).join('')}</ul>` : ''}`);
+  const sources = {filesystem:'وجود ملفات محلية',git:'بيانات المستودع',http:'استجابة عنوان ويب',ssh:'قراءة من الخادم',launchd:'المهام المجدولة على الجهاز',command:'أمر تحقق',github:'سجل التشغيل في المنصة',manual:'مراجعة يدوية', 'ssh via tailscale':'قراءة عبر الشبكة الخاصة','claude settings permissions':'أذونات مسجّلة للأداة','claude settings':'إعدادات مسجّلة للأداة'};
+  const scope = String(record?.checked_from || '').split(' + ').map(source=>sources[source] || 'مصدر فحص غير مصنّف').join(' · ');
+  return wsDetailSection('evidence','نتيجة التحقق', `<div class="ws-evidence ${state.state}"><div>${wsBadge(row)}<time>${E(_fmtRuntimeDate(record?.verified_at))}</time></div><p>${E(record?.summary || 'لا توجد نتيجة فحص آلي لهذا العنصر.')}</p>${record ? `<span class="ws-evidence-scope">نطاق الفحص: ${E(scope)}. النتيجة لا تؤكد كل الوظائف أو صحة الوصف والعلاقات المسجّلة.</span>` : ''}</div>${record?.facts?.length ? `<ul class="ws-evidence-facts">${record.facts.map(fact => `<li><bdi>${E(WorkspaceModel.latinDigits(fact))}</bdi></li>`).join('')}</ul>` : ''}`);
 }
 function wsRefreshEvidence() {
   const row = wsRegistry().find(row => row.key === wsDetailKey);
@@ -62,8 +64,8 @@ function wsResources(row) {
     paths.map(path => `<div class="ws-detail-path"><code dir="ltr">${E(path)}</code><button class="ws-icon-button" data-ws-copy="${E(path)}" aria-label="نسخ المسار" title="نسخ المسار">${wsIcon('copy')}</button></div>`).join(''));
 }
 function wsConnections(row) {
-  const related = WorkspaceModel.related(wsRegistry(),row);
-  const content = related.length ? `<div class="ws-connected-list">${related.map(other => wsOpenButton(other,`<span class="ws-entity-icon" data-tone="${wsTone(other)}">${wsGlyph(other)}</span><span><strong>${E(other.title)}</strong><small>${E(WS_PAGES[other.page].title)}</small></span>${wsIcon('arrow-left')}`,'ws-connected-item')).join('')}</div>` : `<p class="ws-muted">لا توجد ارتباطات مسجلة.</p>`;
+  const {rows,graph} = wsRelations();
+  const content = RelationshipView.render(rows,row,{graph});
   return wsDetailSection('connections',row.kind === 'team' ? 'المشاريع المسندة' : 'الارتباطات',content);
 }
 function wsOperation(row) {

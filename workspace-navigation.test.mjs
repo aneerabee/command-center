@@ -27,7 +27,7 @@ function workspace() {
     MutationObserver:class { observe() {} },
   };
   vm.createContext(context);
-  for(const file of ['data.js','workspace-model.js','app.js','workspace.js','workspace-catalogs.js','workspace-detail.js']) {
+  for(const file of ['data.js','workspace-model.js','relationship-view.js','app.js','workspace.js','workspace-relations.js','workspace-catalogs.js','workspace-detail.js']) {
     vm.runInContext(readFileSync(new URL(file,import.meta.url),'utf8'),context,{filename:file});
   }
   return { context, handlers, frames, run:code=>vm.runInContext(code,context) };

@@ -78,7 +78,7 @@ const WorkspaceModel = (() => {
   }
   function route(row) { return `${row.page}/${encodeURIComponent(row.arg)}`; }
   const lookupIndexes = new WeakMap();
-  function resolve(rows, value, page) {
+  function candidates(rows, value, page) {
     if(!lookupIndexes.has(rows)) {
       const index = new Map();
       for(const row of rows) {
@@ -88,25 +88,66 @@ const WorkspaceModel = (() => {
       lookupIndexes.set(rows,index);
     }
     const matches = lookupIndexes.get(rows).get(normalize(value)) || [];
-    return (page ? matches.find(row => row.page === page) : matches[0]) || null;
+    return page ? matches.filter(row => row.page === page) : matches;
+  }
+  function resolve(rows, value, page) {
+    return candidates(rows, value, page)[0] || null;
+  }
+  const RELATION_FIELDS = Object.freeze({
+    related_entities: { page:null, label:'ارتباط مسجّل' },
+    related_services: { page:'server', label:'خدمة مرتبطة' },
+    related_tools: { page:'tools', label:'أداة مرتبطة' },
+    related_cloud: { page:'cloud', label:'منصة مرتبطة' },
+    related_projects: { page:'projects', label:'مشروع مرتبط' },
+    assigned_projects: { page:'projects', label:'عمل مسند', directed:true },
+    used_in: { page:null, label:'استخدام مسجّل', directed:true, reverse:true },
+    parent_project: { page:'projects', label:'تبعية للمشروع', directed:true },
+    prj: { page:'projects', label:'مشروع مرتبط' },
+  });
+  function referenceEntries(item) {
+    return Object.entries(RELATION_FIELDS).flatMap(([field,spec]) => {
+      const value = item[field];
+      const names = Array.isArray(value) ? value : typeof value === 'string' && (field === 'parent_project' || field === 'prj' && item.service_type) ? [value] : [];
+      return names.map(value => ({ field, value, ...spec }));
+    });
   }
   function references(item) {
-    return [...new Set([
-      ...['related_entities','related_services','related_tools','related_cloud','related_projects','assigned_projects'].flatMap(key => item[key] || []),
-      ...(Array.isArray(item.prj) ? item.prj : []), ...(item.parent_project ? [item.parent_project] : []),
-      ...(item.service_type && typeof item.prj === 'string' ? [item.prj] : []),
-    ])];
+    return [...new Set(referenceEntries(item).map(entry => entry.value))];
+  }
+  function relationshipState(a,b) {
+    if ([a,b].some(row => row.kind === 'idea')) return 'proposed';
+    if ([a,b].some(row => row.item.active === false || row.item.st === 'r' || row.kind === 'automation' && row.item.on === false || row.kind === 'archive' && row.item.kind !== 'active-security')) return 'historical';
+    return 'recorded';
+  }
+  function relationshipGraph(rows) {
+    const edges = new Map(), issues = [];
+    for (const row of rows) for (const ref of referenceEntries(row.item)) {
+      const matches = candidates(rows,ref.value,ref.page);
+      if (matches.length !== 1) {
+        issues.push({owner:row.key,field:ref.field,value:ref.value,reason:matches.length ? 'ambiguous' : 'missing'});
+        continue;
+      }
+      const other = matches[0];
+      if (other.key === row.key) continue;
+      const directed = Boolean(ref.directed);
+      const [from,to] = ref.reverse ? [other,row] : directed ? [row,other] : [row,other].sort((a,b)=>a.key.localeCompare(b.key));
+      const kind = directed ? ref.field : 'association';
+      const key = `${kind}|${from.key}|${to.key}`;
+      const previous = edges.get(key);
+      const source = { owner:row.key, field:ref.field, label:ref.label };
+      edges.set(key,{ key, from:from.key, to:to.key, directed, kind, state:relationshipState(from,to),
+        label:directed ? ref.label : 'ارتباط مسجّل', sources:[...(previous?.sources || []),source] });
+    }
+    return {edges:[...edges.values()],issues};
+  }
+  function connections(rows,row,graph = relationshipGraph(rows)) {
+    return graph.edges.filter(edge => edge.from === row.key || edge.to === row.key).map(edge => ({
+      ...edge, other:rows.find(other => other.key === (edge.from === row.key ? edge.to : edge.from)),
+    }));
   }
   function related(rows, row) {
-    const targets = item => [
-      ...Object.entries({related_entities:null,related_services:'server',related_tools:'tools',related_cloud:'cloud',related_projects:'projects',assigned_projects:'projects'}).flatMap(([key,page]) => (item[key] || []).map(name => resolve(rows,name,page))),
-      ...(Array.isArray(item.prj) ? item.prj : item.service_type && typeof item.prj === 'string' ? [item.prj] : []).map(name => resolve(rows,name,'projects')),
-      ...(item.parent_project ? [resolve(rows,item.parent_project,'projects')] : []),
-    ].filter(Boolean);
-    const direct = targets(row.item);
-    const inverse = rows.filter(other => targets(other.item).some(target => target.key === row.key));
-    return [...new Map([...direct,...inverse].filter(other => other && other.key !== row.key).map(other => [other.key,other])).values()];
+    return [...new Map(connections(rows,row).map(edge => [edge.other.key,edge.other])).values()];
   }
-  return Object.freeze({ LOCALE, latinDigits, route, resolve, references, related, MAX_CHECK_AGE, HEALTH_MAX_AGE, STATES, status, registry, counts, normalize, matches, safeUrl, primaryLink, health });
+  return Object.freeze({ LOCALE, latinDigits, route, resolve, references, related, relationshipGraph, connections, MAX_CHECK_AGE, HEALTH_MAX_AGE, STATES, status, registry, counts, normalize, matches, safeUrl, primaryLink, health });
 })();
 if (typeof module !== 'undefined') module.exports = WorkspaceModel;
