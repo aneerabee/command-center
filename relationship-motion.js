@@ -3,15 +3,15 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const observed = new Set();
   const seen = new WeakSet();
-  const selector = '.rel-flow,.ws-company-branches,.ws-path-item,.ws-relation-hint,[data-project-motion]';
+  const selector = '.rel-flow,.ws-company-branches,.ws-path-item,.ws-relation-hint,[data-project-motion],[data-context-motion]';
   function play(element) {
     if (reduced.matches || !element.animate) return;
     element.getAnimations({subtree:true}).forEach(animation=>animation.cancel());
     const connector = element.querySelector('.rel-connector i,.ws-relation-trace');
-    const nodes = [...element.querySelectorAll('.rel-node,.project-step')];
+    const nodes = [...element.querySelectorAll('.rel-node,.project-step,.context-group')];
     const timing = {duration:650,easing:'cubic-bezier(.2,.7,.2,1)'};
     if (connector) connector.animate([{transform:'scaleX(0)',opacity:.3},{transform:'scaleX(1)',opacity:1}],timing);
-    if (nodes.length) nodes.forEach((node,index)=>node.animate([{opacity:.55,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{...timing,delay:index*200}));
+    if (nodes.length) nodes.forEach((node,index)=>node.animate([{opacity:.55,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{...timing,delay:Math.min(index,4)*120}));
     else element.animate([{opacity:.65,transform:'translateY(4px)'},{opacity:1,transform:'none'}],timing);
   }
   const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{

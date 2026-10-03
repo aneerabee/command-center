@@ -152,7 +152,7 @@ function wsRender(page = cur) {
     if (query === page) {
       const fragment=document.createElement('template');
       fragment.innerHTML=html;
-      for (const selector of ['.ws-entity-list','.ws-path-list','.ws-result-count']) {
+      for (const selector of ['.ws-entity-list','.ws-path-list','.context-path-register','.ws-result-count']) {
         const current=target.querySelector(selector),next=fragment.content.querySelector(selector);
         if(current && next) current.replaceWith(next);
       }

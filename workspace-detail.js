@@ -20,7 +20,7 @@ function wsRememberView() {
   const focus = document.activeElement?.closest('[data-ws-open]')?.getAttribute('data-ws-open');
   const attribute = ['data-ws-pin','data-ws-copy','data-ws-back'].find(name => document.activeElement?.hasAttribute(name));
   const control = attribute ? {attribute,value:document.activeElement.getAttribute(attribute)} : null;
-  const expanded = [...document.querySelectorAll('#detail-view details[open]')].map(el=>el.closest('section')?.id);
+  const expanded = [...document.querySelectorAll('#detail-view details')].flatMap((el,index)=>el.open?[index]:[]);
   wsPositions.set(wsActiveRoute, { y:window.scrollY, focus, control, expanded });
 }
 function wsRestoreView(route) {
@@ -56,17 +56,10 @@ function wsRefreshEvidence() {
   requestAnimationFrame(_processIcons);
 }
 function wsResources(row) {
-  const item = row.item;
-  const links = [...new Map(Object.entries({ ...(item.deploy_url ? {'فتح المشروع':item.deploy_url} : {}), ...(item.repo_url ? {'المستودع':item.repo_url} : {}), ...(item.lk ? {'المنصة':item.lk} : {}), ...(item.links || {}) }).filter(([,url]) => WorkspaceModel.safeUrl(url)).map(([label,url]) => [url,{label,url}])).values()];
-  const paths = [...new Set([item.local_path,item.server_path,item.path,...(item.config_paths || [])].filter(Boolean))];
-  return wsDetailSection('resources',row.kind === 'tool' ? 'الإعدادات والمراجع' : 'الروابط والمسارات',
-    links.map(link => `<div class="ws-resource-link">${wsExternal(link.url,link.label)}<bdi>${E(link.url)}</bdi></div>`).join('') +
-    paths.map(path => `<div class="ws-detail-path"><code dir="ltr">${E(path)}</code><button class="ws-icon-button" data-ws-copy="${E(path)}" aria-label="نسخ المسار" title="نسخ المسار">${wsIcon('copy')}</button></div>`).join(''));
+  return wsDomainResources(row);
 }
 function wsConnections(row) {
-  const {rows,graph} = wsRelations();
-  const content = RelationshipView.render(rows,row,{graph});
-  return wsDetailSection('connections',row.kind === 'team' ? 'المشاريع المسندة' : 'الارتباطات',content);
+  return wsDomainConnections(row);
 }
 function wsOperation(row) {
   const item = row.item;
@@ -136,7 +129,7 @@ function wsShowDetail(row, {restore = false} = {}) {
     (project ? wsProjectHeader(row) : `<header class="ws-detail-heading"><div class="ws-detail-title"><span class="ws-detail-symbol">${wsGlyph(row)}</span><div><span class="ws-eyebrow">${E(wsGroup(row) || WS_PAGES[row.page].title)}</span><h1 tabindex="-1">${E(row.title)}</h1>${itemSubtitle(row)}</div></div><div class="ws-detail-actions">${link ? wsExternal(link.url,link.label) : ''}${wsStar(row)}<button class="ws-icon-button" data-ws-copy="${E(new URL('#'+route,location.href).href)}" aria-label="نسخ رابط الصفحة" title="نسخ رابط الصفحة">${wsIcon('link')}</button></div></header>`) +
     `<div class="ws-detail-content">${wsEntityContent(row)}</div>`;
   document.getElementById('app').appendChild(root);
-  if(restore) for(const id of wsPositions.get(route)?.expanded || []) root.querySelector(`#${id} details`)?.setAttribute('open','');
+  if(restore) for(const index of wsPositions.get(route)?.expanded || []) root.querySelectorAll('details')[index]?.setAttribute('open','');
   wsUpdateShell();
   document.title = `${row.title} · مركز التحكم`;
   const crumb = document.querySelector('.ws-breadcrumb');

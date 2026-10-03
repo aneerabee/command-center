@@ -848,9 +848,9 @@ const PRJ = [
     priority: "med",
     next_milestone: "إنعاش المشروع + إضافة Entities للشركات (Etranex, BRIX, SaaS)",
     summary:
-      "مشروع لإدارة الحسابات والأصول، عُثر على مجلده في آيكلاود. المحتوى غير محمّل محليًا؛ اكتماله ومكان مستودعه البعيد يحتاجان تحققًا قبل استئناف العمل.",
-    storage_state: "cloud-only",
-    local_path: "/Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Projects/💰 Money-Manager",
+      "مشروع لإدارة الحسابات والأصول. استُعيدت ملفاته وفُحصت، وأُنشئت نسخة مستقلة خارج آيكلاود. تشغيله واتصاله بالبيانات لم يُختبرا.",
+    storage_state: "local-restored",
+    local_path: "/Users/rabeeshaban/Developer/money-manager",
     server_path: null,
     repo_url: "https://github.com/aneerabee/money-manager",
     deploy_url: null,
@@ -887,7 +887,7 @@ const PRJ = [
       "Alpha Vantage",
       "Financial OS",
     ],
-    path: "/Users/rabeeshaban/Library/Mobile Documents/com~apple~CloudDocs/Desktop/Projects/💰 Money-Manager",
+    path: "/Users/rabeeshaban/Developer/money-manager",
     links: { GitHub: "https://github.com/aneerabee/money-manager" },
     current_status: {
       updated: "2026-05-11",

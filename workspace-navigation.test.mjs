@@ -27,7 +27,7 @@ function workspace() {
     MutationObserver:class { observe() {} },
   };
   vm.createContext(context);
-  for(const file of ['data.js','workspace-model.js','workspace-content.js','relationship-view.js','app.js','workspace.js','workspace-relations.js','workspace-projects.js','workspace-catalogs.js','workspace-detail.js']) {
+  for(const file of ['data.js','workspace-model.js','workspace-content.js','relationship-view.js','app.js','workspace.js','workspace-relations.js','workspace-context.js','workspace-projects.js','workspace-catalogs.js','workspace-detail.js','workspace-domains.js']) {
     vm.runInContext(readFileSync(new URL(file,import.meta.url),'utf8'),context,{filename:file});
   }
   return { context, handlers, frames, run:code=>vm.runInContext(code,context) };
@@ -159,6 +159,14 @@ describe('independent presentation system',()=>{
 });
 
 describe('search and history remain on the correct route',()=>{
+  it('remembers separate expanded sources rather than only the first source in a section',()=>{
+    const {context,run}=workspace();
+    context.document.querySelectorAll=()=>[{open:false},{open:true},{open:false},{open:true}];
+    context.window.scrollY=412;
+    run("wsActiveRoute='tools/Tailscale'; wsRememberView()");
+    expect(run("wsPositions.get('tools/Tailscale').expanded")).toEqual([1,3]);
+    expect(run("wsPositions.get('tools/Tailscale').y")).toBe(412);
+  });
   it('search has one canonical entry and route for every entity',()=>{
     const {run}=workspace();
     expect(run('_buildSearchIndex().length')).toBe(run('wsRegistry().length'));
@@ -194,6 +202,77 @@ describe('search and history remain on the correct route',()=>{
     run("wsActiveRoute='projects'; wsPositions.set('projects',{y:700}); wsRestoreView('projects')");
     frames.forEach(fn=>fn());
     expect(context.window.scrollTo).toHaveBeenCalledWith({top:700,behavior:'instant'});
+  });
+});
+
+describe('context-specific resources and relationship views',()=>{
+  it('preserves canonical link roles when the same URL is repeated in references',()=>{
+    const {run}=workspace();
+    expect(run("WorkspaceContext.resources({item:{repo_url:'https://github.com/a/b',links:{GitHub:'https://github.com/a/b'}}}).links")).toEqual([{label:'المستودع',value:'https://github.com/a/b',kind:'source',link:true}]);
+  });
+  it('classifies real storage locations, not the owning project type',()=>{
+    const {run}=workspace();
+    expect(run("WorkspaceContext.pathKind('/srv/app','server_path')")).toBe('server');
+    expect(run("WorkspaceContext.pathKind('/Users/r/Library/Mobile Documents/app','local_path')")).toBe('cloud');
+    expect(run("WorkspaceContext.pathKind('~/.config/app.json','config_paths')")).toBe('config');
+    expect(run("WorkspaceContext.pathKind('/Users/r/Developer/app','local_path')")).toBe('local');
+  });
+  it('does not overwrite an explicit server location with its generic path alias',()=>{
+    const {run}=workspace();
+    expect(run("WorkspaceContext.resources({item:{server_path:'/srv/app',path:'/srv/app'}}).files")).toEqual([{value:'/srv/app',kind:'server',link:false,label:'على الخادم'}]);
+  });
+  it('keeps every safe resource and exact copyable path for all entities',()=>{
+    const {run}=workspace();
+    expect(run(`wsRegistry().every(row=>{
+      const result=WorkspaceContext.resources(row), html=wsDomainResources(row);
+      const paths=['local_path','server_path','path','config_paths'].flatMap(field=>[row.item[field]||[]].flat()).filter(value=>typeof value==='string');
+      const urls=[row.item.deploy_url,row.item.repo_url,row.item.lk,...Object.values(row.item.links||{})].filter(WorkspaceModel.safeUrl);
+      return paths.every(value=>result.files.some(f=>f.value===value)&&html.includes('data-ws-copy="'+E(value)+'"')) && urls.every(value=>result.links.some(l=>l.value===value)&&html.includes('href="'+E(WorkspaceModel.safeUrl(value))+'"'));
+    })`)).toBe(true);
+  });
+  it('retains every relationship and its recorded source without inventing peers',()=>{
+    const {run}=workspace();
+    expect(run(`wsRegistry().every(row=>{
+      const {rows,graph}=wsRelations(), original=RelationshipView.groups(rows,row,graph);
+      const groups=WorkspaceContext.sections(rows,row,graph), edges=groups.flatMap(g=>g.edges), html=wsDomainConnections(row);
+      return edges.length===original.length && edges.every(edge=>original.some(old=>old.other.key===edge.other.key) && html.includes('data-peer="'+E(edge.other.key)+'"') && html.includes('href="#'+E(WorkspaceModel.route(edge.other))+'"') && edge.sources.every(source=>html.includes(E(source.label))));
+    })`)).toBe(true);
+  });
+  it('uses nine distinct compositions and the actual project theme',()=>{
+    const {run}=workspace();
+    expect(run('new Set(Object.values(WS_CONTEXT_LAYOUTS)).size')).toBe(9);
+    expect(run("wsRegistry().filter(r=>r.kind==='project').every(row=>!WorkspaceContext.sections(...[wsRelations().rows,row,wsRelations().graph]).length || wsDomainConnections(row).includes('data-pattern=\"'+WorkspaceContent.profile(row).theme+'\"'))")).toBe(true);
+  });
+  it('does not mutate inventory while rendering every overview and detail',()=>{
+    const {run}=workspace();
+    const before=run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])');
+    run('wsRegistry().forEach(row=>{wsDomainResources(row);wsDomainConnections(row)});wsDomainHome();wsDomainPaths()');
+    expect(run('JSON.stringify([PRJ,SVC,BOT,TL,CLD,ARC,IDEAS,TEAM,AUTO])')).toBe(before);
+  });
+  it('filters paths by explicit storage kind without losing the search text',()=>{
+    const {run}=workspace();
+    run("wsPathScope='server';wsPageState.map={query:''}");
+    expect(run("wsDomainPaths().includes('data-storage=\"local\"')")).toBe(false);
+    expect(run("wsDomainPaths().includes('data-storage=\"server\"')")).toBe(true);
+    run("wsPageState.map={query:'not-a-path-000'}");
+    expect(run("wsDomainPaths().includes('لا توجد مسارات مطابقة')")).toBe(true);
+  });
+  it('updates the real path register while retaining focus in the search box',()=>{
+    const {context,run}=workspace();
+    class Input { constructor(){this.dataset={wsQuery:'map'};} }
+    context.HTMLInputElement=Input;
+    context.document.activeElement=new Input();
+    const next={},replaceWith=vi.fn();
+    context.document.getElementById=()=>({querySelector:selector=>selector==='.context-path-register'?{replaceWith}:null});
+    context.document.createElement=()=>({content:{querySelector:selector=>selector==='.context-path-register'?next:null}});
+    run("wsRender('map')");
+    expect(replaceWith).toHaveBeenCalledExactlyOnceWith(next);
+    expect(context.document.activeElement).toBeInstanceOf(Input);
+  });
+  it('keeps restoration history scoped to the current detail',()=>{
+    const {run}=workspace();
+    run("wsPositions.set('tools/a',{expanded:[1,3]});wsPositions.set('tools/b',{expanded:[0]})");
+    expect(run("wsPositions.get('tools/a').expanded")).toEqual([1,3]);
   });
 });
 
